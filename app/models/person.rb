@@ -1,0 +1,61 @@
+class Person
+  include Mongoid::Document
+
+
+  ## Make sure we have the minimum fields.
+
+  validates :rut, if: :valid_rut?, presence: true, uniqueness: true # Error: DV invalido
+
+  validates :name, presence: true, with: /^[a-z]+$/i
+
+
+  ## Creates 'c_at' and 'u_at' fields, representing the times
+  ## at which the user was created and updated, respectively.
+  include Mongoid::Timestamps::Short
+
+  has_one :photo, class_name: 'UploadedFile'
+
+  ## Other fields
+  field :rut, type: String
+
+  field :name, :type => String
+  # Last names
+  field :l_name1, :type => String
+  field :l_name2, :type => String
+
+  field :dob, :type => DateTime
+
+  field :email, type: String
+  field :phone, type: String
+
+  field :address, type: String
+
+  field :active, :type => Boolean
+
+  field :role, :type => String
+
+  def valid_rut?
+    number_and_digit = rut.split('-')
+
+    if number_and_digit.size == 2 && (true if Integer(number_and_digit[0]) rescue false) &&
+        number_and_digit[0].size.between?(7, 8) && number_and_digit[1].size == 1
+
+      total = 0
+      i = 2
+      number_and_digit[0].reverse!.each.each { |d|
+        total += d.to_i * i
+        i = i < 7 ? i + 1 : 2
+      }
+
+      digit = 11 - (total % 11)
+      return (digit < 10 && digit.to_s == number_and_digit[1]) ||
+          (digit == 10 && number_and_digit[1].downcase == 'k') ||
+          (digit == 11 && number_and_digit[1] == '0')
+    else
+      # Error, invalid format
+    end
+
+    false
+  end
+
+end
