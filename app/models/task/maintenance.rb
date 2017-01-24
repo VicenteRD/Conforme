@@ -1,4 +1,4 @@
-class Maintenance::Task < Task
+class Task::Maintenance < Task
   include Mongoid::Document
 
   # belongs_to :maintenance

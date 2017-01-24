@@ -2,8 +2,8 @@ class ReadStatus
   include Mongoid::Document
 
   belongs_to :document
-  belongs_to :user
+  belongs_to :user, class_name: 'Person::User'
 
   field :read_at, type: DateTime
-  field :score, tye: Integer
+  field :score, type: Integer
 end

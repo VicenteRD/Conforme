@@ -1,7 +1,65 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+Mongoid.default_client.database.drop
+
+vr =Person::User.new(
+  email: 'vicente.drd@gmail.com',
+  password: 'vicente8',
+
+  rut: '18635551-2',
+  name: 'Vicente',
+  l_name1: 'Rivera',
+  l_name2: 'Dussaillant',
+
+  phone: '(+56) 9 5637XXXX',
+  address: 'Padre Hurtado Sur XXXX, depto X-XX',
+
+  dob: Date.new(1993, 10, 2),
+  photo: nil,
+
+  role: 'SuperAdmin',
+  contract_type: 'Lol nope',
+
+  active: true,
+  ll_at: Time.now,
+  j_at: Time.now)
+vr.save
+
+cv = Person::User.new(
+    email: 'cvillaseca@eworks.cl',
+    password: 'picton1950',
+
+    rut: '11345343-5',
+    name: 'Claudio',
+    l_name1: 'Villaseca',
+    l_name2: ' ',
+
+    phone: '(+56) 9 1234XXXX',
+    address: 'Colon XXXX',
+
+    dob: Date.new(1960, 1, 1),
+    photo: nil,
+
+    role: 'SuperAdmin',
+    contract_type: 'self',
+
+    active: true,
+    ll_at: Time.now,
+    j_at: Time.now)
+cv.save
+
+
+
+Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: ' ')
+    .add_to_set(
+      child_positions:
+          [
+              Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: ' ')
+                  .add_to_set(
+                      child_positions:
+                          Position.new(name: 'goma', functions: 'Ser administrado', competencies: ' ')
+                  ),
+              Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: ' ')
+          ])
+    .save
+
+Task::Doc.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'Hacer pag web', rejected: false,
+  p_at: Time.now, r_at: Time.now)

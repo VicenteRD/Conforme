@@ -6,7 +6,7 @@ class Person
 
   validates :rut, if: :valid_rut?, presence: true, uniqueness: true # Error: DV invalido
 
-  validates :name, presence: true, with: /^[a-z]+$/i
+  validates :name, presence: true, format: {with: /\A[a-z]+\Z/i}
 
 
   ## Creates 'c_at' and 'u_at' fields, representing the times
@@ -18,12 +18,12 @@ class Person
   ## Other fields
   field :rut, type: String
 
-  field :name, :type => String
+  field :name, type: String
   # Last names
-  field :l_name1, :type => String
-  field :l_name2, :type => String
+  field :l_name1, type: String
+  field :l_name2, type: String
 
-  field :dob, :type => DateTime
+  field :dob, type: Date
 
   field :email, type: String
   field :phone, type: String
@@ -42,7 +42,7 @@ class Person
 
       total = 0
       i = 2
-      number_and_digit[0].reverse!.each.each { |d|
+      number_and_digit[0].reverse { |d|
         total += d.to_i * i
         i = i < 7 ? i + 1 : 2
       }

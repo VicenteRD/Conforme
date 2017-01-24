@@ -1,0 +1,35 @@
+<% @tasks = Task.all %>
+
+<% if @tasks.size != 0 %>
+  <% @tasks.each do |task| %>
+
+      <tr onclick = 'onTrClick(this.id)' id='<%= task.id.to_s %>'>
+
+        <td><%= task.type_name %></td>
+
+        <td><%= task.status %></td>
+
+        <td><%= Person::User.find(task.petitioner_id).name%></td>
+
+        <td><%= task.u_at.strftime('%d/%m/%y') %></td>
+
+        <td><%= task.p_at.strftime('%d/%m/%y') %></td>
+
+      </tr>
+
+      <div class="modal fade" id="myModal-<%= task.id.to_s %>">
+        <%= render partial: 'tasks/templates/show_modal', locals: { task_id: task.id } %>
+      </div>
+
+  <% end %>
+<% else %>
+ <tr>No tasks found<tr>
+<% end %>
+
+
+
+<script>
+    function onTrClick(task_id){
+        $('#myModal-' + task_id).modal('show')
+    }
+</script>

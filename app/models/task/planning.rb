@@ -1,4 +1,4 @@
-class Planning::Task < Task
+class Task::Planning < Task
   include Mongoid::Document
 
   belongs_to :planning

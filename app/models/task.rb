@@ -1,13 +1,12 @@
 class Task
   include Mongoid::Document
-  include Mongoid::Timestamps::Created::Short
+  include Mongoid::Timestamps::Short
 
   include Enumerable
 
-  belongs_to :petitioner, class_name: 'Person::User', foreign_key: 'u_id'
-  belongs_to :executor, class_name: 'Person::User', foreign_key: 'e_id'
+  field :executor_id, type: BSON::ObjectId # => Person::User
+  field :petitioner_id, type: BSON::ObjectId # => Person::User
 
-  field :n, as: :number
   field :status, type: String
 
   field :extract, type: String
@@ -16,4 +15,8 @@ class Task
 
   field :p_at, as: :planned_for, type: DateTime
   field :r_at, as: :resolved_at, type: DateTime
+
+  def type_name
+    'Varios'
+  end
 end

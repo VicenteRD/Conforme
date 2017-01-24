@@ -1,4 +1,4 @@
-class Minute::Task < Task
+class Task::Minute < Task
   include Mongoid::Document
 
   belongs_to :minute

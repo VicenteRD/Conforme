@@ -1,0 +1,571 @@
+<% content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+        <div class="dropdown">
+          <a href="javascript: void(0);" class="dropdown-toggle dropdown-inline-button" data-toggle="dropdown" aria-expanded="false">
+            <i class="dropdown-inline-button-icon icmn-folder-open"></i>
+            <span class="hidden-lg-down">Issues History</span>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="" role="menu">
+            <a class="dropdown-item" href="javascript:void(0)">Current search</a>
+            <a class="dropdown-item" href="javascript:void(0)">Search for issues</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-header">Opened</div>
+            <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-checkmark"></i> CLNUI-253 Project implemen...</a>
+            <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-checkmark"></i> CLNUI-234 Active history iss...</a>
+            <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-clock"></i> CLNUI-424 Ionicons intergrat...</a>
+            <a class="dropdown-item" href="javascript:void(0)">More...</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-header">Filters</div>
+            <a class="dropdown-item" href="javascript:void(0)">My open issues</a>
+            <a class="dropdown-item" href="javascript:void(0)">Reported by me</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:void(0)">Import issues from CSV</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-cog"></i> Settings</a>
+          </ul>
+        </div>
+        <div class="dropdown">
+          <a href="javascript: void(0);" class="dropdown-toggle dropdown-inline-button" data-toggle="dropdown" aria-expanded="false">
+            <i class="dropdown-inline-button-icon icmn-database"></i>
+            <span class="hidden-lg-down">Dashboards</span>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="" role="menu">
+            <div class="dropdown-header">Active</div>
+            <a class="dropdown-item" href="javascript:void(0)">Project Management</a>
+            <a class="dropdown-item" href="javascript:void(0)">User Inetrface Development</a>
+            <a class="dropdown-item" href="javascript:void(0)">Documentation</a>
+            <div class="dropdown-header">Inactive</div>
+            <a class="dropdown-item" href="javascript:void(0)">Marketing</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-cog"></i> Settings</a>
+          </ul>
+        </div>
+      </div>
+    </div>
+<% end %>
+<section class="page-content">
+  <div class="page-content-inner">
+
+    <!-- Dashboard -->
+    <div class="dashboard-container">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="panel panel-with-borders">
+            <div class="panel-body">
+              <div class="nav-tabs-horizontal margin-bottom-20">
+                <ul class="nav nav-tabs" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" href="javascript: void(0);" data-toggle="tab" data-target="#h1" role="tab">Tareas Pendientes</a>
+                  </li>
+                  <!-- <li class="nav-item">
+                       <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#h2" role="tab">Tareas Realizados</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#h3" role="tab">Tareas atrasadas</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#h4" role="tab">Waiting for Registration</a>
+                   </li>-->
+                </ul>
+              </div>
+              <table class="table table-hover nowrap margin-bottom-0" id="example1" width="100%"  style="cursor:pointer;">
+                <thead>
+                <tr>
+                  <th>Tipo tarea</th>
+
+
+                  <th>Estado</th>
+                  <th>Remitente</th>
+                  <th>Fecha Modificacion</th>
+
+                  <th>Fecha Plazo</th>
+
+
+
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                  <th>Tipo tarea</th>
+
+
+
+                  <th>Estado</th>
+                  <th>Remitente</th>
+                  <th>Fecha Modificacion</th>
+
+                  <th>Fecha Plazo</th>
+
+
+
+                </tr>
+                </tfoot>
+                <tbody>
+
+                <%= render 'tasks/templates/list' %>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+          <div class="widget widget-seven background-success">
+            <div class="widget-body">
+              <div href="javascript: void(0);" class="widget-body-inner">
+                <h5 class="text-uppercase">Week Sales</h5>
+                <i class="counter-icon icmn-cash3"></i>
+                <span class="counter-count">
+                                <i class="icmn-arrow-up5"></i>
+                                $<span class="counter-init" data-from="25" data-to="942"></span>
+                            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+          <div class="widget widget-seven background-default">
+            <div class="widget-body">
+              <div href="javascript: void(0);" class="widget-body-inner">
+                <h5 class="text-uppercase">Server Uptime</h5>
+                <i class="counter-icon icmn-server"></i>
+                <span class="counter-count">
+                                <i class="icmn-arrow-down5"></i>
+                                <span class="counter-init" data-from="0" data-to="99"></span>%
+                            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+          <div class="widget widget-seven">
+            <div class="widget-body">
+              <div href="javascript: void(0);" class="widget-body-inner">
+                <h5 class="text-uppercase">New Clients</h5>
+                <i class="counter-icon icmn-users"></i>
+                <span class="counter-count">
+                                <i class="icmn-arrow-up5"></i>
+                                <span class="counter-init" data-from="0" data-to="67"></span>
+                            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+          <div class="widget widget-seven">
+            <div class="widget-body">
+              <div href="javascript: void(0);" class="widget-body-inner">
+                <h5 class="text-uppercase">Subscriptions</h5>
+                <i class="counter-icon icmn-users"></i>
+                <span class="counter-count">
+                                <i class="icmn-arrow-up5"></i>
+                                <span class="counter-init" data-from="0" data-to="356"></span>
+                            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6">
+          <div class="widget widget-six">
+            <div class="widget-header">
+              <div class="dropdown pull-right">
+                <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  <i class="dropdown-inline-button-icon icmn-cog"></i>
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="" role="menu">
+                  <a class="dropdown-item" href="javascript:void(0)">Remove</a>
+                  <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="javascript:void(0)">Remove All</a>
+                </ul>
+              </div>
+              <strong class="margin-right-10">Sales Statistics, Billions</strong>
+              <span class="margin-right-10 nowrap">
+                            <span class="donut donut-success"></span>
+                            Guns
+                        </span>
+              <span class="margin-right-10 nowrap">
+                            <span class="donut donut-primary"></span>
+                            Girls
+                        </span>
+              <span class="margin-right-10 nowrap">
+                            <span class="donut donut-yellow"></span>
+                            Drugs
+                        </span>
+            </div>
+            <div class="widget-body">
+              <div class="chart-line height-250 chartist"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6">
+          <div class="widget widget-six">
+            <div class="widget-header">
+              <div class="dropdown pull-right">
+                <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  <i class="dropdown-inline-button-icon icmn-cog"></i>
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="" role="menu">
+                  <a class="dropdown-item" href="javascript:void(0)">Remove</a>
+                  <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="javascript:void(0)">Remove All</a>
+                </ul>
+              </div>
+              <strong class="margin-right-10">Growth, %</strong>
+              <span class="margin-right-10 nowrap">
+                            <span class="donut donut-primary"></span>
+                            Income
+                        </span>
+              <span class="margin-right-10 nowrap">
+                            <span class="donut donut-success"></span>
+                            Outcome
+                        </span>
+            </div>
+            <div class="widget-body">
+              <div class="chart-overlapping-bar height-250 chartist"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+          <div class="widget widget-seven">
+            <div class="carousel-widget carousel slide" data-ride="carousel">
+              <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active">
+                  <div class="widget-body">
+                    <div class="widget-body-icon">
+                      <i class="icmn-accessibility"></i>
+                    </div>
+                    <a href="javascript: void(0);" class="widget-body-inner">
+                      <h2>Sales Growth</h2>
+                      <p>View Report</p>
+                    </a>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <div class="widget-body">
+                    <div class="widget-body-icon">
+                      <i class="icmn-download"></i>
+                    </div>
+                    <a href="javascript: void(0);" class="widget-body-inner">
+                      <h2>All Reports</h2>
+                      <p>Pdf Download</p>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+          <div class="widget widget-seven">
+            <div class="carousel-widget-2 carousel slide" data-ride="carousel">
+              <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active">
+                  <a href="javascript: void(0);" class="widget-body">
+                    <h2>
+                      <i class="icmn-database"></i> Databases
+                    </h2>
+                    <p>
+                      Total: 765
+                      <br />
+                      New: 36
+                    </p>
+                  </a>
+                </div>
+                <div class="carousel-item">
+                  <a href="javascript: void(0);" class="widget-body">
+                    <h2>
+                      <i class="icmn-users"></i> Users
+                    </h2>
+                    <p>
+                      Total: 24 467
+                      <br />
+                      New: 456
+                    </p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+          <div class="widget widget-seven background-danger">
+            <div class="carousel-widget carousel slide" data-ride="carousel">
+              <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active">
+                  <a href="javascript: void(0);" class="widget-body">
+                    <h2>
+                      <i class="icmn-books"></i> Todo
+                    </h2>
+                    <p>
+                      1. Upgrade
+                      <br />
+                      2. Finish
+                    </p>
+                  </a>
+                </div>
+                <div class="carousel-item">
+                  <a href="javascript: void(0);" class="widget-body">
+                    <h2>
+                      <i class="icmn-download"></i> Finish
+                    </h2>
+                    <p>
+                      1. Upgrade
+                      <br />
+                      2. Prepare
+                    </p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+          <div class="widget widget-seven background-info" style="background-image: url(../../../public/assets/common/img/temp/photos/9.jpeg)">
+            <div class="carousel-widget-2 carousel slide" data-ride="carousel">
+              <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active">
+                  <a href="javascript: void(0);" class="widget-body">
+                    <h2>Clean</h2>
+                    <p>
+                      Simple
+                      <br />
+                      Responsive
+                    </p>
+                  </a>
+                </div>
+                <div class="carousel-item">
+                  <a href="javascript: void(0);" class="widget-body">
+                    <h2>Clean</h2>
+                    <p>
+                      Simple
+                      <br />
+                      Responsive
+                    </p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-6">
+          <div class="widget widget-three">
+            <div class="example-calendar-block"></div>
+          </div>
+        </div>
+        <div class="col-xl-6">
+          <div class="widget widget-two">
+            <div class="widget-header">
+              <div class="dropdown pull-right">
+                <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  <i class="dropdown-inline-button-icon icmn-folder-open"></i>
+                  <span class="hidden-lg-down">Issues History</span>
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="" role="menu">
+                  <a class="dropdown-item" href="javascript:void(0)">Current search</a>
+                  <a class="dropdown-item" href="javascript:void(0)">Search for issues</a>
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-header">Opened</div>
+                  <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-checkmark"></i> CLNUI-253 Project implemen...</a>
+                  <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-checkmark"></i> CLNUI-234 Active history iss...</a>
+                  <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-clock"></i> CLNUI-424 Ionicons intergrat...</a>
+                  <a class="dropdown-item" href="javascript:void(0)">More...</a>
+                  <div class="dropdown-divider"></div>
+                  <div class="dropdown-header">Filters</div>
+                  <a class="dropdown-item" href="javascript:void(0)">My open issues</a>
+                  <a class="dropdown-item" href="javascript:void(0)">Reported by me</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="javascript:void(0)">Import issues from CSV</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-cog"></i> Settings</a>
+                </ul>
+              </div>
+              Conversation: <strong>Software</strong>
+            </div>
+            <div class="widget-body clearfix">
+              <div class="conversation-block custom-scroll" style="height: 260px">
+                <div class="conversation-item">
+                  <div class="s1">
+                    <a class="avatar" href="javascript:void(0);">
+                      <img src="../assets/common/img/temp/avatars/3.jpg" alt="Alternative text to the image" />
+                    </a>
+                  </div>
+                  <div class="s2">
+                    <strong>David Scott</strong>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                  </div>
+                </div>
+                <div class="conversation-item">
+                  <div class="s1">
+                    <a class="avatar" href="javascript:void(0);">
+                      <img src="../assets/common/img/temp/avatars/3.jpg" alt="Alternative text to the image" />
+                    </a>
+                  </div>
+                  <div class="s2">
+                    <strong>Chris Smith</strong>
+                    <p>Lorem Ipsum is simply dummy text of the printing</p>
+                  </div>
+                </div>
+                <div class="conversation-item you">
+                  <div class="s1">
+                    <a class="avatar" href="javascript:void(0);">
+                      <img src="../assets/common/img/temp/avatars/4.jpg" alt="Alternative text to the image" />
+                    </a>
+                  </div>
+                  <div class="s2">
+                    <strong>Donald Trump</strong>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy</p>
+                  </div>
+                </div>
+                <div class="conversation-item">
+                  <div class="s1">
+                    <a class="avatar" href="javascript:void(0);">
+                      <img src="../assets/common/img/temp/avatars/3.jpg" alt="Alternative text to the image" />
+                    </a>
+                  </div>
+                  <div class="s2">
+                    <strong>David Scott</strong>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                  </div>
+                </div>
+                <div class="conversation-item you">
+                  <div class="s1">
+                    <a class="avatar" href="javascript:void(0);">
+                      <img src="../assets/common/img/temp/avatars/4.jpg" alt="Alternative text to the image" />
+                    </a>
+                  </div>
+                  <div class="s2">
+                    <strong>Donald Trump</strong>
+                    <p>Ok. Thanks!</p>
+                  </div>
+                </div>
+                <div class="conversation-item you">
+                  <div class="s1">
+                    <a class="avatar" href="javascript:void(0);">
+                      <img src="../assets/common/img/temp/avatars/4.jpg" alt="Alternative text to the image" />
+                    </a>
+                  </div>
+                  <div class="s2">
+                    <strong>Donald Trump</strong>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy</p>
+                  </div>
+                </div>
+                <div class="conversation-item">
+                  <div class="s1">
+                    <a class="avatar" href="javascript:void(0);">
+                      <img src="../assets/common/img/temp/avatars/3.jpg" alt="Alternative text to the image" />
+                    </a>
+                  </div>
+                  <div class="s2">
+                    <strong>David Scott</strong>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                  </div>
+                </div>
+                <div class="conversation-item you">
+                  <div class="s1">
+                    <a class="avatar" href="javascript:void(0);">
+                      <img src="../assets/common/img/temp/avatars/4.jpg" alt="Alternative text to the image" />
+                    </a>
+                  </div>
+                  <div class="s2">
+                    <strong>Donald Trump</strong>
+                    <p>Ok. Thanks!</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group padding-top-20 margin-bottom-0">
+                <textarea id="textarea" class="form-control" placeholder="Type and press enter"></textarea>
+                <button class="btn width-full margin-top-10">
+                  <i class="fa fa-send margin-right-5"></i>
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="widget widget-four background-transparent">
+        <div class="row">
+          <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+            <div class="step-block ">
+                        <span class="step-digit">
+                            <i class="icmn-database"><!-- --></i>
+                        </span>
+              <div class="step-desc">
+                <span class="step-title">Databases</span>
+                <p>
+                  Total: 765
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+            <div class="step-block">
+                        <span class="step-digit">
+                            <i class="icmn-users"><!-- --></i>
+                        </span>
+              <div class="step-desc">
+                <span class="step-title">Users</span>
+                <p>Total: 24 467</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+            <div class="step-block step-warning">
+                        <span class="step-digit">
+                            <i class="icmn-stats-growth"><!-- --></i>
+                        </span>
+              <div class="step-desc">
+                <span class="step-title">Daily Sales</span>
+                <p>
+                  Total: 765
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
+            <div class="step-block step-primary">
+                        <span class="step-digit">
+                            <i class="icmn-stats-dots"><!-- --></i>
+                        </span>
+              <div class="step-desc">
+                <span class="step-title">Bandwidth</span>
+                <p>
+                  <span>160.32 GB/S</span>
+                  <span>&nbsp;</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Dashboard -->
+
+  </div>
+</section>
+
+  <script>
+      function url(u) {
+
+          window.location=u
+
+      }
+
+  </script>

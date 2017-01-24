@@ -1,4 +1,4 @@
-module Enumerable
+module EnumerableDocument
 
   def self.included(receiver)
     receiver.class_eval do

@@ -5,7 +5,7 @@ class Indicator
 
   belongs_to :objective
 
-  field :responsible_id
+  field :responsible_id, type: BSON::ObjectId # => Person::User
 
   field :name, type: String
   field :description, type: String

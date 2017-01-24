@@ -1,7 +1,7 @@
 class Risk
   include Mongoid::Document
 
-  has_many :tasks, class_name: 'Risk::Task'
+  has_many :':tasks', class_name: 'Risk::Risk'
 
   field :name, type: String
   field :measurement, type: Float

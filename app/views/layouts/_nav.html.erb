@@ -1,0 +1,420 @@
+<nav class="left-menu" left-menu ng-class="{'hidden-left-menu': hideLeftMenu}">
+  <div class="logo-container">
+    <a href="/" class="logo">
+      E-works
+    </a>
+  </div>
+
+  <div class="left-menu-inner scroll-pane">
+    <ul class="left-menu-list left-menu-list-root list-unstyled">
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-hour-glass2"><!-- --></i>
+          Tareas
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/tareas/documentos">Documentos</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/tareas/doc_externos">Doc. Externos</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link"  href="/tareas/hallazgos">Hallazgos</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link"  href="/tareas/actas">Actas</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/tareas/varias">Varias</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/tareas/planificacion">Planificación</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/tareas/mantencion">Mantención</a>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-stats-growth "></i>
+          Mejora
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Hallazgos', {controller: 'findings', action: 'index'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/mejora/auditorias">Auditoria</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/mejora/revision_gerencial">Revisión Gerencial</a>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-chart"></i>
+          Análisis
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Indicadores', {controller: 'indicators', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/analisis/informes">Informes</a>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-users"></i>
+          Personas
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Ficha', {controller: 'users', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Organigrama', {controller: 'users', action: 'organization_chart'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Competencias', {controller: 'users', action: 'eval_competencies'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Desempeño', {controller: 'users', action: 'eval_performance'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Clima', {controller: 'users', action: 'work_environment'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-user-tie"></i>
+          Clientes
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Ficha', {controller: 'clients', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="#/pages/register">Tipos</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Satisfacción', {controller: 'clients', action: 'satisfaction'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-cart-add2"></i>
+          Proveedores
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Ficha', {controller: 'providers', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Tipos', {controller: 'providers', action: 'types'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Competencias', {controller: 'providers', action: 'eval_competencies'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Desempeño', {controller: 'providers', action: 'eval_performance'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list">
+        <%= link_to(options = {controller: 'maintenance', action: 'index'}, {class: 'left-menu-link'}) do %>
+            <i class="left-menu-link-icon icmn-construction"></i>
+            Mantención
+        <% end %>
+      </li>
+
+      <li class="left-menu-list">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-calendar5"></i>
+          Planificación
+        </a>
+      </li>
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-book"></i>
+          Documentos
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Documents', {controller: 'documents', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link"   href="/documentos_mantenedores/archivos">Registros</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link"   href="/documentos_mantenedores/archivos">Archivos</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/documentos_mantenedores/actas">Actas</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/documentos_mantenedores/procesos">Definiciones</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <a class="left-menu-link" href="/documentos_mantenedores/objetivos">Cuestionarios</a>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Normas', {controller: 'standards', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Leyes', {controller: 'laws', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-strategy"></i>
+          Estrategias
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'FODA', {controller: 'swot', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Partes Interesadas', {controller: 'concerned_parties', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Objetivos', {controller: 'objectives', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Procesos', {controller: 'processes', action: 'show'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Comunicacion', {controller: 'dashboard', action: 'index'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-warning"></i>
+          Riesgos
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Gestion', {controller: 'risks', action: 'management'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Ambiente', {controller: 'risks', action: 'environment'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Seguridad', {controller: 'risks', action: 'safety'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Normas', {controller: 'risks', action: 'standards'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Leyes', {controller: 'risks', action: 'laws'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript: void(0);">
+          <i class="left-menu-link-icon icmn-cogs"></i>
+          Configuraciones
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Riesgos', {controller: 'settings', action: 'risks'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Ambiente', {controller: 'settings', action: 'environment'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Safety', {controller: 'settings', action: 'safety'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Normas', {controller: 'settings', action: 'standards'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <<%= link_to 'Comunicación', {controller: 'settings', action: 'communication'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Cuestionarios', {controller: 'settings', action: 'questionnaires'}, class: 'left-menu-link' %>
+            </div>
+          </li>
+        </ul>
+      </li>
+
+      <li class="left-menu-list-separator"><!-- --></li>
+      <li class="menu-top-hidden no-colorful-menu">
+        <div class="left-menu-item">
+          Last Week Sales
+        </div>
+      </li>
+      <li class="menu-top-hidden no-colorful-menu">
+        <div class="example-left-menu-chart chartist-animated chartist-theme-dark"></div>
+        <script>
+            $(function () {
+                // CSS STYLING & ANIMATIONS
+                var cssAnimationData = {
+                        labels: ["S", "M", "T", "W", "T", "F", "S"],
+                        series: [
+                            [11, 14, 16, 16, 20, 17, 21]
+                        ]
+                    },
+                    cssAnimationOptions = {
+                        fullWidth: !0,
+                        chartPadding: {
+                            right: 2,
+                            left: 30
+                        },
+                        axisY: {
+                            position: 'end'
+                        }
+                    },
+                    cssAnimationResponsiveOptions = [
+                        [{
+                            axisX: {
+                                labelInterpolationFnc: function(value, index) {
+                                    return index % 2 !== 0 ? !1 : value
+                                }
+                            }
+                        }]
+                    ];
+
+                new Chartist.Line(".example-left-menu-chart", cssAnimationData, cssAnimationOptions, cssAnimationResponsiveOptions);
+
+            });
+        </script>
+      </li>
+      <li class="menu-top-hidden no-colorful-menu">
+        <div class="left-menu-item">
+          Solar System
+        </div>
+      </li>
+      <li class="menu-top-hidden">
+        <div class="left-menu-item">
+          <span class="donut donut-success"></span> Jupiter
+        </div>
+      </li>
+      <li class="menu-top-hidden">
+        <div class="left-menu-item">
+          <span class="donut donut-primary"></span> Earth
+        </div>
+      </li>
+      <li class="menu-top-hidden">
+        <div class="left-menu-item">
+          <span class="donut donut-danger"></span> Mercury
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
