@@ -63,3 +63,6 @@ Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa',
 
 Task::Doc.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'Hacer pag web', rejected: false,
   p_at: Time.now, r_at: Time.now)
+
+Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'No matar el servidor', rejected: false,
+                 p_at: Time.now, r_at: Time.now)

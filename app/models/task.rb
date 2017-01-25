@@ -17,6 +17,6 @@ class Task
   field :r_at, as: :resolved_at, type: DateTime
 
   def type_name
-    'Varios'
+    'Varias'
   end
 end

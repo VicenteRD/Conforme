@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   before_action :ensure_login
 
   def ensure_login
-    reset_session
 
     if session[:id]
       @user = Person::User.find(session[:id])

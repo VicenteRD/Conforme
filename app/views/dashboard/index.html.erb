@@ -51,68 +51,9 @@
 
     <!-- Dashboard -->
     <div class="dashboard-container">
-      <div class="row">
-        <div class="col-xl-12">
-          <div class="panel panel-with-borders">
-            <div class="panel-body">
-              <div class="nav-tabs-horizontal margin-bottom-20">
-                <ul class="nav nav-tabs" role="tablist">
-                  <li class="nav-item">
-                    <a class="nav-link active" href="javascript: void(0);" data-toggle="tab" data-target="#h1" role="tab">Tareas Pendientes</a>
-                  </li>
-                  <!-- <li class="nav-item">
-                       <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#h2" role="tab">Tareas Realizados</a>
-                   </li>
-                   <li class="nav-item">
-                       <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#h3" role="tab">Tareas atrasadas</a>
-                   </li>
-                   <li class="nav-item">
-                       <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#h4" role="tab">Waiting for Registration</a>
-                   </li>-->
-                </ul>
-              </div>
-              <table class="table table-hover nowrap margin-bottom-0" id="example1" width="100%"  style="cursor:pointer;">
-                <thead>
-                <tr>
-                  <th>Tipo tarea</th>
 
+      <%= render 'tasks/templates/list', collection: @tasks = Task.where(status: 'En curso').all %>
 
-                  <th>Estado</th>
-                  <th>Remitente</th>
-                  <th>Fecha Modificacion</th>
-
-                  <th>Fecha Plazo</th>
-
-
-
-                </tr>
-                </thead>
-                <tfoot>
-                <tr>
-                  <th>Tipo tarea</th>
-
-
-
-                  <th>Estado</th>
-                  <th>Remitente</th>
-                  <th>Fecha Modificacion</th>
-
-                  <th>Fecha Plazo</th>
-
-
-
-                </tr>
-                </tfoot>
-                <tbody>
-
-                <%= render 'tasks/templates/list' %>
-
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class="row">
         <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
           <div class="widget widget-seven background-success">
@@ -333,7 +274,7 @@
           </div>
         </div>
         <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">
-          <div class="widget widget-seven background-info" style="background-image: url(../../../public/assets/common/img/temp/photos/9.jpeg)">
+          <div class="widget widget-seven background-info" style="background-image: url(/assets/common/img/temp/photos/9.jpeg)">
             <div class="carousel-widget-2 carousel slide" data-ride="carousel">
               <div class="carousel-inner" role="listbox">
                 <div class="carousel-item active">

@@ -1,6 +1,7 @@
 class Person
   include Mongoid::Document
 
+  include Activatable
 
   ## Make sure we have the minimum fields.
 
@@ -30,9 +31,15 @@ class Person
 
   field :address, type: String
 
-  field :active, :type => Boolean
-
   field :role, :type => String
+
+  def first_last_name
+    self.name + ' ' + self.l_name1
+  end
+
+  def full_name
+    self.name + ' ' + self.l_name1 + ' ' + self.l_name2
+  end
 
   def valid_rut?
     number_and_digit = rut.split('-')

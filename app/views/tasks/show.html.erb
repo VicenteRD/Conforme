@@ -1,0 +1,25 @@
+
+
+Remitente: <%= Person::User.find(BSON::ObjectId(@task.petitioner_id)).first_last_name %> <br>
+Responsable: <%= Person::User.find(BSON::ObjectId(@task.executor_id)).first_last_name %> <br>
+
+<br>
+
+<% if @task.rejected %>
+    RECHAZADA <br>
+<% else %>
+    Estado: <%= @task.status %> <br>
+    Plazo: <%= @task.planned_for.strftime('%d/%m/%y - %H:%M') %> <br>
+<% end %>
+
+<br>
+
+Extracto: <%= @task.extract %> <br>
+
+<br>
+
+<% if @task.resolved_at != nil %>
+  <%= @task.resolved_at.strftime('Resuelta el %d/%m/%y a las %H:%M') %>
+<% else %>
+  Pendiente
+<% end %>
