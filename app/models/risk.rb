@@ -1,10 +1,13 @@
 class Risk
   include Mongoid::Document
 
-  has_many :':tasks', class_name: 'Risk::Risk'
+  embeds_many :measurements, class_name: 'Risk::Measurement'
 
-  field :name, type: String
-  field :measurement, type: Float
+  field :fq, as: :measurement_frequency, type: Integer
 
-  field :m_at, as: :measured_at, type: DateTime
+  belongs_to :position, foreign_key: :p_id
+  belongs_to :responsible, class_name: 'Person::User', foreign_key: :r_id
+
+  field :proc, as: :process, type: String
+  field :act, as: :activity, type: String
 end

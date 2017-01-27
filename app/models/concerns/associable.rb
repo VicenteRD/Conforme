@@ -2,27 +2,24 @@ module Associable
   extend ActiveSupport::Concern
 
   included do
-    receiver.class_eval do
+    field :assoc, as: :associations, type: Hash # {class: [BSON::ObjectId]}
 
-      field :audits             , type: Array
-      field :concerned_parties  , type: Array
-      field :definitions        , type: Array
-      field :documents          , type: Array
-      field :findings           , type: Array
-      field :indicators         , type: Array
-      field :management_reviews , type: Array
-      field :minutes            , type: Array
-      field :objectives         , type: Array
-      field :plannings          , type: Array
-      field :people             , type: Array
-      field :positions          , type: Array
-      field :process_types      , type: Array
-      field :risks              , type: Array
-      field :standards          , type: Array
-      field :swot               , type: Array
-      field :tasks              , type: Array
-      field :uploaded_files     , type: Array
+    def get_all_associated(class_type) # TODO - test this monster
+      unless class_type.method_defined? :find
+        return
+      end
 
+      ret_array = []
+
+      class_string = class_type.name.downcase.pluralize.replace('::', '_')
+      if self.assoc[class_string]
+        self.assoc[class_string].each { |key|
+          ret_array.push(class_type.find(key))
+        }
+      end
+
+      ret_array
     end
   end
 end
+

@@ -7,19 +7,21 @@ class Position
   # to recreate the tree-like nature of business positions.
   recursively_embeds_many
 
+  has_many :risks
+
   ## Other fields
 
   field :name, type: String
 
-  field :is_boss, type: Boolean
+  field :area, type: Boolean
 
   # The functions this role performs.
   field :functions, type: String
   field :competencies, type: String
 
-  def get_boss
+  def is_area?
     p_position = self.parent_position
-    until p_position.is_boss
+    until p_position.is_area?
       p_position = p_position.parent_position
     end
   end

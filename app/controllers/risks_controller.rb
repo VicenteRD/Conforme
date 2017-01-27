@@ -1,6 +1,9 @@
 class RisksController < ApplicationController
-  def management
 
+  def operational
+    @risks = Risk::Operational.all
+
+    render 'risks/operational/index', layout: 'table'
   end
 
   def environment
@@ -16,6 +19,19 @@ class RisksController < ApplicationController
   end
 
   def laws
+
+  end
+
+  def show
+    @risk = Risk.find(params[:id])
+    if @risk != nil
+      if @risk._type == 'Risk::Operational'
+        render 'risks/operational/show'
+      end
+    end
+  end
+
+  def new
 
   end
 end

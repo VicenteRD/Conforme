@@ -9,7 +9,7 @@ class TasksController < ApplicationController
     else
       # Mad hacky skills here. Watch out.
 
-      type = type == 'other' ? 'Task' : 'Task::' + type.camelize
+      type = (type == 'other' ? '' : 'Task::' + type.camelize) + 'Task'
 
       @tasks = Task.where(_type: type)
 

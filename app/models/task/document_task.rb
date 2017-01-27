@@ -1,4 +1,4 @@
-class Task::Doc < Task
+class Task::DocumentTask < Task
   include Mongoid::Document
 
   field :pub_at, type: DateTime

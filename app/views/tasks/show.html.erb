@@ -1,5 +1,3 @@
-
-
 Remitente: <%= Person::User.find(BSON::ObjectId(@task.petitioner_id)).first_last_name %> <br>
 Responsable: <%= Person::User.find(BSON::ObjectId(@task.executor_id)).first_last_name %> <br>
 

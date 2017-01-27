@@ -46,11 +46,13 @@ Rails.application.routes.draw do
 
   get '/procesos' => 'processes#show'
 
-  get '/riesgos/gestion'   => 'risks#management'
+  get '/riesgos/gestion'   => 'risks#operational'
   get '/riesgos/ambiente'  => 'risks#environment'
   get '/riesgos/seguridad' => 'risks#safety'
   get '/riesgos/normas'    => 'risks#standards'
   get '/riesgos/leyes'     => 'risks#laws'
+  get '/riesgos/nuevo'     => 'risks#new'
+  get 'riesgos/detalle/:id' => 'risks#show', as: :risk
 
   get '/configuracion/riesgos'        => 'settings#risks'
   get '/configuracion/ambiente'       => 'settings#environment'
@@ -59,6 +61,4 @@ Rails.application.routes.draw do
   get '/configuracion/normas'         => 'settings#standards'
   get '/configuracion/cuestionarios'  => 'settings#questionnaires'
 
-
-  root to: 'dashboard#index'
 end

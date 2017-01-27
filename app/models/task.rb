@@ -1,8 +1,11 @@
+require 'concerns/enumerable'
+require 'concerns/associable'
+
 class Task
   include Mongoid::Document
   include Mongoid::Timestamps::Short
 
-  include Enumerable
+  # include Enumerable
 
   field :executor_id, type: BSON::ObjectId # => Person::User
   field :petitioner_id, type: BSON::ObjectId # => Person::User

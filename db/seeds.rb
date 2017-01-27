@@ -21,7 +21,7 @@ vr =Person::User.new(
   active: true,
   ll_at: Time.now,
   j_at: Time.now)
-vr.save
+vr.save!
 
 cv = Person::User.new(
     email: 'cvillaseca@eworks.cl',
@@ -44,25 +44,30 @@ cv = Person::User.new(
     active: true,
     ll_at: Time.now,
     j_at: Time.now)
-cv.save
+cv.save!
 
 
 
-Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: ' ')
-    .add_to_set(
+pos = Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: ' ', area: true)
+pos.add_to_set(
       child_positions:
           [
-              Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: ' ')
+              Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: ' ', area: true)
                   .add_to_set(
                       child_positions:
                           Position.new(name: 'goma', functions: 'Ser administrado', competencies: ' ')
                   ),
-              Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: ' ')
+              Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: ' ', area: true)
           ])
-    .save
+pos.save!
 
-Task::Doc.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'Hacer pag web', rejected: false,
+Task::DocumentTask.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'Hacer pag web', rejected: false,
   p_at: Time.now, r_at: Time.now)
 
 Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'No matar el servidor', rejected: false,
                  p_at: Time.now, r_at: Time.now)
+
+
+risk = Risk::Operational.new(measurement_frequency: 1, responsible: vr, position: pos,
+                             process: 'Going to bed', activity: 'Trying to sleep', name: 'Failing to sleep')
+risk.save!

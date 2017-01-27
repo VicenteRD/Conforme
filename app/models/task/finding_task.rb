@@ -1,4 +1,4 @@
-class Task::Finding < Task
+class Task::FindingTask < Task
   include Mongoid::Document
 
   field :finding_id, type: BSON::ObjectId # => Finding
