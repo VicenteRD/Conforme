@@ -12,11 +12,17 @@
   <% if @risks.size != 0 %>
     <% @risks.each do |risk| %>
       <tr data-href="<%= risk_path(risk.id.to_s) %>">
+
+        <td><%= Position.find(risk.position_id).name %></td>
+
         <td><%= risk.process %></td>
 
         <td><%= risk.activity %></td>
 
-        <td><%= Person::User.find(risk.r_id).name%></td>
+        <td><%= risk.name %>
+
+        <td><%= Person::User.find(risk.responsible_id).name%></td>
+
       </tr>
     <% end %>
   <% else %>

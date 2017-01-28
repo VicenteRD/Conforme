@@ -46,7 +46,7 @@ Rails.application.routes.draw do
 
   get '/procesos' => 'processes#show'
 
-  get '/riesgos/gestion'   => 'risks#operational'
+  get '/riesgos/:type'   => 'risks#index', as: :risks
   get '/riesgos/ambiente'  => 'risks#environment'
   get '/riesgos/seguridad' => 'risks#safety'
   get '/riesgos/normas'    => 'risks#standards'

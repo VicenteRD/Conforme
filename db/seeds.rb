@@ -68,6 +68,6 @@ Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extrac
                  p_at: Time.now, r_at: Time.now)
 
 
-risk = Risk::Operational.new(measurement_frequency: 1, responsible: vr, position: pos,
+risk = Risk::Operational.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos.id,
                              process: 'Going to bed', activity: 'Trying to sleep', name: 'Failing to sleep')
 risk.save!

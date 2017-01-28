@@ -1,9 +1,13 @@
 class RisksController < ApplicationController
 
-  def operational
-    @risks = Risk::Operational.all
+  def index
+    if params[:type]
+      if params[:type] == 'gestion'
+        @risks = Risk::Operational.all
 
-    render 'risks/operational/index', layout: 'table'
+        render 'risks/operational/index', layout: 'table'
+      end
+    end
   end
 
   def environment
