@@ -29,9 +29,9 @@
               <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-circle-right"></i> Dashboard configuracion</a>
               <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-circle-right"></i> Editar Cuenta</a>
               <div class="dropdown-divider"></div>
-              <%= link_to(logout_path, method: 'delete', class: 'dropdown-item') do %>
+              <%= link_to(logout_path, method: :delete, class: 'dropdown-item') do %>
                 <i class="dropdown-icon icmn-exit"></i>
-                Cerrar Session
+                Cerrar Sesión
               <% end %>
             </ul>
           </div>
@@ -166,15 +166,6 @@
         $('.carousel-widget-2').carousel({
             interval: 6000
         });
-
-        ///////////////////////////////////////////////////////////
-        // DATATABLES
-        $('#example1').DataTable({
-            responsive: true,
-            "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
-        });
-
-        ///////////////////////////////////////////////////////////
         // CHART 1
         new Chartist.Line(".chart-line", {
             labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],

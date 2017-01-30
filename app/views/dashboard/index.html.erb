@@ -52,7 +52,7 @@
     <!-- Dashboard -->
     <div class="dashboard-container">
 
-      <%= render 'tasks/templates/list', collection: @tasks = Task.where(status: 'En curso').all %>
+      <%= render 'tasks/templates/list_all', collection: @tasks = Task.where(status: 'En curso').all %>
 
       <div class="row">
         <div class="col-xl-3 col-lg-6 col-sm-6 col-xs-12">

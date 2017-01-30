@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-xl-12">
+    <div class="panel panel-with-borders">
+      <div class="panel-body">
+
+        <div class="nav-tabs-horizontal margin-bottom-20">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" href="javascript: void(0);" data-toggle="tab" data-target="#h1" role="tab">
+                Tareas Pendientes
+              </a>
+            </li>
+            <!-- <li class="nav-item">
+                 <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#h2" role="tab">
+                   Tareas Realizadas
+                 </a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#h3" role="tab">
+                   Otras Tareas
+                 </a>
+             </li>-->
+          </ul>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <table class="table table-hover nowrap margin-bottom-0" id="tasks-table" width="100%"  style="cursor:pointer;">
+              <thead>
+                <tr>
+                  <th>Tipo tarea</th>
+                  <th>Estado</th>
+                  <th>Remitente</th>
+                  <th>Fecha Modificacion</th>
+                  <th>Fecha Plazo</th>
+                </tr>
+              </thead>
+
+              <tfoot>
+                <th>Tipo tarea</th>
+                <th>Estado</th>
+                <th>Remitente</th>
+                <th>Fecha Modificacion</th>
+                <th>Fecha Plazo</th>
+              </tfoot>
+
+              <tbody>
+                <% if @tasks.size != 0 %>
+
+                    <% @tasks.each do |task| %>
+                        <tr data-href="<%= task_path(task.id.to_s) %>">
+                          <td><%= task.type_name %></td>
+
+                          <td><%= task.status %></td>
+
+                          <td><%= Person::User.find(task.petitioner_id).name%></td>
+
+                          <td><%= task.u_at.strftime('%d / %m / %Y') %></td>
+
+                          <td><%= task.p_at.strftime('%d / %m / %Y') %></td>
+                        </tr>
+                    <% end %>
+
+                <% else %>
+                    <tr>
+                      <td>No se encontraron tareas de este tipo</td>
+                    </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function(){
+      $('#items-table').DataTable({
+          responsive: true,
+          "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
+      });
+  });
+  $(document).on("click", "#tasks-table tr", function() {
+    var link  = $(this).data("href");
+    window.open(link, '_self')
+  });
+</script>

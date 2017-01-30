@@ -49,16 +49,16 @@ cv.save!
 
 
 pos = Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: ' ', area: true)
-pos.add_to_set(
-      child_positions:
-          [
-              Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: ' ', area: true)
-                  .add_to_set(
-                      child_positions:
-                          Position.new(name: 'goma', functions: 'Ser administrado', competencies: ' ')
-                  ),
-              Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: ' ', area: true)
-          ])
+#pos.add_to_set(
+#      child_positions:
+#          [
+#              Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: ' ', area: true)
+#                  .add_to_set(
+#                      child_positions:
+#                          Position.new(name: 'goma', functions: 'Ser administrado', competencies: ' ')
+#                  ),
+#              Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: ' ', area: true)
+#          ])
 pos.save!
 
 Task::DocumentTask.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'Hacer pag web', rejected: false,
@@ -67,7 +67,9 @@ Task::DocumentTask.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En 
 Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'No matar el servidor', rejected: false,
                  p_at: Time.now, r_at: Time.now)
 
+Settings::RiskSettings.create(operational_threshold: 0.5, margin: 0.05)
 
 risk = Risk::Operational.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos.id,
                              process: 'Going to bed', activity: 'Trying to sleep', name: 'Failing to sleep')
 risk.save!
+risk.created_entry(nil, body = 'Created by system')

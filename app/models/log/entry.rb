@@ -1,11 +1,11 @@
 class Log::Entry
   include Mongoid::Document
 
-  include Timestamps::Created::Short
+  include Mongoid::Timestamps::Created::Short
 
   embedded_in :log_book, class_name: 'Log::Book'
 
-  belongs_to :author, class_name: 'Person::User', foreign_key: 'auth_id'
+  field :a_id, as: :author_id, type: BSON::ObjectId
 
   field :title, type: String
   field :body, type: String

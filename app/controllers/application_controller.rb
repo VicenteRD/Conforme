@@ -5,8 +5,14 @@ class ApplicationController < ActionController::Base
 
   def ensure_login
     if session[:id]
-      @user = Person::User.find(session[:id])
-    else
+      begin
+        @user = Person::User.find(session[:id])
+      rescue Mongoid::Errors::DocumentNotFound
+        @user = nil
+      end
+    end
+
+    if @user.nil?
       redirect_to '/login', status: 302
     end
   end

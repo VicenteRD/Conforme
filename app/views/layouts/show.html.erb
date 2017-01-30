@@ -1,0 +1,30 @@
+<section class="page-content">
+  <div class="page-content-inner">
+    <!-- Risk -->
+    <div class="panel">
+      <div class="panel-heading">
+        <%= yield :heading %>
+      </div>
+
+      <div class="panel-body ">
+
+        <div class="row font-size-20 margin-bottom-50">
+          <div class="col-lg-3 text-right">
+            <%= yield :keys %>
+          </div>
+          <div class="col-lg-3">
+            <%= yield :values %>
+          </div>
+        </div>
+
+        <%= yield :body_extra %>
+
+        <div class="row text-center">
+          <%= yield :footer %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% parent_layout 'application'%>

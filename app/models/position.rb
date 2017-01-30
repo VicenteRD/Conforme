@@ -1,15 +1,10 @@
 class Position
   include Mongoid::Document
 
-  ## Relations
   has_and_belongs_to_many :users, class_name: 'Person::User'
-  # Creates a 'parent_position' and an array of 'child_positions'
-  # to recreate the tree-like nature of business positions.
-  recursively_embeds_many
 
-  has_many :risks
-
-  ## Other fields
+  field :p_id, as: :parent_id, type: BSON::ObjectId # => Position
+  field :c_ids, as: :children_ids, type: Array # BSON::ObjectId => Position
 
   field :name, type: String
 
@@ -20,9 +15,19 @@ class Position
   field :competencies, type: String
 
   def is_area?
-    p_position = self.parent_position
-    until p_position.is_area?
-      p_position = p_position.parent_position
+    if self.area
+      return self
     end
+
+    p_position = Position.find(self.parent_id)
+    until p_position.is_area?
+      if p_position.parent_id != nil
+        p_position = Position.find(p_position.parent_id)
+      else
+        return p_position
+      end
+    end
+
+    p_position
   end
 end

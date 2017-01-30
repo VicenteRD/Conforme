@@ -1,0 +1,47 @@
+<section class="page-content">
+  <div class="panel">
+    <div class="panel-heading">
+      <h3>
+        Historial
+        <br>
+        <small><%= @book.base.id %></small>
+      </h3>
+    </div>
+    <div class="panel-body">
+      <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Autor</th>
+            <th>Acción</th>
+            <th width="50%">Detalle</th>
+
+          </tr>
+          </thead>
+          <tbody>
+            <% @book.entries.each do |entry| %>
+              <tr>
+                <td><%= entry.c_at.strftime('%d/%m/%y - %H:%M') %></td>
+
+                <% if entry.author_id %>
+                    <td><%= Person::User.find(entry.author_id).first_last_name %></td>
+                <% else %>
+                    <td>-</td>
+                <% end %>
+                <td><%= entry.title %></td>
+                <td><%= entry.body %></td>
+              </tr>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row text-center">
+        <%= link_to 'Volver', risk_path(@book.base.id) %>
+      </div>
+    </div>
+  </div>
+</section>
+
+

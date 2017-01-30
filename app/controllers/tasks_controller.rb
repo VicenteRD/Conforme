@@ -2,17 +2,16 @@ class TasksController < ApplicationController
 
   def index
 
-    type = params[:tipo]
+    type = params[:type]
 
     if type == nil
       @tasks = Task.all
-    else
-      # Mad hacky skills here. Watch out.
-
-      type = (type == 'other' ? '' : 'Task::' + type.camelize) + 'Task'
-
-      @tasks = Task.where(_type: type)
-
+    elsif type == 'hallazgos'
+      @tasks = Task::FindingTask.all
+      render 'tasks/finding/index', layout: 'table'
+    elsif type == 'documentos'
+      @tasks = Task::DocumentTask.all
+      render 'tasks/documents/index', layout: 'table'
     end
   end
 

@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   get '/proveedores/performance'  => 'providers#eval_performance'
 
   get '/tareas'           => 'tasks#index'      , as: :tasks
-  get '/tareas/:tipo'     => 'tasks#index'      , as: :tasks_type
+  get '/tareas/:type'     => 'tasks#index'      , as: :tasks_type
   get '/tareas/detalle/:id'       => 'tasks#show'       , as: :task
   get '/tareas/modal/:id' => 'tasks#show_modal' # , as: :modal_task
 
@@ -51,8 +51,11 @@ Rails.application.routes.draw do
   get '/riesgos/seguridad' => 'risks#safety'
   get '/riesgos/normas'    => 'risks#standards'
   get '/riesgos/leyes'     => 'risks#laws'
-  get '/riesgos/nuevo'     => 'risks#new'
+  get '/riesgos/nuevo'     => 'risks#new', as: :new_risk
   get 'riesgos/detalle/:id' => 'risks#show', as: :risk
+  get 'riesgos/detalle/:id/historial' => 'risks#history', as: :risk_history
+  get '/riesgos/detalle/:id/nueva' => 'risks#new_measurement', as: :new_risk_measurement
+  post '/riesgos/detalle/:id/nueva' => 'risks#create_measurement'
 
   get '/configuracion/riesgos'        => 'settings#risks'
   get '/configuracion/ambiente'       => 'settings#environment'
