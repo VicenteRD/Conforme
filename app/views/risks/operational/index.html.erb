@@ -14,14 +14,31 @@
     <th>Área</th>
     <th>Proceso</th>
     <th>Actividad</th>
-    <th>NC</th>
+    <th>Riesgo</th>
     <th>Encargado</th>
+    <th>Significativo</th>
+    <th>Fecha</th>
+    <th>Probabilidad</th>
+    <th>Impacto</th>
+    <th>Magnitud</th>
   </tr>
 <% end %>
 
 <% content_for :table_body do %>
   <% if @risks.size != 0 %>
     <% @risks.each do |risk| %>
+      <% if risk.significant == 0%>
+        <%sig = 'No significativo'%>
+      <% elsif risk.significant == 1 %>
+        <% sig = 'Semi significativo' # TODO Color %>
+      <% elsif risk.significant == 2 %>
+        <% sig = 'Semi significativo' # TODO Color %>
+      <% end %>
+
+      <% msrmnt = risk.measurements.last%>
+
+
+
       <tr data-href="<%= risk_path(risk.id.to_s) %>">
 
         <td><%= Position.find(risk.position_id).name %></td>
@@ -33,6 +50,12 @@
         <td><%= risk.name %>
 
         <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
+
+        <td><%= sig %></td>
+        <td><%= msrmnt != nil ? msrmnt.measured_at.strftime('%d/%m/%y') : ''%></td>
+        <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s + '%' : ''%></td>
+        <td><%= msrmnt != nil ? Settings::RiskSettings.first.operational_impact_options[msrmnt.impact.to_s] : ''%></td>
+        <td><%= msrmnt != nil ? msrmnt.magnitude : ''%></td>
 
       </tr>
     <% end %>

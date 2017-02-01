@@ -59,7 +59,7 @@ class RisksController < ApplicationController
         redirect_to '/'
     end
 
-    render "risks/#{type}/new", layout: 'new'
+    render "risks/#{type}/new" #, layout: 'new'
   end
 
   def create
