@@ -18,7 +18,7 @@
           </div>
           <div class="col-lg-3">
             <%= f.collection_select(:area, Position.where(area: true),
-                                    :id, :name, {}, {class: 'form-control', style: 'width:90%'}) %>
+                                    :id, :name, {prompt: 'Seleccione Área'}, {class: 'form-control', style: 'width:90%'}) %>
           </div>
 
           <div class="col-lg-2">
@@ -58,7 +58,8 @@
             </label>
           </div>
           <div class="col-lg-3 form-inline">
-            <%= f.text_field :responsible_id, class: 'form-control', style: 'width:90%' %>
+            <%= f.collection_select(:responsible, Person::User.all,
+                                    :id, :name_and_position, {prompt: 'Seleccione Responsable'}, {class: 'form-control', style: 'width:90%'}) %>
           </div>
           <div class="col-lg-2">
             <label class="form-control-label">
@@ -93,10 +94,19 @@
       <div id="associations-holder"></div>
 
       <div class="panel">
-        <div class="row form-actions text-center margin-15">
-          <div class="form-group">
-            <%= f.submit 'Ingresar', class: 'btn btn-primary width-150' %>
+        <div class="row form-group margin-left-50 margin-top-30">
+          <div class="col-lg-2">
+            <label class="form-control-label">
+              Bitácora
+            </label>
           </div>
+          <div class="col-lg-6">
+            <%= f.text_area :log_entry, class: 'form-control', style: 'width:90%' %>
+          </div>
+        </div>
+
+        <div class="row form-actions text-center margin-15">
+          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150' %>
         </div>
       </div>
     <% end %>

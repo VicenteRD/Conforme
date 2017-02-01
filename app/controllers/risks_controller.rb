@@ -38,7 +38,30 @@ class RisksController < ApplicationController
   end
 
   def create
-    puts params[:risk]
+    new_hash = params[:risk]
+    new_risk = nil
+
+    if params[:type]
+      if params[:type] == 'gestion'
+
+        new_risk = Risk::Operational.new(name: new_hash[:name],
+                                         measurement_frequency: new_hash[:frequency],
+                                         position_id: new_hash[:area],
+                                         responsible_id: new_hash[:responsible],
+                                         process: new_hash[:process],
+                                         activity: new_hash[:activity]
+        )
+
+        new_risk.save!
+
+        redirect_to risks_path('gestion')
+      end
+    end
+
+    if new_risk
+      body = (new_hash[:log_entry] && new_hash[:log_entry] != '') ? new_hash[:log_entry] : ''
+      new_risk.created_entry(session[:id], body)
+    end
   end
 
   def new_measurement
