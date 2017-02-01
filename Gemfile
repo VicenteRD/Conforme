@@ -13,7 +13,7 @@ gem 'mongoid', '~> 6.0', '>= 6.0.3'
 # Mongoid autoincrement fields
 gem 'mongoid-autoinc', '~> 6.0'
 # Use Puma as the app server
-gem 'puma', '~> 3.7.0'
+gem 'puma', '~> 3.6.2'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
