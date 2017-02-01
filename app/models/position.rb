@@ -14,13 +14,13 @@ class Position
   field :functions, type: String
   field :competencies, type: String
 
-  def is_area?
+  def get_area
     if self.area
       return self
     end
 
     p_position = Position.find(self.parent_id)
-    until p_position.is_area?
+    until p_position.area
       if p_position.parent_id != nil
         p_position = Position.find(p_position.parent_id)
       else

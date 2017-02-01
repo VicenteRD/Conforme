@@ -292,22 +292,22 @@
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Ambiente', {controller: 'risks', action: 'environment'}, class: 'left-menu-link' %>
+              <%= link_to 'Ambiente', risks_path('ambiente'), class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Seguridad', {controller: 'risks', action: 'safety'}, class: 'left-menu-link' %>
+              <%= link_to 'Seguridad', risks_path('seguridad'), class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Normas', {controller: 'risks', action: 'standards'}, class: 'left-menu-link' %>
+              <%= link_to 'Normas', risks_path('normas'), class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Leyes', {controller: 'risks', action: 'laws'}, class: 'left-menu-link' %>
+              <%= link_to 'Leyes', risks_path('leyes'), class: 'left-menu-link' %>
             </div>
           </li>
         </ul>

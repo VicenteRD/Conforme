@@ -30,11 +30,15 @@ class RisksController < ApplicationController
   end
 
   def new
-
+    if params[:type]
+      if params[:type] == 'gestion'
+        render 'risks/operational/new', layout: 'application'
+      end
+    end
   end
 
   def create
-
+    puts params[:risk]
   end
 
   def new_measurement
@@ -56,7 +60,7 @@ class RisksController < ApplicationController
       if risk != nil
         risk.new_measurement(session[:id], {measured_at: date_from_hash(val_params, 'measured_at'),
                                             probability: val_params[:probability].to_f / 100.0,
-                                            impact: val_params[:impact],
+                                            impact: val_params[:impact].to_i,
                                             comments: val_params[:comments]})
       end
     end

@@ -44,9 +44,6 @@ cv = Person::User.new(
     active: true,
     ll_at: Time.now,
     j_at: Time.now)
-cv.save!
-
-
 
 pos = Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: ' ', area: true)
 #pos.add_to_set(
@@ -61,13 +58,19 @@ pos = Position.new(name: 'Gerencia General', functions: 'Administrar toda la emp
 #          ])
 pos.save!
 
+cv.add_to_set(positions: pos)
+cv.save!
+
 Task::DocumentTask.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'Hacer pag web', rejected: false,
   p_at: Time.now, r_at: Time.now)
 
 Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'No matar el servidor', rejected: false,
                  p_at: Time.now, r_at: Time.now)
 
-Settings::RiskSettings.create(operational_threshold: 0.5, margin: 0.05)
+Settings::RiskSettings.create(operational_threshold: 0.5,
+                              margin: 0.05,
+                              operational_impact_options: {1 => 'Good', 2 => 'Bad', 3 => 'Doomed'}
+)
 
 risk = Risk::Operational.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos.id,
                              process: 'Going to bed', activity: 'Trying to sleep', name: 'Failing to sleep')

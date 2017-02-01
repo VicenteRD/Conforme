@@ -9,7 +9,7 @@ class Person::User < Person
 
   validates :password, length: {minimum: 8, maximum: 20, too_short: 'La contraseña debe tener entre 8 y 20 caracteres'}
 
-  has_and_belongs_to_many :positions #, default: []
+  has_and_belongs_to_many :positions
   has_many :read_status
 
   field :ll_at, as: :last_login, type: DateTime
@@ -21,4 +21,13 @@ class Person::User < Person
   ## presence of a password.
   field :password_digest, type: String
   has_secure_password
+
+  def name_and_position
+    pos_names = []
+    for pos_id in self.positions
+      pos_names.push(pos_id.name)
+    end
+
+    "(#{pos_names.join('/')}) #{self.full_name}"
+  end
 end

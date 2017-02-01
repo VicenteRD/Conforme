@@ -5,6 +5,8 @@ class Risk
 
   include EnumerableDocument
 
+  include Associable
+
   before_create :init_log
 
   embeds_many :measurements

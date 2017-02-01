@@ -46,16 +46,15 @@ Rails.application.routes.draw do
 
   get '/procesos' => 'processes#show'
 
-  get '/riesgos/:type'   => 'risks#index', as: :risks
-  get '/riesgos/ambiente'  => 'risks#environment'
-  get '/riesgos/seguridad' => 'risks#safety'
-  get '/riesgos/normas'    => 'risks#standards'
-  get '/riesgos/leyes'     => 'risks#laws'
-  get '/riesgos/nuevo'     => 'risks#new', as: :new_risk
-  get 'riesgos/detalle/:id' => 'risks#show', as: :risk
-  get 'riesgos/detalle/:id/historial' => 'risks#history', as: :risk_history
-  get '/riesgos/detalle/:id/nueva' => 'risks#new_measurement', as: :new_risk_measurement
+  get '/riesgos/:type'                 => 'risks#index',           as: :risks
+  get '/riesgos/:type/nuevo'           => 'risks#new',             as: :new_risk
+  get '/riesgos/detalle/:id'           => 'risks#show',            as: :risk
+  get '/riesgos/detalle/:id/nueva'     => 'risks#new_measurement', as: :new_risk_measurement
+  get '/riesgos/detalle/:id/historial' => 'risks#history',         as: :risk_history
+
+  post '/riesgos/:type/nuevo'       => 'risks#create'
   post '/riesgos/detalle/:id/nueva' => 'risks#create_measurement'
+
 
   get '/configuracion/riesgos'        => 'settings#risks'
   get '/configuracion/ambiente'       => 'settings#environment'
@@ -63,5 +62,8 @@ Rails.application.routes.draw do
   get '/configuracion/comunicaciones' => 'settings#communication'
   get '/configuracion/normas'         => 'settings#standards'
   get '/configuracion/cuestionarios'  => 'settings#questionnaires'
+
+
+  get '/associables/:element/:name' => 'associables#list'
 
 end

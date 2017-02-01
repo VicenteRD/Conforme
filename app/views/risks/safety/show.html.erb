@@ -80,7 +80,7 @@
               <tr bgcolor="<%= bgcolor %>" style="pointer-events:none;">
                 <td style="<%= fontcolor %>"><%= measurement.measured_at.strftime('%d/%m/%y - %H:%M') %></td>
                 <td style="<%= fontcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
-                <td style="<%= fontcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
+                <td style="<%= fontcolor %>"><%= measurement.impact %></td>
                 <td style="<%= fontcolor %>"><%= measurement.magnitude %></td>
                 <td style="<%= fontcolor %>"><%= measurement.comments %></td>
               </tr>

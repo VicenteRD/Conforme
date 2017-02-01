@@ -39,8 +39,7 @@
             </label>
           </div>
           <div class="col-lg-3">
-            <%= f.collection_select(:impact, Settings::RiskSettings.first.operational_impact_options,
-                                    :first, :last, {}, {class: 'form-control', style: 'width:90%'}) %>
+            <%= f.collection_select(:impact, {1 => 'good', 2 => 'bad', 3 => 'doomed'}, :first, :last, {}, {class: 'form-control', style: 'width:90%'}) %>
           </div>
         </div>
 

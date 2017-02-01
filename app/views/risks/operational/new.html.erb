@@ -1,0 +1,106 @@
+<section class="page-content">
+  <div class="page-content-inner">
+
+    <%= form_for(:risk, url: new_risk_path) do |f| %>
+
+      <div class="panel">
+
+        <div class="panel-heading">
+          <h3>Nuevo Riesgo de Gestión</h3>
+        </div>
+
+
+        <div class="row form-group margin-left-50">
+          <div class="col-lg-2">
+            <label class="form-control-label">
+              Área
+            </label>
+          </div>
+          <div class="col-lg-3">
+            <%= f.collection_select(:area, Position.where(area: true),
+                                    :id, :name, {}, {class: 'form-control', style: 'width:90%'}) %>
+          </div>
+
+          <div class="col-lg-2">
+            <label class="form-control-label">
+              Proceso
+            </label>
+          </div>
+          <div class="col-lg-3 form-inline">
+            <%= f.text_field :process, class: 'form-control', style: 'width:90%' %>
+          </div>
+        </div>
+
+        <div class="row form-group margin-left-50">
+          <div class="col-lg-2">
+            <label class="form-control-label">
+              Actividad
+            </label>
+          </div>
+          <div class="col-lg-3 form-inline">
+            <%= f.text_field :activity, class: 'form-control', style: 'width:90%' %>
+          </div>
+
+          <div class="col-lg-2">
+            <label class="form-control-label">
+              NC
+            </label>
+          </div>
+          <div class="col-lg-3 form-inline">
+            <%= f.text_field :name, class: 'form-control', style: 'width:90%' %>
+          </div>
+        </div>
+
+        <div class="row form-group margin-left-50">
+          <div class="col-lg-2">
+            <label class="form-control-label">
+              Responsable
+            </label>
+          </div>
+          <div class="col-lg-3 form-inline">
+            <%= f.text_field :responsible_id, class: 'form-control', style: 'width:90%' %>
+          </div>
+          <div class="col-lg-2">
+            <label class="form-control-label">
+              Frecuencia
+            </label>
+          </div>
+          <div class="col-lg-3 form-inline">
+            <%= f.text_field :frequency, class: 'form-control', style: 'width:90%' %>
+          </div>
+        </div>
+
+        <!-- Associations -->
+        <div class="row form-group margin-left-50">
+          <div class="col-lg-2">
+            <label for="associations"> Asociaciones </label>
+          </div>
+          <div class="col-lg-4">
+            <select id="associations" class="form-control">
+              <%=raw generate_relations_dropdown %>
+            </select>
+          </div>
+        </div>
+
+        <script>
+            $('#associations').change(function(){
+                //alert(this.value)
+                $.ajax({url: '/associables/risk/' + this.value})
+            })
+        </script>
+      </div>
+
+      <div id="associations-holder"></div>
+
+      <div class="panel">
+        <div class="row form-actions text-center margin-15">
+          <div class="form-group">
+            <%= f.submit 'Ingresar', class: 'btn btn-primary width-150' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</section>
+

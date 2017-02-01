@@ -1,3 +1,5 @@
+require 'autoinc'
+
 module EnumerableDocument
   extend ActiveSupport::Concern
 
