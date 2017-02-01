@@ -1,11 +1,17 @@
 Rails.application.routes.draw do
 
+  # -------- Root and Dashboard
+
+  get '/'          => redirect('/dashboard')
+  get '/dashboard' => 'dashboard#index'
+
+  # -------- Sessions
+
   get 'login'     => 'sessions#new'
   post 'login'    => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
-  get '/'          => redirect('/dashboard')
-  get '/dashboard' => 'dashboard#index'
+
 
   get '/personas'              => 'users#show'
   get '/personas/oganigrama'   => 'users#organization_chart'
@@ -46,6 +52,8 @@ Rails.application.routes.draw do
 
   get '/procesos' => 'processes#show'
 
+  # -------- Risks
+
   get '/riesgos/:type'                 => 'risks#index',           as: :risks
   get '/riesgos/:type/nuevo'           => 'risks#new',             as: :new_risk
   get '/riesgos/detalle/:id'           => 'risks#show',            as: :risk
@@ -55,6 +63,7 @@ Rails.application.routes.draw do
   post '/riesgos/:type/nuevo'       => 'risks#create'
   post '/riesgos/detalle/:id/nueva' => 'risks#create_measurement'
 
+  # -------- Configuration
 
   get '/configuracion/riesgos'        => 'settings#risks'
   get '/configuracion/ambiente'       => 'settings#environment'
@@ -63,6 +72,7 @@ Rails.application.routes.draw do
   get '/configuracion/normas'         => 'settings#standards'
   get '/configuracion/cuestionarios'  => 'settings#questionnaires'
 
+  # -------- Associables
 
   get '/associables/:element/:name' => 'associables#list'
 
