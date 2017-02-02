@@ -22,6 +22,6 @@ class Risk::Operational < Risk
 
     measurement.significant = significant
 
-    super(author_id, significant)
+    super(author_id, significant, measurement.comments)
   end
 end

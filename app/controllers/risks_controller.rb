@@ -85,7 +85,7 @@ class RisksController < ApplicationController
     end
 
     new_risk.write_attributes(
-        measurement_frequency: new_hash[:frequency],
+        measurement_frequency: new_hash[:frequency].to_i,
         position_id: new_hash[:area],
         responsible_id: new_hash[:responsible],
         process: new_hash[:process],

@@ -31,10 +31,10 @@ class Risk
     self.log_book.new_entry(author_id, 'Creado', body)
   end
 
-  def new_measurement(author_id, significant)
+  def new_measurement(author_id, significant, comment)
     self.significant = significant
     self.save
 
-    self.log_book.new_entry(author_id, 'Nueva medición', '')
+    self.log_book.new_entry(author_id, 'Nueva medición', comment)
   end
 end

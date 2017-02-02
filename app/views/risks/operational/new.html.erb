@@ -11,75 +11,77 @@
 
 
         <div class="row form-group margin-left-50">
-          <div class="col-lg-2">
+          <div class="col-lg-1">
             <label class="form-control-label">
               Área
             </label>
           </div>
-          <div class="col-lg-3">
+          <div class="col-lg-2">
             <%= f.collection_select(:area, Position.where(area: true),
                                     :id, :name, {prompt: 'Seleccione Área'}, {class: 'form-control', style: 'width:90%'}) %>
           </div>
 
-          <div class="col-lg-2">
+          <div class="col-lg-1">
             <label class="form-control-label">
               Proceso
             </label>
           </div>
-          <div class="col-lg-3 form-inline">
+          <div class="col-lg-2 form-inline">
             <%= f.text_field :process, class: 'form-control', style: 'width:90%' %>
           </div>
-        </div>
 
-        <div class="row form-group margin-left-50">
-          <div class="col-lg-2">
-            <label class="form-control-label">
-              Actividad
-            </label>
-          </div>
-          <div class="col-lg-3 form-inline">
-            <%= f.text_field :activity, class: 'form-control', style: 'width:90%' %>
-          </div>
-
-          <div class="col-lg-2">
-            <label class="form-control-label">
-              NC
-            </label>
-          </div>
-          <div class="col-lg-3 form-inline">
-            <%= f.text_field :name, class: 'form-control', style: 'width:90%' %>
-          </div>
-        </div>
-
-        <div class="row form-group margin-left-50">
-          <div class="col-lg-2">
+          <div class="col-lg-1">
             <label class="form-control-label">
               Responsable
             </label>
           </div>
-          <div class="col-lg-3 form-inline">
+          <div class="col-lg-2 form-inline">
             <%= f.collection_select(:responsible, Person::User.all,
                                     :id, :name_and_position, {prompt: 'Seleccione Responsable'}, {class: 'form-control', style: 'width:90%'}) %>
           </div>
-          <div class="col-lg-2">
+        </div>
+
+        <div class="row form-group margin-left-50">
+          <div class="col-lg-1">
+            <label class="form-control-label">
+              Actividad
+            </label>
+          </div>
+          <div class="col-lg-2 form-inline">
+            <%= f.text_field :activity, class: 'form-control', style: 'width:90%' %>
+          </div>
+
+          <div class="col-lg-1">
+            <label class="form-control-label">
+              Riesgo
+            </label>
+          </div>
+          <div class="col-lg-2 form-inline">
+            <%= f.text_field :name, class: 'form-control', style: 'width:90%' %>
+          </div>
+
+          <div class="col-lg-1">
             <label class="form-control-label">
               Frecuencia
             </label>
           </div>
-          <div class="col-lg-3 form-inline">
-            <%= f.text_field :frequency, class: 'form-control', style: 'width:90%' %>
+          <div class="col-lg-2 form-inline">
+            <%= f.collection_select :frequency, frequency_hash, :first, :last, {}, {class: 'form-control', style: 'width:90%'} %>
           </div>
+        </div>
         </div>
 
         <!-- Associations -->
-      </div>
       <div class="panel">
+
         <div class="panel-heading">
           <h5>Relaciones</h5>
         </div>
 
         <%= render partial: 'associables/associations_nav' %>
+
       </div>
+
       <div id="associations-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
