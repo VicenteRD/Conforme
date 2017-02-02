@@ -352,69 +352,6 @@
           </li>
         </ul>
       </li>
-
-      <li class="left-menu-list-separator"><!-- --></li>
-      <li class="menu-top-hidden no-colorful-menu">
-        <div class="left-menu-item">
-          Last Week Sales
-        </div>
-      </li>
-      <li class="menu-top-hidden no-colorful-menu">
-        <div class="example-left-menu-chart chartist-animated chartist-theme-dark"></div>
-        <script>
-            $(function () {
-                // CSS STYLING & ANIMATIONS
-                var cssAnimationData = {
-                        labels: ["S", "M", "T", "W", "T", "F", "S"],
-                        series: [
-                            [11, 14, 16, 16, 20, 17, 21]
-                        ]
-                    },
-                    cssAnimationOptions = {
-                        fullWidth: !0,
-                        chartPadding: {
-                            right: 2,
-                            left: 30
-                        },
-                        axisY: {
-                            position: 'end'
-                        }
-                    },
-                    cssAnimationResponsiveOptions = [
-                        [{
-                            axisX: {
-                                labelInterpolationFnc: function(value, index) {
-                                    return index % 2 !== 0 ? !1 : value
-                                }
-                            }
-                        }]
-                    ];
-
-                new Chartist.Line(".example-left-menu-chart", cssAnimationData, cssAnimationOptions, cssAnimationResponsiveOptions);
-
-            });
-        </script>
-      </li>
-      <li class="menu-top-hidden no-colorful-menu">
-        <div class="left-menu-item">
-          Solar System
-        </div>
-      </li>
-      <li class="menu-top-hidden">
-        <div class="left-menu-item">
-          <span class="donut donut-success"></span> Jupiter
-        </div>
-      </li>
-      <li class="menu-top-hidden">
-        <div class="left-menu-item">
-          <span class="donut donut-primary"></span> Earth
-        </div>
-      </li>
-      <li class="menu-top-hidden">
-        <div class="left-menu-item">
-          <span class="donut donut-danger"></span> Mercury
-        </div>
-      </li>
     </ul>
   </div>
 </nav>

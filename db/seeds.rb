@@ -69,7 +69,7 @@ Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extrac
 
 Settings::RiskSettings.create(operational_threshold: 0.5,
                               margin: 0.05,
-                              operational_impact_options: {1 => 'Good', 2 => 'Bad', 3 => 'Doomed'}
+                              operational_impact_options: {1 => 'Bueno', 2 => 'Malo', 3 => 'Catastrófico'}
 )
 
 risk = Risk::Operational.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos.id,

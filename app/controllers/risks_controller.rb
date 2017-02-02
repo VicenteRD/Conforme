@@ -12,6 +12,9 @@ class RisksController < ApplicationController
       when 'ambiente'
         @risks = Risk::Environmental.all
         type = 'environmental'
+      when 'seguridad'
+        @risks = Risk::Safety.all
+        type = 'safety'
       when 'leyes'
         @risks = Risk::Law.all
         type = 'laws'
@@ -119,7 +122,8 @@ class RisksController < ApplicationController
     if val_params[:type] == 'operational'
       risk = Risk::Operational.find(params[:id])
       if risk != nil
-        risk.new_measurement(session[:id], {measured_at: date_from_hash(val_params, 'measured_at'),
+        val_params[:measured_at] += ' ' + Time.zone.now.strftime('%z')
+        risk.new_measurement(session[:id], {measured_at: DateTime.strptime(val_params[:measured_at], dt_rb_format()),
                                             probability: val_params[:probability].to_f / 100.0,
                                             impact: val_params[:impact].to_i,
                                             comments: val_params[:comments]})

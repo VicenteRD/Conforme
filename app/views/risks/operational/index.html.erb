@@ -27,12 +27,13 @@
 <% content_for :table_body do %>
   <% if @risks.size != 0 %>
     <% @risks.each do |risk| %>
-      <% if risk.significant == 0%>
-        <%sig = 'No significativo'%>
-      <% elsif risk.significant == 1 %>
-        <% sig = 'Semi significativo' # TODO Color %>
-      <% elsif risk.significant == 2 %>
-        <% sig = 'Semi significativo' # TODO Color %>
+
+      <% if risk.significant == 0 %>
+        <% sig = 'No significativo' %>
+      <% elsif risk.significant == 1 || risk.significant == 2 %>
+        <% sig = 'Significativo'%>
+      <% else %>
+        <% sig = 'Sin mediciones' %>
       <% end %>
 
       <% msrmnt = risk.measurements.last%>
@@ -51,11 +52,11 @@
 
         <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
-        <td><%= sig %></td>
-        <td><%= msrmnt != nil ? msrmnt.measured_at.strftime('%d/%m/%y') : ''%></td>
-        <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s + '%' : ''%></td>
-        <td><%= msrmnt != nil ? Settings::RiskSettings.first.operational_impact_options[msrmnt.impact.to_s] : ''%></td>
-        <td><%= msrmnt != nil ? msrmnt.magnitude : ''%></td>
+        <td style="<%= significant_style(risk.significant) %>"><%= sig %></td>
+        <td><%= msrmnt != nil ? msrmnt.measured_at.strftime('%d/%m/%y') : '-'%></td>
+        <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s + '%' : '-'%></td>
+        <td><%= msrmnt != nil ? Settings::RiskSettings.first.operational_impact_options[msrmnt.impact.to_s] : '-'%></td>
+        <td><%= msrmnt != nil ? msrmnt.magnitude : '-'%></td>
 
       </tr>
     <% end %>
@@ -66,8 +67,15 @@
   <% end %>
 <% end %>
 
-<% content_for :after_table do %>
-  <div class="text-right margin-right-30">
-    <%= button_to 'Nuevo Riesgo de Gestión', new_risk_path('gestion'), method: 'get', class: 'btn btn-primary'%>
+<% content_for :menu do %>
+  <div class="left">
+    <div class="header-buttons">
+      <div class="dropdown">
+        <%= link_to new_risk_path('gestion'), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+        <% end %>
+      </div>
+    </div>
   </div>
 <% end %>

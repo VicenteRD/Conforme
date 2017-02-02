@@ -1,68 +1,16 @@
-<div class="panel">
-    <div class="panel-heading">
-      <h5>Personas</h5>
-    </div>
-    <div class="panel-body">
-      <div class="row margin-left-50 margin-bottom-20">
-        <div class="col-lg-2 padding-top-20">
-          <h6>
-            <a onclick="c = $('#users'); c.is(':hidden') ? c.fadeIn() : c.hide()" href="javascript:void(0);">
-              Empleados
-            </a>
-          </h6>
-        </div>
-        <div class="col-lg-6">
-          <%= select(@element,
-                     :users,
-                     Person::User.all.order_by(name_and_position: 'desc').map {|p| [ p.name_and_position, p.id ] },
-                     {},
-                     { multiple: true, size: 10, class: 'form-control', id: 'users' }) %>
-        </div>
-      </div>
-
-      <div class="row margin-left-50 margin-bottom-20">
-        <div class="col-lg-2 padding-top-20">
-          <h6>
-            <a onclick="c = $('#clients'); c.is(':hidden') ? c.fadeIn() : c.hide()" href="javascript:void(0);">
-              Clientes
-            </a>
-          </h6>
-        </div>
-        <div class="col-lg-6">
-          <%= select(@element,
-                     :clients,
-                     Person::Client.all.map {|p| [ p.name, p.id ] },
-                     {},
-                     { multiple: true, size: 10, class: 'form-control', id: 'clients' }) %>
-        </div>
-      </div>
-
-      <div class="row margin-left-50 margin-bottom-20">
-        <div class="col-lg-2 padding-top-20">
-          <h6>
-            <a onclick="c = $('#providers'); c.is(':hidden') ? c.fadeIn() : c.hide()" href="javascript:void(0);">
-              Proveedores
-            </a>
-          </h6>
-        </div>
-        <div class="col-lg-6">
-          <%= select(@element,
-                     :providers,
-                     Person::Provider.all.map {|p| [ p.name, p.id ] },
-                     {},
-                     { multiple: true, size: 10, class: 'form-control', id: 'providers' }) %>
-        </div>
-      </div>
-
-    </div>
+<div class="row">
+  <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>Test1</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>minitest1</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<script>
-
-  $(document).ready(function() {
-      $('#users').hide();
-      $('#clients').hide();
-      $('#providers').hide();
-  });
-
-</script>

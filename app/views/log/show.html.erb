@@ -1,3 +1,18 @@
+<%= content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+        <div class="dropdown">
+
+          <%= link_to risk_path(@book.base.id), class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-undo2"></i>
+              Volver
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+<% end %>
+
 <section class="page-content">
   <div class="panel">
     <div class="panel-heading">
@@ -20,7 +35,7 @@
           </tr>
           </thead>
           <tbody>
-            <% @book.entries.each do |entry| %>
+          <% @book.entries.each do |entry| %>
               <tr>
                 <td><%= entry.c_at.strftime('%d/%m/%y - %H:%M') %></td>
 
@@ -36,12 +51,6 @@
           </tbody>
         </table>
       </div>
-
-      <div class="row text-center">
-        <%= link_to 'Volver', risk_path(@book.base.id) %>
-      </div>
     </div>
   </div>
 </section>
-
-

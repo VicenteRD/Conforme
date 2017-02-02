@@ -2,7 +2,7 @@
   <h3>
     Detalle de Riesgo N.<%= @risk.number %>
     <br>
-    <small><%= @risk.id%></small>
+    <!--<small>< @risk.id ></small>-->
   </h3>
   <div class="margin-left-50">
     <h4 class="text-capitalize">
@@ -19,35 +19,46 @@
   </div>
 <% end %>
 
-<%= content_for :keys do %>
-  Proceso:
+<%= content_for :keys_1 do %>
+  Área:
   <br>
+  Proceso:
+<% end %>
+
+<%= content_for :keys_2 do %>
   Actividad:
   <br>
   <strong>
-    NC:
+    Riesgo:
   </strong>
-  <br>
-  <br>
-  Responsable:
-  <br>
-  Frecuencia de medición:
 <% end %>
 
-<%= content_for :values do %>
-  <%= @risk.process %>
+<%= content_for :keys_3 do %>
+  Responsable:
   <br>
+  Frec. medición:
+<% end %>
+
+<%= content_for :values_1 do %>
+  <%= Position.find(@risk.position_id).name rescue '' %>
+  <br>
+  <%= @risk.process %>
+<% end %>
+
+<%= content_for :values_2 do %>
   <%= @risk.activity %>
   <br>
   <strong>
     <%= @risk.name %>
   </strong>
-  <br>
-  <br>
+<% end %>
+
+<%= content_for :values_3 do %>
   <%= raw Person::User.find(@risk.res_id).first_last_name %>
   <br>
-  <%= @risk.measurement_frequency %>
+  <%= frequency_string(@risk.measurement_frequency).capitalize %>
 <% end %>
+
 
 
 <%= content_for :body_extra do %>
@@ -65,36 +76,101 @@
         </thead>
         <tbody>
           <% @risk.measurements.order('measured_at DESC').each do |measurement| %>
+              <% bgcolor = significant_bgcolor(measurement.significant) %>
+              <% txtcolor = significant_txtcolor(measurement.significant) %>
 
-              <% if measurement.significant == 1 %>
-                  <% bgcolor = '#a9a900' %>
-                  <% fontcolor = 'color:#ffffff' %>
-              <% elsif measurement.significant == 2 %>
-                  <% bgcolor = '#8b0000' %>
-                  <% fontcolor = 'color:#ffffff' %>
-              <% else %>
-                  <% bgcolor = '#ffffff' %>
-                  <% fontcolor = 'color:#514d6a' %>
-              <% end %>
-
-              <tr bgcolor="<%= bgcolor %>" style="pointer-events:none;">
-                <td style="<%= fontcolor %>"><%= measurement.measured_at.strftime('%d/%m/%y - %H:%M') %></td>
-                <td style="<%= fontcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
-                <td style="<%= fontcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
-                <td style="<%= fontcolor %>"><%= measurement.magnitude %></td>
-                <td style="<%= fontcolor %>"><%= measurement.comments %></td>
+              <tr style="<%= bgcolor %>" style="pointer-events:none;">
+                <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
+                <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
+                <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
+                <td style="<%= txtcolor %>"><%= measurement.magnitude %></td>
+                <td style="<%= txtcolor %>"><%= measurement.comments %></td>
               </tr>
           <% end %>
         </tbody>
       </table>
     </div>
   </div>
-
-  <div class="row text-right">
-    <%= button_to 'Nueva medición', new_risk_measurement_path(@risk.id), method: 'get', class: 'btn btn-primary'%>
-  </div>
 <% end %>
 
-<%= content_for :footer do %>
-  <%= link_to 'Ver historial', risk_history_path(@risk.id) %>
+
+
+<%= content_for :menu do %>
+    <script type="text/javascript">
+        function showHistoryModal() {
+            $('#history-modal').modal();
+        }
+    </script>
+
+    <div class="left">
+      <div class="header-buttons">
+        <div class="dropdown">
+          <!--<a href="javascript:showHistoryModal()" class="dropdown-inline-button">
+            <i class="dropdown-inline-button-icon icmn-history"></i>
+            Ver historial
+          </a> -->
+
+          <%= link_to risk_history_path, class: 'dropdown-inline-button' do %>
+            <i class="dropdown-inline-button-icon icmn-history"></i>
+            Ver historial
+          <% end %>
+
+        </div>
+        <div class="dropdown">
+          <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+            <i class="dropdown-inline-button-icon icmn-design"></i>
+            Nueva medición
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+
+  <div id="history-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Bitácora</h4>
+        </div>
+
+        <div class="modal-body" id="history-modal-body">
+          <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Autor</th>
+                <th>Acción</th>
+                <th width="50%">Detalle</th>
+
+              </tr>
+              </thead>
+              <tbody>
+              <% @risk.log_book.entries.each do |entry| %>
+                  <tr>
+                    <td><%= entry.c_at.strftime('%d/%m/%y - %H:%M') %></td>
+
+                    <% if entry.author_id %>
+                      <td><%= Person::User.find(entry.author_id).first_last_name %></td>
+                    <% else %>
+                      <td>-</td>
+                    <% end %>
+
+                    <td><%= entry.title %></td>
+
+                    <td><%= entry.body %></td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 <% end %>

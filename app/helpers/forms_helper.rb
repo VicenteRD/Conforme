@@ -3,12 +3,12 @@ module FormsHelper
     %w(Enero Febrero Marzo Abril Mayo Junio Julio Agosto Septiembre Octubre Noviembre Diciembre)
   end
 
-  def dt_select_cl_format(fields = [:hour, :minute, :day, :month, :year])
-    {
-        default: Time.zone.now,
-        order: fields,
-        use_month_names: es_months
-    }
+  def dt_rb_format(time = false, tz = true)
+    '%d/%m/%Y' + (time ? ' - %H:%M' : '') + (tz ? ' %z' : '')
+  end
+
+  def dt_form_format(time = false)
+    'DD/MM/YYYY' + (time ? ' - HH:mm' : '')
   end
 
   def date_from_hash(date_hash, form_name)

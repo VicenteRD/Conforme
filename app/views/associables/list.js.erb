@@ -1,2 +1,4 @@
-$('#associations-holder')
+$('#associations-modal-body')
     .html("<%= escape_javascript(render partial: 'associables/templates/' + @association_key) %>");
+
+$('#associations-modal').modal();

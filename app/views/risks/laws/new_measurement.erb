@@ -3,7 +3,7 @@
     <div class="panel">
 
       <div class="panel-heading">
-        <h3>Nueva</h3>
+        <h3>Nueva Medición de Riesgo</h3>
       </div>
 
       <%= form_for(:measurement, url: new_risk_measurement_path(@risk.id)) do |f| %>
@@ -11,63 +11,43 @@
         <%= f.hidden_field :type, value: 'operational' %>
 
         <div class="row form-group margin-left-50">
-          <div class="col-lg-1">
+          <div class="col-lg-2">
             <label class="form-control-label">
               Fecha de medición
             </label>
           </div>
-          <div class="col-lg-2">
-            <div class='input-group date' id='date-picker'>
-              <%= f.text_field :measured_at, class: 'form-control', data: {date_format: dt_form_format()}%>
-              <span class="input-group-addon">
-                <i class="icmn-calendar"></i>
-              </span>
+          <div class="col-lg-7">
+            <div class="form-inline">
+              <%= f.datetime_select(:measured_at, dt_select_cl_format, {class: 'form-control', style: 'width:18%'}) %>
             </div>
-            <script type="text/javascript">
-                $(function () {
-                    $('#date-picker').datetimepicker({
-                        locale: moment.locale('es'),
-                        format: '<%= dt_form_format() %>',
-                        defaultDate: Date.now(),
-                        maxDate: Date.now(),
-                        icons: {
-                            time: "fa fa-clock-o",
-                            date: "fa fa-calendar",
-                            up: "fa fa-arrow-up",
-                            down: "fa fa-arrow-down"
-                        }
-                    });
-                });
-            </script>
           </div>
         </div>
 
         <div class="row form-group margin-left-50">
-          <div class="col-lg-1">
+          <div class="col-lg-2">
             <label class="form-control-label">
               Probabilidad
             </label>
           </div>
-          <div class="col-lg-1 form-inline">
+          <div class="col-lg-3 form-inline">
             <%= f.number_field :probability, value: 0, within: 0..100, class: 'form-control', style: 'width:75px' %> %
           </div>
 
-          <div class="col-lg-1">
+          <div class="col-lg-2">
             <label class="form-control-label">
               Impacto
             </label>
           </div>
-          <div class="col-lg-1">
-            <%= f.collection_select(:impact, Settings::RiskSettings.first.operational_impact_options,
-                                    :first, :last, {}, {class: 'form-control'}) %>
+          <div class="col-lg-3">
+            <%= f.collection_select(:impact, {1 => 'good', 2 => 'bad', 3 => 'doomed'}, :first, :last, {}, {class: 'form-control', style: 'width:90%'}) %>
           </div>
         </div>
 
         <div class="row form-group margin-left-50">
-          <div class="col-lg-1">
+          <div class="col-lg-2">
             <label class="form-control-label">Comentarios</label>
           </div>
-          <div class="col-lg-3">
+          <div class="col-lg-4">
             <%= f.text_area :comments, class: 'form-control', style: 'width:100%' %>
           </div>
         </div>
