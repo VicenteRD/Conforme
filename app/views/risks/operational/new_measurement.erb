@@ -18,7 +18,7 @@
             </div>
             <div class="col-lg-2">
               <div class='input-group date' id='date-picker'>
-                <%= f.text_field :measured_at, class: 'form-control', data: {date_format: dt_form_format()}%>
+                <%= f.text_field :measured_at, class: 'form-control', data: {date_format: dt_form_format}%>
                 <span class="input-group-addon">
                   <i class="icmn-calendar"></i>
                 </span>
@@ -27,9 +27,10 @@
                   $(function () {
                       $('#date-picker').datetimepicker({
                           locale: moment.locale('es'),
-                          format: '<%= dt_form_format() %>',
+                          format: '<%= dt_form_format %>',
                           defaultDate: Date.now(),
                           maxDate: Date.now(),
+                          timeZone: '<% server_timezone %>',
                           icons: {
                               time: "fa fa-clock-o",
                               date: "fa fa-calendar",

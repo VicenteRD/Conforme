@@ -1,4 +1,4 @@
-module FormsHelper
+module DatesHelper
   def es_months
     %w(Enero Febrero Marzo Abril Mayo Junio Julio Agosto Septiembre Octubre Noviembre Diciembre)
   end
@@ -11,11 +11,7 @@ module FormsHelper
     'DD/MM/YYYY' + (time ? ' - HH:mm' : '')
   end
 
-  def date_from_hash(date_hash, form_name)
-    DateTime.new(date_hash[form_name + '(1i)'].to_i,
-                 date_hash[form_name + '(2i)'].to_i,
-                 date_hash[form_name + '(3i)'].to_i,
-                 date_hash[form_name + '(4i)'].to_i,
-                 date_hash[form_name + '(5i)'].to_i)
+  def server_timezone
+    Time.zone.now.strftime('%z')
   end
 end

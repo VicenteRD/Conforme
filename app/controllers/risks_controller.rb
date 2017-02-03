@@ -1,13 +1,13 @@
 class RisksController < ApplicationController
 
-  include FormsHelper
+  include DatesHelper
 
   before_action :check_permissions, only: [:new_measurement, :create_measurement]
 
   def index
     case params[:type]
       when 'gestion'
-        @risks = Risk::Operational.all
+        @risks = Risk::Operational.order_by(significant: :desc)
         type = 'operational'
       when 'ambiente'
         @risks = Risk::Environmental.all
@@ -59,7 +59,7 @@ class RisksController < ApplicationController
         type = 'standards'
       else
         type = 'invalid'
-        redirect_to '/'
+        redirect_to '/' and return
     end
 
     render "risks/#{type}/new" #, layout: 'new'
@@ -81,7 +81,7 @@ class RisksController < ApplicationController
       when 'normas'
         new_risk = Risk::Standard.new(name: new_hash[:name])
       else
-        redirect_to '/'
+        redirect_to '/' and return
     end
 
     new_risk.write_attributes(
@@ -98,14 +98,13 @@ class RisksController < ApplicationController
       new_risk.created_entry(session[:id], (entry && entry != '') ? entry : '')
     end
 
-    redirect_to risks_path(params[:type])
+    redirect_to risk_path(new_risk.id)
   end
 
   def new_measurement
-    begin
-      @risk = Risk.find(params[:id])
-    rescue Mongoid::Errors::DocumentNotFound
-      redirect_to '/'
+    @risk = Risk.find(params[:id])
+    if @risk.nil?
+      redirect_to '/' and return
     end
 
     type = minimize_type @risk._type
@@ -116,22 +115,40 @@ class RisksController < ApplicationController
     render "risks/#{type}/new_measurement"
   end
 
-  def create_measurement #   TODO - replicate case statement
-
-    val_params = params[:measurement]
-    if val_params[:type] == 'operational'
-      risk = Risk::Operational.find(params[:id])
-      if risk != nil
-        val_params[:measured_at] += ' ' + Time.zone.now.strftime('%z')
-        risk.new_measurement(session[:id], {measured_at: DateTime.strptime(val_params[:measured_at], dt_rb_format()),
-                                            probability: val_params[:probability].to_f / 100.0,
-                                            impact: val_params[:impact].to_i,
-                                            comments: val_params[:comments]})
-      end
+  def create_measurement
+    risk = Risk.find(params[:id])
+    if risk.nil?
+      redirect_to '/' and return
     end
 
-    redirect_to risk_path(params[:id])
+    val_params = params[:measurement]
+
+    measurement_options = {
+        measured_at: DateTime.strptime(val_params[:measured_at] + ' ' + server_timezone, dt_rb_format),
+        probability: val_params[:probability].to_f / 100.0,
+        comments: val_params[:comments]
+    }
+
+    case minimize_type(risk._type)
+      when 'operational'
+        measurement_options[:impact] = val_params[:impact].to_i
+      when 'environmental'
+        # TODO
+      when 'safety'
+        measurement_options[:impact] = val_params[:impact].to_i
+      when 'leyes'
+        measurement_options[:impact] = val_params[:impact].to_i
+      when 'normas'
+        measurement_options[:impact] = val_params[:impact].to_i
+      else
+        redirect_to '/' and return
+    end
+
+    risk.new_measurement(session[:id], measurement_options)
+
+    redirect_to risk_path(risk.id)
   end
+
 
   def history
     @book = Risk.find(params[:id]).log_book
@@ -174,10 +191,12 @@ class RisksController < ApplicationController
         type = 'operational'
       when 'Risk::Environmental'
         type = 'environmental'
+      when 'Risk::Safety'
+        type = 'safety'
       when 'Risk::Law'
-        type = 'law'
+        type = 'laws'
       when 'Risk::Standard'
-        type = 'standard'
+        type = 'standards'
       else
         type = 'invalid'
     end

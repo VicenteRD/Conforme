@@ -3,12 +3,12 @@
     <!-- Risk -->
     <div class="panel">
       <div class="panel-heading">
-        <%= yield :heading %>
+        <%= yield :heading_main %>
       </div>
 
       <div class="panel-body ">
 
-        <div class="row margin-bottom-50">
+        <div class="row margin-bottom">
 
           <div class="col-lg-1 text-right">
             <%= yield :keys_1 %>
@@ -33,14 +33,38 @@
 
         </div>
 
-        <%= yield :body_extra %>
-
-        <div class="row text-center">
-          <%= yield :footer %>
-        </div>
       </div>
     </div>
+
+    <div class="panel">
+      <div class="panel-heading">
+        <%= yield :heading_extra %>
+      </div>
+
+      <%= yield :body_extra %>
+
+    </div>
+
   </div>
 </section>
+
+<div id="history-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Bitácora</h4>
+      </div>
+
+      <div class="modal-body" id="history-modal-body">
+        <%= yield :history_modal_body %>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 <% parent_layout 'application'%>

@@ -1,4 +1,4 @@
-<%= content_for :heading do %>
+<%= content_for :heading_main do %>
   <h3>
     Detalle de Riesgo N.<%= @risk.number %>
     <br>
@@ -59,12 +59,14 @@
   <%= frequency_string(@risk.measurement_frequency).capitalize %>
 <% end %>
 
-
+<%= content_for :heading_extra do %>
+    <h5>Mediciones</h5>
+<% end %>
 
 <%= content_for :body_extra do %>
-  <div class="row">
-    <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
-      <table class="table table-hover">
+  <div class="row margin-left-20 margin-right-20">
+    <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+      <table class="table">
         <thead>
           <tr>
             <th>Fecha</th>
@@ -79,7 +81,7 @@
               <% bgcolor = significant_bgcolor(measurement.significant) %>
               <% txtcolor = significant_txtcolor(measurement.significant) %>
 
-              <tr style="<%= bgcolor %>" style="pointer-events:none;">
+              <tr style="<%= bgcolor %>">
                 <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
                 <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
                 <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
@@ -96,24 +98,18 @@
 
 
 <%= content_for :menu do %>
-    <script type="text/javascript">
-        function showHistoryModal() {
-            $('#history-modal').modal();
-        }
-    </script>
-
     <div class="left">
       <div class="header-buttons">
         <div class="dropdown">
-          <!--<a href="javascript:showHistoryModal()" class="dropdown-inline-button">
+          <a href="#history-modal" class="dropdown-inline-button" data-toggle="modal">
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
-          </a> -->
+          </a>
 
-          <%= link_to risk_history_path, class: 'dropdown-inline-button' do %>
+          <!--<= link_to risk_history_path, class: 'dropdown-inline-button' do %>
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
-          <% end %>
+          < end %>-->
 
         </div>
         <div class="dropdown">
@@ -125,52 +121,8 @@
 
       </div>
     </div>
+<% end %>
 
-  <div id="history-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Bitácora</h4>
-        </div>
-
-        <div class="modal-body" id="history-modal-body">
-          <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
-            <table class="table table-hover">
-              <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Autor</th>
-                <th>Acción</th>
-                <th width="50%">Detalle</th>
-
-              </tr>
-              </thead>
-              <tbody>
-              <% @risk.log_book.entries.each do |entry| %>
-                  <tr>
-                    <td><%= entry.c_at.strftime('%d/%m/%y - %H:%M') %></td>
-
-                    <% if entry.author_id %>
-                      <td><%= Person::User.find(entry.author_id).first_last_name %></td>
-                    <% else %>
-                      <td>-</td>
-                    <% end %>
-
-                    <td><%= entry.title %></td>
-
-                    <td><%= entry.body %></td>
-                  </tr>
-              <% end %>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
+<%= content_for :history_modal_body do %>
+  <%= render partial: 'log/modal', locals: {book: @risk.log_book} %>
 <% end %>

@@ -7,7 +7,7 @@ class Risk
 
   include Associable
 
-  before_create :init_log
+  before_create :init
 
   embeds_many :measurements
 
@@ -23,7 +23,8 @@ class Risk
   field :proc, as: :process, type: String
   field :act, as: :activity, type: String
 
-  def init_log
+  def init
+    self.significant = -1
     self.log_book = Log::Book.new
   end
 
