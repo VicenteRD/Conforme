@@ -248,9 +248,10 @@
   </div>
 </nav>
 
+
+
 <script>
     $('.assoc-item').click(function(){
-        //alert(this.getAttribute('data-linked_class'));
         $.ajax({url: '/associables/risk/' + $(this).attr('data-linked_class')})
     });
 </script>

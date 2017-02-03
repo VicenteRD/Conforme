@@ -27,7 +27,8 @@
             </label>
           </div>
           <div class="col-lg-2 form-inline">
-            <%= f.text_field :process, class: 'form-control', style: 'width:90%' %>
+            <a href="javascript:void(0)" id="process-list">Abrir lista</a>
+            <!--<= f.text_field :process, class: 'form-control', style: 'width:90%' >-->
           </div>
 
           <div class="col-lg-1">
@@ -82,23 +83,6 @@
 
       </div>
 
-      <div id="associations-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Modal Header</h4>
-            </div>
-            <div class="modal-body" id="associations-modal-body">
-            </div>
-            <!--<div class="modal-footer"></div>-->
-          </div>
-
-        </div>
-      </div>
-
       <div class="panel">
         <div class="row form-group margin-left-50 margin-top-30">
           <div class="col-lg-2">
@@ -121,4 +105,43 @@
 
   </div>
 </section>
+
+<script>
+  $('#process-list').click(function () {
+      $.ajax({url: '/processes/risk'})
+  });
+
+  $('#process-new').click(function () {
+     $.ajax({url: '/processes/risk/new'});
+  });
+
+</script>
+
+<div id="table-modal" class="modal fade modal-size-large" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content" id="table-modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="table-modal-title">?</h4>
+      </div>
+      <div class="modal-body" id="table-modal-body">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="new-modal" class="modal fade modal-size-small" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content" id="table-modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="new-modal-title">?</h4>
+      </div>
+      <div class="modal-body" id="new-modal-body">
+      </div>
+    </div>
+  </div>
+</div>
 

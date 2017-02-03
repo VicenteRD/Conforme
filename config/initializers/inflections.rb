@@ -19,5 +19,4 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'read_status', 'read_status'
   inflect.irregular 'settings', 'settings'
   inflect.irregular 'swot', 'swot'
-  inflect.irregular 'process', 'processes'
 end

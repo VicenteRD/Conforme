@@ -1,0 +1,14 @@
+$('#table-modal-title').html('Procesos');
+$('#table-modal-body')
+    .html("<%= escape_javascript(render partial: 'business_processes/modal_list') %>");
+
+var modal_content = $('#table-modal-content');
+var footer_button = '\
+<div class="modal-footer text-right" id="table-modal-footer">\
+    <%= button_to 'Nuevo', new_business_process_path(@element), method: :get, remote: true %>\
+</div>';
+
+modal_content.find('#table-modal-footer').remove();
+modal_content.append(footer_button);
+
+$('#table-modal').modal();

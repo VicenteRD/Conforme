@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'business_processes/list'
+
+  get 'business_processes/new'
+
   # -------- Root and Dashboard
 
   get '/'          => redirect('/dashboard')
@@ -50,8 +54,6 @@ Rails.application.routes.draw do
 
   get '/objetivos' => 'objectives#show'
 
-  get '/procesos' => 'processes#show'
-
   # -------- Risks
 
   get '/riesgos/:type'                 => 'risks#index',           as: :risks
@@ -72,8 +74,11 @@ Rails.application.routes.draw do
   get '/configuracion/normas'         => 'settings#standards'
   get '/configuracion/cuestionarios'  => 'settings#questionnaires'
 
-  # -------- Associables
+  # -------- Other
 
   get '/associables/:element/:name' => 'associables#list'
+
+  get '/processes/:element'     => 'business_processes#list'
+  get '/processes/:element/new' => 'business_processes#new', as: :new_business_process
 
 end
