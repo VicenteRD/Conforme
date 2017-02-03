@@ -7,6 +7,14 @@
     </div>
 
     <div class="form-actions text-center">
-    <%= f.  submit 'Ingresar', class: 'btn btn-primary width-150 height-50', id: 'process-create', data: {dismiss: 'modal'} %>
+    <%= f.  submit 'Ingresar', class: 'btn btn-primary width-150 height-50', id: 'process-create' %>
     </div>
 <% end %>
+
+<script>
+  $('#process-create').click(function () {
+      $('#new-modal').modal('hide');
+
+      $('#process-picker').find('.form-control').val($('#process_name').val());
+  })
+</script>

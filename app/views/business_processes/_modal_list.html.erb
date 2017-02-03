@@ -10,7 +10,7 @@
       <tbody>
         <% if BusinessProcess.count > 0 %>
           <% BusinessProcess.each do |business_process| %>
-            <tr data-id="<%= business_process.id %>">
+            <tr class="bProcessRow" data-name="<%= business_process.name %>">
               <td><%= business_process.name %></td>
               <td><%= business_process.description %></td>
             </tr>
@@ -24,3 +24,10 @@
     </table>
   </div>
 </div>
+
+<script>
+  $('.bProcessRow').click(function () {
+      $('#process-picker').find('.form-control').val($(this).attr('data-name'));
+      $('#table-modal').modal('hide')
+  });
+</script>
