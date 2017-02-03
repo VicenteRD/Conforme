@@ -20,7 +20,7 @@
         <div class="menu-user-block">
           <div class="dropdown dropdown-avatar">
             <a href="javascript: void(0);" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              <span><%= @user.name %>  <%= @user.l_name1 %></span>
+              <span><%= @user.first_last_name %></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="" role="menu">
               <a class="dropdown-item" href="javascript:void(0)"><i class="dropdown-icon icmn-user"></i> Perfil</a>
@@ -220,4 +220,34 @@
 <div class="main-backdrop"><!-- --></div>
 
 </body>
+
+<div id="table-modal" class="modal fade modal-size-large" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content" id="table-modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="table-modal-title">?</h4>
+      </div>
+      <div class="modal-body" id="table-modal-body">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="new-modal" class="modal fade modal-size-small" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content" id="table-modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="new-modal-title">?</h4>
+      </div>
+      <div class="modal-body" id="new-modal-body">
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </html>

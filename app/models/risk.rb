@@ -20,7 +20,7 @@ class Risk
   field :pos_id, as: :position_id, type: BSON::ObjectId    # => Position
   field :res_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
 
-  field :proc, as: :process, type: String
+  field :proc_id, as: :process_id, type: BSON::ObjectId # => BusinessProcess
   field :act, as: :activity, type: String
 
   def init

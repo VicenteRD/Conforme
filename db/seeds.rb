@@ -72,7 +72,16 @@ Settings::RiskSettings.create(operational_threshold: 0.5,
                               operational_impact_options: {1 => 'Bueno', 2 => 'Malo', 3 => 'Catastrófico'}
 )
 
+proc1 = BusinessProcess.new(name: 'Going to sleep',
+                           description: 'Something some humans do.')
+proc1.save!
+
+proc2 = BusinessProcess.new(name: 'Processing process',
+                            description: 'Process to process to processing of processes within the main process of the process.')
+proc2.save!
+
+
 risk = Risk::Operational.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos.id,
-                             process: 'Going to bed', activity: 'Trying to sleep', name: 'Failing to sleep')
+                             process_id: proc1.id, activity: 'Trying to sleep', name: 'Failing to sleep')
 risk.save!
 risk.created_entry(nil, body = 'Created by system')

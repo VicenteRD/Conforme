@@ -88,7 +88,7 @@ class RisksController < ApplicationController
         measurement_frequency: new_hash[:frequency].to_i,
         position_id: new_hash[:area],
         responsible_id: new_hash[:responsible],
-        process: new_hash[:process],
+        process_id: BusinessProcess.where(name: new_hash[:process]).first.id,
         activity: new_hash[:activity]
     )
     new_risk.save!

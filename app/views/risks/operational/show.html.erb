@@ -42,7 +42,7 @@
 <%= content_for :values_1 do %>
   <%= Position.find(@risk.position_id).name rescue '' %>
   <br>
-  <%= @risk.process %>
+  <%= BusinessProcess.find(@risk.process_id).name %>
 <% end %>
 
 <%= content_for :values_2 do %>
