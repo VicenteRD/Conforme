@@ -78,7 +78,8 @@ Rails.application.routes.draw do
 
   get '/associables/:element/:name' => 'associables#list'
 
-  get '/processes/:element'     => 'business_processes#list'
-  get '/processes/:element/new' => 'business_processes#new', as: :new_business_process
+  get '/processes/:element'      => 'business_processes#list'
+  get '/processes/:element/new'  => 'business_processes#new', as: :new_business_process
+  post '/processes/:element/new' => 'business_processes#create'
 
 end

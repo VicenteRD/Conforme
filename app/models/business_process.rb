@@ -2,5 +2,5 @@ class BusinessProcess
   include Mongoid::Document
 
   field :name, type: String
-  field :description, type: String
+  field :desc, as: :description, type: String
 end

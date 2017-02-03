@@ -3,13 +3,23 @@
     <table class="table table-hover">
       <thead>
       <tr>
-        <th>Test1</th>
+        <th>Nombre</th>
+        <th style="width: 70%">Descripción</th>
       </tr>
       </thead>
       <tbody>
-      <tr>
-        <td>minitest1</td>
-      </tr>
+        <% if BusinessProcess.count > 0 %>
+          <% BusinessProcess.each do |business_process| %>
+            <tr data-id="<%= business_process.id %>">
+              <td><%= business_process.name %></td>
+              <td><%= business_process.description %></td>
+            </tr>
+          <% end %>
+        <% else %>
+          <tr>
+            <td>No se encontraron procesos</td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
