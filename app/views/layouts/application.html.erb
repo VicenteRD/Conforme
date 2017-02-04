@@ -249,5 +249,14 @@
   </div>
 </div>
 
+<script>
+  $('#table-modal').on('hidden.bs.modal', function (e) {
+      var footer = $('#table-modal-content').find('.modal-footer');
+      if (footer != null) {
+          footer.remove()
+      }
+  })
+</script>
+
 
 </html>

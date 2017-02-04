@@ -62,10 +62,10 @@ Rails.application.routes.draw do
   get '/riesgos/detalle/:id/nueva'     => 'risks#new_measurement', as: :new_risk_measurement
   get '/riesgos/detalle/:id/historial' => 'risks#history',         as: :risk_history
 
-  post '/riesgos/:type/nuevo'       => 'risks#create'
+  post '/riesgos/nuevo/:type'       => 'risks#create'
   post '/riesgos/detalle/:id/nueva' => 'risks#create_measurement'
 
-  # -------- Configuration
+  # -------- Configuration - TODO Maybe move them into their kind as 'settings' ?
 
   get '/configuracion/riesgos'        => 'settings#risks'
   get '/configuracion/ambiente'       => 'settings#environment'
