@@ -1,62 +1,62 @@
 <%= content_for :heading_main do %>
-  <h3>
-    Detalle de Riesgo N.<%= @risk.number %>
-    <br>
-    <!--<small>< @risk.id ></small>-->
-  </h3>
-  <div class="margin-left-50">
-    <h4 class="text-capitalize">
-      <% if @risk.significant == 0 %>
-        No Significativo
-      <% elsif @risk.significant == 1 %>
-        <span style="background-color: #a9a900; color: white; padding: 5px 15px"> Significativo </span>
-      <% elsif @risk.significant == 2 %>
-        <span style="background-color: #8b0000; color: white; padding: 5px 15px"> Significativo </span>
-      <% else %>
-        No Significativo
-      <% end %>
-    </h4>
-  </div>
+    <h3>
+      Detalle de Riesgo N. <%= @risk.number %>
+      <br>
+      <!--<small>< @risk.id ></small>-->
+    </h3>
+    <div class="margin-left-50">
+      <h4 class="text-capitalize">
+        <% if @risk.significant == 0 %>
+            No Significativo
+        <% elsif @risk.significant == 1 %>
+            <span style="background-color: #a9a900; color: white; padding: 5px 15px"> Significativo </span>
+        <% elsif @risk.significant == 2 %>
+            <span style="background-color: #8b0000; color: white; padding: 5px 15px"> Significativo </span>
+        <% else %>
+            No Significativo
+        <% end %>
+      </h4>
+    </div>
 <% end %>
 
 <%= content_for :keys_1 do %>
-  Área:
-  <br>
-  Proceso:
+    Área:
+    <br>
+    Proceso:
 <% end %>
 
 <%= content_for :keys_2 do %>
-  Actividad:
-  <br>
-  <strong>
-    Riesgo:
-  </strong>
+    Actividad:
+    <br>
+    <strong>
+      Riesgo:
+    </strong>
 <% end %>
 
 <%= content_for :keys_3 do %>
-  Responsable:
-  <br>
-  Frec. medición:
+    Responsable:
+    <br>
+    Frec. medición:
 <% end %>
 
 <%= content_for :values_1 do %>
-  <%= Position.find(@risk.position_id).name rescue '' %>
-  <br>
-  <%= BusinessProcess.find(@risk.process_id).name %>
+    <%= Position.find(@risk.position_id).name rescue '' %>
+    <br>
+    <%= BusinessProcess.find(@risk.process_id).name %>
 <% end %>
 
 <%= content_for :values_2 do %>
-  <%= @risk.activity %>
-  <br>
-  <strong>
-    <%= @risk.name %>
-  </strong>
+    <%= @risk.activity %>
+    <br>
+    <strong>
+      <%= @risk.name %>
+    </strong>
 <% end %>
 
 <%= content_for :values_3 do %>
-  <%= raw Person::User.find(@risk.res_id).first_last_name %>
-  <br>
-  <%= frequency_string(@risk.measurement_frequency).capitalize %>
+    <%= raw Person::User.find(@risk.res_id).first_last_name %>
+    <br>
+    <%= frequency_string(@risk.measurement_frequency).capitalize %>
 <% end %>
 
 <%= content_for :heading_extra do %>
@@ -64,10 +64,10 @@
 <% end %>
 
 <%= content_for :body_extra do %>
-  <div class="row margin-left-20 margin-right-20">
-    <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
-      <table class="table">
-        <thead>
+    <div class="row margin-left-20 margin-right-20">
+      <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+        <table class="table">
+          <thead>
           <tr>
             <th>Fecha</th>
             <th>Probabilidad</th>
@@ -75,8 +75,8 @@
             <th>Magnitud</th>
             <th width="50%">Comentarios</th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           <% @risk.measurements.order('measured_at DESC').each do |measurement| %>
               <% bgcolor = significant_bgcolor(measurement.significant) %>
               <% txtcolor = significant_txtcolor(measurement.significant) %>
@@ -89,10 +89,10 @@
                 <td style="<%= txtcolor %>"><%= measurement.comments %></td>
               </tr>
           <% end %>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 <% end %>
 
 
@@ -106,16 +106,11 @@
             Ver historial
           </a>
 
-          <!--<= link_to risk_history_path, class: 'dropdown-inline-button' do %>
-            <i class="dropdown-inline-button-icon icmn-history"></i>
-            Ver historial
-          < end %>-->
-
         </div>
         <div class="dropdown">
           <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
-            <i class="dropdown-inline-button-icon icmn-design"></i>
-            Nueva medición
+              <i class="dropdown-inline-button-icon icmn-design"></i>
+              Nueva medición
           <% end %>
         </div>
 
@@ -124,5 +119,5 @@
 <% end %>
 
 <%= content_for :history_modal_body do %>
-  <%= render partial: 'log/modal', locals: {book: @risk.log_book} %>
+    <%= render partial: 'log/modal', locals: {book: @risk.log_book} %>
 <% end %>

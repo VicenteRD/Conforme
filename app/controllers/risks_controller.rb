@@ -26,7 +26,7 @@ class RisksController < ApplicationController
         redirect_to '/'
     end
 
-    render "risks/#{type}/index", layout: 'table'
+    render "risks/index/#{type}", layout: 'table'
   end
 
   def show
@@ -42,7 +42,7 @@ class RisksController < ApplicationController
         redirect_to '/'
     end
 
-    render "risks/#{type}/show", layout: 'show'
+    render "risks/show/#{type}", layout: 'show'
   end
 
   def new
@@ -62,7 +62,7 @@ class RisksController < ApplicationController
         redirect_to '/' and return
     end
 
-    render "risks/#{type}/new" #, layout: 'new'
+    render "risks/new/#{type}" #, layout: 'new'
   end
 
   def create
@@ -112,7 +112,7 @@ class RisksController < ApplicationController
       redirect_to '/'
     end
 
-    render "risks/#{type}/new_measurement"
+    render "risks/new/measurement/#{type}"
   end
 
   def create_measurement

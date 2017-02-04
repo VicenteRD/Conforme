@@ -10,7 +10,7 @@
       <tbody>
         <% if BusinessProcess.count > 0 %>
           <% BusinessProcess.each do |business_process| %>
-            <tr class="bProcessRow" data-name="<%= business_process.name %>">
+            <tr class="bProcessRow" data-name="<%= business_process.name %>" style="cursor: pointer">
               <td><%= business_process.name %></td>
               <td><%= business_process.description %></td>
             </tr>

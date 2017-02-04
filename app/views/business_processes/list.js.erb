@@ -5,7 +5,7 @@ $('#table-modal-body')
 var modal_content = $('#table-modal-content');
 var footer_button = '\
 <div class="modal-footer text-right" id="table-modal-footer">\
-    <%= button_to 'Nuevo', new_business_process_path(@element), method: :get, remote: true %>\
+  <%= button_to 'Nuevo', new_business_process_path(@element), class: 'btn btn-primary' , method: :get, remote: true %>\
 </div>';
 
 modal_content.find('#table-modal-footer').remove();
