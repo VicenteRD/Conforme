@@ -1,6 +1,6 @@
 Mongoid.default_client.database.drop
 
-vr =Person::User.new(
+vr = Person::User.new(
   email: 'vicente.drd@gmail.com',
   password: 'vicente8',
 
@@ -81,7 +81,7 @@ proc2 = BusinessProcess.new(name: 'Processing process',
 proc2.save!
 
 
-risk = Risk::Operational.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos.id,
+risk = Risk::OperationalRisk.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos.id,
                              process_id: proc1.id, activity: 'Trying to sleep', name: 'Failing to sleep')
 risk.save!
 risk.created_entry(nil, body = 'Created by system')

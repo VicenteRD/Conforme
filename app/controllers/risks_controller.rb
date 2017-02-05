@@ -7,19 +7,19 @@ class RisksController < ApplicationController
   def index
     case params[:type]
       when 'gestion'
-        @risks = Risk::Operational.order_by(significant: :desc)
+        @risks = Risk::OperationalRisk.order_by(significant: :desc)
         type = 'operational'
       when 'ambiente'
-        @risks = Risk::Environmental.all
+        @risks = Risk::EnvironmentalRisk.all
         type = 'environmental'
       when 'seguridad'
-        @risks = Risk::Safety.all
+        @risks = Risk::SafetyRisk.all
         type = 'safety'
       when 'leyes'
-        @risks = Risk::Law.all
+        @risks = Risk::LawRisk.all
         type = 'laws'
       when 'normas'
-        @risks = Risk::Standard.all
+        @risks = Risk::StandardRisk.all
         type = 'standards'
       else
         type = 'invalid'
@@ -30,16 +30,15 @@ class RisksController < ApplicationController
   end
 
   def show
-    begin
-      @risk = Risk.find(params[:id])
-    rescue Mongoid::Errors::DocumentNotFound
-      redirect_to '/'
+    @risk = Risk.find(params[:id])
+    if @risk.nil?
+      redirect_to '/' and return
     end
 
     type = minimize_type @risk._type
 
     if type == 'invalid'
-        redirect_to '/'
+        redirect_to '/' and return
     end
 
     render "risks/show/#{type}", layout: 'show'
@@ -71,15 +70,15 @@ class RisksController < ApplicationController
 
     case params[:type]
       when 'gestion'
-        new_risk = Risk::Operational.new(name: new_hash[:name])
+        new_risk = Risk::OperationalRisk.new(name: new_hash[:name])
       when 'ambiente'
-        new_risk = Risk::Operational.new(name: new_hash[:name])
+        new_risk = Risk::EnvironmentalRisk.new(name: new_hash[:name])
       when 'seguridad'
-        new_risk = Risk::Safety.new(name: new_hash[:name])
+        new_risk = Risk::SafetyRisk.new(name: new_hash[:name])
       when 'leyes'
-        new_risk = Risk::Law.new(name: new_hash[:name])
+        new_risk = Risk::LawRisk.new(name: new_hash[:name])
       when 'normas'
-        new_risk = Risk::Standard.new(name: new_hash[:name])
+        new_risk = Risk::StandardRisk.new(name: new_hash[:name])
       else
         redirect_to '/' and return
     end
@@ -187,15 +186,15 @@ class RisksController < ApplicationController
 
   def minimize_type class_name
     case class_name
-      when 'Risk::Operational'
+      when 'Risk::OperationalRisk'
         type = 'operational'
-      when 'Risk::Environmental'
+      when 'Risk::EnvironmentalRisk'
         type = 'environmental'
-      when 'Risk::Safety'
+      when 'Risk::SafetyRisk'
         type = 'safety'
-      when 'Risk::Law'
+      when 'Risk::LawRisk'
         type = 'laws'
-      when 'Risk::Standard'
+      when 'Risk::StandardRisk'
         type = 'standards'
       else
         type = 'invalid'

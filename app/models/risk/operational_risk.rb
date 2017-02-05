@@ -1,6 +1,6 @@
-class Risk::Operational < Risk
+class Risk::OperationalRisk < Risk
 
-  embeds_many :measurements, class_name: 'Risk::OperationalMeasurement'
+  embeds_many :measurements, class_name: 'RiskMeasurement::OperationalMeasurement'
 
   field :name, type: String
 

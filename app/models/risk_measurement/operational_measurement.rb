@@ -1,7 +1,7 @@
-class Risk::OperationalMeasurement < Risk::Measurement
+class RiskMeasurement::OperationalMeasurement < RiskMeasurement
   include Mongoid::Document
 
-  embedded_in :risk, class_name: 'Risk::Operational'
+  embedded_in :risk, class_name: 'Risk::OperationalRisk'
 
   def calculate_magnitude
     if self.probability && self.impact

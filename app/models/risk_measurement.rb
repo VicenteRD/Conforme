@@ -1,4 +1,4 @@
-class Risk::Measurement
+class RiskMeasurement
   include Mongoid::Document
 
   before_save :calculate_magnitude
