@@ -6,15 +6,9 @@
   </h3>
   <div class="margin-left-50">
     <h4 class="text-capitalize">
-      <% if @risk.significant == 0 %>
-        No Significativo
-      <% elsif @risk.significant == 1 %>
-        <span style="background-color: #a9a900; color: white; padding: 5px 15px"> Significativo </span>
-      <% elsif @risk.significant == 2 %>
-        <span style="background-color: #8b0000; color: white; padding: 5px 15px"> Significativo </span>
-      <% else %>
-        No Significativo
-      <% end %>
+      <span style="<%= significant_style(@risk.significant)%>; padding: 5px">
+        <%= humanize_significant @risk.significant %>
+      </span>
     </h4>
   </div>
 <% end %>
@@ -93,7 +87,9 @@
       </table>
     </div>
 
-    <div class="ct-chart ct-minor-seventh height-400" id="risk-chart"></div>
+    <div class="margin-top-50">
+      <div class="ct-chart height-400" id="risk-chart"></div>
+    </div>
   </div>
 <% end %>
 
@@ -125,34 +121,61 @@
 <% end %>
 
 <%= content_for :scripts do %>
-    <% labels = []%>
-    <% data = [] %>
-    <% thresholds = [] %>
-    <% @risk.measurements.order(measured_at: :asc).each do |m| %>
-        <% labels.push(m.measured_at.strftime(dt_rb_format(false, false))) %>
-        <% data.push(m.magnitude) %>
-        <% thresholds.push(m.threshold) %>
-    <% end %>
+    <% if @risk.measurements.count > 0 %>
+      <% date_nums = Set.new %>
+      <% data = [] %>
+      <% thresholds = [] %>
+      <% @risk.measurements.order(measured_at: :asc).each do |m| %>
+          <% date = m.measured_at.to_i %>
+          <% date_nums.add(date) %>
+          <% data.push({x: date, y: m.magnitude}) %>
+          <% thresholds.push({x: date, y: m.threshold}) %>
+      <% end %>
 
-    <script>
-      var data = {
-          labels: <%= raw labels %>,
-          series: [<%= data %>, <%= thresholds %>]
-      };
-      $(document).ready(function() {
-          new Chartist.Line('#risk-chart', data);
-      });
-    </script>
+      <script>
+        var data = {
+            labels: <%= raw date_nums.to_a %>,
+            series: [
+                <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
+                <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
+            ]
+        };
+        $(document).ready(function() {
+            chart = new Chartist.Line(
+                '#risk-chart',
+                data,
+                {
+                    lineSmooth: false,
+                    axisX: {
+                        type: Chartist.FixedScaleAxis,
+                        ticks: <%= raw date_nums.to_a %>,
+                        low: <%= raw date_nums.to_a.first - 4.hours.to_i %>,
+                        high: <%= raw date_nums.to_a.last + 4.hours.to_i %>,
+                        labelInterpolationFnc: function (value) {
+                          return moment(value * 1000).format('<%= dt_form_format(false) %>');
+                        }
+                    },
+                    axisY: {
+                        type: Chartist.AutoScaleAxis,
+                        low: 0,
+                        high: <%= Settings::RiskSettings.first.operational_impact_options.keys.last %>
+                    }
+                }
+            );
+        });
+
+      </script>
+    <% end %>
 
     <style>
       .ct-series-a .ct-line,
       .ct-series-a .ct-point {
-        stroke: royalblue;
+        stroke: #01a8fe;
       }
 
       .ct-series-b .ct-line,
       .ct-series-b .ct-point {
-        stroke: #8b0000;
+        stroke: #fb434a;
       }
     </style>
 <% end %>

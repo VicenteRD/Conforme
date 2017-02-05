@@ -6,9 +6,9 @@ module RisksHelper
       when 0
         tag + '#ffffff'
       when 1
-        tag + '#a9a900'
+        tag + '#cccc37'
       when 2
-        tag + '#8b0000'
+        tag + '#fb434a'
       else
         ''
     end
