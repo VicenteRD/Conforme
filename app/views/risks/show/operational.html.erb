@@ -159,7 +159,14 @@
                         type: Chartist.AutoScaleAxis,
                         low: 0,
                         high: <%= Settings::RiskSettings.first.operational_impact_options.keys.last %>
-                    }
+                    },
+                    plugins: [
+                        Chartist.plugins.tooltip({
+                            tooltipFnc: function (meta, value) {
+                                return value.split(',')[1]
+                            }
+                        })
+                    ]
                 }
             );
         });
