@@ -1,4 +1,5 @@
 module RisksHelper
+
   def significant_bgcolor(sig)
     tag = 'background-color: '
     case sig
@@ -30,4 +31,36 @@ module RisksHelper
   def significant_style(sig)
     significant_bgcolor(sig) + '; ' + significant_txtcolor(sig)
   end
+
+  def humanize_significant(sig)
+    if sig == 0
+      'No Significativo'
+    elsif sig == 1 || sig == 2
+      'Significativo'
+    else
+      'Sin mediciones'
+    end
+  end
+
+  def ppf?(n)
+    case n
+      when -1
+        'Pasado'
+      when 0
+        'Presente'
+      when 1
+        'Futuro'
+      else
+        '?'
+    end
+  end
+
+  def direct?(dir)
+    dir ? 'Directo' : 'Indirecto'
+  end
+
+  def positive?(pos)
+    pos ? 'Positivo' : 'Negativo'
+  end
+
 end

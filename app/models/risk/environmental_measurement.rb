@@ -6,8 +6,8 @@ module Risk
     field :geo_a, as: :geographical_amplitude, type: Integer
     field :pub_b, as: :public_perception, type: Integer
 
-    field :indirect, type: Boolean
-    field :positive, type: Boolean
+    field :dir, as: :direct, type: Boolean
+    field :pos, as: :positive, type: Boolean
 
     def calculate_magnitude
       self.index = self.op_situation + self.geo_amp + self.public_perception + self.reversible + self.control

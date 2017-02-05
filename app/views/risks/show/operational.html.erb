@@ -77,7 +77,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @risk.measurements.order('measured_at DESC').each do |measurement| %>
+          <% @risk.measurements.order(measured_at: :desc).each do |measurement| %>
               <% bgcolor = significant_bgcolor(measurement.significant) %>
               <% txtcolor = significant_txtcolor(measurement.significant) %>
 
@@ -92,6 +92,8 @@
         </tbody>
       </table>
     </div>
+
+    <div class="ct-chart ct-minor-seventh height-400" id="risk-chart"></div>
   </div>
 <% end %>
 
@@ -120,4 +122,37 @@
 
 <%= content_for :history_modal_body do %>
   <%= render partial: 'log/modal', locals: {book: @risk.log_book} %>
+<% end %>
+
+<%= content_for :scripts do %>
+    <% labels = []%>
+    <% data = [] %>
+    <% thresholds = [] %>
+    <% @risk.measurements.order(measured_at: :asc).each do |m| %>
+        <% labels.push(m.measured_at.strftime(dt_rb_format(false, false))) %>
+        <% data.push(m.magnitude) %>
+        <% thresholds.push(m.threshold) %>
+    <% end %>
+
+    <script>
+      var data = {
+          labels: <%= raw labels %>,
+          series: [<%= data %>, <%= thresholds %>]
+      };
+      $(document).ready(function() {
+          new Chartist.Line('#risk-chart', data);
+      });
+    </script>
+
+    <style>
+      .ct-series-a .ct-line,
+      .ct-series-a .ct-point {
+        stroke: royalblue;
+      }
+
+      .ct-series-b .ct-line,
+      .ct-series-b .ct-point {
+        stroke: #8b0000;
+      }
+    </style>
 <% end %>

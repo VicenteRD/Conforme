@@ -10,17 +10,20 @@ class Risk::Operational < Risk
     self.measurements.create(values)
     measurement = self.measurements.last
 
-
     significant = 0
     if settings && settings[:operational_threshold] && settings[:margin]
-      if measurement.magnitude >= (settings[:operational_threshold] * (1.0 + (settings[:margin] / 100)))
+
+      measurement.threshold = settings[:operational_threshold]
+
+      if measurement.magnitude >= (measurement.threshold * (1.0 + (settings[:margin] / 100)))
         significant = 2
-      elsif measurement.magnitude >= settings[:operational_threshold]
+      elsif measurement.magnitude >= measurement.threshold
         significant = 1
       end
     end
 
     measurement.significant = significant
+    measurement.save!
 
     super(author_id, significant, measurement.comments)
   end

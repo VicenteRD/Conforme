@@ -9,8 +9,6 @@ class Risk
 
   before_create :init
 
-  embeds_many :measurements
-
   embeds_one :log_book, class_name: 'Log::Book'
 
   field :fq, as: :measurement_frequency, type: Integer

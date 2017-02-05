@@ -28,17 +28,8 @@
   <% if @risks.size != 0 %>
     <% @risks.each do |risk| %>
 
-      <% if risk.significant == 0 %>
-        <% sig = 'No significativo' %>
-      <% elsif risk.significant == 1 || risk.significant == 2 %>
-        <% sig = 'Significativo'%>
-      <% else %>
-        <% sig = 'Sin mediciones' %>
-      <% end %>
-
-      <% msrmnt = risk.measurements.last%>
-
-
+      <% sig = humanize_significant(risk.significant) %>
+      <% msrmnt = risk.measurements.order_by(measured_at: 'asc').last %>
 
       <tr data-href="<%= risk_path(risk.id.to_s) %>">
 
@@ -62,7 +53,7 @@
     <% end %>
   <% else %>
     <tr>
-      <td> No se encontraron riesgos de esta clase. </td>
+      <td colspan="10"> No se encontraron riesgos de esta clase. </td>
     </tr>
   <% end %>
 <% end %>
