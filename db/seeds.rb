@@ -45,20 +45,28 @@ cv = Person::User.new(
     ll_at: Time.now,
     j_at: Time.now)
 
-pos = Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: ' ', area: true)
-#pos.add_to_set(
-#      child_positions:
-#          [
-#              Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: ' ', area: true)
-#                  .add_to_set(
-#                      child_positions:
-#                          Position.new(name: 'goma', functions: 'Ser administrado', competencies: ' ')
-#                  ),
-#              Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: ' ', area: true)
-#          ])
-pos.save!
+pos_gg = Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: ' ', area: true)
 
-cv.add_to_set(positions: pos)
+pos_dp = Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: ' ', area: true)
+
+pos_go = Position.new(name: 'Goma', functions: 'Ser administrado', competencies: ' ')
+
+pos_dv = Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: ' ', area: true)
+
+pos_go.parent_id = pos_dp.id
+pos_go.save!
+
+pos_dp.add_to_set(children_ids: pos_go.id)
+pos_dp.parent_id = pos_gg.id
+pos_dp.save!
+
+pos_dv.parent_id = pos_gg.id
+pos_dv.save!
+
+pos_gg.add_to_set(children_ids: [pos_dp.id, pos_dv.id])
+pos_gg.save!
+
+cv.add_to_set(positions: pos_gg)
 cv.save!
 
 Task::DocumentTask.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'Hacer pag web', rejected: false,
@@ -81,7 +89,7 @@ proc2 = BusinessProcess.new(name: 'Processing process',
 proc2.save!
 
 
-risk = Risk::OperationalRisk.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos.id,
+risk = Risk::OperationalRisk.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos_gg.id,
                              process_id: proc1.id, activity: 'Trying to sleep', name: 'Failing to sleep')
 risk.save!
 risk.created_entry(nil, body = 'Created by system')

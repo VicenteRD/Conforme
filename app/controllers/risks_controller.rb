@@ -4,6 +4,10 @@ class RisksController < ApplicationController
 
   before_action :check_permissions, only: [:new_measurement, :create_measurement]
 
+  def risk_operational_risk_path(id)
+    risk_path(type = 'gestion', id = id)
+  end
+
   def index
     case params[:type]
       when 'gestion'
@@ -100,6 +104,26 @@ class RisksController < ApplicationController
     redirect_to risk_path(new_risk.id)
   end
 
+  def edit
+    @risk = Risk.find(params[:id])
+    if @risk.nil?
+      redirect_to '/' and return
+    end
+
+    type = minimize_type @risk._type
+    if type == 'invalid'
+      redirect_to '/' and return
+    end
+
+    render "risks/edit/#{type}"
+  end
+
+  def update
+    # TODO
+
+    redirect_to risks_path(@risk.id)
+  end
+
   def new_measurement
     @risk = Risk.find(params[:id])
     if @risk.nil?
@@ -108,7 +132,7 @@ class RisksController < ApplicationController
 
     type = minimize_type @risk._type
     if type == 'invalid'
-      redirect_to '/'
+      redirect_to '/' and return
     end
 
     render "risks/new/measurement/#{type}"
@@ -146,6 +170,32 @@ class RisksController < ApplicationController
     risk.new_measurement(session[:id], measurement_options)
 
     redirect_to risk_path(risk.id)
+  end
+
+  def edit_measurement
+    @measurement = RiskMeasurement.find(params[:id])
+
+    if @measurement.nil?
+      redirect_to '/' and return
+    end
+
+    @risk = @measurement.base
+    if @risk.nil?
+      redirect_to '/' and return
+    end
+
+    type = minimize_type @risk._type
+    if type == 'invalid'
+      redirect_to '/' and return
+    end
+
+    render "risks/edit/measurement/#{type}"
+  end
+
+  def update_measurement
+    # TODO
+
+    redirect_to risks_path(@risk.id)
   end
 
 

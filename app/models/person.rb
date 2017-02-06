@@ -37,8 +37,12 @@ class Person
     self.name + ' ' + self.l_name1
   end
 
+  def last_names
+    self.l_name1 + ' ' + self.l_name2
+  end
+
   def full_name
-    self.name + ' ' + self.l_name1 + ' ' + self.l_name2
+    self.name + ' ' + self.last_names
   end
 
   def valid_rut?

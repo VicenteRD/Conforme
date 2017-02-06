@@ -1,0 +1,42 @@
+<% picker_id = (@element.to_s.starts_with?('single') ? @element.to_s.split('_').to_a.last : nil) %>
+
+<div class="row">
+  <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellidos</th>
+        <th>Posiciones</th>
+        <th>Rol</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% Person::User.each do |user| %>
+        <% positions = []; user.positions.each { |pos| positions.push(pos.name) } %>
+        <tr class="<%= picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-id="<%= user.id %>">
+          <td id="user-name"><%= user.name %></td>
+          <td id="user-last-names"><%= user.last_names %></td>
+          <td><%= positions.join(', ') %></td>
+          <td><%= user.role %></td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  $('.user-selectable').click(function () {
+      row = $(this);
+      formGroup = $('#<%= picker_id %>');
+
+      formGroup.find('.form-control')
+          .val(row.find('#user-name').html() + ' ' + row.find('#user-last-names').html());
+      formGroup.find('.form-control-hidden').val(row.attr('data-id'));
+
+
+      $('#table-modal').modal('hide');
+  });
+</script>
+

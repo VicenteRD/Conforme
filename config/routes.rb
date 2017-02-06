@@ -54,16 +54,22 @@ Rails.application.routes.draw do
 
   get '/objetivos' => 'objectives#show'
 
+  get 'posicion/:parent_id/nueva' => 'positions#new'
+
   # -------- Risks
 
-  get '/riesgos/:type'                 => 'risks#index',           as: :risks
-  get '/riesgos/nuevo/:type'           => 'risks#new',             as: :new_risk
-  get '/riesgos/detalle/:id'           => 'risks#show',            as: :risk
-  get '/riesgos/detalle/:id/nueva'     => 'risks#new_measurement', as: :new_risk_measurement
-  get '/riesgos/detalle/:id/historial' => 'risks#history',         as: :risk_history
+  get '/riesgos/:type'                 => 'risks#index',            as: :risks
+  get '/riesgos/nuevo/:type'           => 'risks#new',              as: :new_risk
+  get '/riesgos/editar/:id'            => 'risks#edit',             as: :edit_risk
+  get '/riesgos/detalle/:id'           => 'risks#show',             as: :risk
+  get '/riesgos/detalle/:id/nueva'     => 'risks#new_measurement',  as: :new_risk_measurement
+  get '/riesgos/editar-medicion/:id'   => 'risks#edit_measurement', as: :edit_risk_measurement
+  get '/riesgos/detalle/:id/historial' => 'risks#history',          as: :risk_history
 
-  post '/riesgos/nuevo/:type'       => 'risks#create'
-  post '/riesgos/detalle/:id/nueva' => 'risks#create_measurement'
+  post '/riesgos/nuevo/:type'         => 'risks#create'
+  post '/riesgos/detalle/:id/nueva'   => 'risks#create_measurement'
+  post '/riesgos/editar/:id'          => 'risks#update'
+  post '/riesgos/editar-medicion/:id' => 'risks#update_measurement'
 
   # -------- Configuration - TODO Maybe move them into their kind as 'settings' ?
 

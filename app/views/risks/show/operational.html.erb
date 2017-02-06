@@ -68,6 +68,9 @@
             <th>Impacto</th>
             <th>Magnitud</th>
             <th width="50%">Comentarios</th>
+            <% if @risk.responsible_id == @user.id %>
+              <th>Editar</th>
+            <% end %>
           </tr>
         </thead>
         <tbody>
@@ -81,6 +84,9 @@
                 <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
                 <td style="<%= txtcolor %>"><%= measurement.magnitude %></td>
                 <td style="<%= txtcolor %>"><%= measurement.comments %></td>
+                <% if @risk.responsible_id == @user.id %>
+                  <td><%= link_to 'Editar', edit_risk_measurement_path(measurement.id) %></td>
+                <% end %>
               </tr>
           <% end %>
         </tbody>
@@ -98,17 +104,34 @@
 <%= content_for :menu do %>
     <div class="left">
       <div class="header-buttons">
+
+        <div class="dropdown">
+          <%= link_to risks_path('gestion'), class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-undo2"></i>
+              Volver
+          <% end %>
+        </div>
+
         <div class="dropdown">
           <a href="#history-modal" class="dropdown-inline-button" data-toggle="modal">
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
           </a>
-
         </div>
+
+        <% if @risk.responsible_id == @user.id %>
+          <div class="dropdown">
+            <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-design"></i>
+              Nueva medición
+            <% end %>
+          </div>
+        <% end %>
+
         <div class="dropdown">
-          <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
-            <i class="dropdown-inline-button-icon icmn-design"></i>
-            Nueva medición
+          <%= link_to edit_risk_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-pencil"></i>
+              Editar
           <% end %>
         </div>
 

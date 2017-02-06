@@ -1,0 +1,29 @@
+<div class="row">
+
+  <%= render partial: 'positions/chart', layout: false %>
+
+</div>
+
+<style>
+  .position {
+    color: #827ca1;
+  }
+  .area-position {
+    color: #827ca1;
+    cursor: pointer;
+  }
+</style>
+
+<% if @element.to_s.starts_with?('single') %>
+    <% picker_id = @element.to_s.split('_').to_a.last %>
+  <script>
+      $('.area-position').click(function () {
+          formGroup = $('#<%= picker_id %>');
+
+          formGroup.find('.form-control').val($(this).html());
+          formGroup.find('.form-control-hidden').val($(this).attr('id'));
+
+          $('#table-modal').modal('hide');
+      });
+  </script>
+<% end %>

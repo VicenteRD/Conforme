@@ -1,14 +1,14 @@
 <section class="page-content">
   <div class="page-content-inner">
-    <%= form_for(:measurement, url: new_risk_measurement_path(@risk.id)) do |f| %>
+    <%= form_for(@measurement) do |f| %>
 
-      <div class="panel">
+        <div class="panel">
 
-        <div class="panel-heading">
-          <h3>Nueva</h3>
-        </div>
+          <div class="panel-heading">
+            <h3>Nueva</h3>
+          </div>
 
-        <%= f.hidden_field :type, value: 'operational' %>
+          <%= f.hidden_field :type, value: 'operational' %>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
@@ -73,52 +73,39 @@
             </div>
           </div>
 
-      </div>
-      <div class="panel">
-
-        <div class="panel-heading">
-          <h5>Relaciones</h5>
         </div>
+        <div class="panel">
 
-        <%= render partial: 'associables/associations_nav', locals: {element: 'measurement'} %>
-
-      </div>
-
-      <div id="associations-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-
-          <!-- Modal content-->
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Modal Header</h4>
-            </div>
-            <div class="modal-body" id="associations-modal-body">
-            </div>
-            <!--<div class="modal-footer"></div>-->
+          <div class="panel-heading">
+            <h5>Relaciones</h5>
           </div>
 
-        </div>
-      </div>
+          <%= render partial: 'associables/associations_nav', locals: {element: 'measurement'} %>
 
-      <div class="panel" style="position: fixed; width: 100%; bottom: 0; margin: 0 0 0 -16px  ">
-        <div class="row text-center margin-15">
-          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
         </div>
-      </div>
+
+        <div id="associations-modal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+              </div>
+              <div class="modal-body" id="associations-modal-body">
+              </div>
+              <!--<div class="modal-footer"></div>-->
+            </div>
+
+          </div>
+        </div>
+
+        <div class="panel" style="position: fixed; width: 100%; bottom: 0; margin: 0 0 0 -16px  ">
+          <div class="row text-center margin-15">
+            <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+          </div>
+        </div>
     <% end %>
   </div>
 </section>
-
-<%= content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-        <div class="dropdown">
-          <%= link_to risk_path(params[:id]), class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-undo2"></i>
-              Volver
-          <% end %>
-        </div>
-      </div>
-    </div>
-<% end %>

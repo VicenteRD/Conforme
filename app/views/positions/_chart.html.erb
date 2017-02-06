@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="/assets/organization/jquery.orgchart.css"/>
+
+<script>
+    $('#org-chart-data').orgChart({container: $('#org-chart-container')});
+
+
+</script>
+
+<div id='org-chart-container'></div>
+
+<ul id="org-chart-data" style="display:none">
+  <%= generate_organization_chart.html_safe %>
+</ul>
+
+<style>
+  .orgChart p {
+    margin-bottom: 0.5rem;
+  }
+</style>
