@@ -8,6 +8,10 @@
         <div class="panel-heading">
           <h3>Nuevo Riesgo de Gestión</h3>
         </div>
+        <a href="javascript:showAssoc()">R</a>
+        <div id="associations">
+          <%= render partial: 'associables/associations_nav', locals: {element: 'risk'} %>
+        </div>
 
 
         <div class="row form-group margin-left-50">
@@ -79,16 +83,6 @@
           </div>
         </div>
         </div>
-
-        <!-- Associations -->
-      <div class="panel">
-
-        <div class="panel-heading">
-          <h5>Relaciones</h5>
-        </div>
-
-        <%= render partial: 'associables/associations_nav', locals: {element: 'risk'} %>
-
       </div>
 
       <div class="panel">
@@ -132,6 +126,14 @@
       $('#table-modal-title').html('Seleccionar Área');
       $.ajax({url: '/associables/single_area-in/Position'});
   });
+
+  $(document).ready(function () {
+     $('#associations').hide();
+  });
+
+  function showAssoc() {
+      $('#associations').fadeIn();
+  }
 
 </script>
 

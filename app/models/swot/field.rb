@@ -3,6 +3,8 @@ class Swot::Field
 
   embedded_in :swot
 
+  # % de medicion
+
   field :type_of, type: String
   field :name, type: String
   field :version, type: String

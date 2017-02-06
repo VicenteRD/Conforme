@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
 
   get '/personas'              => 'users#show'
-  get '/personas/oganigrama'   => 'users#organization_chart'
+  get '/personas/oganigrama'   => 'positions#show'
   get '/personas/competencias' => 'users#eval_competencies'
   get '/personas/performance'  => 'users#eval_performance'
   get '/personas/clima'        => 'users#work_environment'
@@ -68,7 +68,7 @@ Rails.application.routes.draw do
 
   post '/riesgos/nuevo/:type'         => 'risks#create'
   post '/riesgos/detalle/:id/nueva'   => 'risks#create_measurement'
-  post '/riesgos/editar/:id'          => 'risks#update'
+  patch '/riesgos/editar/:id'          => 'risks#update'
   post '/riesgos/editar-medicion/:id' => 'risks#update_measurement'
 
   # -------- Configuration - TODO Maybe move them into their kind as 'settings' ?
