@@ -3,12 +3,14 @@ class RiskMeasurement::OperationalMeasurement < RiskMeasurement
 
   embedded_in :risk, class_name: 'Risk::OperationalRisk'
 
+  validates_presence_of :probability, :impact
+
+  field :pbb, as: :probability, type: Float
+
+  field :imp, as: :impact, type: Integer
+
   def calculate_magnitude
-    if self.probability && self.impact
-      self.magnitude = self.probability * self.impact
-    else
-      self.magnitude = 0
-    end
+    self.magnitude = self.probability * self.impact
   end
 
 end

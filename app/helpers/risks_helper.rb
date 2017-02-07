@@ -1,35 +1,54 @@
 module RisksHelper
 
-  def significant_bgcolor(sig)
+  def significant_bgcolor(sig, hover = false)
     tag = 'background-color: '
     case sig
-      when 0
-        tag + '#ffffff'
       when 1
-        tag + '#cccc37'
+        tag + (hover ? '#abab2c' : '#cccc37')
       when 2
-        tag + '#fb434a'
+        tag + (hover ? '#d6393f' : '#fb434a')
       else
         ''
     end
   end
 
-  def significant_txtcolor(sig)
+  def significant_txtcolor(sig, hover = false)
     tag = 'color: '
     case sig
-      when 0
-        tag + '#514d64'
       when 1
-        tag + '#ffffff'
+        tag + (hover ? '#ffffff' : '#ffffff')
       when 2
-        tag + '#ffffff'
+        tag + (hover ? '#ffffff' : '#ffffff')
       else
         ''
     end
   end
 
-  def significant_style(sig)
-    significant_bgcolor(sig) + '; ' + significant_txtcolor(sig)
+  def significant_style(sig, hover = false)
+    significant_bgcolor(sig, hover) + '; ' + significant_txtcolor(sig, hover)
+  end
+
+  def significant_style_css
+    <<-EOS
+
+.risk-sig-0 {
+  /* Intentionally left blank. */
+}
+.risk-sig-1 {
+  #{significant_style(1).sub('; ', ";\n  ")}
+}
+.risk-sig-2 {
+  #{significant_style(2).sub('; ', ";\n  ")}
+}
+
+tr:hover .risk-sig-1 {
+  #{significant_style(1, true).sub('; ', ";\n  ")}
+}
+
+tr:hover .risk-sig-2 {
+  #{significant_style(2, true).sub('; ', ";\n  ")}
+}
+    EOS
   end
 
   def humanize_significant(sig)

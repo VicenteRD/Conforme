@@ -1,9 +1,4 @@
 <%= content_for :heading_main do %>
-  <h3>
-    Detalle de Riesgo N. <%= @risk.number %>
-    <br>
-    <!--<small>< @risk.id ></small>-->
-  </h3>
   <div class="margin-left-50">
     <h4 class="text-capitalize">
       <span style="<%= significant_style(@risk.significant)%>; padding: 5px">
@@ -106,13 +101,6 @@
       <div class="header-buttons">
 
         <div class="dropdown">
-          <%= link_to risks_path('gestion'), class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-undo2"></i>
-              Volver
-          <% end %>
-        </div>
-
-        <div class="dropdown">
           <a href="#history-modal" class="dropdown-inline-button" data-toggle="modal">
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
@@ -136,6 +124,23 @@
         </div>
 
       </div>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to risks_path('gestion') do %>
+            Riesgos Operacionales
+          <% end %>
+        </li>
+        <li>
+          <span>
+            <%= @risk.number %>
+          </span>
+        </li>
+      </ul>
     </div>
 <% end %>
 

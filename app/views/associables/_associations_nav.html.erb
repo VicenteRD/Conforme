@@ -1,5 +1,10 @@
+<div class="margin-left-20 margin-top-20">
+  <h6>
+    <a href="javascript:showAssoc()">Relaciones</a>
+  </h6>
+</div>
 
-<div class="associables-menu">
+<div class="associables-menu" id="associables">
 
   <div class="menu-item menu-item-drop-down">
     <p class="item-content"> Mejora </p>
@@ -252,17 +257,27 @@
         // as the name.
         $.ajax({url: '/associables/<%= element %>/' + $(this).attr('data-linked_class')})
     });
+
+    $(document).ready(function () {
+        $('#associables').hide();
+    });
+
+    function showAssoc() {
+        var menu = $('#associables');
+        menu.is(':visible') ? menu.hide() : menu.fadeIn();
+    }
 </script>
 
 <style>
   .associables-menu {
     position: relative;
-    display: block;
+    display: inline-block;
     width: 100%;
     height: 80px;
     background-color: #ffffff;
     border-top: 1px solid #dfe4ed;
-
+    border-bottom: 1px solid #dfe4ed;
+    margin-bottom: 20px;
   }
 
   .associables-menu > .menu-item {
@@ -309,7 +324,7 @@
     color: #818a91;
     min-width: 240px;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    z-index: 1;
+    z-index: 100;
     padding: 10px 0;
   }
 
@@ -337,7 +352,7 @@
   }
 
   .menu-item-drop-down:hover {
-    height: 82px;
+    height: 81px;
   }
 
   .menu-item-drop-down:hover .associables-sub-menu {

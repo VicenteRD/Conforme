@@ -5,13 +5,7 @@
 
       <div class="panel">
 
-        <div class="panel-heading">
-          <h3>Nuevo Riesgo de Gestión</h3>
-        </div>
-        <a href="javascript:showAssoc()">R</a>
-        <div id="associations">
           <%= render partial: 'associables/associations_nav', locals: {element: 'risk'} %>
-        </div>
 
 
         <div class="row form-group margin-left-50">
@@ -126,15 +120,6 @@
       $('#table-modal-title').html('Seleccionar Área');
       $.ajax({url: '/associables/single_area-in/Position'});
   });
-
-  $(document).ready(function () {
-     $('#associations').hide();
-  });
-
-  function showAssoc() {
-      $('#associations').fadeIn();
-  }
-
 </script>
 
 <%= content_for :menu do %>
@@ -150,3 +135,19 @@
   </div>
 <% end %>
 
+<%= content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to risks_path('gestion') do %>
+              Riesgos Operacionales
+          <% end %>
+        </li>
+        <li>
+          <span>
+            Nuevo
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

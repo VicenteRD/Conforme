@@ -89,7 +89,7 @@ proc2 = BusinessProcess.new(name: 'Processing process',
 proc2.save!
 
 
-risk = Risk::OperationalRisk.new(measurement_frequency: 1, responsible_id: vr.id, position_id: pos_gg.id,
+risk = Risk::OperationalRisk.new(measurement_frequency: 1, responsible_id: vr.id, area_id: pos_gg.id,
                              process_id: proc1.id, activity: 'Trying to sleep', name: 'Failing to sleep')
 risk.save!
 risk.created_entry(nil, body = 'Created by system')

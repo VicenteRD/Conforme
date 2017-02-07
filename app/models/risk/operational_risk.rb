@@ -1,4 +1,5 @@
 class Risk::OperationalRisk < Risk
+  include Mongoid::Document
 
   embeds_many :measurements, class_name: 'RiskMeasurement::OperationalMeasurement'
 

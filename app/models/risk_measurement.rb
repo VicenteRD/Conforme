@@ -3,20 +3,19 @@ class RiskMeasurement
 
   before_save :calculate_magnitude
 
+  validates_presence_of :measured_at
+
   field :m_at, as: :measured_at, type: DateTime
 
   field :sig, as: :significant, type: Integer
-
-  field :pbb, as: :probability, type: Float
-  field :imp, as: :impact, type: Integer
-
-  field :mag, as: :magnitude, type: Float
 
   field :thr, as: :threshold, type: Float
 
   field :cmts, as: :comments, type: String
 
+  field :mag, as: :magnitude, type: Float
+
   def calculate_magnitude
-    self.magnitude = -1
+    self.magnitude
   end
 end

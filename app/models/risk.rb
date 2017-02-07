@@ -7,6 +7,8 @@ class Risk
 
   include Associable
 
+  validates_presence_of :area_id, :responsible_id, :process_id
+
   before_create :init
 
   embeds_one :log_book, class_name: 'Log::Book'
@@ -15,11 +17,11 @@ class Risk
 
   field :sig, as: :significant, type: Integer
 
-  field :pos_id, as: :position_id, type: BSON::ObjectId    # => Position
-  field :res_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
-
+  field :a_id, as: :area_id, type: BSON::ObjectId    # => Position
   field :proc_id, as: :process_id, type: BSON::ObjectId # => BusinessProcess
   field :act, as: :activity, type: String
+
+  field :res_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
 
   def init
     self.significant = -1
@@ -33,7 +35,5 @@ class Risk
   def new_measurement(author_id, significant, comment)
     self.significant = significant
     self.save
-
-    self.log_book.new_entry(author_id, 'Nueva medición', comment)
   end
 end
