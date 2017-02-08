@@ -29,7 +29,7 @@
 <% end %>
 
 <%= content_for :values_1 do %>
-  <%= Position.find(@risk.position_id).name rescue '' %>
+  <%= Position.find(@risk.area_id).name rescue '' %>
   <br>
   <%= BusinessProcess.find(@risk.process_id).name %>
 <% end %>

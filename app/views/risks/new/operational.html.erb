@@ -16,7 +16,7 @@
           </div>
           <div class="col-lg-2 input-group margin-right-20" id="area-in">
             <%= f.text_field :area_name, class: 'form-control', readonly: true %>
-            <span class="input-group-addon" style="cursor: pointer" id="area-list">
+            <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
             <%= f.hidden_field :area, class: 'form-control-hidden' %>
@@ -27,9 +27,9 @@
               Proceso
             </label>
           </div>
-          <div class="col-lg-2 input-group margin-right-20" id="process-picker">
+          <div class="col-lg-2 input-group margin-right-20" id="process-in">
             <%= f.text_field :process, class: 'form-control', readonly: true %>
-            <span class="input-group-addon" style="cursor: pointer" id="process-list">
+            <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
           </div>
@@ -41,7 +41,7 @@
           </div>
           <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
             <%= f.text_field :responsible_name, class: 'form-control', readonly: true %>
-            <span class="input-group-addon" style="cursor: pointer" id="responsible-list">
+            <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
             <%= f.hidden_field :responsible, class: 'form-control-hidden' %>
@@ -76,7 +76,6 @@
             <%= f.collection_select :frequency, frequency_hash, :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
           </div>
         </div>
-        </div>
       </div>
 
       <div class="panel">
@@ -98,12 +97,11 @@
         </div>
       </div>
     <% end %>
-
   </div>
 </section>
 
 <script>
-  $('#process-list').click(function () {
+  $('#process-in').click(function () {
       $.ajax({url: '/processes/risk'})
   });
 
@@ -111,29 +109,16 @@
      $.ajax({url: '/processes/risk/new'});
   });
 
-  $('#responsible-list').click(function () {
+  $('#responsible-in').click(function () {
       $('#table-modal-title').html('Seleccionar Responsable');
       $.ajax({url: '/associables/single_responsible-in/Person::User'});
   });
 
-  $('#area-list').click(function () {
+  $('#area-in').click(function () {
       $('#table-modal-title').html('Seleccionar Área');
       $.ajax({url: '/associables/single_area-in/Position'});
   });
 </script>
-
-<%= content_for :menu do %>
-  <div class="left">
-    <div class="header-buttons">
-      <div class="dropdown">
-        <%= link_to risks_path('gestion'), class: 'dropdown-inline-button' do %>
-            <i class="dropdown-inline-button-icon icmn-undo2"></i>
-            Volver
-        <% end %>
-      </div>
-    </div>
-  </div>
-<% end %>
 
 <%= content_for :breadcrumbs do %>
     <div class="left">
