@@ -23,6 +23,8 @@ class Risk
 
   field :res_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
 
+  field :cmts, as: :comments, type: String
+
   def init
     self.significant = -1
     self.log_book = Log::Book.new

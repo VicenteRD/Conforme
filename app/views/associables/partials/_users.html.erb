@@ -7,7 +7,7 @@
       <tr>
         <th>Nombre</th>
         <th>Apellidos</th>
-        <th>Posiciones</th>
+        <th>Cargos</th>
         <th>Rol</th>
       </tr>
       </thead>
@@ -38,5 +38,30 @@
 
       $('#table-modal').modal('hide');
   });
+
+  $('.associable-data-row').click(function () {
+      row = $(this);
+      container = $('#associables-container');
+
+      selectedId = row.attr('data-id');
+
+      selectedField = container.find('#' + selectedId);
+
+      if (selectedField.length > 0) {
+          selectedField.remove();
+      } else {
+          container.append(
+              '<div id="' + selectedId + '">\n' +
+                  '<input class="form-control-hidden" type="hidden" ' +
+                    'name="<%= @element %>[associables][users][]" id="<%= @element %>_associable_user" ' +
+                    'value="' + selectedId + '">\n' +
+                  '<input class="form-control user-displayed-name" readonly="readonly" type="text" ' +
+                    'name="associable_user_display" id="user_' + selectedId + '_display" ' +
+                    'value="Empleado: ' + row.find('#user-name').html() + ' ' + row.find('#user-last-names').html() + '">\n' +
+              '</div>'
+          );
+      }
+  });
+
 </script>
 

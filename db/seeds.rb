@@ -21,7 +21,6 @@ vr = Person::User.new(
   active: true,
   ll_at: Time.now,
   j_at: Time.now)
-vr.save!
 
 cv = Person::User.new(
     email: 'cvillaseca@eworks.cl',
@@ -65,6 +64,9 @@ pos_dv.save!
 
 pos_gg.add_to_set(children_ids: [pos_dp.id, pos_dv.id])
 pos_gg.save!
+
+vr.add_to_set(positions: pos_dp)
+vr.save!
 
 cv.add_to_set(positions: pos_gg)
 cv.save!

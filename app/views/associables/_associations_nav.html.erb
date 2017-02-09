@@ -1,6 +1,6 @@
 <div class="margin-left-20 margin-top-20">
   <h6>
-    <a href="javascript:showAssoc()">Relaciones</a>
+    <a href="javascript:showAssociation()">Referencias</a>
   </h6>
 </div>
 
@@ -247,6 +247,8 @@
 
 </div>
 
+<div id="associables-container"></div>
+
 
 <script>
     $('.assoc-item').click(function(){
@@ -262,7 +264,7 @@
         $('#associables').hide();
     });
 
-    function showAssoc() {
+    function showAssociation() {
         var menu = $('#associables');
         menu.is(':visible') ? menu.hide() : menu.fadeIn();
     }
@@ -273,11 +275,10 @@
     position: relative;
     display: inline-block;
     width: 100%;
-    height: 80px;
+    height: 50px;
     background-color: #ffffff;
     border-top: 1px solid #dfe4ed;
     border-bottom: 1px solid #dfe4ed;
-    margin-bottom: 20px;
   }
 
   .associables-menu > .menu-item {
@@ -294,7 +295,7 @@
   }
 
   .menu-item > .item-content {
-    padding: 42px 25px 10px 25px;
+    padding: 16px 25px 10px 25px;
     margin: 0;
     height:100%;
     color: #827ca1;
@@ -336,7 +337,7 @@
   .sub-menu-item > .item-content {
     color: #827ca1;
     padding: 10px 25px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     height:100%;
     font-weight: 400;
     text-align: left;
@@ -352,7 +353,7 @@
   }
 
   .menu-item-drop-down:hover {
-    height: 81px;
+    height: 51px;
   }
 
   .menu-item-drop-down:hover .associables-sub-menu {

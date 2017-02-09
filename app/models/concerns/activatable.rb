@@ -5,6 +5,9 @@ module Activatable
 
     field :active, type: Boolean
 
+    scope :active,   ->{where(active: true)}
+    scope :inactive, ->{where(active: false)}
+
     def active?
       self.active
     end

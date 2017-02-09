@@ -1,0 +1,18 @@
+$('#comments-modal-comments').html('<%= raw @measurement.comments %>');
+
+
+<% if @risk.responsible_id == @user.id %>
+if ($('#comments-modal-content').find('.modal-footer').length == 0) {
+  $('#comments-modal-content').append(
+      '<div class="modal-footer" id="comments-modal-footer">' +
+        '<div class="row">' +
+          '<%= button_to 'Editar',
+            edit_risk_measurement_path(base_id: @risk.id, id: @measurement.id),
+            class: 'btn btn-primary width-150 height-50' %>' +
+        '</div>' +
+      '</div>'
+  );
+}
+<% end %>
+
+$('#comments-modal').modal();

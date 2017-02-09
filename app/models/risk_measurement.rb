@@ -1,6 +1,8 @@
 class RiskMeasurement
   include Mongoid::Document
 
+  embeds_one :log_book, class_name: 'Log::Book'
+
   before_save :calculate_magnitude
 
   validates_presence_of :measured_at

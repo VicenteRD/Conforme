@@ -5,11 +5,10 @@ module PositionsHelper
 
 
     return <<-EOS
-<li>
-  <p class="#{(parent.area ? 'area-position' : 'position')}" id="#{parent.id}">
+<li class="#{(parent.area ? 'area-position' : 'position')}">
+  <p id="#{parent.id}">
     #{parent.name}
   </p>
-  <a href="/posicion/#{parent.id}/nueva">+</a>
   <ul>#{generate_branches(parent.children_ids)}</ul>
 </li>
               EOS
@@ -30,11 +29,10 @@ module PositionsHelper
       child = Position.find(branch_id)
 
       branches_text += <<-EOS
-  <li>
-    <p class="#{(child.area ? 'area-position' : '')}" id="#{branch_id}">
+  <li class="#{(child.area ? 'area-position' : '')}">
+    <p data-id="#{branch_id}">
       #{child.name}
     </p>
-    <a href="/posicion/#{child.id}/nueva">+</a>
    <ul>#{ generate_branches(child.children_ids) }</ul>
   </li>
                 EOS

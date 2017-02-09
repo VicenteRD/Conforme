@@ -10,7 +10,15 @@
   }
   .area-position {
     color: #827ca1;
-    cursor: pointer;
+    cursor: pointer !important;
+  }
+
+  .area-position p {
+    color: #827ca1;
+  }
+
+  .area-position:hover p {
+    color: #24222f;
   }
 </style>
 
@@ -19,9 +27,10 @@
   <script>
       $('.area-position').click(function () {
           formGroup = $('#<%= picker_id %>');
+          clicked = $(this).find('p');
 
-          formGroup.find('.form-control').val($(this).html());
-          formGroup.find('.form-control-hidden').val($(this).attr('id'));
+          formGroup.find('.form-control').val(clicked.html().replace(/^\s+|\s+$/g, ''));
+          formGroup.find('.form-control-hidden').val(clicked.attr('data-id'));
 
           $('#table-modal').modal('hide');
       });

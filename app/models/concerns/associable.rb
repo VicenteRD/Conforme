@@ -14,8 +14,8 @@ module Associable
 
       class_sym = class_as_key class_type
 
-      if self.assoc[class_sym]
-        self.assoc[class_sym].each { |key|
+      if self.associations[class_sym]
+        self.associations[class_sym].each { |key|
           ret_array.push(class_type.find(key)) # might need to use send()
         }
       end
@@ -29,22 +29,36 @@ module Associable
           hash_key = class_as_key key
         when Symbol
           hash_key = key
-        else
+        else # Assuming the key is a string
           hash_key = key.to_sym
       end
 
-      unless assoc[hash_key]
-        assoc[hash_key] = []
+      if self.associations.nil?
+        self.associations = {}
+      end
+      if self.associations[hash_key].nil?
+        self.associations[hash_key] = []
       end
 
       values.each { |val|
         case val
           when Array
-            assoc[hash_key].push(*val)
+            self.associations[hash_key].push(*val)
           else
-            assoc[hash_key].push(val)
+            self.associations[hash_key].push(val)
         end
       }
+    end
+
+    # Loads all the associations from an already set hash,
+    # without overriding already-set values.
+    def add_from_hash(hashed_values)
+      hashed_values.each { |k, v| self.add_associated(k, v) }
+    end
+
+    def set_from_hash(hashed_values)
+      self.associations = {}
+      add_from_hash(hashed_values)
     end
 
   end # included

@@ -17,7 +17,8 @@ Rails.application.routes.draw do
 
 
 
-  get '/personas'              => 'users#show'
+  get '/personas'              => 'users#index'
+  get '/personas/ficha/:id'    => 'users#show', as: :user
   get '/personas/oganigrama'   => 'positions#show'
   get '/personas/competencias' => 'users#eval_competencies'
   get '/personas/performance'  => 'users#eval_performance'
@@ -58,18 +59,19 @@ Rails.application.routes.draw do
 
   # -------- Risks
 
-  get '/riesgos/:type'                 => 'risks#index',            as: :risks
-  get '/riesgos/nuevo/:type'           => 'risks#new',              as: :new_risk
-  get '/riesgos/editar/:id'            => 'risks#edit',             as: :edit_risk
-  get '/riesgos/detalle/:id'           => 'risks#show',             as: :risk
-  get '/riesgos/detalle/:id/nueva'     => 'risks#new_measurement',  as: :new_risk_measurement
-  get '/riesgos/editar-medicion/:id'   => 'risks#edit_measurement', as: :edit_risk_measurement
-  get '/riesgos/detalle/:id/historial' => 'risks#history',          as: :risk_history
+  get '/riesgos/:type'                  => 'risks#index',            as: :risks
+  get '/riesgos/nuevo/:type'            => 'risks#new',              as: :new_risk
+  get '/riesgos/editar/:id'             => 'risks#edit',             as: :edit_risk
+  get '/riesgos/detalle/:id'            => 'risks#show',             as: :risk
+  get '/riesgos/detalle/:id/nueva'      => 'risks#new_measurement',  as: :new_risk_measurement
+  get '/riesgos/detalle/:id/:msrmnt_id' => 'risks#show_details'
+  get '/riesgos/:base_id/:id/editar'    => 'risks#edit_measurement', as: :edit_risk_measurement
+  get '/riesgos/detalle/:id/historial'  => 'risks#history',          as: :risk_history
 
-  post '/riesgos/nuevo/:type'         => 'risks#create'
-  post '/riesgos/detalle/:id/nueva'   => 'risks#create_measurement'
+  post '/riesgos/nuevo/:type'          => 'risks#create'
+  post '/riesgos/detalle/:id/nueva'    => 'risks#create_measurement'
   patch '/riesgos/editar/:id'          => 'risks#update'
-  post '/riesgos/editar-medicion/:id' => 'risks#update_measurement'
+  patch '/riesgos/:base_id/:id/editar' => 'risks#update_measurement'
 
   # -------- Configuration - TODO Maybe move them into their kind as 'settings' ?
 

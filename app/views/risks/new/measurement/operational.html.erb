@@ -1,12 +1,10 @@
-<section class="page-content">
-  <div class="page-content-inner">
-    <%= form_for(:measurement, url: new_risk_measurement_path(@risk.id)) do |f| %>
+<%= form_for(:measurement, url: new_risk_measurement_path(@risk.id)) do |f| %>
+  <section class="page-content">
+    <div class="page-content-inner">
 
       <div class="panel">
 
-        <div class="panel-heading">
-          <h3>Nueva</h3>
-        </div>
+        <%= render partial: 'associables/associations_nav', locals: {element: 'measurement'} %>
 
         <%= f.hidden_field :type, value: 'operational' %>
 
@@ -35,16 +33,15 @@
                               time: "fa fa-clock-o",
                               date: "fa fa-calendar",
                               up: "fa fa-arrow-up",
-                              down: "fa fa-arrow-down"
+                              down: "fa fa-arrow-down",
+                              previous: "fa fa-arrow-left",
+                              next: "fa fa-arrow-right"
                           }
                       });
                   });
               </script>
             </div>
-          </div>
-
-          <div class="row form-group margin-left-50">
-            <div class="col-lg-1">
+            <div class="col-lg-1 text-right">
               <label class="form-control-label">
                 Probabilidad
               </label>
@@ -53,7 +50,7 @@
               <%= f.number_field :probability, value: 0, within: 0..100, class: 'form-control', style: 'width:75px' %> %
             </div>
 
-            <div class="col-lg-1">
+            <div class="col-lg-1 text-right">
               <label class="form-control-label">
                 Impacto
               </label>
@@ -74,15 +71,6 @@
           </div>
 
       </div>
-      <div class="panel">
-
-        <div class="panel-heading">
-          <h5>Relaciones</h5>
-        </div>
-
-        <%= render partial: 'associables/associations_nav', locals: {element: 'measurement'} %>
-
-      </div>
 
       <div id="associations-modal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -101,24 +89,78 @@
         </div>
       </div>
 
-      <div class="panel" style="position: fixed; width: 100%; bottom: 0; margin: 0 0 0 -16px  ">
-        <div class="row text-center margin-15">
-          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+    </div>
+  </section>
+
+  <!-- Confirmation modal -->
+  <div id="confirmation-modal" class="modal fade modal-size-large" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content" id="confirmation-modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" id="confirmation-modal-title">Está Seguro?</h4>
+        </div>
+
+        <div class="modal-body" id="confirmation-modal-body">
+          <div class="row">
+            <div class="col-md-2">
+              <label>Entrada Bitácora</label>
+            </div>
+            <div class="col-md-9">
+              <%= f.text_area :log_entry, class: 'form-control height-150' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col-md-6 text-left">
+              <button class="btn btn-danger width-150 height-50" data-dismiss="modal">Cancelar</button>
+            </div>
+            <div class="text-right col-md-6">
+              <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+            </div>
+          </div>
         </div>
       </div>
-    <% end %>
+    </div>
   </div>
-</section>
+
+<% end %>
 
 <%= content_for :menu do %>
     <div class="left">
       <div class="header-buttons">
+
         <div class="dropdown">
-          <%= link_to risk_path(params[:id]), class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-undo2"></i>
-              Volver
-          <% end %>
+          <a href="#confirmation-modal" class="dropdown-inline-button" data-toggle="modal">
+            <i class="dropdown-inline-button-icon icmn-file-check"></i>
+            Grabar
+          </a>
         </div>
       </div>
     </div>
 <% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to risks_path('gestion') do %>
+              Riesgos Operacionales
+          <% end %>
+        </li>
+        <li>
+          <%= link_to risk_path(@risk.id) do %>
+              <%= @risk.number %>
+          <% end %>
+        </li>
+        <li>
+          <span>
+            Nueva medición
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>
+

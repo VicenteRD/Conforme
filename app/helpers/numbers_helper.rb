@@ -4,6 +4,6 @@ module NumbersHelper
   end
 
   def frequency_hash
-    {1 => 'Diaria', 7 => 'Semanal', 30 => 'Mensual', 122 => 'Trimestral', 182 => 'Semestral',  365 => 'Anual'}
+    {365 => 'Anual', 182 => 'Semestral', 122 => 'Trimestral', 30 => 'Mensual', 7 => 'Semanal', 1 => 'Diaria'}
   end
 end

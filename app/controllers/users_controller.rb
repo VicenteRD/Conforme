@@ -1,6 +1,13 @@
 class UsersController < ApplicationController
-  def show
+  def index
 
+  end
+
+  def show
+    @user = Person::User.find(params[:id])
+    if @user.nil?
+      redirect_to '/' and return
+    end
   end
 
   def organization_chart

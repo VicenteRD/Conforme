@@ -42,7 +42,7 @@
         <td><%= msrmnt != nil ? msrmnt.measured_at.strftime('%d/%m/%y') : '-'%></td>
         <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s + '%' : '-'%></td>
         <td><%= msrmnt != nil ? Settings::RiskSettings.first.operational_impact_options[msrmnt.impact.to_s] : '-'%></td>
-        <td><%= msrmnt != nil ? msrmnt.magnitude : '-' %></td>
+        <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
 
         <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
 

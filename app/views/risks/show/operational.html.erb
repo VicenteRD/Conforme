@@ -43,16 +43,26 @@
 <% end %>
 
 <%= content_for :values_3 do %>
-  <%= raw Person::User.find(@risk.res_id).first_last_name %>
+  <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
   <br>
   <%= frequency_string(@risk.measurement_frequency).capitalize %>
 <% end %>
 
-<%= content_for :heading_extra do %>
+<%= content_for :heading_extra1 do %>
+    <h5>Notas</h5>
+<% end %>
+
+<%= content_for :body_extra1 do %>
+    <div class="margin-left-30 margin-bottom-30">
+      <%= @risk.comments %>
+    </div>
+<% end %>
+
+<%= content_for :heading_extra2 do %>
     <h5>Mediciones</h5>
 <% end %>
 
-<%= content_for :body_extra do %>
+<%= content_for :body_extra2 do %>
   <div class="row margin-left-20 margin-right-20">
     <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
       <table class="table">
@@ -63,9 +73,6 @@
             <th>Impacto</th>
             <th>Magnitud</th>
             <th width="50%">Comentarios</th>
-            <% if @risk.responsible_id == @user.id %>
-              <th>Editar</th>
-            <% end %>
           </tr>
         </thead>
         <tbody>
@@ -73,20 +80,20 @@
               <% bgcolor = significant_bgcolor(measurement.significant) %>
               <% txtcolor = significant_txtcolor(measurement.significant) %>
 
-              <tr style="<%= bgcolor %>">
+              <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
                 <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
                 <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
                 <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
-                <td style="<%= txtcolor %>"><%= measurement.magnitude %></td>
+                <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
                 <td style="<%= txtcolor %>"><%= measurement.comments %></td>
-                <% if @risk.responsible_id == @user.id %>
-                  <td><%= link_to 'Editar', edit_risk_measurement_path(measurement.id) %></td>
-                <% end %>
               </tr>
           <% end %>
         </tbody>
       </table>
     </div>
+    <script>
+
+    </script>
 
     <div class="margin-top-50">
       <div class="ct-chart height-400" id="risk-chart"></div>
@@ -149,6 +156,25 @@
 <% end %>
 
 <%= content_for :scripts do %>
+
+    <div id="comments-modal" class="modal fade modal-size-large" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content" id="comments-modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="confirmation-modal-title">Detalles de la Medición</h4>
+          </div>
+
+          <div class="modal-body" id="confirmation-modal-body">
+            <div class="margin-left-20">
+              <h6>Comentarios</h6>
+            </div>
+            <div class="margin-left-50" id="comments-modal-comments"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <% if @risk.measurements.count > 0 %>
       <% date_nums = Set.new %>
       <% data = [] %>
@@ -197,6 +223,13 @@
                     ]
                 }
             );
+        });
+
+        $('.measurement-row').click(function () {
+            // Show measurements comments along with 'edit' button
+            $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
+
+            $('#comments-modal').modal();
         });
 
       </script>

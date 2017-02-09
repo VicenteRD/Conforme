@@ -48,6 +48,21 @@ class RisksController < ApplicationController
     render "risks/show/#{type}", layout: 'show'
   end
 
+  def show_details
+    @risk = Risk.find(params[:id])
+
+    if @risk.nil? || !(defined? @risk.measurements)
+      redirect_to '/' and return
+    end
+
+    @measurement = @risk.measurements.find(params[:msrmnt_id])
+    if @measurement.nil?
+      redirect_to '/' and return
+    end
+
+    render 'risks/show/measurement_comments/show'
+  end
+
   def new
     case params[:type]
       when 'gestion'
@@ -69,35 +84,40 @@ class RisksController < ApplicationController
   end
 
   def create
-    new_hash = params[:risk]
+    fields = params[:risk]
     new_risk = nil
 
     case params[:type]
       when 'gestion'
-        new_risk = Risk::OperationalRisk.new(name: new_hash[:name])
+        new_risk = Risk::OperationalRisk.new(name: fields[:name])
       when 'ambiente'
-        new_risk = Risk::EnvironmentalRisk.new(name: new_hash[:name])
+        new_risk = Risk::EnvironmentalRisk.new(name: fields[:name])
       when 'seguridad'
-        new_risk = Risk::SafetyRisk.new(name: new_hash[:name])
+        new_risk = Risk::SafetyRisk.new(name: fields[:name])
       when 'leyes'
-        new_risk = Risk::LawRisk.new(name: new_hash[:name])
+        new_risk = Risk::LawRisk.new(name: fields[:name])
       when 'normas'
-        new_risk = Risk::StandardRisk.new(name: new_hash[:name])
+        new_risk = Risk::StandardRisk.new(name: fields[:name])
       else
         redirect_to '/' and return
     end
 
     new_risk.write_attributes(
-        measurement_frequency: new_hash[:frequency].to_i,
-        position_id: new_hash[:area],
-        responsible_id: new_hash[:responsible],
-        process_id: BusinessProcess.where(name: new_hash[:process]).first.id,
-        activity: new_hash[:activity]
+        measurement_frequency: fields[:measurement_frequency].to_i,
+        area_id: fields[:area_id],
+        responsible_id: fields[:responsible_id],
+        process_id: BusinessProcess.where(name: fields[:process_name]).first.id,
+        activity: fields[:activity],
+        comments: fields[:comments]
     )
+    if fields.key? :associables
+      new_risk.set_from_hash(fields[:associables])
+    end
+
     new_risk.save!
 
     if new_risk
-      entry = new_hash[:log_entry]
+      entry = fields[:log_entry]
       new_risk.created_entry(session[:id], (entry && entry != '') ? entry : '')
     end
 
@@ -119,9 +139,49 @@ class RisksController < ApplicationController
   end
 
   def update
-    # TODO
+    risk = Risk.find(params[:id])
+    if risk.nil?
+      redirect_to '/' and return
+    end
 
-    redirect_to risks_path(@risk.id)
+    type = minimize_type @risk._type
+
+    proc_id = BusinessProcess.where(name: params[:raw][:process_name])
+    fields = params[:risk]
+
+    case type
+      when 'gestion'
+        # specific fields
+      when 'ambiente'
+        #
+      when 'seguridad'
+        #
+      when 'leyes'
+        #
+      when 'normas'
+        #
+      else
+        redirect_to '/' and return
+    end
+
+    risk.write_attributes(
+            area_id: fields[:area_id],
+            process_id: proc_id,
+            activity: fields[:activity],
+            name: fields[:name],
+            responsible_id: fields[:responsible_id],
+            measurement_frequency: fields[:measurement_frequency].to_i,
+            comments: fields[:comments]
+    )
+    if fields.key? :associables
+      fields.set_from_hash(fields[:associables])
+    end
+
+    risk.log_book.new_entry(@user.id, 'Editado', params[:log][:entry])
+
+    risk.save!
+
+    redirect_to risk_path(risk.id)
   end
 
   def new_measurement
@@ -173,19 +233,21 @@ class RisksController < ApplicationController
   end
 
   def edit_measurement
-    @measurement = RiskMeasurement.find(params[:id])
+    @risk = Risk.find(params[:base_id])
 
-    if @measurement.nil?
-      redirect_to '/' and return
-    end
-
-    @risk = @measurement.base
     if @risk.nil?
       redirect_to '/' and return
     end
 
+    puts @risk._type
     type = minimize_type @risk._type
     if type == 'invalid'
+      redirect_to '/' and return
+    end
+
+    @measurement = @risk.measurements.find(params[:id])
+
+    if @measurement.nil?
       redirect_to '/' and return
     end
 
