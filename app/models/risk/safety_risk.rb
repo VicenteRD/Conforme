@@ -10,5 +10,12 @@ class Risk::SafetyRisk
   field :ag, as: :agent, type: Integer
   field :cons, as: :consequence, type: String
 
-  embeds_many :measurements, class_name: 'RiskMeasurement::SafetyMeasurement'
+  field :name, type: String
+
+  def new_measurement(values)
+    measurement = self.measurements.create(values)
+    super(measurement.significant)
+
+    measurement
+  end
 end

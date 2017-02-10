@@ -52,15 +52,15 @@ class RisksController < ApplicationController
     @risk = Risk.find(params[:id])
 
     if @risk.nil? || !(defined? @risk.measurements)
-      redirect_to '/' and return
+      return
     end
 
     @measurement = @risk.measurements.find(params[:msrmnt_id])
     if @measurement.nil?
-      redirect_to '/' and return
+      return
     end
 
-    render 'risks/show/measurement_comments/show'
+    render 'risks/show/measurement_comments/show', layout: false
   end
 
   def new
@@ -227,7 +227,10 @@ class RisksController < ApplicationController
         redirect_to '/' and return
     end
 
-    risk.new_measurement(session[:id], measurement_options)
+    measurement = risk.new_measurement(session[:id], measurement_options)
+
+    measurement.log_book.new_entry(@user.id, 'Creado', params[:log][:entry])
+
 
     redirect_to risk_path(risk.id)
   end

@@ -11,6 +11,8 @@ class RiskMeasurement::OperationalMeasurement < RiskMeasurement
 
   def calculate_magnitude
     self.magnitude = self.probability * self.impact
+
+    super
   end
 
 end

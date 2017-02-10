@@ -1,82 +1,109 @@
-<% content_for :page_header do %>
-    <h3>Riesgos Ambientales</h3>
-<% end %>
-
 <% content_for :before_table do %>
 <% end %>
 
 <% content_for :table_name_active do %>
-    Activos
+  Activos
 <% end %>
 
 <% content_for :table_headers do %>
-    <tr>
-      <th>Área</th>
-      <th>Proceso</th>
-      <th>Actividad</th>
-      <th>Aspecto Ambiental</th>
-      <th>Impacto</th>
-      <th>Encargado</th>
-      <th>Significativo</th>
-      <th>Fecha</th>
-      <th>Probabilidad</th>
-      <th>Tiempo</th>
-      <th>S.O.</th>
-      <th>A.G.</th>
-      <th>P.P</th>
-      <th>Directo?</th>
-      <th>+ o -</th>
-      <th>Magnitud</th>
-    </tr>
+  <tr>
+    <th>Área</th>
+    <th>Proceso</th>
+    <th>Actividad</th>
+    <th>Aspecto</th>
+    <th>Impacto</th>
+    <th>Encargado</th>
+    <th>Fecha</th>
+    <th>Probabilidad</th>
+    <th>Consecuencia</th>
+    <th>Magnitud</th>
+    <th>Significativo</th>
+  </tr>
 <% end %>
+
+<!--Info not included:
+
+  * This might be useful, but it's an extra feature
+
+      regulation_info
+
+  * These are extra risk information:
+
+      occurence_time
+      operational_situation
+      positive
+      direct
+
+  * This is information that can be resumed by
+    just showing the consequence:
+
+      impact
+      geographical_amplitude
+      public_perception
+      reversibility
+      regulation_breach
+  -->
 
 <% content_for :table_body do %>
     <% if @risks.size != 0 %>
         <% @risks.each do |risk| %>
 
             <% sig = humanize_significant(risk.significant) %>
-            <% msrmnt = risk.measurements.order_by(measured_at: 'asc').last %>
+            <% msrmnt = risk.measurements.order_by(measured_at: :asc, created_at: :desc).last %>
 
             <tr data-href="<%= risk_path(risk.id.to_s) %>">
 
-              <td><%= Position.find(risk.position_id).name %></td>
+              <td><%= Position.find(risk.area_id).name %></td>
               <td><%= BusinessProcess.find(risk.process_id).name %></td>
               <td><%= risk.activity %></td>
               <td><%= risk.aspect %></td>
-              <td><%= risk.impact %></td>
+              <td><%= risk.name %></td>
 
               <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
-              <td style="<%= significant_style(risk.significant) %>"><%= sig %></td>
+              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
 
-              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime('%d/%m/%y') : '-'%></td>
               <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s + '%' : '-'%></td>
-              <td><%= msrmnt != nil ? ppf?( msrmnt.occurrence_time) : '-' %></td>
-              <td><%= msrmnt != nil ? msrmnt.operational_situation : '-' %></td>
-              <td><%= msrmnt != nil ? msrmnt.geographical_amplitude : '-' %></td>
-              <td><%= msrmnt != nil ? msrmnt.public_perception : '-' %></td>
-              <td><%= msrmnt != nil ? direct?(msrmnt.direct) : '-' %></td>
-              <td><%= msrmnt != nil ? positive?(msrmnt.positive) : '-' %></td>
-              <td><%= msrmnt != nil ? msrmnt.magnitude : '-' %></td>
+              <td><%= msrmnt != nil ? msrmnt.consequence.round(2) : '-'%></td>
+              <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
 
+              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
             </tr>
         <% end %>
     <% else %>
         <tr>
-          <td colspan="16"> No se encontraron riesgos de esta clase. </td>
+          <td colspan="11"> No se encontraron riesgos de esta clase. </td>
         </tr>
     <% end %>
 <% end %>
 
+<% content_for :after_table do %>
+    <style>
+      <%= significant_style_css %>
+    </style>
+<% end %>
+
 <% content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-        <div class="dropdown">
-          <%= link_to new_risk_path('gestion'), method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
-              Nuevo
-          <% end %>
-        </div>
+  <div class="left">
+    <div class="header-buttons">
+      <div class="dropdown">
+        <%= link_to new_risk_path('ambiente'), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+        <% end %>
       </div>
     </div>
+  </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+  <div class="left">
+    <ul class="list-unstyled breadcrumb breadcrumb-custom">
+      <li>
+        <span>
+          Riesgos Ambientales
+        </span>
+      </li>
+    </ul>
+  </div>
 <% end %>

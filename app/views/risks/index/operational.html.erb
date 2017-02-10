@@ -25,7 +25,7 @@
     <% @risks.each do |risk| %>
 
       <% sig = humanize_significant(risk.significant) %>
-      <% msrmnt = risk.measurements.order_by(measured_at: 'asc').last %>
+      <% msrmnt = risk.measurements.order_by(measured_at: :asc, created_at: :desc).last %>
 
       <tr data-href="<%= risk_path(risk.id.to_s) %>">
 
@@ -39,7 +39,8 @@
 
         <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
-        <td><%= msrmnt != nil ? msrmnt.measured_at.strftime('%d/%m/%y') : '-'%></td>
+        <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
+
         <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s + '%' : '-'%></td>
         <td><%= msrmnt != nil ? Settings::RiskSettings.first.operational_impact_options[msrmnt.impact.to_s] : '-'%></td>
         <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
@@ -75,14 +76,14 @@
 <% end %>
 
 <% content_for :breadcrumbs do %>
-    <div class="left">
-      <ul class="list-unstyled breadcrumb breadcrumb-custom">
-        <li>
-          <span>
-              Riesgos Operacionales
-          </span>
-        </li>
-      </ul>
-    </div>
+  <div class="left">
+    <ul class="list-unstyled breadcrumb breadcrumb-custom">
+      <li>
+        <span>
+          Riesgos Operacionales
+        </span>
+      </li>
+    </ul>
+  </div>
 <% end %>
 

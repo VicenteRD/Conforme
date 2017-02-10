@@ -8,5 +8,10 @@ class Risk::LawRisk
   field :law_id, type: BSON::ObjectId
   field :art, as: :article, type: String
 
-  field :req, as: :requirement, type: String
+  def new_measurement(values)
+    measurement = self.measurements.create(values)
+    super(measurement.significant)
+
+    measurement
+  end
 end

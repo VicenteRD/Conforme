@@ -1,0 +1,18 @@
+<div class="modal-footer text-inline" id="comments-modal-footer">
+  <% if @risk.responsible_id == @user.id %>
+      <%= link_to 'Editar', edit_risk_measurement_path(base_id: @risk.id, id: @measurement.id),
+                     class: 'btn btn-primary width-150 height-50' %>
+  <% end %>
+
+  <a class="btn btn-primary width-150 height-50" href="javascript:showMeasurementHistory();">Ver Historial</a>
+</div>
+
+<script>
+    function showMeasurementHistory() {
+        $("#history-modal-body").html(
+            '<%= escape_javascript(render partial: 'log/modal',locals: {book: @measurement.log_book}) %>'
+        );
+        $('#comments-modal').modal('hide');
+        $("#history-modal").modal();
+    }
+</script>

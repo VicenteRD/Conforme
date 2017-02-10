@@ -107,7 +107,7 @@
     <div class="left">
       <div class="header-buttons">
 
-        <div class="dropdown">
+        <div class="dropdown"><!-- TODO REDO call js func or smth -->
           <a href="#history-modal" class="dropdown-inline-button" data-toggle="modal">
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
@@ -151,10 +151,6 @@
     </div>
 <% end %>
 
-<%= content_for :history_modal_body do %>
-  <%= render partial: 'log/modal', locals: {book: @risk.log_book} %>
-<% end %>
-
 <%= content_for :scripts do %>
 
     <div id="comments-modal" class="modal fade modal-size-large" role="dialog">
@@ -175,6 +171,10 @@
       </div>
     </div>
 
+    <!-- Stay away from this, for your own safety and mental health.
+         If this has somehow broken, just tell the client it can't be fixed.
+      -->
+
     <% if @risk.measurements.count > 0 %>
       <% date_nums = Set.new %>
       <% data = [] %>
@@ -187,50 +187,51 @@
       <% end %>
 
       <script>
-        var data = {
+
+          $('.measurement-row').click(function () {
+              // Show measurement's comments along with 'edit' and 'history' button
+              $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
+          });
+
+          var data = {
             labels: <%= raw date_nums.to_a %>,
             series: [
                 <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
                 <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
             ]
-        };
-        $(document).ready(function() {
-            chart = new Chartist.Line(
-                '#risk-chart',
-                data,
-                {
-                    lineSmooth: false,
-                    axisX: {
-                        type: Chartist.FixedScaleAxis,
-                        ticks: <%= raw date_nums.to_a %>,
-                        low: <%= raw date_nums.to_a.first - 4.hours.to_i %>,
-                        high: <%= raw date_nums.to_a.last + 4.hours.to_i %>,
-                        labelInterpolationFnc: function (value) {
-                          return moment(value * 1000).format('<%= dt_form_format(false) %>');
-                        }
-                    },
-                    axisY: {
-                        type: Chartist.AutoScaleAxis,
-                        low: 0,
-                        high: <%= Settings::RiskSettings.first.operational_impact_options.keys.last %>
-                    },
-                    plugins: [
-                        Chartist.plugins.tooltip({
-                            tooltipFnc: function (meta, value) {
-                                return value.split(',')[1]
-                            }
-                        })
-                    ]
-                }
-            );
-        });
+          };
 
-        $('.measurement-row').click(function () {
-            // Show measurements comments along with 'edit' button
-            $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
-
-            $('#comments-modal').modal();
-        });
+          // xMin, xMax, xTicks, yMax
+          $(document).ready(function() {
+              chart = new Chartist.Line(
+                  '#risk-chart',
+                  data,
+                  {
+                      lineSmooth: false,
+                      axisX: {
+                          type: Chartist.FixedScaleAxis,
+                          ticks: <%= raw date_nums.to_a %>,
+                          low: <%= raw date_nums.to_a.first - 4.hours.to_i %>,
+                          high: <%= raw date_nums.to_a.last + 4.hours.to_i %>,
+                          labelInterpolationFnc: function (value) {
+                            return moment(value * 1000).format('<%= dt_form_format(false) %>');
+                          }
+                      },
+                      axisY: {
+                          type: Chartist.AutoScaleAxis,
+                          low: 0,
+                          high: <%= Settings::RiskSettings.first.operational_impact_options.keys.last %>
+                      },
+                      plugins: [
+                          Chartist.plugins.tooltip({
+                              tooltipFnc: function (meta, value) {
+                                  return value.split(',')[1]
+                              }
+                          })
+                      ]
+                  }
+              );
+          });
 
       </script>
     <% end %>

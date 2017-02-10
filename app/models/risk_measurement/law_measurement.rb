@@ -7,6 +7,6 @@ class RiskMeasurement::LawMeasurement
   field :meth, as: :method, type: String
 
   def calculate_magnitude
-    self.magnitude = self.compliance
+    self.magnitude = 1 - self.compliance
   end
 end

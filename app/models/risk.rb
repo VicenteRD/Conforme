@@ -2,6 +2,7 @@ require 'concerns/enumerable_document'
 
 class Risk
   include Mongoid::Document
+  include Mongoid::Timestamps::Created::Short
 
   include EnumerableDocument
 
@@ -34,7 +35,7 @@ class Risk
     self.log_book.new_entry(author_id, 'Creado', body)
   end
 
-  def new_measurement(author_id, significant, comment)
+  def new_measurement(significant)
     self.significant = significant
     self.save
   end

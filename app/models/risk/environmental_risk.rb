@@ -13,4 +13,11 @@ class Risk::EnvironmentalRisk < Risk
 
   field :pos, as: :positive, type: Boolean
   field :dir, as: :direct, type: Boolean
+
+  def new_measurement(values)
+    measurement = self.measurements.create(values)
+    super(measurement.significant)
+
+    measurement
+  end
 end
