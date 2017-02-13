@@ -10,17 +10,13 @@
   <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.css" rel="stylesheet">
   <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.2/summernote.js"></script>
 
-
-
-  <script src="/assets/vendors/jquery/jquery.min.js"></script>
-
-
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
 
   <%= csrf_meta_tag %>
 
   <%= yield :script_tags %>
+  <%= yield :style_tags %>
 
 
   <script src="/assets/angular-summernote.js"></script>
@@ -55,7 +51,6 @@
   <link rel="stylesheet" type="text/css" href="/assets/vendors/ionrangeslider/css/ion.rangeSlider.css">
   <link rel="stylesheet" type="text/css" href="/assets/vendors/datatables/media/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" type="text/css" href="/assets/vendors/c3/c3.min.css">
-  <link rel="stylesheet" type="text/css" href="/assets/vendors/chartist/dist/chartist.min.css">
   <link rel="stylesheet" type="text/css" href="/assets/select.css">
 
   <!-- Clean UI Styles -->
@@ -109,34 +104,21 @@
   <script src="/assets/common/js/common.js"></script>
   <script src="/assets/common/js/demo.temp.js"></script>
 
-
-
   <script src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart','orgchart']}]}"></script>
   <script src="/assets/organization/jquery.orgchart.js"></script>
   <script src="/assets/organization/angular-google-chart.js"></script>
 
-
-
-
   <script type="text/javascript" src="/assets/jQueryRotate.js"></script>
-
-
-
-
 
   <script src="/assets/dropzone.js"></script>
   <link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
 
-
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.2.0/ui-bootstrap-tpls.js"></script>
-
-
 
   <script type="text/javascript" charset="utf-8" src="/assets/date/datetime-picker.js"></script>
 
   <script type="text/javascript">
-    moment.tz.add("Etc/UTC|UTC|0|0|")
+    moment.tz.add("Etc/UTC|UTC|0|0|");
     moment.tz.add("America/Santiago|SMT CLT CLT CLST CLST|4G.K 50 40 40 30|010203131313131212421242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424|-2q2jh.e fJAh.e 5knG.K 1Vzh.e jRAG.K 1pbh.e 11d0 1oL0 11d0 1oL0 11d0 1oL0 11d0 1pb0 11d0 nHX0 op0 9Bz0 jb0 1oN0 ko0 Qeo0 WL0 1zd0 On0 1ip0 11z0 1o10 11z0 1qN0 WL0 1ld0 14n0 1qN0 WL0 1qN0 11z0 1o10 11z0 1o10 11z0 1qN0 WL0 1qN0 WL0 1qN0 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1qN0 WL0 1qN0 WL0 1qN0 1cL0 1cN0 11z0 1o10 11z0 1qN0 WL0 1fB0 19X0 1qN0 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1qN0 WL0 1qN0 17b0 1ip0 11z0 1ip0 1fz0 1fB0 11z0 1qN0 WL0 1qN0 WL0 1qN0 WL0 1qN0 11z0 1o10 11z0 1o10 11z0 1qN0 WL0 1qN0 17b0 1ip0 11z0 1o10 19X0 1fB0 1nX0 G10 1EL0 Op0 1zb0 Rd0 1wn0 Rd0 46n0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Dd0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Dd0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Dd0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0 1Nb0 Ap0|62e5")
   </script>
 

@@ -195,8 +195,7 @@
               <%# does not consider the Ruby Embedding on the source code%>
               axisX: generateFixedAxis(
                   0 + <%= raw date_nums.first - 4.hours.to_i %>,
-                  0 + <%= raw date_nums.last + 4.hours.to_i %>,
-                  0 + <%= raw date_nums %>,
+                  0 + <%= raw date_nums.last + 4.hours.to_i %>, <%= raw date_nums %>,
               function (value) {
                   return moment(value * 1000).format('<%= dt_form_format(false) %>')
               }),

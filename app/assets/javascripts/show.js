@@ -1,5 +1,5 @@
-//= require chartist/dist/chartist
-//= require chartist-plugin-tooltip/dist/chartist-plugin-tooltip
+//= require chartist
+//= require dist/chartist-plugin-tooltip
 
 function generateLineChart(id, data, opts) {
     opts['plugins'] = [
