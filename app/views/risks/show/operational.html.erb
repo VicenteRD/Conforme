@@ -1,3 +1,7 @@
+<%= content_for :script_tags do %>
+    <% javascript_include_tag 'show' %>
+<% end %>
+
 <%= content_for :heading_main do %>
   <div class="margin-left-50">
     <h4 class="text-capitalize">
@@ -7,6 +11,8 @@
     </h4>
   </div>
 <% end %>
+
+<%# Populate all 3 columns of the view with keys & their values %>
 
 <%= content_for :keys_1 do %>
   Área:
@@ -76,7 +82,7 @@
           </tr>
         </thead>
         <tbody>
-          <% @risk.measurements.order(measured_at: :desc).each do |measurement| %>
+          <% @risk.measurements.order(measured_at: :desc, created_at: :desc).each do |measurement| %>
               <% bgcolor = significant_bgcolor(measurement.significant) %>
               <% txtcolor = significant_txtcolor(measurement.significant) %>
 
@@ -100,8 +106,6 @@
     </div>
   </div>
 <% end %>
-
-
 
 <%= content_for :menu do %>
     <div class="left">
@@ -152,41 +156,25 @@
 <% end %>
 
 <%= content_for :scripts do %>
-
-    <div id="comments-modal" class="modal fade modal-size-large" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content" id="comments-modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title" id="confirmation-modal-title">Detalles de la Medición</h4>
-          </div>
-
-          <div class="modal-body" id="confirmation-modal-body">
-            <div class="margin-left-20">
-              <h6>Comentarios</h6>
-            </div>
-            <div class="margin-left-50" id="comments-modal-comments"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Stay away from this, for your own safety and mental health.
-         If this has somehow broken, just tell the client it can't be fixed.
-      -->
-
+    <%# Process and load measurement data for use in the chart (Using ChartistJS). %>
     <% if @risk.measurements.count > 0 %>
-      <% date_nums = Set.new %>
+      <% raw_dates = Set.new %>
       <% data = [] %>
       <% thresholds = [] %>
-      <% @risk.measurements.order(measured_at: :asc).each do |m| %>
-          <% date = m.measured_at.to_i %>
-          <% date_nums.add(date) %>
+      <% @risk.measurements.order(measured_at: :asc, created_at: :asc).each do |m| %>
+          <% date = m.measured_at.to_time.to_i %>
+          <% raw_dates.add(date) %>
           <% data.push({x: date, y: m.magnitude}) %>
           <% thresholds.push({x: date, y: m.threshold}) %>
       <% end %>
+      <%# For calculations, a Set is needed (so no repeated values are shown), but to use within %>
+      <%# Javascript, we use an array. %>
+      <% date_nums = raw_dates.to_a %>
+      <%# The highest magnitude is that of the highest impact option available, so we use that. %>
+      <% highest_y = Settings::RiskSettings.first.operational_impact_options.keys.last.to_i %>
 
-      <script>
+      <!-- Risks' Show Page Scripts -->
+      <script type="text/javascript">
 
           $('.measurement-row').click(function () {
               // Show measurement's comments along with 'edit' and 'history' button
@@ -194,57 +182,46 @@
           });
 
           var data = {
-            labels: <%= raw date_nums.to_a %>,
+            labels: <%= raw date_nums %>,
             series: [
                 <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
                 <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
             ]
           };
 
-          // xMin, xMax, xTicks, yMax
+          var opts = {
+              lineSmooth: false,
+              <%# Ignore the 0s, it's to avoid the JS checker giving errors, as it %>
+              <%# does not consider the Ruby Embedding on the source code%>
+              axisX: generateFixedAxis(
+                  0 + <%= raw date_nums.first - 4.hours.to_i %>,
+                  0 + <%= raw date_nums.last + 4.hours.to_i %>,
+                  0 + <%= raw date_nums %>,
+              function (value) {
+                  return moment(value * 1000).format('<%= dt_form_format(false) %>')
+              }),
+              axisY: generateAutoAxis(0, <%= highest_y %>)
+          };
+
           $(document).ready(function() {
-              chart = new Chartist.Line(
-                  '#risk-chart',
-                  data,
-                  {
-                      lineSmooth: false,
-                      axisX: {
-                          type: Chartist.FixedScaleAxis,
-                          ticks: <%= raw date_nums.to_a %>,
-                          low: <%= raw date_nums.to_a.first - 4.hours.to_i %>,
-                          high: <%= raw date_nums.to_a.last + 4.hours.to_i %>,
-                          labelInterpolationFnc: function (value) {
-                            return moment(value * 1000).format('<%= dt_form_format(false) %>');
-                          }
-                      },
-                      axisY: {
-                          type: Chartist.AutoScaleAxis,
-                          low: 0,
-                          high: <%= Settings::RiskSettings.first.operational_impact_options.keys.last %>
-                      },
-                      plugins: [
-                          Chartist.plugins.tooltip({
-                              tooltipFnc: function (meta, value) {
-                                  return value.split(',')[1]
-                              }
-                          })
-                      ]
-                  }
-              );
+              chart = generateLineChart('#risk-chart', data, opts);
           });
 
       </script>
     <% end %>
+<% end %>
 
+<% content_for :styles do %>
+    <!-- Risks' Show Page Styles -->
     <style>
-      .ct-series-a .ct-line,
-      .ct-series-a .ct-point {
-        stroke: #01a8fe;
-      }
+    .ct-series-a .ct-line,
+    .ct-series-a .ct-point {
+      stroke: #01a8fe;
+    }
 
-      .ct-series-b .ct-line,
-      .ct-series-b .ct-point {
-        stroke: #fb434a;
-      }
-    </style>
+    .ct-series-b .ct-line,
+    .ct-series-b .ct-point {
+      stroke: #fb434a;
+    }
+  </style>
 <% end %>

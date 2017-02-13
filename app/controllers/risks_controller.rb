@@ -227,7 +227,7 @@ class RisksController < ApplicationController
         redirect_to '/' and return
     end
 
-    measurement = risk.new_measurement(session[:id], measurement_options)
+    measurement = risk.new_measurement(measurement_options)
 
     measurement.log_book.new_entry(@user.id, 'Creado', params[:log][:entry])
 

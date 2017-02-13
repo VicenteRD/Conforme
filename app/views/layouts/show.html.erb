@@ -73,7 +73,22 @@
   </div>
 </div>
 
-<%= yield :scripts %>
+<div id="comments-modal" class="modal fade modal-size-large" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" id="comments-modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Detalles</h4>
+      </div>
 
+      <div class="modal-body" id="comments-modal-body">
+        <div class="margin-left-20">
+          <h6>Comentarios</h6>
+        </div>
+        <div class="margin-left-50" id="comments-modal-comments"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <% parent_layout 'application'%>

@@ -54,7 +54,10 @@
 
 <%= yield %>
 
-<script>
+<!-- Start Page Scripts -->
+
+<!-- Main script -->
+<script type="text/javascript">
     $(function() {
 
         ///////////////////////////////////////////////////////////
@@ -206,12 +209,15 @@
 
     });
 </script>
+
+<%= yield :scripts %>
 <!-- End Page Scripts -->
+
+<%= yield :styles %>
 
 <div class="main-backdrop"><!-- --></div>
 
-<script src="/assets/vendors/chartist/dist/chartist.min.js"></script>
-  <script src="/assets/vendors/chartist-plugin-tooltip/dist/chartist-plugin-tooltip.min.js"></script>
+
 
 
 </body>

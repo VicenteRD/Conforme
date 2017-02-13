@@ -25,7 +25,7 @@
     <% @risks.each do |risk| %>
 
       <% sig = humanize_significant(risk.significant) %>
-      <% msrmnt = risk.measurements.order_by(measured_at: :asc, created_at: :desc).last %>
+      <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
       <tr data-href="<%= risk_path(risk.id.to_s) %>">
 
@@ -56,10 +56,11 @@
   <% end %>
 <% end %>
 
-<% content_for :after_table do %>
-    <style>
-      <%= significant_style_css %>
-    </style>
+<% content_for :styles do %>
+  <!-- Risks' Index Page Styles -->
+  <style>
+    <%= significant_style_css %>
+  </style>
 <% end %>
 
 <% content_for :menu do %>

@@ -3,6 +3,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Conforme</title>
+
   <%= csrf_meta_tags %>
 
   <script src="http://www.google.com/jsapi?ext.js"></script>
@@ -14,12 +15,12 @@
   <script src="/assets/vendors/jquery/jquery.min.js"></script>
 
 
-
-
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
 
   <%= csrf_meta_tag %>
+
+  <%= yield :script_tags %>
 
 
   <script src="/assets/angular-summernote.js"></script>

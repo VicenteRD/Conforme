@@ -1,23 +1,18 @@
+<%= content_for :script_tags do %>
+    <% javascript_include_tag 'show' %>
+<% end %>
+
 <%= content_for :heading_main do %>
-    <h3>
-      Detalle de Riesgo N. <%= @risk.number %>
-      <br>
-      <!--<small>< @risk.id ></small>-->
-    </h3>
     <div class="margin-left-50">
       <h4 class="text-capitalize">
-        <% if @risk.significant == 0 %>
-            No Significativo
-        <% elsif @risk.significant == 1 %>
-            <span style="background-color: #a9a900; color: white; padding: 5px 15px"> Significativo </span>
-        <% elsif @risk.significant == 2 %>
-            <span style="background-color: #8b0000; color: white; padding: 5px 15px"> Significativo </span>
-        <% else %>
-            No Significativo
-        <% end %>
+      <span style="<%= significant_style(@risk.significant)%>; padding: 5px">
+        <%= humanize_significant @risk.significant %>
+      </span>
       </h4>
     </div>
 <% end %>
+
+<%# Populate all 3 columns of the view with keys & their values %>
 
 <%= content_for :keys_1 do %>
     Área:
@@ -40,7 +35,7 @@
 <% end %>
 
 <%= content_for :values_1 do %>
-    <%= Position.find(@risk.position_id).name rescue '' %>
+    <%= Position.find(@risk.area_id).name rescue '' %>
     <br>
     <%= BusinessProcess.find(@risk.process_id).name %>
 <% end %>
@@ -54,16 +49,26 @@
 <% end %>
 
 <%= content_for :values_3 do %>
-    <%= raw Person::User.find(@risk.res_id).first_last_name %>
+    <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
     <br>
     <%= frequency_string(@risk.measurement_frequency).capitalize %>
 <% end %>
 
-<%= content_for :heading_extra do %>
+<%= content_for :heading_extra1 do %>
+    <h5>Notas</h5>
+<% end %>
+
+<%= content_for :body_extra1 do %>
+    <div class="margin-left-30 margin-bottom-30">
+      <%= @risk.comments %>
+    </div>
+<% end %>
+
+<%= content_for :heading_extra2 do %>
     <h5>Mediciones</h5>
 <% end %>
 
-<%= content_for :body_extra do %>
+<%= content_for :body_extra2 do %>
     <div class="row margin-left-20 margin-right-20">
       <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
         <table class="table">
@@ -77,40 +82,55 @@
           </tr>
           </thead>
           <tbody>
-          <% @risk.measurements.order('measured_at DESC').each do |measurement| %>
+          <% @risk.measurements.order(measured_at: :desc, created_at: :desc).each do |measurement| %>
               <% bgcolor = significant_bgcolor(measurement.significant) %>
               <% txtcolor = significant_txtcolor(measurement.significant) %>
 
-              <tr style="<%= bgcolor %>">
+              <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
                 <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
                 <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
                 <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
-                <td style="<%= txtcolor %>"><%= measurement.magnitude %></td>
+                <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
                 <td style="<%= txtcolor %>"><%= measurement.comments %></td>
               </tr>
           <% end %>
           </tbody>
         </table>
       </div>
+      <script>
+
+      </script>
+
+      <div class="margin-top-50">
+        <div class="ct-chart height-400" id="risk-chart"></div>
+      </div>
     </div>
 <% end %>
-
-
 
 <%= content_for :menu do %>
     <div class="left">
       <div class="header-buttons">
-        <div class="dropdown">
+
+        <div class="dropdown"><!-- TODO REDO call js func or smth -->
           <a href="#history-modal" class="dropdown-inline-button" data-toggle="modal">
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
           </a>
-
         </div>
+
+        <% if @risk.responsible_id == @user.id %>
+            <div class="dropdown">
+              <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+                  <i class="dropdown-inline-button-icon icmn-design"></i>
+                  Nueva medición
+              <% end %>
+            </div>
+        <% end %>
+
         <div class="dropdown">
-          <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-design"></i>
-              Nueva medición
+          <%= link_to edit_risk_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-pencil"></i>
+              Editar
           <% end %>
         </div>
 
@@ -118,6 +138,90 @@
     </div>
 <% end %>
 
-<%= content_for :history_modal_body do %>
-    <%= render partial: 'log/modal', locals: {book: @risk.log_book} %>
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to risks_path('gestion') do %>
+              Riesgos Operacionales
+          <% end %>
+        </li>
+        <li>
+          <span>
+            <%= @risk.number %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>
+
+<%= content_for :scripts do %>
+    <%# Process and load measurement data for use in the chart (Using ChartistJS). %>
+    <% if @risk.measurements.count > 0 %>
+        <% raw_dates = Set.new %>
+        <% data = [] %>
+        <% thresholds = [] %>
+        <% @risk.measurements.order(measured_at: :asc, created_at: :asc).each do |m| %>
+            <% date = m.measured_at.to_time.to_i %>
+            <% raw_dates.add(date) %>
+            <% data.push({x: date, y: m.magnitude}) %>
+            <% thresholds.push({x: date, y: m.threshold}) %>
+        <% end %>
+        <%# For calculations, a Set is needed (so no repeated values are shown), but to use within %>
+        <%# Javascript, we use an array. %>
+        <% date_nums = raw_dates.to_a %>
+        <%# The highest magnitude is that of the highest impact option available, so we use that. %>
+        <% highest_y = Settings::RiskSettings.first.operational_impact_options.keys.last.to_i %>
+
+        <!-- Risks' Show Page Scripts -->
+        <script type="text/javascript">
+
+            $('.measurement-row').click(function () {
+                // Show measurement's comments along with 'edit' and 'history' button
+                $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
+            });
+
+            var data = {
+                labels: <%= raw date_nums %>,
+                series: [
+                    <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
+                    <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
+                ]
+            };
+
+            var opts = {
+                lineSmooth: false,
+                <%# Ignore the 0s, it's to avoid the JS checker giving errors, as it %>
+                <%# does not consider the Ruby Embedding on the source code%>
+                axisX: generateFixedAxis(
+                    0 + <%= raw date_nums.first - 4.hours.to_i %>,
+                    0 + <%= raw date_nums.last + 4.hours.to_i %>,
+                    0 + <%= raw date_nums %>,
+                    function (value) {
+                        return moment(value * 1000).format('<%= dt_form_format(false) %>')
+                    }),
+                axisY: generateAutoAxis(0, <%= highest_y %>)
+            };
+
+            $(document).ready(function() {
+                chart = generateLineChart('#risk-chart', data, opts);
+            });
+
+        </script>
+    <% end %>
+<% end %>
+
+<% content_for :styles do %>
+    <!-- Risks' Show Page Styles -->
+    <style>
+      .ct-series-a .ct-line,
+      .ct-series-a .ct-point {
+        stroke: #01a8fe;
+      }
+
+      .ct-series-b .ct-line,
+      .ct-series-b .ct-point {
+        stroke: #fb434a;
+      }
+    </style>
 <% end %>
