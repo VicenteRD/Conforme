@@ -1,3 +1,11 @@
+<%= content_for :script_tags do %>
+    <%= javascript_include_tag 'new' %>
+<% end %>
+
+<%= content_for :script_tags do %>
+    <%= stylesheet_link_tag 'new' %>
+<% end %>
+
 <%= form_for(:measurement, url: new_risk_measurement_path(@risk.id)) do |f| %>
   <section class="page-content">
     <div class="page-content-inner">
@@ -61,13 +69,8 @@
             </div>
           </div>
 
-          <div class="row form-group margin-left-50">
-            <div class="col-lg-1">
-              <label class="form-control-label">Comentarios</label>
-            </div>
-            <div class="col-lg-3">
-              <%= f.text_area :comments, class: 'form-control', style: 'width:100%' %>
-            </div>
+          <div class="row form-group" style="margin: 30px 10px;height:400px">
+            <%= f.text_area :comments, class: 'form-control', style: 'width:100%;height:300px', data: {provider: 'summernote'} %>
           </div>
 
       </div>
@@ -164,3 +167,12 @@
     </div>
 <% end %>
 
+<%= content_for :scripts do %>
+  <script type="text/javascript">
+      $(document).ready(function() {
+          $('[data-provider="summernote"]').each(function(){
+              newSummernote($(this));
+          });
+      });
+  </script>
+<% end %>

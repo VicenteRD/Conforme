@@ -13,9 +13,10 @@
 //= require angular
 //= require jquery
 //= require jquery_ujs
+//
 //= require tether
 //= require bootstrap
 //= require turbolinks
+//
 //= require moment
-//= require moment/es.js
-//= require bootstrap-datetimepicker
+//= require moment/es

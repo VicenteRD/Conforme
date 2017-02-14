@@ -13,11 +13,7 @@
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
 
-  <%= csrf_meta_tag %>
-
-  <%= yield :script_tags %>
   <%= yield :style_tags %>
-
 
   <script src="/assets/angular-summernote.js"></script>
 
@@ -41,8 +37,6 @@
   <link rel="stylesheet" type="text/css" href="/assets/vendors/ladda/dist/ladda-themeless.min.css">
   <link rel="stylesheet" type="text/css" href="/assets/vendors/select2/dist/css/select2.min.css">
   <link rel="stylesheet" type="text/css" href="/assets/vendors/fullcalendar/dist/fullcalendar.min.css">
-  <link rel="stylesheet" type="text/css" href="/assets/vendors/cleanhtmlaudioplayer/src/player.css">
-  <link rel="stylesheet" type="text/css" href="/assets/vendors/cleanhtmlvideoplayer/src/player.css">
   <link rel="stylesheet" type="text/css" href="/assets/vendors/bootstrap-sweetalert/dist/sweetalert.css">
   <link rel="stylesheet" type="text/css" href="/assets/vendors/summernote/dist/summernote.css">
   <link rel="stylesheet" type="text/css" href="/assets/vendors/owl.carousel/dist/assets/owl.carousel.min.css">
@@ -57,6 +51,8 @@
   <!-- Vendors Scripts -->
   <!-- v1.0.0 -->
 
+  <%= yield :script_tags %>
+
   <script src="/assets/vendors/jquery-mousewheel/jquery.mousewheel.min.js"></script>
   <script src="/assets/vendors/jscrollpane/script/jquery.jscrollpane.min.js"></script>
   <script src="/assets/vendors/spin.js/spin.js"></script>
@@ -68,8 +64,6 @@
   <script src="/assets/vendors/autosize/dist/autosize.min.js"></script>
   <script src="/assets/vendors/bootstrap-show-password/bootstrap-show-password.min.js"></script>
   <script src="/assets/vendors/fullcalendar/dist/fullcalendar.min.js"></script>
-  <script src="/assets/vendors/cleanhtmlaudioplayer/src/jquery.cleanaudioplayer.js"></script>
-  <script src="/assets/vendors/cleanhtmlvideoplayer/src/jquery.cleanvideoplayer.js"></script>
   <script src="/assets/vendors/bootstrap-sweetalert/dist/sweetalert.min.js"></script>
   <script src="/assets/vendors/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js"></script>
   <script src="/assets/vendors/summernote/dist/summernote.min.js"></script>
@@ -107,5 +101,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.2.0/ui-bootstrap-tpls.js"></script>
 
   <script type="text/javascript" charset="utf-8" src="/assets/date/datetime-picker.js"></script>
-  
+
 </head>

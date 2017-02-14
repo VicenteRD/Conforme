@@ -15,7 +15,9 @@ Rails.application.routes.draw do
   post 'login'    => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
+  # -------- Uploads
 
+  post '/upload'  => 'uploaded_files#create'
 
   get '/personas'              => 'users#index'
   get '/personas/ficha/:id'    => 'users#show', as: :user
