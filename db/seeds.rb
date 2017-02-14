@@ -112,6 +112,10 @@ proc2 = BusinessProcess.new(name: 'Processing process',
 proc2.save!
 
 # law1 = Law.new()
+stdd = Standard.new
+stdd.save!
+law = Law.new
+law.save!
 
 Settings::RiskSettings.create(
     margin: 0.05,
@@ -126,10 +130,19 @@ Settings::RiskSettings.create(
         op_situation: {0 => 'Normal', 1 => 'Anormal', 2 => 'Emergencia'},
         geo_amplitude: {0 => 'Local', 1 => 'Puntual', 2 => 'Externa'},
         pub_perception: {0 => 'Baja', 1 => 'Media', 2 => 'Alta'}
-    }
+    },
+    safety_threshold: 0.5,
+    safety_options: {
+        condition: {0 => 'No Rutinaria', 1 => 'Rutinaria'},
+        agent: ['Manejo de Conflictos', 'Horno'],
+        consequence: ['Stress, tensión', 'Quemaduras y Deshidratación'],
+        name: ['Agresiones verbales', 'Físico (Radiación no Ionizante)']
+    },
+    standard_threshold: 0.5,
+    law_threshold: 0.5
 )
 
-risk1 = Risk::OperationalRisk.new(
+op_risk = Risk::OperationalRisk.new(
     measurement_frequency: 1,
     responsible_id: vr.id,
     area_id: pos_gg.id,
@@ -137,22 +150,69 @@ risk1 = Risk::OperationalRisk.new(
     activity: 'Trying to sleep',
     name: 'Failing to sleep'
 )
-risk1.save!
-risk1.created_entry(nil, body = 'Created by system')
+op_risk.save!
+op_risk.created_entry(nil, body = 'Created by system')
 
-risk2 = Risk::EnvironmentalRisk.new(
-    measurement_frequency: 365,
+st_risk = Risk::StandardRisk.new(
+    measurement_frequency: 30,
     responsible_id: cv.id,
     area_id: pos_dp.id,
+    process_id: proc1.id,
+    activity: 'Standarizing the standard standards',
+
+    standard_id: stdd.id,
+    article: '1',
+    requirement: 'You must build an ark!',
+)
+st_risk.save!
+st_risk.created_entry(nil, body = 'Created by system')
+
+la_risk = Risk::StandardRisk.new(
+    measurement_frequency: 30,
+    responsible_id: cv.id,
+    area_id: pos_dv.id,
+    process_id: proc2.id,
+    activity: 'Standarizing the standard standards',
+
+    standard_id: law.id,
+    article: '1',
+    requirement: 'You must build an ark!',
+)
+la_risk.save!
+la_risk.created_entry(nil, body = 'Created by system')
+
+en_risk = Risk::EnvironmentalRisk.new(
+    measurement_frequency: 365,
+    responsible_id: cv.id,
+    area_id: pos_dv.id,
     process_id: proc2.id,
     activity: 'Trashing the trashy trash can full of trashy trash',
+
     aspect: 'Basura',
     name: 'Altera la condición del suelo',
-    regulation_id: nil,
+    regulation_id: la_risk.id,
     occurrence_time: 1,
     operational_situation: 2,
     positive: true,
     direct: false
 )
-risk2.save!
-risk2.created_entry(nil, body = 'Created by system')
+en_risk.save!
+en_risk.created_entry(nil, body = 'Created by system')
+
+sa_risk = Risk::SafetyRisk.new(
+    measurement_frequency: 7,
+    responsible_id: vr.id,
+    area_id: pos_dp.id,
+    process_id: proc1.id,
+    activity: 'Walking',
+
+    position_id: pos_go.id,
+    condition: 1,
+    agent: 'Horno',
+    consequence: 'Quemaduras y Deshidratación',
+    name: 'Físico (Radiación no Ionizante)',
+
+    comments: '<p><h6>Safety first!</h6>This is just a test...</p>',
+)
+sa_risk.save!
+sa_risk.created_entry(nil, body = 'Created by system')

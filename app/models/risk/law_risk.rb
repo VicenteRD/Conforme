@@ -6,7 +6,7 @@ class Risk::LawRisk
   validates_presence_of :law_id
 
   field :law_id, type: BSON::ObjectId
-  field :art, as: :article, type: String
+  field :art_id, as: :article, type: BSON::ObjectId
 
   def new_measurement(values)
     measurement = self.measurements.create(values)

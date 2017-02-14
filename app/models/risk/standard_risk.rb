@@ -1,4 +1,4 @@
-class Risk::StandardRisk
+class Risk::StandardRisk < Risk
   include Mongoid::Document
 
   validates_presence_of :standard_id
@@ -6,7 +6,12 @@ class Risk::StandardRisk
   embeds_many :measurements, class_name: 'RiskMeasurement::StandardMeasurement'
 
   field :std_id, as: :standard_id, type: BSON::ObjectId
-  field :art, as: :article, type: String
+  field :art_id, as: :article_id, type: BSON::ObjectId
 
-  field :req, as: :requirement, type: String
+  def new_measurement(values)
+    measurement = self.measurements.create(values)
+    super(measurement.significant)
+
+    measurement
+  end
 end

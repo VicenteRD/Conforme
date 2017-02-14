@@ -1,7 +1,9 @@
+//
 //= require summernote
 //= require summernote/locales/es-ES
-
+//
 //= require bootstrap-datetimepicker
+//
 
 function sendFile(file, toSummernote) {
     var data;
@@ -34,3 +36,22 @@ function newSummernote(field) {
         //}
     });
 }
+
+function newDateTimePicker(field, format, tz) {
+    field.datetimepicker({
+        locale: moment.locale('es'),
+        format: format,
+        defaultDate: Date.now(),
+        maxDate: Date.now(),
+        timeZone: tz,
+        icons: {
+            time: "fa fa-clock-o",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down",
+            previous: "fa fa-arrow-left",
+            next: "fa fa-arrow-right"
+        }
+    });
+}
+

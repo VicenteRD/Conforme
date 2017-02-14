@@ -7,6 +7,7 @@ class Risk::OperationalRisk < Risk
 
   def new_measurement(values)
     measurement = self.measurements.create(values)
+
     super(measurement.significant)
 
     measurement

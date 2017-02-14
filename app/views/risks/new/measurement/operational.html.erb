@@ -29,25 +29,6 @@
                   <i class="icmn-calendar"></i>
                 </span>
               </div>
-              <script type="text/javascript">
-                  $(function () {
-                      $('#date-picker').datetimepicker({
-                          locale: moment.locale('es'),
-                          format: '<%= dt_form_format %>',
-                          defaultDate: Date.now(),
-                          maxDate: Date.now(),
-                          timeZone: '<% server_timezone %>',
-                          icons: {
-                              time: "fa fa-clock-o",
-                              date: "fa fa-calendar",
-                              up: "fa fa-arrow-up",
-                              down: "fa fa-arrow-down",
-                              previous: "fa fa-arrow-left",
-                              next: "fa fa-arrow-right"
-                          }
-                      });
-                  });
-              </script>
             </div>
             <div class="col-lg-1 text-right">
               <label class="form-control-label">
@@ -173,6 +154,7 @@
           $('[data-provider="summernote"]').each(function(){
               newSummernote($(this));
           });
+          newDateTimePicker($('#date-picker'), '<%= dt_form_format %>', '<% server_timezone %>');
       });
   </script>
 <% end %>

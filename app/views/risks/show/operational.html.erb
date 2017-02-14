@@ -18,44 +18,52 @@
 
 <%# Populate all 3 columns of the view with keys & their values %>
 
-<%= content_for :keys_1 do %>
-  Área:
-  <br>
-  Proceso:
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Área:</div>
+      <div class="col-lg-8">
+        <%= Position.find(@risk.area_id).name rescue '' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right">Proceso:</div>
+      <div class="col-lg-8">
+        <%= BusinessProcess.find(@risk.process_id).name rescue '' %>
+      </div>
+    </div>
+
 <% end %>
 
-<%= content_for :keys_2 do %>
-  Actividad:
-  <br>
-  <strong>
-    Riesgo:
-  </strong>
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 text-right">Actividad:</div>
+      <div class="col-lg-8">
+        <%= @risk.activity %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right"><strong>Riesgo:</strong></div>
+      <div class="col-lg-8">
+        <strong>
+          <%= @risk.name %>
+        </strong>
+      </div>
+    </div>
 <% end %>
 
-<%= content_for :keys_3 do %>
-  Responsable:
-  <br>
-  Frec. medición:
-<% end %>
-
-<%= content_for :values_1 do %>
-  <%= Position.find(@risk.area_id).name rescue '' %>
-  <br>
-  <%= BusinessProcess.find(@risk.process_id).name %>
-<% end %>
-
-<%= content_for :values_2 do %>
-  <%= @risk.activity %>
-  <br>
-  <strong>
-    <%= @risk.name %>
-  </strong>
-<% end %>
-
-<%= content_for :values_3 do %>
-  <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
-  <br>
-  <%= frequency_string(@risk.measurement_frequency).capitalize %>
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Responsable:</div>
+      <div class="col-lg-8">
+        <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Frec. Medición:</div>
+      <div class="col-lg-8">
+        <%= frequency_string(@risk.measurement_frequency).capitalize %>
+      </div>
+    </div>
 <% end %>
 
 <%= content_for :heading_extra1 do %>
@@ -64,7 +72,7 @@
 
 <%= content_for :body_extra1 do %>
     <div class="margin-left-30 margin-bottom-30">
-      <%= @risk.comments %>
+      <%= raw @risk.comments %>
     </div>
 <% end %>
 
@@ -95,7 +103,6 @@
                 <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
                 <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_options[:impact][measurement.impact.to_s] %></td>
                 <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
-                <td style="<%= txtcolor %>"><%= measurement.comments %></td>
               </tr>
           <% end %>
         </tbody>
@@ -115,9 +122,9 @@
     <div class="left">
       <div class="header-buttons">
 
-        <div class="dropdown"><!-- TODO REDO call js func or smth -->
+        <div class="dropdown">
           <% history_content = "#{escape_javascript(render partial: 'log/modal',locals: {book: @risk.log_book})}" %>
-          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content%>')">
+          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
           </a>
@@ -163,20 +170,8 @@
 <%= content_for :scripts do %>
     <%# Process and load measurement data for use in the chart (Using ChartistJS). %>
     <% if @risk.measurements.count > 0 %>
-      <% raw_dates = Set.new %>
-      <% data = [] %>
-      <% thresholds = [] %>
-      <% @risk.measurements.order(measured_at: :asc, created_at: :asc).each do |m| %>
-          <% date = m.measured_at.to_time.to_i %>
-          <% raw_dates.add(date) %>
-          <% data.push({x: date, y: m.magnitude}) %>
-          <% thresholds.push({x: date, y: m.threshold}) %>
-      <% end %>
-      <%# For calculations, a Set is needed (so no repeated values are shown), but to use within %>
-      <%# Javascript, we use an array. %>
-      <% date_nums = raw_dates.to_a %>
-      <%# The highest magnitude is that of the highest impact option available, so we use that. %>
-      <% highest_y = Settings::RiskSettings.first.operational_options[:impact].keys.last.to_i %>
+
+      <% data = chart_data(@risk.measurements.order(measured_at: :asc, created_at: :asc), 4) %>
 
       <!-- Risks' Show Page Scripts -->
       <script type="text/javascript">
@@ -186,28 +181,23 @@
           });
 
           $(document).ready(function() {
-              var data = {
-                  labels: <%= raw date_nums %>,
-                  series: [
-                      <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
-                      <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
-                  ]
-              };
-
-              var opts = {
-                  lineSmooth: false,
-                  <%# Ignore the 0s, it's to avoid the JS checker giving errors, as it %>
-                  <%# does not consider the Ruby Embedding on the source code%>
-                  axisX: generateFixedAxis(
-                      0 + <%= raw date_nums.first - 4.hours.to_i %>,
-                      0 + <%= raw date_nums.last + 4.hours.to_i %>, <%= raw date_nums %>,
-                      function (value) {
-                          return moment(value * 1000).format('<%= dt_form_format(false) %>')
-                      }),
-                  axisY: generateAutoAxis(0, <%= highest_y %>)
-              };
-
-              chart = generateLineChart('#risk-chart', data, opts);
+              chart = generateLineChart(
+                  '#risk-chart',
+                  { // data
+                      labels: <%= raw data[:numeric_dates] %>,
+                      series: [<%= raw data[:values] %>, <%= raw data[:thresholds] %>]
+                  },
+                  { // options
+                      lineSmooth: false,
+                      axisX: generateFixedAxis(<%= raw data[:numeric_dates] %>,
+                          0 + <%= raw data[:min_x] %>, <%= raw data[:max_x] %>,
+                          function (value) {
+                              return moment(value * 1000)
+                                  .format('<%= dt_form_format(false) %>')
+                          }),
+                      axisY: generateAutoAxis(0,
+                          0 + <%= @settings.operational_options[:impact].keys.last.to_i %>)
+                  });
           });
       </script>
     <% end %>

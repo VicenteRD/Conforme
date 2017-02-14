@@ -1,4 +1,4 @@
-class Risk::SafetyRisk
+class Risk::SafetyRisk < Risk
   include Mongoid::Document
 
   validates_presence_of :position_id
@@ -6,8 +6,8 @@ class Risk::SafetyRisk
   embeds_many :measurements, class_name: 'RiskMeasurement::SafetyMeasurement'
 
   field :pos_id, as: :position_id, type: BSON::ObjectId # => Position
-  field :cond, as: :condition, type: String
-  field :ag, as: :agent, type: Integer
+  field :cond, as: :condition, type: Integer
+  field :ag, as: :agent, type: String
   field :cons, as: :consequence, type: String
 
   field :name, type: String

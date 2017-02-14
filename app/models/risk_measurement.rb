@@ -6,7 +6,7 @@ class RiskMeasurement
 
   before_create :init
 
-  before_save :calculate_magnitude
+  around_create :calculate_magnitude
 
   validates_presence_of :measured_at
 
@@ -38,12 +38,18 @@ class RiskMeasurement
 
       self.threshold = settings[:operational_threshold]
 
-      if self.magnitude >= (self.threshold * (1.0 + (settings[:margin] / 100)))
+      puts self.magnitude
+      puts self.threshold * (1.0 + settings[:margin])
+
+      if self.magnitude >= (self.threshold * (1.0 + settings[:margin]))
         self.significant = 2
       elsif self.magnitude >= self.threshold
         self.significant = 1
       end
     end
+
+    yield
+
   end
 
 end

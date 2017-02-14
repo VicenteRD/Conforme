@@ -1,5 +1,5 @@
 <%= content_for :script_tags do %>
-    <% javascript_include_tag 'show.min' %>
+    <% javascript_include_tag 'show' %>
 <% end %>
 
 <%= content_for :heading_main do %>
@@ -13,7 +13,6 @@
 <% end %>
 
 <%# Populate all 3 columns of the view with keys & their values %>
-
 
 <%= content_for :main_col_1 do %>
     <div class="row">
@@ -43,47 +42,59 @@
 <% end %>
 
 <%= content_for :main_col_2 do %>
-<% end %>
-<%= content_for :keys_2 do %>
-    Positivo:
-    <br>
-    Tiempo:
-    <br>
-    Sit. Operacional:
-    <br>
-    Directo:
-<% end %>
-
-<%= content_for :keys_3 do %>
-    <strong>
-      Riesgo:
-    </strong>
-    <br>
-    M. Regulatorio:
-    <br>
-    Responsable:
-    <br>
-    Frec. medición:
-<% end %>
-
-<%= content_for :values_2 do %>
-    <%= @risk.positive ? 'Si' : 'No' %>
-    <br>
-    <%= Settings::RiskSettings.first.environmental_options[:occ_time][@risk.occurrence_time.to_s] rescue '' %>
-    <br>
-
+    <div class="row">
+      <div class="col-lg-4 text-right" >Positivo:</div>
+      <div class="col-lg-8">
+        <%= @risk.positive ? 'Positivo' : 'Negativo' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Tiempo:</div>
+      <div class="col-lg-8">
+        <%= @settings.environmental_options[:occ_time][@risk.occurrence_time.to_s] rescue '' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Sit. Operacional:</div>
+      <div class="col-lg-8">
+        <%= @settings.environmental_options[:op_situation][@risk.operational_situation.to_s] rescue '' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Directo:</div>
+      <div class="col-lg-8">
+        <%= @risk.direct ? 'Directo' : 'Indirecto' %>
+      </div>
+    </div>
 <% end %>
 
-<%= content_for :values_3 do %>
-    <strong>
-      <%= @risk.name %>
-    </strong>
-    <br>
-    <%= @risk.regulation_id.nil? ? 'No regulado' : Risk::LawRisk.find(@risk.regulation_id) rescue 'No regulado' %>
-    <br>
-    <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
-    <br>
-    <%= frequency_string(@risk.measurement_frequency).capitalize %>
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 text-right"><strong>Riesgo:</strong></div>
+      <div class="col-lg-8">
+        <strong>
+          <%= @risk.name %>
+        </strong>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right" >M. Regulatorio:</div>
+      <div class="col-lg-8">
+        <%= @risk.regulation_id.nil? ? 'No regulado' : Risk::LawRisk.find(@risk.regulation_id) rescue 'No regulado' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Responsable:</div>
+      <div class="col-lg-8">
+        <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Frec. Medición:</div>
+      <div class="col-lg-8">
+        <%= frequency_string(@risk.measurement_frequency).capitalize %>
+      </div>
+    </div>
 <% end %>
 
 <%= content_for :heading_extra1 do %>
@@ -92,7 +103,7 @@
 
 <%= content_for :body_extra1 do %>
     <div class="margin-left-30 margin-bottom-30">
-      <%= @risk.comments %>
+      <%= raw @risk.comments %>
     </div>
 <% end %>
 
@@ -110,7 +121,6 @@
             <th>Probabilidad</th>
             <th>Impacto</th>
             <th>Magnitud</th>
-            <th width="50%">Comentarios</th>
           </tr>
           </thead>
           <tbody>
@@ -123,15 +133,11 @@
                 <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
                 <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
                 <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
-                <td style="<%= txtcolor %>"><%= measurement.comments %></td>
               </tr>
           <% end %>
           </tbody>
         </table>
       </div>
-      <script>
-
-      </script>
 
       <div class="margin-top-50">
         <div class="ct-chart height-400" id="risk-chart"></div>
@@ -176,7 +182,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
           <%= link_to risks_path('gestion') do %>
-              Riesgos Operacionales
+              Riesgos Ambientales
           <% end %>
         </li>
         <li>
@@ -191,20 +197,8 @@
 <%= content_for :scripts do %>
     <%# Process and load measurement data for use in the chart (Using ChartistJS). %>
     <% if @risk.measurements.count > 0 %>
-        <% raw_dates = Set.new %>
-        <% data = [] %>
-        <% thresholds = [] %>
-        <% @risk.measurements.order(measured_at: :asc, created_at: :asc).each do |m| %>
-            <% date = m.measured_at.to_time.to_i %>
-            <% raw_dates.add(date) %>
-            <% data.push({x: date, y: m.magnitude}) %>
-            <% thresholds.push({x: date, y: m.threshold}) %>
-        <% end %>
-        <%# For calculations, a Set is needed (so no repeated values are shown), but to use within %>
-        <%# Javascript, we use an array. %>
-        <% date_nums = raw_dates.to_a %>
-        <%# The highest magnitude is that of the highest impact option available, so we use that. %>
-        <% highest_y = Settings::RiskSettings.first.operational_impact_options.keys.last.to_i %>
+
+        <% data = chart_data(@risk.measurements.order(measured_at: :asc, created_at: :asc), 4) %>
 
         <!-- Risks' Show Page Scripts -->
         <script type="text/javascript">
@@ -214,28 +208,23 @@
             });
 
             $(document).ready(function() {
-                var data = {
-                    labels: <%= raw date_nums %>,
-                    series: [
-                        <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
-                        <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
-                    ]
-                };
-
-                var opts = {
-                    lineSmooth: false,
-                    <%# Ignore the 0s, it's to avoid the JS checker giving errors, as it %>
-                    <%# does not consider the Ruby Embedding on the source code%>
-                    axisX: generateFixedAxis(
-                        0 + <%= raw date_nums.first - 4.hours.to_i %>,
-                        0 + <%= raw date_nums.last + 4.hours.to_i %>, <%= raw date_nums %>,
-                        function (value) {
-                            return moment(value * 1000).format('<%= dt_form_format(false) %>')
-                        }),
-                    axisY: generateAutoAxis(0, <%= highest_y %>)
-                };
-
-                chart = generateLineChart('#risk-chart', data, opts);
+                chart = generateLineChart(
+                    '#risk-chart',
+                    { // data
+                        labels: <%= raw data[:numeric_dates] %>,
+                        series: [<%= raw data[:values] %>, <%= raw data[:thresholds] %>]
+                    },
+                    { // options
+                        lineSmooth: false,
+                        axisX: generateFixedAxis(<%= raw data[:numeric_dates] %>,
+                            0 + <%= raw data[:min_x] %>, <%= raw data[:max_x] %>,
+                            function (value) {
+                                return moment(value * 1000)
+                                    .format('<%= dt_form_format(false) %>')
+                            }),
+                        axisY: generateAutoAxis(0,
+                            0 + <%= @settings.environmental_options[:impact].keys.last.to_i %>)
+                    });
             });
         </script>
     <% end %>

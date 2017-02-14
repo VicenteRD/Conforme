@@ -4,11 +4,14 @@ class RisksController < ApplicationController
 
   before_action :check_permissions, only: [:new_measurement, :create_measurement]
 
+
   def risk_operational_risk_path(id)
     risk_path(type = 'gestion', id = id)
   end
 
   def index
+    @settings = Settings::RiskSettings.first
+
     case params[:type]
       when 'gestion'
         @risks = Risk::OperationalRisk.order_by(significant: :desc)
@@ -34,6 +37,8 @@ class RisksController < ApplicationController
   end
 
   def show
+    @settings = Settings::RiskSettings.first
+
     @risk = Risk.find(params[:id])
     if @risk.nil?
       redirect_to '/' and return
@@ -64,6 +69,8 @@ class RisksController < ApplicationController
   end
 
   def new
+    @settings = Settings::RiskSettings.first
+
     case params[:type]
       when 'gestion'
         type = 'operational'
@@ -125,6 +132,8 @@ class RisksController < ApplicationController
   end
 
   def edit
+    @settings = Settings::RiskSettings.first
+
     @risk = Risk.find(params[:id])
     if @risk.nil?
       redirect_to '/' and return
@@ -185,6 +194,8 @@ class RisksController < ApplicationController
   end
 
   def new_measurement
+    @settings = Settings::RiskSettings.first
+
     @risk = Risk.find(params[:id])
     if @risk.nil?
       redirect_to '/' and return
@@ -236,6 +247,8 @@ class RisksController < ApplicationController
   end
 
   def edit_measurement
+    @settings = Settings::RiskSettings.first
+
     @risk = Risk.find(params[:base_id])
 
     if @risk.nil?
