@@ -25,7 +25,7 @@ vr = Person::User.new(
 
 tst = Person::User.new(
     email: 'a@a',
-    password: '12345678',
+    password: '88888888',
 
     rut: '17700224-0',
     name: 'a',
@@ -45,6 +45,7 @@ tst = Person::User.new(
     ll_at: Time.now,
     j_at: Time.now
 )
+tst.save!
 
 cv = Person::User.new(
     email: 'cvillaseca@eworks.cl',
