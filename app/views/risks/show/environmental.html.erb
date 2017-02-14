@@ -1,5 +1,5 @@
 <%= content_for :script_tags do %>
-    <% javascript_include_tag 'show' %>
+    <% javascript_include_tag 'show.min' %>
 <% end %>
 
 <%= content_for :heading_main do %>
@@ -14,45 +14,73 @@
 
 <%# Populate all 3 columns of the view with keys & their values %>
 
-<%= content_for :keys_1 do %>
-    Área:
-    <br>
-    Proceso:
-    <br>
-    Actividad:
-    <br>
-    Aspecto:
+
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Área:</div>
+      <div class="col-lg-8">
+        <%= Position.find(@risk.area_id).name rescue '' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right">Proceso:</div>
+      <div class="col-lg-8">
+        <%= BusinessProcess.find(@risk.process_id).name rescue '' %>
+      </div>
+      </div>
+    <div class="row">
+      <div class="col-lg-4 text-right">Actividad:</div>
+      <div class="col-lg-8">
+        <%= @risk.activity %>
+      </div>
+      </div>
+    <div class="row">
+      <div class="col-lg-4 text-right">Aspecto:</div>
+      <div class="col-lg-8">
+        <%= @risk.aspect %>
+      </div>
+    </div>
 <% end %>
 
+<%= content_for :main_col_2 do %>
+<% end %>
 <%= content_for :keys_2 do %>
-
+    Positivo:
     <br>
-    <strong>
-      Riesgo:
-    </strong>
+    Tiempo:
+    <br>
+    Sit. Operacional:
+    <br>
+    Directo:
 <% end %>
 
 <%= content_for :keys_3 do %>
+    <strong>
+      Riesgo:
+    </strong>
+    <br>
+    M. Regulatorio:
+    <br>
     Responsable:
     <br>
     Frec. medición:
 <% end %>
 
-<%= content_for :values_1 do %>
-    <%= Position.find(@risk.area_id).name rescue '' %>
-    <br>
-    <%= BusinessProcess.find(@risk.process_id).name %>
-<% end %>
-
 <%= content_for :values_2 do %>
-    <%= @risk.activity %>
+    <%= @risk.positive ? 'Si' : 'No' %>
     <br>
-    <strong>
-      <%= @risk.name %>
-    </strong>
+    <%= Settings::RiskSettings.first.environmental_options[:occ_time][@risk.occurrence_time.to_s] rescue '' %>
+    <br>
+
 <% end %>
 
 <%= content_for :values_3 do %>
+    <strong>
+      <%= @risk.name %>
+    </strong>
+    <br>
+    <%= @risk.regulation_id.nil? ? 'No regulado' : Risk::LawRisk.find(@risk.regulation_id) rescue 'No regulado' %>
+    <br>
     <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
     <br>
     <%= frequency_string(@risk.measurement_frequency).capitalize %>
@@ -116,7 +144,8 @@
       <div class="header-buttons">
 
         <div class="dropdown"><!-- TODO REDO call js func or smth -->
-          <a href="#history-modal" class="dropdown-inline-button" data-toggle="modal">
+          <% history_content = "#{escape_javascript(render partial: 'log/modal',locals: {book: @risk.log_book})}" %>
+          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content%>')">
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
           </a>
@@ -179,38 +208,35 @@
 
         <!-- Risks' Show Page Scripts -->
         <script type="text/javascript">
-
-            $('.measurement-row').click(function () {
+            $('.measurement-row').click(function() {
                 // Show measurement's comments along with 'edit' and 'history' button
                 $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
             });
 
-            var data = {
-                labels: <%= raw date_nums %>,
-                series: [
-                    <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
-                    <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
-                ]
-            };
-
-            var opts = {
-                lineSmooth: false,
-                <%# Ignore the 0s, it's to avoid the JS checker giving errors, as it %>
-                <%# does not consider the Ruby Embedding on the source code%>
-                axisX: generateFixedAxis(
-                    0 + <%= raw date_nums.first - 4.hours.to_i %>,
-                    0 + <%= raw date_nums.last + 4.hours.to_i %>,
-                    0 + <%= raw date_nums %>,
-                    function (value) {
-                        return moment(value * 1000).format('<%= dt_form_format(false) %>')
-                    }),
-                axisY: generateAutoAxis(0, <%= highest_y %>)
-            };
-
             $(document).ready(function() {
+                var data = {
+                    labels: <%= raw date_nums %>,
+                    series: [
+                        <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
+                        <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
+                    ]
+                };
+
+                var opts = {
+                    lineSmooth: false,
+                    <%# Ignore the 0s, it's to avoid the JS checker giving errors, as it %>
+                    <%# does not consider the Ruby Embedding on the source code%>
+                    axisX: generateFixedAxis(
+                        0 + <%= raw date_nums.first - 4.hours.to_i %>,
+                        0 + <%= raw date_nums.last + 4.hours.to_i %>, <%= raw date_nums %>,
+                        function (value) {
+                            return moment(value * 1000).format('<%= dt_form_format(false) %>')
+                        }),
+                    axisY: generateAutoAxis(0, <%= highest_y %>)
+                };
+
                 chart = generateLineChart('#risk-chart', data, opts);
             });
-
         </script>
     <% end %>
 <% end %>

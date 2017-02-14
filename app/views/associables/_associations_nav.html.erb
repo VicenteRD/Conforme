@@ -270,15 +270,9 @@
           $.ajax({url: '/associables/<%= element %>/' + $(this).attr('data-linked_class')})
       });
 
-
-
       function showAssociation() {
           var menu = $('#associables');
           menu.is(':visible') ? menu.hide() : menu.fadeIn();
       }
   </script>
-<% end %>
-
-<% content_for :styles do %>
-  <!-- Associations Bar Styles -->
 <% end %>

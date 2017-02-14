@@ -1,5 +1,5 @@
 <%= content_for :script_tags do %>
-    <% javascript_include_tag 'show' %>
+    <% javascript_include_tag 'show.min' %>
 <% end %>
 
 <%= content_for :heading_main do %>
@@ -89,7 +89,7 @@
               <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
                 <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
                 <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
-                <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
+                <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_options[:impact][measurement.impact.to_s] %></td>
                 <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
                 <td style="<%= txtcolor %>"><%= measurement.comments %></td>
               </tr>
@@ -112,7 +112,8 @@
       <div class="header-buttons">
 
         <div class="dropdown"><!-- TODO REDO call js func or smth -->
-          <a href="#history-modal" class="dropdown-inline-button" data-toggle="modal">
+          <% history_content = "#{escape_javascript(render partial: 'log/modal',locals: {book: @risk.log_book})}" %>
+          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content%>')">
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
           </a>
@@ -171,41 +172,39 @@
       <%# Javascript, we use an array. %>
       <% date_nums = raw_dates.to_a %>
       <%# The highest magnitude is that of the highest impact option available, so we use that. %>
-      <% highest_y = Settings::RiskSettings.first.operational_impact_options.keys.last.to_i %>
+      <% highest_y = Settings::RiskSettings.first.operational_options[:impact].keys.last.to_i %>
 
       <!-- Risks' Show Page Scripts -->
       <script type="text/javascript">
-
-          $('.measurement-row').click(function () {
+          $('.measurement-row').click(function() {
               // Show measurement's comments along with 'edit' and 'history' button
               $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
           });
 
-          var data = {
-            labels: <%= raw date_nums %>,
-            series: [
-                <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
-                <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
-            ]
-          };
-
-          var opts = {
-              lineSmooth: false,
-              <%# Ignore the 0s, it's to avoid the JS checker giving errors, as it %>
-              <%# does not consider the Ruby Embedding on the source code%>
-              axisX: generateFixedAxis(
-                  0 + <%= raw date_nums.first - 4.hours.to_i %>,
-                  0 + <%= raw date_nums.last + 4.hours.to_i %>, <%= raw date_nums %>,
-              function (value) {
-                  return moment(value * 1000).format('<%= dt_form_format(false) %>')
-              }),
-              axisY: generateAutoAxis(0, <%= highest_y %>)
-          };
-
           $(document).ready(function() {
+              var data = {
+                  labels: <%= raw date_nums %>,
+                  series: [
+                      <%= raw data.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>,
+                      <%= raw thresholds.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ') %>
+                  ]
+              };
+
+              var opts = {
+                  lineSmooth: false,
+                  <%# Ignore the 0s, it's to avoid the JS checker giving errors, as it %>
+                  <%# does not consider the Ruby Embedding on the source code%>
+                  axisX: generateFixedAxis(
+                      0 + <%= raw date_nums.first - 4.hours.to_i %>,
+                      0 + <%= raw date_nums.last + 4.hours.to_i %>, <%= raw date_nums %>,
+                      function (value) {
+                          return moment(value * 1000).format('<%= dt_form_format(false) %>')
+                      }),
+                  axisY: generateAutoAxis(0, <%= highest_y %>)
+              };
+
               chart = generateLineChart('#risk-chart', data, opts);
           });
-
       </script>
     <% end %>
 <% end %>

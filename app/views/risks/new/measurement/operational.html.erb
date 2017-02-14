@@ -56,7 +56,7 @@
               </label>
             </div>
             <div class="col-lg-1">
-              <%= f.collection_select(:impact, Settings::RiskSettings.first.operational_impact_options,
+              <%= f.collection_select(:impact, Settings::RiskSettings.first.operational_options[:impact],
                                       :first, :last, {}, {class: 'form-control'}) %>
             </div>
           </div>

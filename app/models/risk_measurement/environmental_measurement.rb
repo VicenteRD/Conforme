@@ -2,7 +2,7 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
 
   embedded_in :risk, class_name: 'Risk::EnvironmentalRisk'
 
-  validates_presence_of :probability,
+  validates_presence_of :probability
 
   field :pbb, as: :probability, type: Float
 

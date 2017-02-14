@@ -20,7 +20,31 @@ vr = Person::User.new(
 
   active: true,
   ll_at: Time.now,
-  j_at: Time.now)
+  j_at: Time.now
+)
+
+tst = Person::User.new(
+    email: 'a@a',
+    password: '12345678',
+
+    rut: '17700224-0',
+    name: 'a',
+    l_name1: 'b',
+    l_name2: 'c',
+
+    phone: 'phone',
+    address: 'address',
+
+    dob: Date.new(1991, 2, 19),
+    photo: nil,
+
+    role: 'SuperAdmin',
+    contract_type: 'Lol nope',
+
+    active: true,
+    ll_at: Time.now,
+    j_at: Time.now
+)
 
 cv = Person::User.new(
     email: 'cvillaseca@eworks.cl',
@@ -42,7 +66,8 @@ cv = Person::User.new(
 
     active: true,
     ll_at: Time.now,
-    j_at: Time.now)
+    j_at: Time.now
+)
 
 pos_gg = Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: ' ', area: true)
 
@@ -77,21 +102,56 @@ Task::DocumentTask.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En 
 Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'No matar el servidor', rejected: false,
                  p_at: Time.now, r_at: Time.now)
 
-Settings::RiskSettings.create(operational_threshold: 0.5,
-                              margin: 0.05,
-                              operational_impact_options: {1 => 'Bueno', 2 => 'Malo', 3 => 'Catastrófico'}
-)
-
 proc1 = BusinessProcess.new(name: 'Going to sleep',
-                           description: 'Something some humans do.')
+                            description: 'Something some humans do.')
 proc1.save!
 
 proc2 = BusinessProcess.new(name: 'Processing process',
                             description: 'Process to process to processing of processes within the main process of the process.')
 proc2.save!
 
+# law1 = Law.new()
 
-risk = Risk::OperationalRisk.new(measurement_frequency: 1, responsible_id: vr.id, area_id: pos_gg.id,
-                             process_id: proc1.id, activity: 'Trying to sleep', name: 'Failing to sleep')
-risk.save!
-risk.created_entry(nil, body = 'Created by system')
+Settings::RiskSettings.create(
+    margin: 0.05,
+    operational_threshold: 0.5,
+    operational_options: {
+        impact: {1 => 'Bueno', 2 => 'Malo', 3 => 'Catastrófico'}
+    },
+    environmental_threshold: 0.5,
+    environmental_options: {
+        name: ['Altera la condición del aire', 'Altera la condición del suelo'],
+        occ_time: {-1 => 'Pasado', 0 => 'Presente', 1 => 'Futuro'},
+        op_situation: {0 => 'Normal', 1 => 'Anormal', 2 => 'Emergencia'},
+        geo_amplitude: {0 => 'Local', 1 => 'Puntual', 2 => 'Externa'},
+        pub_perception: {0 => 'Baja', 1 => 'Media', 2 => 'Alta'}
+    }
+)
+
+risk1 = Risk::OperationalRisk.new(
+    measurement_frequency: 1,
+    responsible_id: vr.id,
+    area_id: pos_gg.id,
+    process_id: proc1.id,
+    activity: 'Trying to sleep',
+    name: 'Failing to sleep'
+)
+risk1.save!
+risk1.created_entry(nil, body = 'Created by system')
+
+risk2 = Risk::EnvironmentalRisk.new(
+    measurement_frequency: 365,
+    responsible_id: cv.id,
+    area_id: pos_dp.id,
+    process_id: proc2.id,
+    activity: 'Trashing the trashy trash can full of trashy trash',
+    aspect: 'Basura',
+    name: 'Altera la condición del suelo',
+    regulation_id: nil,
+    occurrence_time: 1,
+    operational_situation: 2,
+    positive: true,
+    direct: false
+)
+risk2.save!
+risk2.created_entry(nil, body = 'Created by system')

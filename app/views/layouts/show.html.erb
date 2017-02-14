@@ -8,9 +8,21 @@
 
       <div class="panel-body ">
 
-        <div class="row margin-bottom">
+        <div class="row margin-bottom" style="width: 100%">
 
-          <div class="col-lg-1 text-right">
+          <div class="col-lg-3">
+            <%= yield :main_col_1 %>
+          </div>
+
+          <div class="col-lg-3">
+            <%= yield :main_col_2 %>
+          </div>
+
+          <div class="col-lg-3">
+            <%= yield :main_col_3 %>
+          </div>
+
+          <!--<div class="col-lg-1 text-right">
             <%= yield :keys_1 %>
           </div>
           <div class="col-lg-2">
@@ -29,7 +41,7 @@
           </div>
           <div class="col-lg-2">
             <%= yield :values_3 %>
-          </div>
+          </div>-->
 
         </div>
 
@@ -90,5 +102,14 @@
     </div>
   </div>
 </div>
+
+<%= content_for :scripts do %>
+    <script type="text/javascript">
+        function showHistory(bodyContent) {
+            $("#history-modal-body").html(bodyContent);
+            $("#history-modal").modal();
+        }
+    </script>
+<% end %>
 
 <% parent_layout 'application'%>
