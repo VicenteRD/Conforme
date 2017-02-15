@@ -1,0 +1,40 @@
+<% picker_id = (@element.to_s.starts_with?('single') ? @element.to_s.split('_').to_a.last : nil) %>
+
+<div class="row">
+  <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Ley</th>
+          <th>Artículo</th>
+          <th>Requisito</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% Risk::LawRisk.each do |risk| %>
+            <% law = Law.find(risk.law_id) %>
+            <% article = law.articles.find(risk.article_id) %>
+            <tr class="<%= picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-id="<%= risk.id %>">
+              <td id="risk-law"><%= law.name %></td>
+              <td id="risk-article"><%= article.name %></td>
+              <td><%= article.requirement %></td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+    $('.user-selectable').click(function () {
+        row = $(this);
+        formGroup = $('#<%= picker_id %>');
+
+        formGroup.find('.form-control')
+            .val(row.find('#risk-law').html() + ' ' + row.find('#risk-article').html());
+        formGroup.find('.form-control-hidden').val(row.attr('data-id'));
+
+
+        $('#table-modal').modal('hide');
+    });
+</script>

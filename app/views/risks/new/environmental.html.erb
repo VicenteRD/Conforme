@@ -81,7 +81,7 @@
                 Positivo
               </label>
             </div>
-            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
+            <div class="col-lg-2 input-group margin-right-20">
               <%= f.collection_select :occurrence_time, boolean_hash,
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
@@ -91,7 +91,7 @@
                 Sit. Operacional
               </label>
             </div>
-            <div class="col-lg-2 input-group margin-right-20" id="process-in">
+            <div class="col-lg-2 input-group margin-right-20">
               <%= f.collection_select :operational_situation, @settings.environmental_options[:op_situation],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
@@ -104,8 +104,8 @@
             <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
               <%= f.text_field :responsible_name, class: 'form-control', readonly: true %>
               <span class="input-group-addon" style="cursor: pointer">
-              <i class="icmn-pencil5"></i>
-            </span>
+                <i class="icmn-pencil5"></i>
+              </span>
               <%= f.hidden_field :responsible_id, class: 'form-control-hidden' %>
             </div>
           </div>
@@ -126,7 +126,7 @@
                 T. de Ocurrencia
               </label>
             </div>
-            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
+            <div class="col-lg-2 input-group margin-right-20">
               <%= f.collection_select :occurrence_time, @settings.environmental_options[:occ_time],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
@@ -186,8 +186,13 @@
     </div>
 <% end %>
 
-<%= content_for :breadcrumbs do %>
+<%= content_for :scripts do %>
     <script>
+        $('#regulation-in').click(function() {
+            $('#table-modal-title').html('Seleccionar Ley');
+            $.ajax({url: '/associables/single_risk-in/Risk::LawRisk'})
+        });
+
         $('#process-in').click(function () {
             $.ajax({url: '/processes/risk'})
         });
