@@ -1,0 +1,41 @@
+<%= content_for :script_tags do %>
+    <%= javascript_include_tag 'new' %>
+<% end %>
+
+<%= content_for :style_tags do %>
+    <%= stylesheet_link_tag 'new' %>
+<% end %>
+
+<%= content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+
+        <div class="dropdown">
+          <a href="#confirmation-modal" class="dropdown-inline-button" data-toggle="modal">
+            <i class="dropdown-inline-button-icon icmn-file-check"></i>
+            Grabar
+          </a>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<%= yield %>
+
+<%= content_for :scripts do %>
+    <!-- Form scripts -->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('[data-provider="summernote"]').each(function(){
+                newSummernote($(this));
+            });
+
+            var datePicker = $('#date-picker');
+            if (datePicker.length != 0) {
+                newDateTimePicker(datePicker, '<%= dt_form_format %>', '<% server_timezone %>');
+            }
+        });
+    </script>
+<% end %>
+
+<% parent_layout 'application' %>

@@ -1,5 +1,5 @@
 <%= content_for :script_tags do %>
-    <% javascript_include_tag 'show.min' %>
+    <% javascript_include_tag 'show' %>
 <% end %>
 
 <%= content_for :heading_main do %>
@@ -13,45 +13,47 @@
 <% end %>
 
 <%# Populate all 3 columns of the view with keys & their values %>
+<% law = Law.find(@risk.law_id) %>
+<% article = law.articles.find(@risk.article_id)%>
 
-<%= content_for :keys_1 do %>
-    Área:
-    <br>
-    Proceso:
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Ley:</div>
+      <div class="col-lg-8">
+        <%= law.name %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right">Artículo:</div>
+      <div class="col-lg-8">
+        <%= article.name %>
+      </div>
+    </div>
+
 <% end %>
 
-<%= content_for :keys_2 do %>
-    Actividad:
-    <br>
-    <strong>
-      Riesgo:
-    </strong>
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 text-right">Requerimiento:</div>
+      <div class="col-lg-8">
+        <%= article.requirement %>
+      </div>
+    </div>
 <% end %>
 
-<%= content_for :keys_3 do %>
-    Responsable:
-    <br>
-    Frec. medición:
-<% end %>
-
-<%= content_for :values_1 do %>
-    <%= Position.find(@risk.area_id).name rescue '' %>
-    <br>
-    <%= BusinessProcess.find(@risk.process_id).name %>
-<% end %>
-
-<%= content_for :values_2 do %>
-    <%= @risk.activity %>
-    <br>
-    <strong>
-      <%= @risk.name %>
-    </strong>
-<% end %>
-
-<%= content_for :values_3 do %>
-    <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
-    <br>
-    <%= frequency_string(@risk.measurement_frequency).capitalize %>
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Responsable:</div>
+      <div class="col-lg-8">
+        <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right" >Frec. Medición:</div>
+      <div class="col-lg-8">
+        <%= frequency_string(@risk.measurement_frequency).capitalize %>
+      </div>
+    </div>
 <% end %>
 
 <%= content_for :heading_extra1 do %>
@@ -75,8 +77,8 @@
           <thead>
           <tr>
             <th>Fecha</th>
-            <th>Probabilidad</th>
-            <th>Impacto</th>
+            <th>Cumplimiento (%)</th>
+            <th>Método</th>
             <th>Magnitud</th>
           </tr>
           </thead>
@@ -87,8 +89,8 @@
 
               <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
                 <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
-                <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
-                <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
+                <td style="<%= txtcolor %>"><%= (measurement.compliance * 100).round %></td>
+                <td style="<%= txtcolor %>"><%= measurement.method %></td>
                 <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
               </tr>
           <% end %>
@@ -142,7 +144,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
           <%= link_to risks_path('gestion') do %>
-              Riesgos Operacionales
+              Riesgos Legales
           <% end %>
         </li>
         <li>

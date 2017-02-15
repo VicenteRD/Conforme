@@ -111,11 +111,13 @@ proc2 = BusinessProcess.new(name: 'Processing process',
                             description: 'Process to process to processing of processes within the main process of the process.')
 proc2.save!
 
-# law1 = Law.new()
-stdd = Standard.new
+stdd = Standard.new(name: 'ISO 9001')
 stdd.save!
-law = Law.new
+s_art = stdd.articles.create(name: 'A', requirement: 'Do stuff right.')
+
+law = Law.new(name: 'Constitución')
 law.save!
+l_art = law.articles.create(name: '110011', requirement: 'Dont do stuff.')
 
 Settings::RiskSettings.create(
     margin: 0.05,
@@ -161,22 +163,20 @@ st_risk = Risk::StandardRisk.new(
     activity: 'Standarizing the standard standards',
 
     standard_id: stdd.id,
-    article: '1',
-    requirement: 'You must build an ark!',
+    article_id: s_art.id
 )
 st_risk.save!
 st_risk.created_entry(nil, body = 'Created by system')
 
-la_risk = Risk::StandardRisk.new(
+la_risk = Risk::LawRisk.new(
     measurement_frequency: 30,
     responsible_id: cv.id,
     area_id: pos_dv.id,
     process_id: proc2.id,
     activity: 'Standarizing the standard standards',
 
-    standard_id: law.id,
-    article: '1',
-    requirement: 'You must build an ark!',
+    law_id: law.id,
+    article_id: l_art.id
 )
 la_risk.save!
 la_risk.created_entry(nil, body = 'Created by system')

@@ -62,7 +62,7 @@ Rails.application.routes.draw do
   # -------- Risks
 
   get '/riesgos/:type'                  => 'risks#index',            as: :risks
-  get '/riesgos/nuevo/:type'            => 'risks#new',              as: :new_risk
+  get '/riesgos/:type/nuevo'            => 'risks#new',              as: :new_risk
   get '/riesgos/editar/:id'             => 'risks#edit',             as: :edit_risk
   get '/riesgos/detalle/:id'            => 'risks#show',             as: :risk
   get '/riesgos/detalle/:id/nueva'      => 'risks#new_measurement',  as: :new_risk_measurement

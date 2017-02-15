@@ -34,7 +34,7 @@
         <td><%= Position.find(risk.area_id).name %></td>
         <td><%= Position.find(risk.position_id).name %></td>
         <td><%= risk.activity %></td>
-        <td><%= risk.condition %></td>
+        <td><%= @settings.safety_options[:condition][risk.condition.to_s] %></td>
         <td><%= risk.name %></td>
         <td><%= risk.agent %></td>
 

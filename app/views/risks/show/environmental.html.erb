@@ -80,7 +80,8 @@
     <div class="row">
       <div class="col-lg-4 text-right" >M. Regulatorio:</div>
       <div class="col-lg-8">
-        <%= @risk.regulation_id.nil? ? 'No regulado' : Risk::LawRisk.find(@risk.regulation_id) rescue 'No regulado' %>
+        <% law = @risk.regulation_id.nil? ? nil : Risk::LawRisk.find(@risk.regulation_id) %>
+        <%= law.nil? ? 'No regulado' : link_to(law.get_law_name, risk_path(law.id)) rescue 'No regulado' %>
       </div>
     </div>
     <div class="row">

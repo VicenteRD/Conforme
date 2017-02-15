@@ -87,7 +87,7 @@ class RisksController < ApplicationController
         redirect_to '/' and return
     end
 
-    render "risks/new/#{type}" #, layout: 'new'
+    render "risks/new/#{type}" , layout: 'new'
   end
 
   def create
@@ -206,7 +206,7 @@ class RisksController < ApplicationController
       redirect_to '/' and return
     end
 
-    render "risks/new/measurement/#{type}"
+    render "risks/new/measurement/#{type}", layout: 'new'
   end
 
   def create_measurement

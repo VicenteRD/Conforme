@@ -1,0 +1,226 @@
+<%= form_for(:risk, url: new_risk_path) do |f| %>
+
+    <section class="page-content">
+      <div class="page-content-inner">
+
+        <div class="panel">
+          <%= render partial: 'associables/associations_nav', locals: {element: 'risk'} %>
+
+          <div class="row form-group margin-left-50">
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Área
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="area-in">
+              <%= f.text_field :area_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+              <i class="icmn-pencil5"></i>
+            </span>
+              <%= f.hidden_field :area_id, class: 'form-control-hidden' %>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Proceso
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="process-in">
+              <%= f.text_field :process_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                M. Regulatorio
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="regulation-in">
+              <%= f.text_field :regulation_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :regulation_id, class: 'form-control-hidden' %>
+            </div>
+          </div>
+
+          <div class="row form-group margin-left-50">
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Actividad
+              </label>
+            </div>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.text_field :activity, class: 'form-control' %>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Aspecto
+              </label>
+            </div>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.text_field :aspect, class: 'form-control' %>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Riesgo
+              </label>
+            </div>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.text_field :name, class: 'form-control' %>
+            </div>
+          </div>
+
+          <div class="row form-group margin-left-50">
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Positivo
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
+              <%= f.collection_select :occurrence_time, boolean_hash,
+                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Sit. Operacional
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="process-in">
+              <%= f.collection_select :operational_situation, @settings.environmental_options[:op_situation],
+                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Responsable
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
+              <%= f.text_field :responsible_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+              <i class="icmn-pencil5"></i>
+            </span>
+              <%= f.hidden_field :responsible_id, class: 'form-control-hidden' %>
+            </div>
+          </div>
+
+          <div class="row form-group margin-left-50">
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Directo
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
+              <%= f.collection_select :occurrence_time, boolean_hash,
+                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                T. de Ocurrencia
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
+              <%= f.collection_select :occurrence_time, @settings.environmental_options[:occ_time],
+                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Frecuencia
+              </label>
+            </div>
+            <div class="col-lg-2 form-inline">
+              <%= f.collection_select :measurement_frequency, frequency_hash, :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+            </div>
+          </div>
+
+          <div class="row form-group" style="margin: 30px 10px;height:400px">
+            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'}  %>
+          </div>
+
+          <div id="associables-container"></div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Confirmation modal -->
+    <div id="confirmation-modal" class="modal fade modal-size-large" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content" id="confirmation-modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="confirmation-modal-title">Está Seguro?</h4>
+          </div>
+
+          <div class="modal-body" id="confirmation-modal-body">
+            <div class="row">
+              <div class="col-md-2">
+                <label>Entrada Bitácora</label>
+              </div>
+              <div class="col-md-9">
+                <%= f.text_area :log_entry, class: 'form-control height-150' %>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-6 text-left">
+                <button class="btn btn-danger width-150 height-50" data-dismiss="modal">Cancelar</button>
+              </div>
+              <div class="text-right col-md-6">
+                <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :breadcrumbs do %>
+    <script>
+        $('#process-in').click(function () {
+            $.ajax({url: '/processes/risk'})
+        });
+
+        $('#process-new').click(function () {
+            $.ajax({url: '/processes/risk/new'});
+        });
+
+        $('#responsible-in').click(function () {
+            $('#table-modal-title').html('Seleccionar Responsable');
+            $.ajax({url: '/associables/single_responsible-in/Person::User'});
+        });
+
+        $('#area-in').click(function () {
+            $('#table-modal-title').html('Seleccionar Área');
+            $.ajax({url: '/associables/single_area-in/Position'});
+        });
+    </script>
+<% end %>
+
+<%= content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to risks_path('gestion') do %>
+              Riesgos Ambientales
+          <% end %>
+        </li>
+        <li>
+          <span>
+            Nuevo
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

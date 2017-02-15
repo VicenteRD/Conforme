@@ -87,10 +87,9 @@
         <thead>
           <tr>
             <th>Fecha</th>
-            <th>Probabilidad</th>
+            <th>Probabilidad (%)</th>
             <th>Impacto</th>
             <th>Magnitud</th>
-            <th width="50%">Comentarios</th>
           </tr>
         </thead>
         <tbody>
@@ -100,7 +99,7 @@
 
               <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
                 <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
-                <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
+                <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %></td>
                 <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_options[:impact][measurement.impact.to_s] %></td>
                 <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
               </tr>

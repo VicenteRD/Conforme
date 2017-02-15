@@ -8,7 +8,7 @@
   </h6>
 </div>
 
-<div class="associables-menu" id="associables">
+<div class="associables-menu margin-bottom-20" id="associables">
 
   <div class="menu-item menu-item-drop-down">
     <p class="item-content"> Mejora </p>
@@ -251,14 +251,11 @@
 
 </div>
 
-<div id="associables-container"></div>
-
 <% content_for :scripts do %>
   <!-- Associations Bar Scripts -->
   <script type="text/javascript">
       $(document).ready(function() {
           $('#associables').hide();
-          console.log('hi');
       });
 
       $('.assoc-item').click(function(){

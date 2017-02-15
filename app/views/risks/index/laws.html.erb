@@ -24,6 +24,7 @@
         <% @risks.each do |risk| %>
 
             <% law = Law.find(risk.law_id) %>
+            <% article = law.articles.find(risk.article_id)%>
 
             <% sig = humanize_significant(risk.significant) %>
             <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
@@ -31,8 +32,8 @@
             <tr data-href="<%= risk_path(risk.id) %>">
 
               <td><%= law.name %></td>
-              <td><%= risk.article %></td>
-              <td><%= law.requirement %></td>
+              <td><%= article.name %></td>
+              <td><%= article.requirement %></td>
 
               <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
