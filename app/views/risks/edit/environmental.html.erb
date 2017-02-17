@@ -41,7 +41,8 @@
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="regulation-in">
               <%= text_field :extra, :regulation_name, class: 'form-control', readonly: true,
-                             value: Risk::LawRisk.find(@risk.regulation_id).get_law_name %>
+                             value: @risk.regulation_id.nil? ? '' : Risk::LawRisk
+                                 .find(@risk.regulation_id).get_law_name %>
               <span class="input-group-addon" style="cursor: pointer">
                 <i class="icmn-pencil5"></i>
               </span>

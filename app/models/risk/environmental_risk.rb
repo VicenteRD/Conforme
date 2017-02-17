@@ -33,7 +33,7 @@ class Risk::EnvironmentalRisk < Risk
   end
 
   def new_measurement(values)
-    measurement = self.measurements.create(values)
+    measurement = self.measurements.create!(values)
 
     super(measurement.significant)
 

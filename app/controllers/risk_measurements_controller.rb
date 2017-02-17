@@ -31,7 +31,7 @@ class RiskMeasurementsController < ApplicationController
   end
 
   def create
-    unless (risk = Risk.find(params[:id]))
+    unless (risk = Risk.find(params[:risk_id]))
       redirect_to '/' and return
     end
 
