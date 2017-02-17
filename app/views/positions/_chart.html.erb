@@ -7,7 +7,9 @@
 <div id='org-chart-container'></div>
 
 <ul id="org-chart-data" style="display:none">
-  <%= generate_organization_chart.html_safe %>
+  <% puts (defined?(parent) && parent != nil && parent != '')  %>
+  <% parent_id = (defined?(parent) && parent != nil && parent != '') ? parent : nil %>
+  <%= generate_organization_chart(parent_id).html_safe %>
 </ul>
 
 <style>

@@ -61,19 +61,20 @@ Rails.application.routes.draw do
 
   # -------- Risks
 
-  get '/riesgos/:type'                  => 'risks#index',            as: :risks
-  get '/riesgos/:type/nuevo'            => 'risks#new',              as: :new_risk
-  get '/riesgos/editar/:id'             => 'risks#edit',             as: :edit_risk
-  get '/riesgos/detalle/:id'            => 'risks#show',             as: :risk
-  get '/riesgos/detalle/:id/nueva'      => 'risks#new_measurement',  as: :new_risk_measurement
-  get '/riesgos/detalle/:id/:msrmnt_id' => 'risks#show_details'
-  get '/riesgos/:base_id/:id/editar'    => 'risks#edit_measurement', as: :edit_risk_measurement
-  get '/riesgos/detalle/:id/historial'  => 'risks#history',          as: :risk_history
+  get '/riesgos/:type'                       => 'risks#index',            as: :risks
+  get '/riesgos/:type/nuevo'                 => 'risks#new',              as: :new_risk
+  get '/riesgos/editar/:id'                  => 'risks#edit',             as: :edit_risk
+  get '/riesgos/detalle/:id'                 => 'risks#show',             as: :risk
+  get '/riesgos/detalle/:risk_id/nueva'      => 'risk_measurements#new',  as: :new_risk_measurement
+  get '/riesgos/:risk_id/:id/editar'         => 'risk_measurements#edit', as: :edit_risk_measurement
+  get '/riesgos/detalle/:id/historial'       => 'risks#history',          as: :risk_history
 
-  post '/riesgos/nuevo/:type'          => 'risks#create'
-  post '/riesgos/detalle/:id/nueva'    => 'risks#create_measurement'
-  patch '/riesgos/editar/:id'          => 'risks#update'
-  patch '/riesgos/:base_id/:id/editar' => 'risks#update_measurement'
+  get '/riesgos/detalle/:id/:msrmnt_id'      => 'risk_measurements#show_details'
+
+  post  '/riesgos/:type/nuevo'               => 'risks#create'
+  patch '/riesgos/editar/:id'                => 'risks#update'
+  post  '/riesgos/detalle/:risk_id/nueva'    => 'risk_measurements#create'
+  patch '/riesgos/:risk_id/:id/editar'       => 'risk_measurements#update'
 
   # -------- Configuration - TODO Maybe move them into their kind as 'settings' ?
 

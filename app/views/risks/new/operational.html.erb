@@ -13,7 +13,7 @@
             </label>
           </div>
           <div class="col-lg-2 input-group margin-right-20" id="area-in">
-            <%= f.text_field :area_name, class: 'form-control', readonly: true %>
+            <%= text_field :extra, :area_name, class: 'form-control', readonly: true %>
             <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
@@ -26,7 +26,7 @@
             </label>
           </div>
           <div class="col-lg-2 input-group margin-right-20" id="process-in">
-            <%= f.text_field :process_name, class: 'form-control', readonly: true %>
+            <%= text_field :raw, :process_name, class: 'form-control', readonly: true %>
             <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
@@ -38,7 +38,7 @@
             </label>
           </div>
           <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
-            <%= f.text_field :responsible_name, class: 'form-control', readonly: true %>
+            <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true %>
             <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
@@ -100,7 +100,7 @@
               <label>Entrada Bitácora</label>
             </div>
             <div class="col-md-9">
-              <%= f.text_area :log_entry, class: 'form-control height-150' %>
+              <%= text_area :log, :body, class: 'form-control height-150' %>
             </div>
           </div>
         </div>

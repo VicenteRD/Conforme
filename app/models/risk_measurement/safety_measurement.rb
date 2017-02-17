@@ -9,6 +9,10 @@ class RiskMeasurement::SafetyMeasurement
 
   field :imp, as: :impact, type: Integer
 
+  def self.permitted_fields
+    super + [:probability, :impact]
+  end
+
   def calculate_magnitude
     self.magnitude = self.probability * self.impact
 

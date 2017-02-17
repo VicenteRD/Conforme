@@ -3,6 +3,10 @@ class Risk::EnvironmentalRisk < Risk
 
   embeds_many :measurements, class_name: 'RiskMeasurement::EnvironmentalMeasurement'
 
+  field :a_id, as: :area_id, type: BSON::ObjectId    # => Position
+  field :proc_id, as: :process_id, type: BSON::ObjectId # => BusinessProcess
+  field :act, as: :activity, type: String
+
   field :asp, as: :aspect, type: String
   field :name, type: String
 
@@ -14,10 +18,36 @@ class Risk::EnvironmentalRisk < Risk
   field :pos, as: :positive, type: Boolean
   field :dir, as: :direct, type: Boolean
 
+  def permitted_fields
+    super + [
+        :area_id,
+        :process_id,
+        :activity,
+        :name,
+        :regulation_id,
+        :occurrence_time,
+        :operational_situation,
+        :positive,
+        :direct
+    ]
+  end
+
   def new_measurement(values)
     measurement = self.measurements.create(values)
+
     super(measurement.significant)
 
     measurement
   end
+
+  def get_compliance
+    if self.regulation_id.nil?
+      return 1
+    end
+
+    regulation = Risk::LawRisk.find(self.regulation_id)
+
+    regulation.nil? ? 1 : regulation.get_compliance
+  end
+
 end

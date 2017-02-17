@@ -129,9 +129,11 @@ Settings::RiskSettings.create(
     environmental_options: {
         name: ['Altera la condición del aire', 'Altera la condición del suelo'],
         occ_time: {-1 => 'Pasado', 0 => 'Presente', 1 => 'Futuro'},
-        op_situation: {0 => 'Normal', 1 => 'Anormal', 2 => 'Emergencia'},
-        geo_amplitude: {0 => 'Local', 1 => 'Puntual', 2 => 'Externa'},
-        pub_perception: {0 => 'Baja', 1 => 'Media', 2 => 'Alta'}
+        op_situation: {1 => 'Normal', 2 => 'Anormal', 3 => 'Emergencia'},
+        geo_amplitude: {1 => 'Local', 2 => 'Puntual', 3 => 'Externa'},
+        pub_perception: {1 => 'Baja', 2 => 'Media', 3 => 'Alta'},
+        reversibility: {1 => 'Reversible', 2 => 'Recuperable', 3 => 'Irrecuperable'},
+        impact: {1 => 'Bajo', 2 => 'Grave', 3 => 'Crítico'}
     },
     safety_threshold: 0.5,
     safety_options: {
@@ -153,7 +155,7 @@ op_risk = Risk::OperationalRisk.new(
     name: 'Failing to sleep'
 )
 op_risk.save!
-op_risk.created_entry(nil, body = 'Created by system')
+op_risk.log_creation(nil, body = 'Created by system')
 
 st_risk = Risk::StandardRisk.new(
     measurement_frequency: 30,
@@ -166,7 +168,7 @@ st_risk = Risk::StandardRisk.new(
     article_id: s_art.id
 )
 st_risk.save!
-st_risk.created_entry(nil, body = 'Created by system')
+st_risk.log_creation(nil, body = 'Created by system')
 
 la_risk = Risk::LawRisk.new(
     measurement_frequency: 30,
@@ -179,7 +181,7 @@ la_risk = Risk::LawRisk.new(
     article_id: l_art.id
 )
 la_risk.save!
-la_risk.created_entry(nil, body = 'Created by system')
+la_risk.log_creation(nil, body = 'Created by system')
 
 en_risk = Risk::EnvironmentalRisk.new(
     measurement_frequency: 365,
@@ -197,7 +199,7 @@ en_risk = Risk::EnvironmentalRisk.new(
     direct: false
 )
 en_risk.save!
-en_risk.created_entry(nil, body = 'Created by system')
+en_risk.log_creation(nil, body = 'Created by system')
 
 sa_risk = Risk::SafetyRisk.new(
     measurement_frequency: 7,
@@ -215,4 +217,4 @@ sa_risk = Risk::SafetyRisk.new(
     comments: '<p><h6>Safety first!</h6>This is just a test...</p>',
 )
 sa_risk.save!
-sa_risk.created_entry(nil, body = 'Created by system')
+sa_risk.log_creation(nil, body = 'Created by system')

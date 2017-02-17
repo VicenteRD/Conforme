@@ -8,6 +8,10 @@ class Risk::LawRisk < Risk
   field :law_id, type: BSON::ObjectId
   field :art_id, as: :article_id, type: BSON::ObjectId
 
+  def permitted_fields
+    super + [:law_id, :article_id]
+  end
+
   def new_measurement(values)
     measurement = self.measurements.create(values)
     super(measurement.significant)
@@ -19,5 +23,13 @@ class Risk::LawRisk < Risk
     law = Law.find(self.law_id)
 
     law.name + ': ' + law.articles.find(self.article_id).name
+  end
+
+  def get_compliance
+    if self.measurements != nil && self.measurements
+      self.measurements.last.compliance
+    else
+      0
+    end
   end
 end

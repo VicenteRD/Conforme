@@ -3,7 +3,8 @@
     <section class="page-content">
       <div class="page-content-inner">
 
-        <div class="panel padding-top-20">
+        <div class="panel">
+          <%= render partial: 'associables/associations_nav', locals: {element: 'risk'} %>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
@@ -13,7 +14,7 @@
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="area-in">
               <%= text_field :extra, :area_name, class: 'form-control', readonly: true,
-                value: Position.find(@risk.area_id).name %>
+                             value: Position.find(@risk.area_id).name %>
               <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
@@ -27,7 +28,7 @@
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="process-in">
               <%= text_field :raw, :process_name, class: 'form-control', readonly: true,
-                value: BusinessProcess.find(@risk.process_id).name %>
+                             value: BusinessProcess.find(@risk.process_id).name %>
               <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
@@ -40,7 +41,7 @@
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
               <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true,
-                value: Person::User.find(@risk.responsible_id).full_name %>
+                             value: Person::User.find(@risk.responsible_id).full_name %>
               <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
@@ -77,22 +78,13 @@
             </div>
           </div>
 
-          <%= render partial: 'associables/associations_nav', locals: {element: 'risk'} %>
-        </div>
-
-        <div class="panel">
-          <div class="row form-group margin-left-50 margin-top-30">
-            <div class="col-lg-2">
-              <label class="form-control-label">
-                Bitácora
-              </label>
-            </div>
-            <div class="col-lg-6">
-              <%= f.text_area :comments, class: 'form-control', style: 'width:90%' %>
-            </div>
+          <div class="row form-group" style="margin: 30px 10px;height:400px">
+            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'}  %>
           </div>
-        </div>
 
+          <div id="associables-container"></div>
+
+        </div>
       </div>
     </section>
 
@@ -111,7 +103,7 @@
                 <label>Entrada Bitácora</label>
               </div>
               <div class="col-md-9">
-                <%= text_area :log, :entry, class: 'form-control height-150' %>
+                <%= text_area :log, :body, class: 'form-control height-150' %>
               </div>
             </div>
           </div>
@@ -132,39 +124,26 @@
 
 <% end %>
 
+<%= content_for :scripts do %>
+    <script>
+        $('#process-in').click(function () {
+            $.ajax({url: '/processes/risk'})
+        });
 
-<script>
-    $('#process-in').click(function () {
-        $.ajax({url: '/processes/risk'})
-    });
+        $('#process-new').click(function () {
+            $.ajax({url: '/processes/risk/new'});
+        });
 
-    $('#process-new').click(function () {
-        $.ajax({url: '/processes/risk/new'});
-    });
+        $('#responsible-in').click(function () {
+            $('#table-modal-title').html('Seleccionar Responsable');
+            $.ajax({url: '/associables/single_responsible-in/Person::User'});
+        });
 
-    $('#responsible-in').click(function () {
-        $('#table-modal-title').html('Seleccionar Responsable');
-        $.ajax({url: '/associables/single_responsible-in/Person::User'});
-    });
-
-    $('#area-in').click(function () {
-        $('#table-modal-title').html('Seleccionar Área');
-        $.ajax({url: '/associables/single_area-in/Position'});
-    });
-</script>
-
-<%= content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-
-        <div class="dropdown">
-          <a href="#confirmation-modal" class="dropdown-inline-button" data-toggle="modal">
-            <i class="dropdown-inline-button-icon icmn-file-check"></i>
-            Grabar
-          </a>
-        </div>
-      </div>
-    </div>
+        $('#area-in').click(function () {
+            $('#table-modal-title').html('Seleccionar Área');
+            $.ajax({url: '/associables/single_area-in/Position'});
+        });
+    </script>
 <% end %>
 
 <% content_for :breadcrumbs do %>

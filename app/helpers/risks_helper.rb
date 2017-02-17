@@ -1,5 +1,22 @@
 module RisksHelper
 
+  def minimize_type(class_name)
+    case class_name
+      when 'Risk::OperationalRisk'
+        'operational'
+      when 'Risk::EnvironmentalRisk'
+        'environmental'
+      when 'Risk::SafetyRisk'
+        'safety'
+      when 'Risk::LawRisk'
+        'laws'
+      when 'Risk::StandardRisk'
+        'standards'
+      else
+        nil
+    end
+  end
+
   def chart_data(measurements, x_buffer)
 
     # Instantiate a set of raw holders

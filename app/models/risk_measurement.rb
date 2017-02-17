@@ -20,6 +20,10 @@ class RiskMeasurement
 
   field :mag, as: :magnitude, type: Float
 
+  def self.permitted_fields
+    [:measured_at, :comments]
+  end
+
   def init
     self.significant = -1
     self.log_book = Log::Book.new
@@ -32,19 +36,16 @@ class RiskMeasurement
 
     settings = Settings::RiskSettings.first
 
-    self.significant = 0
-
     if settings && settings[:operational_threshold] && settings[:margin]
 
       self.threshold = settings[:operational_threshold]
-
-      puts self.magnitude
-      puts self.threshold * (1.0 + settings[:margin])
 
       if self.magnitude >= (self.threshold * (1.0 + settings[:margin]))
         self.significant = 2
       elsif self.magnitude >= self.threshold
         self.significant = 1
+      else
+        self.significant = 0
       end
     end
 

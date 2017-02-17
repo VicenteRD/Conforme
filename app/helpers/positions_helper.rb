@@ -1,8 +1,11 @@
 module PositionsHelper
 
-  def generate_organization_chart
-    parent = Position.or({:parent_id => nil}, {:parent_id.exists => false}).first
-
+  def generate_organization_chart(parent_id = nil)
+    if parent_id.nil?
+      parent = Position.or({:parent_id => nil}, {:parent_id.exists => false}).first
+    else
+      parent = Position.find(parent_id)
+    end
 
     return <<-EOS
 <li class="#{(parent.area ? 'area-position' : 'position')}">

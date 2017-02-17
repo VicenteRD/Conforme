@@ -2,21 +2,38 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
 
   embedded_in :risk, class_name: 'Risk::EnvironmentalRisk'
 
-  validates_presence_of :probability
+  validates_presence_of :probability,
+                        :geographical_amplitude,
+                        :public_perception,
+                        :reversibility,
+                        :impact
 
   field :pbb, as: :probability, type: Float
 
-  field :geo_a, as: :geographical_amplitude, type: Integer #
-  field :pub_p, as: :public_perception, type: Integer #
-  field :rev, as: :reversibility, type: Integer #
+  field :geo_a, as: :geographical_amplitude, type: Integer
+  field :pub_p, as: :public_perception, type: Integer
+  field :rev, as: :reversibility, type: Integer
 
-  field :imp, as: :impact, type: Integer #
+  field :imp, as: :impact, type: Integer
 
-  field :reg_br, as: :regulation_breach, type: Float # Calculated as 1 - Risk::LawRisk.find(this.base.reg_id).compliance_percentage
+  field :reg_br, as: :regulation_breach, type: Float
 
   field :cons, as: :consequence, type: Float
 
+  def self.permitted_fields
+    super + [
+        :probability,
+        :geographical_amplitude,
+        :public_perception,
+        :reversibility,
+        :impact
+    ]
+  end
+
   def calculate_magnitude
+    # regulation_breach is given via a hidden field in the form,
+    # taken from the base risk
+
     self.consequence = self.imp +
         self.geographical_amplitude +
         self.public_perception +
