@@ -8,7 +8,7 @@ class Risk
 
   include Associable
 
-  validates_presence_of :area_id, :responsible_id, :process_id
+  validates_presence_of :responsible_id
 
   before_create :init
 

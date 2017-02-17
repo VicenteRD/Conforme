@@ -160,9 +160,6 @@ op_risk.log_creation(nil, body = 'Created by system')
 st_risk = Risk::StandardRisk.new(
     measurement_frequency: 30,
     responsible_id: cv.id,
-    area_id: pos_dp.id,
-    process_id: proc1.id,
-    activity: 'Standarizing the standard standards',
 
     standard_id: stdd.id,
     article_id: s_art.id
@@ -173,9 +170,6 @@ st_risk.log_creation(nil, body = 'Created by system')
 la_risk = Risk::LawRisk.new(
     measurement_frequency: 30,
     responsible_id: cv.id,
-    area_id: pos_dv.id,
-    process_id: proc2.id,
-    activity: 'Standarizing the standard standards',
 
     law_id: law.id,
     article_id: l_art.id
