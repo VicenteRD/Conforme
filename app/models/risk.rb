@@ -35,8 +35,12 @@ class Risk
   end
 
   def new_measurement(significant)
+    update_significant(significant)
+  end
+
+  def update_significant(significant)
     self.significant = significant
-    self.save
+    self.save!
   end
 
   def self.permitted_fields

@@ -1,3 +1,11 @@
+<%= content_for :script_tags do %>
+    <% javascript_include_tag 'show' %>
+<% end %>
+
+<%= content_for :style_tags do %>
+    <%= stylesheet_link_tag 'show' %>
+<% end %>
+
 <section class="page-content">
   <div class="page-content-inner">
     <!-- Risk -->

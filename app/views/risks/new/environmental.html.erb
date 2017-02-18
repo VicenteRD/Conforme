@@ -34,7 +34,7 @@
 
             <div class="col-lg-1">
               <label class="form-control-label">
-                M. Regulatorio
+                M. Regulatorio (<a href="javascript:void(0);" id="regulation-clear">&times;</a>)
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="regulation-in">
@@ -209,6 +209,12 @@
         $('#area-in').click(function () {
             $('#table-modal-title').html('Seleccionar Área');
             $.ajax({url: '/associables/single_area-in/Position'});
+        });
+
+        $('#regulation-clear').click(function() {
+            var regulationArea = $('#regulation-in');
+            regulationArea.find('.form-control').val('');
+            regulationArea.find('.form-control-hidden').val('');
         });
     </script>
 <% end %>

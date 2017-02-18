@@ -1,7 +1,3 @@
-<%= content_for :script_tags do %>
-    <% javascript_include_tag 'show' %>
-<% end %>
-
 <%= content_for :heading_main do %>
     <div class="margin-left-50">
       <h4 class="text-capitalize">
@@ -244,7 +240,7 @@
                         axisX: generateFixedAxis(<%= raw data[:numeric_dates] %>,
                             0 + <%= raw data[:min_x] %>, <%= raw data[:max_x] %>,
                             function (value) {
-                                return moment(value * 1000)
+                                return moment.unix(value)
                                     .format('<%= dt_form_format(false) %>')
                             }),
                         axisY: generateAutoAxis(0,

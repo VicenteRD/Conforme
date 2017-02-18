@@ -102,6 +102,8 @@ class RiskMeasurementsController < ApplicationController
       measurement.update!(fields.permit(klass.permitted_fields))
       measurement.log_book.new_entry(@user.id, 'Editado', params[:log][:entry])
 
+      risk.update_significant(measurement.significant)
+
       redirect_to risk_path(risk.id)
     else
       redirect_to '/'

@@ -25,8 +25,12 @@ class RiskMeasurement
   end
 
   def init
-    self.significant = -1
-    self.log_book = Log::Book.new
+    unless self.significant
+      self.significant = -1
+    end
+    unless self.log_book
+      self.log_book = Log::Book.new
+    end
   end
 
   def calculate_magnitude
@@ -36,11 +40,13 @@ class RiskMeasurement
 
     settings = Settings::RiskSettings.first
 
-    if settings && settings[:operational_threshold] && settings[:margin]
+    if settings&.operational_threshold && settings.margin
 
-      self.threshold = settings[:operational_threshold]
+      self.threshold = settings.operational_threshold
 
-      if self.magnitude >= (self.threshold * (1.0 + settings[:margin]))
+      puts self.magnitude.to_s + ' vs. thr: ' + (self.threshold * (1.0 + settings.margin)).to_s
+
+      if self.magnitude >= (self.threshold * (1.0 + settings.margin))
         self.significant = 2
       elsif self.magnitude >= self.threshold
         self.significant = 1
