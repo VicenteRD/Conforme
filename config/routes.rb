@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   get '/hallazgos'    => 'findings#index'
   get 'hallazgos/:id' => 'findings#show', as: :finding
 
-  get '/analisis/indicadores' => 'indicators#show'
+  get '/analisis/indicadores' => 'indicators#index'
 
   get '/mantencion' => 'maintenance#index'
 
