@@ -8,8 +8,11 @@ Rails.application.config.assets.version = '1.0'
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
+Rails.application.config.assets.precompile += %w( source/main.scss )
 Rails.application.config.assets.precompile += %w( show.js )
 Rails.application.config.assets.precompile += %w( form.js )
 Rails.application.config.assets.precompile += %w( associables.scss )
 Rails.application.config.assets.precompile += %w( show.scss )
 Rails.application.config.assets.precompile += %w( new.scss )
+
+Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|woff2|ttf)\z/

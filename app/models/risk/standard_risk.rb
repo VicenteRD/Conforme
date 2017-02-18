@@ -12,8 +12,8 @@ class Risk::StandardRisk < Risk
   field :std_id, as: :standard_id, type: BSON::ObjectId
   field :art_id, as: :article_id, type: BSON::ObjectId
 
-  def permitted_fields
-    super + [:law_id, :article_id]
+  def self.permitted_fields
+    super + [:standard_id, :article_id]
   end
 
   def get_standard_name

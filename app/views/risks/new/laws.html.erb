@@ -12,13 +12,13 @@
                 Ley
               </label>
             </div>
-            <div class="col-lg-5 input-group" id="area-in">
+            <div class="col-lg-5 input-group" id="law-in">
               <%= text_field :extra, :law_name, class: 'form-control', readonly: true %>
               <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
-              <%= f.hidden_field :law_id, class: 'form-control-hidden' %>
-              <%= f.hidden_field :article_id, class: 'form-control-hidden' %>
+              <%= f.hidden_field :law_id, class: 'form-control-hidden law-input' %>
+              <%= f.hidden_field :article_id, class: 'form-control-hidden article-input' %>
             </div>
           </div>
 
@@ -112,6 +112,11 @@
             $('#table-modal-title').html('Seleccionar Área');
             $.ajax({url: '/associables/single_area-in/Position'});
         });
+
+        $('#law-in').click(function () {
+            $('#table-modal-title').html('Seleccionar Ley');
+            $.ajax({url: '/associables/single_law-in/Law'});
+        });
     </script>
 <% end %>
 
@@ -119,7 +124,7 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('gestion') do %>
+          <%= link_to risks_path('ley') do %>
               Riesgos Legales
           <% end %>
         </li>

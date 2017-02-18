@@ -12,13 +12,13 @@
                 Norma
               </label>
             </div>
-            <div class="col-lg-5 input-group" id="area-in">
+            <div class="col-lg-5 input-group" id="standard-in">
               <%= text_field :extra, :standard_name, class: 'form-control', readonly: true %>
               <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
-              <%= f.hidden_field :standard_id, class: 'form-control-hidden' %>
-              <%= f.hidden_field :article_id, class: 'form-control-hidden' %>
+              <%= f.hidden_field :standard_id, class: 'form-control-hidden standard-input' %>
+              <%= f.hidden_field :article_id, class: 'form-control-hidden article-input' %>
             </div>
           </div>
 
@@ -111,6 +111,11 @@
         $('#area-in').click(function () {
             $('#table-modal-title').html('Seleccionar Área');
             $.ajax({url: '/associables/single_area-in/Position'});
+        });
+
+        $('#standard-in').click(function () {
+            $('#table-modal-title').html('Seleccionar Norma');
+            $.ajax({url: '/associables/single_standard-in/Standard'});
         });
     </script>
 <% end %>

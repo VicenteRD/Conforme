@@ -8,7 +8,7 @@ class Risk::LawRisk < Risk
   field :law_id, type: BSON::ObjectId
   field :art_id, as: :article_id, type: BSON::ObjectId
 
-  def permitted_fields
+  def self.permitted_fields
     super + [:law_id, :article_id]
   end
 
