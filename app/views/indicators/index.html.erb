@@ -1,0 +1,96 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Nombre</th>
+      <th>Description</th>
+      <th>Método</th>
+      <th>Riesgo</th>
+      <th>Encargado</th>
+      <th>Fecha</th>
+      <th>Probabilidad</th>
+      <th>Impacto</th>
+      <th>Magnitud</th>
+      <th>Significativo</th>
+    </tr>
+<% end %>
+
+<% content_for :table_body do %>
+    <% if @indicator.size != 0 %>
+        <% @indicators.each do |indicator| %>
+
+            <% sig = humanize_significant(risk.significant) %>
+            <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
+
+            <tr data-href="<%= risk_path(risk.id.to_s) %>">
+
+              <td><%= Position.find(risk.area_id).name %></td>
+
+              <td><%= BusinessProcess.find(risk.process_id).name %></td>
+
+              <td><%= risk.activity %></td>
+
+              <td><%= risk.name %>
+
+              <!--  :responsible_id
+
+                :name
+                :description
+                :method
+
+                :ideal_value
+                :acc_delta
+                :criterion
+
+                :measurement
+                :unit
+
+                :frequency
+
+                :last_measured_at
+                :next_measurement_at -->
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="10"> No se encontraron riesgos de esta clase. </td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :styles do %>
+    <!-- Risks' Index Page Styles -->
+    <style>
+      <%= significant_style_css %>
+    </style>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+        <div class="dropdown">
+          <%= link_to new_risk_path('operacional'), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+              Nuevo
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Riesgos Operacionales
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

@@ -1,7 +1,7 @@
 class Indicator
   include Mongoid::Document
 
-  has_many :tasks, class_name: 'Indicator::Task'
+  #has_many :tasks, class_name: 'Indicator::Task'
 
   belongs_to :objective
 
