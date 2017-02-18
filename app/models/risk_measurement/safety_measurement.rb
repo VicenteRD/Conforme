@@ -1,4 +1,4 @@
-class RiskMeasurement::SafetyMeasurement
+class RiskMeasurement::SafetyMeasurement < RiskMeasurement
   include Mongoid::Document
 
   embedded_in :risk, class_name: 'Risk::SafetyRisk'

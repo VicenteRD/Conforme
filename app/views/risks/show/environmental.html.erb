@@ -119,8 +119,15 @@
           <thead>
           <tr>
             <th>Fecha</th>
-            <th>Probabilidad</th>
+
+            <th>Amplitud Geográfica</th>
+            <th>Percepción Pública</th>
+            <th>Reversibilidad</th>
             <th>Impacto</th>
+            <th>Cumplimiento Normativa (%)</th>
+
+            <th>Probabilidad (%)</th>
+            <th>Consecuencia</th>
             <th>Magnitud</th>
           </tr>
           </thead>
@@ -129,10 +136,27 @@
               <% bgcolor = significant_bgcolor(measurement.significant) %>
               <% txtcolor = significant_txtcolor(measurement.significant) %>
 
+              <% regulation_breach = measurement.regulation_breach %>
+
               <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
                 <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
-                <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
-                <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
+
+                <td style="<%= txtcolor %>">
+                  <%= @settings.environmental_options[:geo_amplitude][measurement.geographical_amplitude.to_s] %>
+                </td>
+                <td style="<%= txtcolor %>">
+                  <%= @settings.environmental_options[:pub_perception][measurement.public_perception.to_s] %>
+                </td>
+                <td style="<%= txtcolor %>">
+                  <%= @settings.environmental_options[:reversibility][measurement.reversibility.to_s] %>
+                </td>
+                <td style="<%= txtcolor %>">
+                  <%= @settings.environmental_options[:impact][measurement.impact.to_s] %>
+                </td>
+                <td style="<%= txtcolor %>"><%= regulation_breach == -1 ? 'No regulado' : ((1 - regulation_breach) * 100).to_i %>
+
+                <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %></td>
+                <td style="<%= txtcolor %>"><%= measurement.consequence %></td>
                 <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
               </tr>
           <% end %>
@@ -182,7 +206,7 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('gestion') do %>
+          <%= link_to risks_path('ambiente') do %>
               Riesgos Ambientales
           <% end %>
         </li>

@@ -46,6 +46,9 @@ class RiskMeasurementsController < ApplicationController
     probability = params[:raw][:probability]
     fields[:probability] = probability.to_f / 100.0 if probability
 
+    compliance = params[:raw][:compliance]
+    fields[:compliance] = compliance.to_f / 100.0 if compliance
+
     if (klass = Risk.get_risk_types[params[:raw][:type].to_sym][:measurement_klass])
       measurement = risk.new_measurement(fields.permit(klass.permitted_fields))
       measurement.log_book.new_entry(@user.id, 'Creado', params[:log][:entry])
@@ -72,7 +75,7 @@ class RiskMeasurementsController < ApplicationController
   end
 
   def update
-    unless (risk = Risk.find(params[:base_id]))
+    unless (risk = Risk.find(params[:risk_id]))
       redirect_to '/' and return
     end
     unless (measurement = risk.measurements.find(params[:id]))
@@ -90,16 +93,19 @@ class RiskMeasurementsController < ApplicationController
     probability = params[:raw][:probability]
     fields[:probability] = probability.to_f / 100.0 if probability
 
+    compliance = params[:raw][:compliance]
+    fields[:compliance] = compliance.to_f / 100.0 if compliance
+
+
     if (klass = Risk.get_risk_types[params[:raw][:type].to_sym][:measurement_klass])
+      puts klass.permitted_fields
       measurement.update!(fields.permit(klass.permitted_fields))
-      measurement.log_book.new_entry(@user.id, 'Creado', params[:log][:entry])
+      measurement.log_book.new_entry(@user.id, 'Editado', params[:log][:entry])
 
       redirect_to risk_path(risk.id)
     else
       redirect_to '/'
     end
-
-    redirect_to risks_path(@risk.id)
   end
 
   private

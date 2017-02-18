@@ -9,7 +9,7 @@ module PositionsHelper
 
     return <<-EOS
 <li class="#{(parent.area ? 'area-position' : 'position')}">
-  <p id="#{parent.id}">
+  <p data-id="#{parent.id}">
     #{parent.name}
   </p>
   <ul>#{generate_branches(parent.children_ids)}</ul>
@@ -32,7 +32,7 @@ module PositionsHelper
       child = Position.find(branch_id)
 
       branches_text += <<-EOS
-  <li class="#{(child.area ? 'area-position' : '')}">
+  <li class="#{(child.area ? 'area-position' : 'position')}">
     <p data-id="#{branch_id}">
       #{child.name}
     </p>

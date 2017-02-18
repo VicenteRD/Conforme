@@ -16,8 +16,8 @@
               <%= text_field :extra, :area_name, class: 'form-control', readonly: true,
                              value: Position.find(@risk.area_id).name %>
               <span class="input-group-addon" style="cursor: pointer">
-              <i class="icmn-pencil5"></i>
-            </span>
+                <i class="icmn-pencil5"></i>
+              </span>
               <%= f.hidden_field :area_id, class: 'form-control-hidden' %>
             </div>
 
@@ -79,7 +79,7 @@
           </div>
 
           <div class="row form-group" style="margin: 30px 10px;height:400px">
-            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'}  %>
+            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
           </div>
 
           <div id="associables-container"></div>
@@ -150,7 +150,7 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('gestion') do %>
+          <%= link_to risks_path('operacional') do %>
               Riesgos Operacionales
           <% end %>
         </li>

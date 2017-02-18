@@ -1,6 +1,8 @@
 class Risk::OperationalRisk < Risk
   include Mongoid::Document
 
+  validates_presence_of :area_id, :process_id, :activity, :name
+
   embeds_many :measurements, class_name: 'RiskMeasurement::OperationalMeasurement'
 
   field :a_id, as: :area_id, type: BSON::ObjectId    # => Position

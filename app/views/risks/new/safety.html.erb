@@ -109,7 +109,7 @@
               </label>
             </div>
             <div class="col-lg-2 margin-right-20">
-              <%= f.collection_select :name, @settings.safety_options[:condition],
+              <%= f.collection_select :condition, @settings.safety_options[:condition],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
 
@@ -119,7 +119,7 @@
               </label>
             </div>
             <div class="col-lg-2 margin-right-20">
-              <%= f.collection_select :name, @settings.safety_options[:consequence].collect { |item| [item, item] },
+              <%= f.collection_select :consequence, @settings.safety_options[:consequence].collect { |item| [item, item] },
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
           </div>
@@ -203,8 +203,8 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('gestion') do %>
-              Riesgos Operacionales
+          <%= link_to risks_path('seguridad') do %>
+              Riesgos de Seguridad
           <% end %>
         </li>
         <li>

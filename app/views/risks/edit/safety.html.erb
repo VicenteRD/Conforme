@@ -40,12 +40,12 @@
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
-              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true %>
+              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true,
+                             value: Person::User.find(@risk.responsible_id).full_name %>
               <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
-              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true,
-                             value: Person::User.find(@risk.responsible_id).full_name %>
+              <%= f.hidden_field :responsible_id, class: 'form-control-hidden' %>
             </div>
           </div>
 
@@ -207,13 +207,18 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('gestion') do %>
-              Riesgos Operacionales
+          <%= link_to risks_path('seguridad') do %>
+              Riesgos de Seguridad
+          <% end %>
+        </li>
+        <li>
+          <%= link_to risk_path(@risk.id) do %>
+              <%= @risk.number %>
           <% end %>
         </li>
         <li>
           <span>
-            Nuevo
+            Editar
           </span>
         </li>
       </ul>

@@ -1,7 +1,7 @@
 class Risk::StandardRisk < Risk
   include Mongoid::Document
 
-  validates_presence_of :standard_id
+  validates_presence_of :standard_id, :article_id
 
   embeds_many :measurements, class_name: 'RiskMeasurement::StandardMeasurement'
 

@@ -17,7 +17,8 @@
             </div>
             <div class="col-lg-2">
               <div class='input-group date' id='date-picker'>
-                <%= text_field :raw, :measured_on, class: 'form-control', data: {date_format: dt_form_format} %>
+                <%= text_field :raw, :measured_on, class: 'form-control', data: {date_format: dt_form_format},
+                               value: Date.today.to_time.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
@@ -29,7 +30,7 @@
               </label>
             </div>
             <div class="col-lg-1 form-inline">
-              <%= f.number_field :compiance, value: 0, within: 0..100, class: 'form-control', style: 'width:75px' %> %
+              <%= number_field :raw, :compliance, value: 0, within: 0..100, class: 'form-control', style: 'width:75px' %> %
             </div>
 
           </div>

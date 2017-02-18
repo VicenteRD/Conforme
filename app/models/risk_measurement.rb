@@ -6,19 +6,19 @@ class RiskMeasurement
 
   before_create :init
 
-  around_create :calculate_magnitude
+  around_save :calculate_magnitude
 
   validates_presence_of :measured_at
 
-  field :m_at, as: :measured_at, type: Date
+  field :m_at, as: :measured_at, type: Date # Fecha / TODO: need to change to 'on'
 
-  field :sig, as: :significant, type: Integer
+  field :sig, as: :significant, type: Integer # Significativo
 
-  field :thr, as: :threshold, type: Float
+  field :thr, as: :threshold, type: Float # Threshold / TODO - improve current system (ThrMeasurements)
 
-  field :cmts, as: :comments, type: String
+  field :cmts, as: :comments, type: String # Comments
 
-  field :mag, as: :magnitude, type: Float
+  field :mag, as: :magnitude, type: Float # Magnitud
 
   def self.permitted_fields
     [:measured_at, :comments]

@@ -1,9 +1,9 @@
 class Risk::LawRisk < Risk
   include Mongoid::Document
 
-  embeds_many :measurements, class_name: 'RiskMeasurement::LawMeasurement'
+  validates_presence_of :law_id, :article_id
 
-  validates_presence_of :law_id
+  embeds_many :measurements, class_name: 'RiskMeasurement::LawMeasurement'
 
   field :law_id, type: BSON::ObjectId
   field :art_id, as: :article_id, type: BSON::ObjectId
@@ -26,10 +26,10 @@ class Risk::LawRisk < Risk
   end
 
   def get_compliance
-    if self.measurements != nil && self.measurements
+    if self.measurements&.last
       self.measurements.last.compliance
     else
-      0
+      nil
     end
   end
 end

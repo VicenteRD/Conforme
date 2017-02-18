@@ -1,5 +1,8 @@
-<%= form_for(:measurement, url: new_risk_measurement_path(@risk.id)) do |f| %>
-    <%= f.hidden_field :type, value: 'ley' %>
+<%= form_for @measurement,
+             as: :measurement,
+             url: edit_risk_measurement_path(risk_id: @risk.id, id: @measurement.id),
+             method: :patch do |f| %>
+    <%= hidden_field :raw, :type, value: 'ley' %>
 
     <section class="page-content">
       <div class="page-content-inner">
@@ -17,7 +20,8 @@
             </div>
             <div class="col-lg-2">
               <div class='input-group date' id='date-picker'>
-                <%= f.text_field :measured_at, class: 'form-control', data: {date_format: dt_form_format} %>
+                <%= text_field :raw, :measured_on, class: 'form-control', data: {date_format: dt_form_format},
+                               value: @measurement.measured_at.to_time.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
@@ -29,18 +33,19 @@
               </label>
             </div>
             <div class="col-lg-1 form-inline">
-              <%= f.number_field :compiance, value: 0, within: 0..100, class: 'form-control', style: 'width:75px' %> %
+              <%= number_field :raw, :compliance, value: (@measurement.compliance * 100).to_i,
+                               within: 0..100, class: 'form-control', style: 'width:75px' %> %
             </div>
 
           </div>
-          <div class="modal-body" id="confirmation-modal-body">
-            <div class="row">
-              <div class="col-md-2">
-                <label>Método</label>
-              </div>
-              <div class="col-md-9">
-                <%= f.text_area :method, class: 'form-control height-150' %>
-              </div>
+          <div class="row form-group margin-left-50">
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Método
+              </label>
+            </div>
+            <div class="col-lg-8">
+              <%= f.text_area :method, class: 'form-control height-150' %>
             </div>
           </div>
 

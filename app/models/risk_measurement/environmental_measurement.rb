@@ -26,6 +26,7 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
         :geographical_amplitude,
         :public_perception,
         :reversibility,
+        :regulation_breach,
         :impact
     ]
   end
@@ -38,8 +39,7 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
         self.geographical_amplitude +
         self.public_perception +
         self.reversibility +
-        self.regulatory_breach
-
+        [self.regulation_breach, 0].max
     self.magnitude = self.consequence * self.probability
 
     super

@@ -8,7 +8,7 @@ class Risk
 
   include Associable
 
-  validates_presence_of :responsible_id
+  validates_presence_of :responsible_id, :measurement_frequency
 
   before_create :init
 

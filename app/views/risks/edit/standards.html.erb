@@ -122,13 +122,18 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('normas') do %>
+          <%= link_to risks_path('norma') do %>
               Riesgos Normativos
           <% end %>
         </li>
         <li>
+          <%= link_to risk_path(@risk.id) do %>
+              <%= @risk.number %>
+          <% end %>
+        </li>
+        <li>
           <span>
-            Nuevo
+            Editar
           </span>
         </li>
       </ul>

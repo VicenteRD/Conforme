@@ -1,6 +1,11 @@
 class Risk::EnvironmentalRisk < Risk
   include Mongoid::Document
 
+  validates_presence_of :area_id, :process_id, :activity,
+                        :aspect, :name,
+                        :occurrence_time, :operational_situation,
+                        :positive, :direct
+
   embeds_many :measurements, class_name: 'RiskMeasurement::EnvironmentalMeasurement'
 
   field :a_id, as: :area_id, type: BSON::ObjectId    # => Position
@@ -18,12 +23,15 @@ class Risk::EnvironmentalRisk < Risk
   field :pos, as: :positive, type: Boolean
   field :dir, as: :direct, type: Boolean
 
-  def permitted_fields
+  def self.permitted_fields
     super + [
         :area_id,
         :process_id,
         :activity,
+
+        :aspect,
         :name,
+
         :regulation_id,
         :occurrence_time,
         :operational_situation,
@@ -42,12 +50,12 @@ class Risk::EnvironmentalRisk < Risk
 
   def get_compliance
     if self.regulation_id.nil?
-      return 1
+      return nil
     end
 
     regulation = Risk::LawRisk.find(self.regulation_id)
 
-    regulation.nil? ? 1 : regulation.get_compliance
+    regulation.nil? ? nil : regulation.get_compliance
   end
 
 end

@@ -123,7 +123,7 @@ Settings::RiskSettings.create(
     margin: 0.05,
     operational_threshold: 0.5,
     operational_options: {
-        impact: {1 => 'Bueno', 2 => 'Malo', 3 => 'Catastrófico'}
+        impact: {1 => 'Bajo', 2 => 'Grave', 3 => 'Crítico'}
     },
     environmental_threshold: 0.5,
     environmental_options: {
@@ -140,7 +140,8 @@ Settings::RiskSettings.create(
         condition: {0 => 'No Rutinaria', 1 => 'Rutinaria'},
         agent: ['Manejo de Conflictos', 'Horno'],
         consequence: ['Stress, tensión', 'Quemaduras y Deshidratación'],
-        name: ['Agresiones verbales', 'Físico (Radiación no Ionizante)']
+        name: ['Agresiones verbales', 'Físico (Radiación no Ionizante)'],
+        impact: {1 => 'Bajo', 2 => 'Grave', 3 => 'Crítico'}
     },
     standard_threshold: 0.5,
     law_threshold: 0.5

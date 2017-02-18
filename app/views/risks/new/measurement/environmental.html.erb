@@ -1,6 +1,6 @@
 <%= form_for(:measurement, url: new_risk_measurement_path(@risk.id)) do |f| %>
     <%= hidden_field :raw, :type, value: 'ambiente' %>
-    <%= f.hidden_field :regulatory_breach, value: 1 - @risk.get_compliance.to_i %>
+    <%= f.hidden_field :regulation_breach, value: @risk.get_compliance ? (1 - @risk.get_compliance) : -1 %>
 
     <section class="page-content">
       <div class="page-content-inner">
@@ -17,7 +17,8 @@
             </div>
             <div class="col-lg-2">
               <div class='input-group date' id='date-picker'>
-                <%= text_field :raw, :measured_on, class: 'form-control', data: {date_format: dt_form_format} %>
+                <%= text_field :raw, :measured_on, class: 'form-control', data: {date_format: dt_form_format},
+                               value: Date.today.to_time.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
@@ -40,7 +41,7 @@
               </label>
             </div>
             <div class="col-lg-2">
-              <%= f.collection_select :geographic_amplitude, @settings.environmental_options[:geo_amplitude],
+              <%= f.collection_select :geographical_amplitude, @settings.environmental_options[:geo_amplitude],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
 
@@ -50,7 +51,7 @@
               </label>
             </div>
             <div class="col-lg-2">
-              <%= f.collection_select :geographic_amplitude, @settings.environmental_options[:pub_perception],
+              <%= f.collection_select :public_perception, @settings.environmental_options[:pub_perception],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
           </div>
@@ -62,7 +63,7 @@
               </label>
             </div>
             <div class="col-lg-2">
-              <%= f.collection_select :geographic_amplitude, @settings.environmental_options[:reversibility],
+              <%= f.collection_select :reversibility, @settings.environmental_options[:reversibility],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
             <div class="col-lg-1">
@@ -71,7 +72,7 @@
               </label>
             </div>
             <div class="col-lg-2">
-              <%= f.collection_select :geographic_amplitude, @settings.environmental_options[:impact],
+              <%= f.collection_select :impact, @settings.environmental_options[:impact],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
           </div>
@@ -128,7 +129,7 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('operacional') do %>
+          <%= link_to risks_path('ambiente') do %>
               Riesgos Ambientales
           <% end %>
         </li>

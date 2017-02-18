@@ -119,7 +119,7 @@
               <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
                 <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
                 <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %>%</td>
-                <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_impact_options[measurement.impact.to_s] %></td>
+                <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.safety_options[:impact][measurement.impact.to_s] %></td>
                 <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
               </tr>
           <% end %>
@@ -172,7 +172,7 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('gestion') do %>
+          <%= link_to risks_path('seguridad') do %>
               Riesgos de Seguridad
           <% end %>
         </li>
