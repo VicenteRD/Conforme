@@ -1,26 +1,28 @@
 <%= content_for :heading_main do %>
-    <div class="margin-left-50">
-      <h4 class="text-capitalize">
-      <span style="<%= significant_style(@risk.significant)%>; padding: 5px">
-        <%= humanize_significant @risk.significant %>
-      </span>
-      </h4>
-    </div>
+
 <% end %>
 
 <%# Populate all 3 columns of the view with keys & their values %>
 
 <%= content_for :main_col_1 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Área:</div>
+      <div class="col-lg-4 text-right">Objetivo:</div>
       <div class="col-lg-8">
-        <%= Position.find(@risk.area_id).name rescue '' %>
+        <%= link_to objective_path(@indicator.objective_id) do %>
+            <%= Objective.find(@indicator.objective_id).name %>
+        <% end %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Proceso:</div>
+      <div class="col-lg-4 text-right">Descripción:</div>
       <div class="col-lg-8">
-        <%= BusinessProcess.find(@risk.process_id).name rescue '' %>
+        <%= @indicator.description || '' %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right">Criterio:</div>
+      <div class="col-lg-8">
+        <%= @indicator.criterion %>
       </div>
     </div>
 
@@ -28,17 +30,23 @@
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Actividad:</div>
+      <div class="col-lg-4 text-right"><strong>Nombre:</strong></div>
       <div class="col-lg-8">
-        <%= @risk.activity %>
+        <strong>
+          <%= @indicator.name %>
+        </strong>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right"><strong>Riesgo:</strong></div>
+      <div class="col-lg-4 text-right">Método:</div>
       <div class="col-lg-8">
-        <strong>
-          <%= @risk.name %>
-        </strong>
+        <%= @indicator.method %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right">Valor Ideal:</div>
+      <div class="col-lg-8">
+        <%= raw "#{@indicator.threshold.round(2).to_s} &plusmn; #{(@indicator.margin * 100).to_i}%" %>
       </div>
     </div>
 <% end %>
@@ -47,13 +55,19 @@
     <div class="row">
       <div class="col-lg-4 text-right">Responsable:</div>
       <div class="col-lg-8">
-        <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
+        <%= link_to Person::User.find(@indicator.responsible_id).first_last_name, user_path(@indicator.responsible_id) %>
       </div>
     </div>
     <div class="row">
       <div class="col-lg-4 text-right">Frec. Medición:</div>
       <div class="col-lg-8">
-        <%= frequency_string(@risk.measurement_frequency).capitalize %>
+        <%= frequency_string(@indicator.measurement_frequency).capitalize %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 text-right">Unidad:</div>
+      <div class="col-lg-8">
+        <%= @indicator.unit %>
       </div>
     </div>
 <% end %>
@@ -64,7 +78,7 @@
 
 <%= content_for :body_extra1 do %>
     <div class="margin-left-30 margin-bottom-30">
-      <%= raw @risk.comments %>
+      <%= raw @indicator.comments %>
     </div>
 <% end %>
 
@@ -85,7 +99,7 @@
           </tr>
           </thead>
           <tbody>
-          <% @risk.measurements.order(measured_at: :desc, created_at: :desc).each do |measurement| %>
+          <% @indicator.measurements.order(measured_at: :desc, created_at: :desc).each do |measurement| %>
               <% bgcolor = significant_bgcolor(measurement.significant) %>
               <% txtcolor = significant_txtcolor(measurement.significant) %>
 
@@ -114,16 +128,16 @@
       <div class="header-buttons">
 
         <div class="dropdown">
-          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @risk.log_book})}" %>
+          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @indicator.log_book})}" %>
           <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
             <i class="dropdown-inline-button-icon icmn-history"></i>
             Ver historial
           </a>
         </div>
 
-        <% if @risk.responsible_id == @user.id %>
+        <% if @indicator.responsible_id == @user.id %>
             <div class="dropdown">
-              <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <%= link_to new_risk_measurement_path(@indicator.id), method: 'get', class: 'dropdown-inline-button' do %>
                   <i class="dropdown-inline-button-icon icmn-design"></i>
                   Nueva medición
               <% end %>
@@ -131,7 +145,7 @@
         <% end %>
 
         <div class="dropdown">
-          <%= link_to edit_risk_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+          <%= link_to edit_indicator_path(@indicator.id), method: 'get', class: 'dropdown-inline-button' do %>
               <i class="dropdown-inline-button-icon icmn-pencil"></i>
               Editar
           <% end %>

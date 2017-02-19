@@ -45,9 +45,12 @@ Rails.application.routes.draw do
   # -------- Indicators
 
   get '/analisis/indicadores' => 'indicators#index', as: :indicators
-  get '/analisis/indicadores/:id' => 'indicators#show', as: :indicator
-  get '/analisis/indicadores/nuevo' => 'indicators#index', as: :new_indicator
-  post '/analisis/indicadores/nuevo' => 'indicators#index'
+  get '/analisis/indicadores/detalle/:id' => 'indicators#show', as: :indicator
+  get '/analisis/indicadores/nuevo' => 'indicators#new', as: :new_indicator
+  get '/analisis/indicadores/editar/:id' => 'indicators#edit', as: :edit_indicator
+
+  post '/analisis/indicadores/nuevo' => 'indicators#create'
+  patch '/analisis/indicadores/editar/:id' => 'indicators#update'
 
 
   get '/mantencion' => 'maintenance#index'
@@ -61,7 +64,7 @@ Rails.application.routes.draw do
 
   get '/partes-interesadas' => 'concerned_parties#show'
 
-  get '/objetivos' => 'objectives#show'
+  get '/objetivos' => 'objectives#show', as: :objective
 
   get 'posicion/:parent_id/nueva' => 'positions#new'
 

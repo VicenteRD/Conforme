@@ -51,9 +51,6 @@ class RisksController < ApplicationController
       fields[:process_id] = id.to_s if id
     end
 
-
-    puts fields.inspect
-
     if params[:type]
       klass = Risk.get_risk_types[params[:type].to_sym][:klass]
       redirect_to risk_path create_risk(klass, fields)
