@@ -213,3 +213,29 @@ sa_risk = Risk::SafetyRisk.new(
 )
 sa_risk.save!
 sa_risk.log_creation(nil, body = 'Created by system')
+
+
+obj = Objective.new(
+    creator_id: vr.id,
+    responsible_id: vr.id,
+    name: 'Objective 1',
+    phrase: 'Order 66'
+)
+obj.save!
+
+ind = Indicator.new(
+    objective_id: obj.id,
+    responsible_id: vr.id,
+
+    name: 'Indicator A',
+    description: 'Geeky stuff',
+    method: 'No idea',
+    thr: 1.0,
+    margin: 0.05,
+    criterion: '>',
+    unit: 'Kms',
+    measurement_frequency: 365
+)
+ind.save!
+
+obj.save!

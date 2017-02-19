@@ -7,74 +7,52 @@
 
 <% content_for :table_headers do %>
     <tr>
+      <th>Objetivo</th>
       <th>Nombre</th>
       <th>Description</th>
       <th>Método</th>
-      <th>Riesgo</th>
       <th>Encargado</th>
-      <th>Fecha</th>
-      <th>Probabilidad</th>
-      <th>Impacto</th>
-      <th>Magnitud</th>
-      <th>Significativo</th>
+      <th>Criterio</th>
+      <th>Fecha Última Medición</th>
+      <th>Unidad</th>
+      <th>Valor Esperado</th>
+      <th>Valor Obtenido</th>
     </tr>
 <% end %>
 
 <% content_for :table_body do %>
-    <% if @indicator.size != 0 %>
+    <% if @indicators.size != 0 %>
         <% @indicators.each do |indicator| %>
+            <% measurement = indicator.measurements.order_by(measured_on: :desc, created_at: :desc).first %>
 
-            <% sig = humanize_significant(risk.significant) %>
-            <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
+            <tr data-href="<%= indicator_path(indicator.id) %>">
 
-            <tr data-href="<%= risk_path(risk.id.to_s) %>">
+              <td><%= Objective.find(indicator.objective_id).name %></td>
 
-              <td><%= Position.find(risk.area_id).name %></td>
+              <td><%= indicator.name %></td>
+              <td><%= indicator.description %></td>
+              <td><%= indicator.method %></td>
+              <td><%= Person::User.find(indicator.responsible_id).first_last_name %></td>
+              <td><%= indicator.criterion %></td>
+              <td><%= indicator.unit %></td>
+              <td><%= measurement&.measured_on || '-' %></td>
+              <td><%= measurement&.threshold || '-' %></td>
+              <td><%= measurement&.value || '-' %></td>
 
-              <td><%= BusinessProcess.find(risk.process_id).name %></td>
-
-              <td><%= risk.activity %></td>
-
-              <td><%= risk.name %>
-
-              <!--  :responsible_id
-
-                :name
-                :description
-                :method
-
-                :ideal_value
-                :acc_delta
-                :criterion
-
-                :measurement
-                :unit
-
-                :frequency
-
-                :last_measured_at
-                :next_measurement_at -->
             </tr>
         <% end %>
     <% else %>
         <tr>
-          <td colspan="10"> No se encontraron riesgos de esta clase. </td>
+          <td colspan="10"> No se encontraron indicadores. </td>
         </tr>
     <% end %>
-<% end %>
-
-<% content_for :styles do %>
-    <!-- Risks' Index Page Styles -->
-    <style>
-      <%= significant_style_css %>
-    </style>
 <% end %>
 
 <% content_for :menu do %>
     <div class="left">
       <div class="header-buttons">
         <div class="dropdown">
-          <%= link_to new_risk_path('operacional'), method: 'get', class: 'dropdown-inline-button' do %>
+          <%= link_to new_indicator_path, method: 'get', class: 'dropdown-inline-button' do %>
               <i class="dropdown-inline-button-icon icmn-file-plus"></i>
               Nuevo
           <% end %>
@@ -88,7 +66,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
         <span>
-          Riesgos Operacionales
+          Indicadores
         </span>
         </li>
       </ul>

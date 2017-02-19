@@ -1,25 +1,24 @@
 class Indicator
   include Mongoid::Document
 
+  include Enumerable
+
   #has_many :tasks, class_name: 'Indicator::Task'
+
+  embeds_many :measurements, class_name: 'Indicator::Measurement'
 
   belongs_to :objective
 
-  field :responsible_id, type: BSON::ObjectId # => Person::User
+  field :r_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
 
   field :name, type: String
-  field :description, type: String
+  field :desc, as: :description, type: String
   field :method, type: String
 
-  field :ideal_value, type: Float
-  field :acc_delta, type: Float
-  field :criterion, type: String
-
-  field :measurement, type: Float
+  field :thr, as: :threshold, type: Float
+  field :mrg, as: :margin, type: Float
+  field :crt, as: :criterion, type: String
   field :unit, type: String
 
-  field :frequency, type: String
-
-  field :lm_at, as: :last_measured_at, type: DateTime
-  field :nm_at, as: :next_measurement_at, type: DateTime
+  field :freq, as: :measurement_frequency, type: String
 end
