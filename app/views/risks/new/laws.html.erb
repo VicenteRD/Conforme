@@ -15,8 +15,8 @@
             <div class="col-lg-5 input-group" id="law-in">
               <%= text_field :extra, :law_name, class: 'form-control', readonly: true %>
               <span class="input-group-addon" style="cursor: pointer">
-              <i class="icmn-pencil5"></i>
-            </span>
+                <i class="icmn-pencil5"></i>
+              </span>
               <%= f.hidden_field :law_id, class: 'form-control-hidden law-input' %>
               <%= f.hidden_field :article_id, class: 'form-control-hidden article-input' %>
             </div>
@@ -48,7 +48,7 @@
           </div>
 
           <div class="row form-group" style="margin: 30px 10px;height:400px">
-            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'}  %>
+            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
           </div>
 
           <div id="associables-container"></div>

@@ -2,10 +2,6 @@ class RisksController < ApplicationController
 
   include RisksHelper
 
-  def risk_operational_risk_path(id)
-    risk_path(type = 'gestion', id = id)
-  end
-
   def index
     @settings = Settings::RiskSettings.first
 

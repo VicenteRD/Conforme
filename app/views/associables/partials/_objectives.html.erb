@@ -1,7 +1,13 @@
 <% picker_id = (@element.to_s.starts_with?('single') ? @element.to_s.split('_').to_a.last : nil) %>
 
-<div class="row">
-  <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
+<div class="tab-pane active" id="table" role="tabpanel" aria-expanded="false">
+  <div class="input-group padding-10 inline" style="width: 80%; overflow: auto">
+    <%= text_field :search, :input, placeholder: 'Buscar', class: 'form-control'%>
+    <span class="input-group-addon">
+      <i class="icmn-search"></i>
+    </span>
+  </div>
+  <div class="table-responsive" style="height:301px; overflow:auto; width: auto">
     <table class="table table-hover">
       <thead>
       <tr>
@@ -21,6 +27,8 @@
       </tbody>
     </table>
   </div>
+</div>
+<div class="tab-pane" id="new" role="tabpanel" style="height:360px">
 </div>
 
 <script>
