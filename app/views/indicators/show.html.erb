@@ -137,15 +137,17 @@
 
         <% if @indicator.responsible_id == @user.id %>
             <div class="dropdown">
-              <%= link_to new_risk_measurement_path(@indicator.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <%= link_to new_inidicator_measurement_path(@indicator.id),
+                          method: 'get', class: 'dropdown-inline-button' do %>
                   <i class="dropdown-inline-button-icon icmn-design"></i>
-                  Nueva medición
+                  Nueva Medición
               <% end %>
             </div>
         <% end %>
 
         <div class="dropdown">
-          <%= link_to edit_indicator_path(@indicator.id), method: 'get', class: 'dropdown-inline-button' do %>
+          <%= link_to edit_indicator_path(@indicator.id),
+                      method: 'get', class: 'dropdown-inline-button' do %>
               <i class="dropdown-inline-button-icon icmn-pencil"></i>
               Editar
           <% end %>
@@ -180,10 +182,14 @@
 
         <!-- Risks' Show Page Scripts -->
         <script type="text/javascript">
-            //$('.measurement-row').click(function () {
+            $('.measurement-row').click(function () {
                 // Show measurement's comments along with 'edit' and 'history' button
-                //$.ajax({url: '/riesgos/detalle/<%= @indicator.id%>/' + $(this).attr('data-id')});
-            //});
+                $.ajax(
+                    {
+                        url: '/analisis/indicadores/detalle/<%= @indicator.id%>/' +
+                          $(this).attr('data-id')
+                    });
+            });
 
             $(document).ready(function () {
                 chart = generateLineChart(

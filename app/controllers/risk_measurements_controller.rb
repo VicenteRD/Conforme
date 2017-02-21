@@ -125,7 +125,7 @@ class RiskMeasurementsController < ApplicationController
       if (user && risk) && user.id == risk.responsible_id
         return true
       else
-        redirect_to risk_path(params[:id]) and return false
+        redirect_to risk_path(params[:risk_id]) and return false
       end
     else
       redirect_to '/'

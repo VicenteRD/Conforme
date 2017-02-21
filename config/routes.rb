@@ -48,9 +48,17 @@ Rails.application.routes.draw do
   get '/analisis/indicadores/detalle/:id' => 'indicators#show', as: :indicator
   get '/analisis/indicadores/nuevo' => 'indicators#new', as: :new_indicator
   get '/analisis/indicadores/editar/:id' => 'indicators#edit', as: :edit_indicator
+  get '/analisis/indicadores/detalle/:indicator_id/:id' => 'indicator_measurements#show_details'
+
+  get '/analisis/indicadores/:indicator_id/nueva' => 'indicator_measurements#new',
+      as: :new_indicator_measurement
+  get '/analisis/indicadores/:indicator_id/:id/editar' => 'indicator_measurements#edit',
+      as: :edit_indicator_measurement
 
   post '/analisis/indicadores/nuevo' => 'indicators#create'
   patch '/analisis/indicadores/editar/:id' => 'indicators#update'
+  post '/analisis/indicadores/:indicator_id/nueva' => 'indicator_measurements#create'
+  patch '/analisis/indicadores/:indicator_id/:id/editar' => 'indicator_measurements#update'
 
 
   get '/mantencion' => 'maintenance#index'
