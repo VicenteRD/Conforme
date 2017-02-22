@@ -20,3 +20,5 @@
 //
 //= require moment
 //= require moment/es
+
+//= require filter_table
