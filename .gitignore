@@ -16,8 +16,5 @@
 # Ignore Byebug command history file.
 .byebug_history
 
-# Ignore the Gemfile.lock
-Gemfile.lock
-
 # Ignore the IDE configuration folder
 .idea/
