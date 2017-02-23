@@ -1,8 +1,0 @@
-$('#table-modal').modal('hide');
-$('#table-modal-body').html('');
-$('#table-modal-content').find('#table-modal-footer').remove();
-
-$('#new-modal-title').html('Nuevo Proceso');
-$('#new-modal-body').html('<%= escape_javascript(render partial: 'business_processes/modal_new') %>');
-
-$('#new-modal').modal();

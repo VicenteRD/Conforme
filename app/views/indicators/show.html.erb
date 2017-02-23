@@ -137,7 +137,7 @@
 
         <% if @indicator.responsible_id == @user.id %>
             <div class="dropdown">
-              <%= link_to new_inidicator_measurement_path(@indicator.id),
+              <%= link_to new_indicator_measurement_path(@indicator.id),
                           method: 'get', class: 'dropdown-inline-button' do %>
                   <i class="dropdown-inline-button-icon icmn-design"></i>
                   Nueva Medición
