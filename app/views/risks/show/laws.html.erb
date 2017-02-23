@@ -10,11 +10,11 @@
 
 <%# Populate all 3 columns of the view with keys & their values %>
 <% law = Law.find(@risk.law_id) %>
-<% article = law.articles.find(@risk.article_id)%>
+<% article = law.articles.find(@risk.article_id) %>
 
 <%= content_for :main_col_1 do %>
     <div class="row">
-      <div class="col-lg-4 text-right" >Ley:</div>
+      <div class="col-lg-4 text-right">Ley:</div>
       <div class="col-lg-8">
         <%= law.name %>
       </div>
@@ -39,34 +39,37 @@
 
 <%= content_for :main_col_3 do %>
     <div class="row">
-      <div class="col-lg-4 text-right" >Responsable:</div>
+      <div class="col-lg-4 text-right">Responsable:</div>
       <div class="col-lg-8">
         <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right" >Frec. Medición:</div>
+      <div class="col-lg-4 text-right">Frec. Medición:</div>
       <div class="col-lg-8">
         <%= frequency_string(@risk.measurement_frequency).capitalize %>
       </div>
     </div>
 <% end %>
 
-<%= content_for :heading_extra1 do %>
-    <h5>Notas</h5>
+<% if @risk.comments %>
+    <%= content_for :extra_no_panel do %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Descripción</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= raw @risk.comments %>
+          </div>
+        </div>
+    <% end %>
 <% end %>
 
-<%= content_for :body_extra1 do %>
-    <div class="margin-left-30 margin-bottom-30">
-      <%= @risk.comments %>
-    </div>
-<% end %>
-
-<%= content_for :heading_extra2 do %>
+<%= content_for :extra_panel_heading do %>
     <h5>Mediciones</h5>
 <% end %>
 
-<%= content_for :body_extra2 do %>
+<%= content_for :extra_panel_body do %>
     <div class="row margin-left-20 margin-right-20">
       <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
         <table class="table">
@@ -108,10 +111,10 @@
       <div class="header-buttons">
 
         <div class="dropdown"><!-- TODO REDO call js func or smth -->
-          <% history_content = "#{escape_javascript(render partial: 'log/modal',locals: {book: @risk.log_book})}" %>
+          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @risk.log_book})}" %>
           <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content%>')">
             <i class="dropdown-inline-button-icon icmn-history"></i>
-            Ver historial
+            Ver Bitácora
           </a>
         </div>
 
@@ -119,7 +122,7 @@
             <div class="dropdown">
               <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
                   <i class="dropdown-inline-button-icon icmn-design"></i>
-                  Nueva medición
+                  Medir
               <% end %>
             </div>
         <% end %>
@@ -160,12 +163,12 @@
 
         <!-- Risks' Show Page Scripts -->
         <script type="text/javascript">
-            $('.measurement-row').click(function() {
+            $('.measurement-row').click(function () {
                 // Show measurement's comments along with 'edit' and 'history' button
                 $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
             });
 
-            $(document).ready(function() {
+            $(document).ready(function () {
                 chart = generateLineChart(
                     '#risk-chart',
                     { // data

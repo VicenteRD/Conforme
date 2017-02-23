@@ -11,11 +11,8 @@
       <th>Artículo</th>
       <th>Requerimiento</th>
       <th>Encargado</th>
-      <th>Fecha</th>
       <th>Cumplimiento (%)</th>
-      <th>Método</th>
-      <th>Magnitud</th>
-      <th>Significativo</th>
+      <th>Fecha</th>
     </tr>
 <% end %>
 
@@ -37,13 +34,9 @@
 
               <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
-              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
-
               <td><%= msrmnt != nil ? (msrmnt.compliance * 100).to_i.to_s : '-'%></td>
-              <td><%= msrmnt != nil ? msrmnt.method : '-'%></td>
-              <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
 
-              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
+              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
             </tr>
         <% end %>
     <% else %>

@@ -15,7 +15,9 @@ function generateLineChart(id, data, opts) {
 }
 
 function generateFixedAxis(values, min, max, labelFnc) {
-    return {type: Chartist.FixedScaleAxis, low: min, high: max, ticks: values, labelInterpolationFnc: labelFnc};
+    return {type: Chartist.FixedScaleAxis,
+        low: min, high: max,
+        ticks: values, labelInterpolationFnc: labelFnc};
 }
 
 function generateAutoAxis(min, max) {

@@ -58,21 +58,24 @@
     </div>
 <% end %>
 
-<%= content_for :heading_extra1 do %>
-    <h5>Notas</h5>
+<% if @risk.comments %>
+    <%= content_for :extra_no_panel do %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Descripción</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= raw @risk.comments %>
+          </div>
+        </div>
+    <% end %>
 <% end %>
 
-<%= content_for :body_extra1 do %>
-    <div class="margin-left-30 margin-bottom-30">
-      <%= raw @risk.comments %>
-    </div>
-<% end %>
-
-<%= content_for :heading_extra2 do %>
+<%= content_for :extra_panel_heading do %>
     <h5>Mediciones</h5>
 <% end %>
 
-<%= content_for :body_extra2 do %>
+<%= content_for :extra_panel_body do %>
     <div class="row margin-left-20 margin-right-20">
       <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
         <table class="table">
@@ -117,7 +120,7 @@
           <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @risk.log_book})}" %>
           <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
             <i class="dropdown-inline-button-icon icmn-history"></i>
-            Ver historial
+            Ver Bitácora
           </a>
         </div>
 
@@ -125,7 +128,7 @@
             <div class="dropdown">
               <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
                   <i class="dropdown-inline-button-icon icmn-design"></i>
-                  Nueva medición
+                  Medir
               <% end %>
             </div>
         <% end %>

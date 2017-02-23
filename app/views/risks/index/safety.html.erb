@@ -14,11 +14,11 @@
     <th>Riesgo</th>
     <th>Agente</th>
     <th>Encargado</th>
+    <th>Significativo</th>
     <th>Fecha</th>
     <th>Probabilidad (%)</th>
     <th>Impacto</th>
     <th>Magnitud</th>
-    <th>Significativo</th>
   </tr>
 <% end %>
 
@@ -40,13 +40,13 @@
 
         <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
+        <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
+
         <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
 
         <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s : '-'%></td>
         <td><%= msrmnt != nil ? msrmnt.impact : '-'%></td>
         <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
-
-        <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
       </tr>
     <% end %>
   <% else %>

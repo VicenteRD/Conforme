@@ -35,21 +35,14 @@
       </div>
     </div>
 
-    <div class="panel">
-      <div class="panel-heading">
-        <%= yield :heading_extra1 %>
-      </div>
-
-      <%= yield :body_extra1 %>
-
-    </div>
+    <%= yield :extra_no_panel%>
 
     <div class="panel">
       <div class="panel-heading">
-        <%= yield :heading_extra2 %>
+        <%= yield :extra_panel_heading %>
       </div>
 
-      <%= yield :body_extra2 %>
+      <%= yield :extra_panel_body %>
 
     </div>
 

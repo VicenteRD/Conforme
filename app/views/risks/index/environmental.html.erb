@@ -13,36 +13,13 @@
     <th>Aspecto</th>
     <th>Impacto</th>
     <th>Encargado</th>
+    <th>Significativo</th>
     <th>Fecha</th>
     <th>Probabilidad(%)</th>
     <th>Consecuencia</th>
     <th>Magnitud</th>
-    <th>Significativo</th>
   </tr>
 <% end %>
-
-<!--Info not included:
-
-  * This might be useful, but it's an extra feature
-
-      regulation_info
-
-  * These are extra risk information:
-
-      occurence_time
-      operational_situation
-      positive
-      direct
-
-  * This is information that can be resumed by
-    just showing the consequence:
-
-      impact
-      geographical_amplitude
-      public_perception
-      reversibility
-      regulation_breach
-  -->
 
 <% content_for :table_body do %>
     <% if @risks.size != 0 %>
@@ -61,13 +38,14 @@
 
               <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
+              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
+
               <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
 
               <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s : '-'%></td>
               <td><%= msrmnt != nil ? msrmnt.consequence.round(2) : '-'%></td>
               <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
 
-              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
             </tr>
         <% end %>
     <% else %>

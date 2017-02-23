@@ -4,7 +4,7 @@
 
       <div class="panel-body">
 
-        <%= yield :before_table%>
+        <%= yield :before_table %>
 
         <div class="nav-tabs-horizontal margin-bottom-20">
           <ul class="nav nav-tabs" role="tablist">
@@ -28,17 +28,17 @@
 
         <div class="row">
           <div class="col-md-12">
-            <table class="table table-hover nowrap margin-bottom-0" id="items-table" width="100%"  style="cursor:pointer;">
+            <table class="table table-hover nowrap margin-bottom-0" id="items-table" width="100%">
               <thead>
-                <%= yield :table_headers %>
+              <%= yield :table_headers %>
               </thead>
 
               <tfoot>
-                <%= yield :table_headers %>
+              <%= yield :table_headers %>
               </tfoot>
 
               <tbody>
-                <%= yield :table_body %>
+              <%= yield :table_body %>
               </tbody>
             </table>
           </div>
@@ -51,17 +51,21 @@
   </div>
 </div>
 
-<script>
-    $(document).ready(function(){
-        $('#items-table').DataTable({
-            responsive: true,
-            "lengthMenu": [[5, 25, 50, -1], [5, 25, 50, "All"]]
+
+
+<% content_for :scripts do %>
+    <script>
+        $(document).ready(function () {
+            $('#items-table').DataTable({
+                responsive: true,
+                lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "Todos"]]
+            });
         });
-    });
-    $(document).on("click", "#items-table tr", function() {
-        var link  = $(this).data("href");
-        window.open(link, '_self')
-    });
-</script>
+        $(document).on("click", "#items-table tr", function () {
+            var link = $(this).data("href");
+            window.open(link, '_self')
+        });
+    </script>
+<% end %>
 
 <% parent_layout 'application' %>

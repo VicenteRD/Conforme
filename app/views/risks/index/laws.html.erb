@@ -13,9 +13,6 @@
       <th>Encargado</th>
       <th>Fecha</th>
       <th>Cumplimiento (%)</th>
-      <th>Método</th>
-      <th>Magnitud</th>
-      <th>Significativo</th>
     </tr>
 <% end %>
 
@@ -26,7 +23,6 @@
             <% law = Law.find(risk.law_id) %>
             <% article = law.articles.find(risk.article_id)%>
 
-            <% sig = humanize_significant(risk.significant) %>
             <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
             <tr data-href="<%= risk_path(risk.id) %>">
@@ -37,13 +33,9 @@
 
               <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
-              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
-
               <td><%= msrmnt != nil ? (msrmnt.compliance * 100).to_i.to_s : '-'%></td>
-              <td><%= msrmnt != nil ? msrmnt.method : '-'%></td>
-              <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
 
-              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
+              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
             </tr>
         <% end %>
     <% else %>

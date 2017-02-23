@@ -67,14 +67,7 @@
           </div>
 
           <div class="modal-body" id="confirmation-modal-body">
-            <div class="row">
-              <div class="col-md-2">
-                <label>Entrada Bitácora</label>
-              </div>
-              <div class="col-md-9">
-                <%= text_area :log, :body, class: 'form-control height-150' %>
-              </div>
-            </div>
+            <%= text_area :log, :body, class: 'form-control height-150' %>
           </div>
 
           <div class="modal-footer">
@@ -95,22 +88,9 @@
 
 <%= content_for :scripts do %>
     <script>
-        $('#process-in').click(function () {
-            $.ajax({url: '/processes/risk'})
-        });
-
-        $('#process-new').click(function () {
-            $.ajax({url: '/processes/risk/new'});
-        });
-
         $('#responsible-in').click(function () {
             $('#table-modal-title').html('Seleccionar Responsable');
             $.ajax({url: '/associables/single_responsible-in/Person::User'});
-        });
-
-        $('#area-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Área');
-            $.ajax({url: '/associables/single_area-in/Position'});
         });
 
         $('#standard-in').click(function () {
