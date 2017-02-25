@@ -51,19 +51,59 @@
   </div>
 </div>
 
+<% content_for :styles do %>
+  <style>
+    table.dataTable.collapsed .expand-collapse {
+      background-color: #acb7bf;
+      border: none;
+      border-radius: 100px;
+      box-shadow: none;
+      box-sizing: content-box;
+      color: white;
+      cursor: pointer;
+      display: inline-block;
+      height: 16px;
+      left: 6px;
+      line-height: 15px;
+      margin-right: 4px;
+      top: 13px;
+      width: 16px;
+      text-align: center;
+      -webkit-border-radius: 100px;
+      -webkit-box-shadow: none;
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+    }
 
+    table.dataTable .expand-collapse {
+      display: none;
+    }
+
+    table.dataTable tr {
+      cursor: pointer;
+    }
+  </style>
+<% end %>
 
 <% content_for :scripts do %>
     <script>
         $(document).ready(function () {
-            $('#items-table').DataTable({
-                responsive: true,
+            $("#items-table").DataTable({
+                responsive: {
+                  details: {
+                      type: "column",
+                      target: ".expand-collapse"
+                  }
+                },
                 lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "Todos"]]
             });
         });
         $(document).on("click", "#items-table tr", function () {
             var link = $(this).data("href");
             window.open(link, '_self')
+        });
+        $(document).on("click", "#items-table .expand-collapse", function(e) {
+          e.stopPropagation();
         });
     </script>
 <% end %>
