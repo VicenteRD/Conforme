@@ -1,5 +1,3 @@
-require 'concerns/enumerable_document'
-
 class Risk
   include Mongoid::Document
   include Mongoid::Timestamps::Created::Short
@@ -69,13 +67,13 @@ class Risk
       },
       :ley         => {
           en: 'laws',
-          klass: Risk::LawRisk,
-          measurement_klass: RiskMeasurement::LawMeasurement
+          klass: Risk::RuleRisk,
+          measurement_klass: RiskMeasurement::RuleMeasurement
       },
       :norma       => {
           en: 'standards',
-          klass: Risk::StandardRisk,
-          measurement_klass: RiskMeasurement::StandardMeasurement
+          klass: Risk::RuleRisk,
+          measurement_klass: RiskMeasurement::RuleMeasurement
       }
   }
 end

@@ -1,16 +1,14 @@
-class RiskMeasurement::LawMeasurement < RiskMeasurement
+class RiskMeasurement::RuleMeasurement < RiskMeasurement
   include Mongoid::Document
 
-  embedded_in :risk, class_name: 'Risk::LawRisk'
+  embedded_in :risk, class_name: 'Risk::RuleRisk'
 
   validates_presence_of :compliance
 
   field :comp, as: :compliance, type: Float
 
-  field :meth, as: :method, type: String
-
   def self.permitted_fields
-    super + [:compliance, :method]
+    super + [:compliance]
   end
 
   def calculate_magnitude

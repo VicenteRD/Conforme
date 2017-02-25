@@ -9,28 +9,33 @@
 <% end %>
 
 <%# Populate all 3 columns of the view with keys & their values %>
-<% law = Law.find(@risk.law_id) %>
-<% article = law.articles.find(@risk.article_id) %>
+<% rule = Rule.find(@risk.rule_id) %>
+<% article = rule.articles.find(@risk.article_id) %>
 
 <%= content_for :main_col_1 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Ley:</div>
+      <div class="col-lg-4 show-label">Institución:</div>
       <div class="col-lg-8">
-        <%= law.name %>
+        <%= rule.institution %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Artículo:</div>
+      <div class="col-lg-4 show-label"><%= rule.get_rule_type_name[:es].capitalize %>:</div>
       <div class="col-lg-8">
-        <%= article.name %>
+        <%= rule.name %>
       </div>
     </div>
-
 <% end %>
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Requerimiento:</div>
+      <div class="col-lg-4 show-label">Artículo:</div>
+      <div class="col-lg-8">
+        <%= article.name %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Requerimiento:</div>
       <div class="col-lg-8">
         <%= article.requirement %>
       </div>
@@ -39,20 +44,20 @@
 
 <%= content_for :main_col_3 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Responsable:</div>
+      <div class="col-lg-4 show-label">Responsable:</div>
       <div class="col-lg-8">
         <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Frec. Medición:</div>
+      <div class="col-lg-4 show-label">Frec. Medición:</div>
       <div class="col-lg-8">
         <%= frequency_string(@risk.measurement_frequency).capitalize %>
       </div>
     </div>
 <% end %>
 
-<% if @risk.comments %>
+<% if @risk.comments? %>
     <%= content_for :extra_no_panel do %>
         <div class="panel">
           <div class="panel-heading">
@@ -142,13 +147,14 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('ley') do %>
-              Riesgos Legales
-          <% end %>
+          <%= rule_type_breadcrumb(@risk.rule_type) %>
+        </li>
+        <li>
+          <%= link_to rule.full_name, risks_path(rule.id) %>
         </li>
         <li>
           <span>
-            <%= @risk.number %>
+            Artículo <%= article.name %>
           </span>
         </li>
       </ul>

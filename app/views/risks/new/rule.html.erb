@@ -1,0 +1,43 @@
+
+<%= render partial: 'risks/new/rule_form',
+          locals: {type_label: @rule.get_rule_type_name[:es].capitalize} %>
+
+<%= content_for :scripts do %>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var ruleArea = $('#rule-in');
+
+            ruleArea.find('.form-control').val('<%= @rule.full_name %>');
+            ruleArea.find('.form-control-hidden').val('<%= @rule.id %>');
+        });
+
+        $('#article-in').click(function() {
+            $('#table-modal-title').html('Seleccionar Artículo');
+            $.ajax({url: '/associables/single_article-in_<%= @rule.id %>/Rule::Article'});
+        });
+
+        $('#responsible-in').click(function () {
+            $('#table-modal-title').html('Seleccionar Responsable');
+            $.ajax({url: '/associables/single_responsible-in/Person::User'});
+        });
+
+    </script>
+<% end %>
+
+<%= content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= rule_type_breadcrumb(@rule.rule_type) %>
+        </li>
+        <li>
+          <%= link_to @rule.full_name, risks_path(@rule.id) %>
+        </li>
+        <li>
+          <span>
+            Nuevo
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

@@ -23,8 +23,9 @@
 <% end %>
 
 <% content_for :table_body do %>
-  <% if @risks.size != 0 %>
-    <% @risks.each do |risk| %>
+    <% risks = Risk::SafetyRisk.order_by(significant: :desc) %>
+    <% if risks.size != 0 %>
+    <% risks.each do |risk| %>
 
       <% sig = humanize_significant(risk.significant) %>
       <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>

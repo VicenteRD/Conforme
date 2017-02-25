@@ -1,0 +1,71 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Artículo</th>
+      <th>Requerimiento</th>
+      <th>Encargado</th>
+      <th>Fecha</th>
+      <th>Cumplimiento (%)</th>
+    </tr>
+<% end %>
+
+<% content_for :table_body do %>
+    <% if @risks.size != 0 %>
+        <% @risks.each do |risk| %>
+
+            <% article = Rule.find(risk.rule_id).articles.find(risk.article_id) %>
+            <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
+
+            <tr data-href="<%= risk_path(risk.id) %>">
+
+              <td><%= article.name %></td>
+              <td><%= article.requirement %></td>
+
+              <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
+
+              <td><%= msrmnt ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-' %></td>
+
+              <td><%= msrmnt ? (msrmnt.compliance * 100).to_i.to_s : '-' %></td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="5"> No se encontraron riesgos de esta clase.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+        <div class="dropdown">
+          <%= link_to new_risk_path(@risks.first.rule_id),
+                      method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+              Nuevo
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= rule_type_breadcrumb(@risks.first.rule_type) %>
+        </li>
+        <li>
+          <span>
+            <%= Rule.find(@risks.first.rule_id).full_name %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

@@ -32,6 +32,15 @@
             <div class="col-lg-2 form-inline">
               <%= number_field :raw, :probability, value: 0, within: 0..100, class: 'form-control', style: 'width:75px' %> %
             </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Criticidad
+              </label>
+            </div>
+            <div class="col-lg-2">
+              <%= f.collection_select :criticity, @settings.environmental_options[:criticity],
+                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+            </div>
           </div>
 
           <div class="row form-group margin-left-50">
@@ -54,9 +63,6 @@
               <%= f.collection_select :public_perception, @settings.environmental_options[:pub_perception],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
-          </div>
-
-          <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
                 Reversibilidad
@@ -64,15 +70,6 @@
             </div>
             <div class="col-lg-2">
               <%= f.collection_select :reversibility, @settings.environmental_options[:reversibility],
-                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
-            </div>
-            <div class="col-lg-1">
-              <label class="form-control-label">
-                Impacto
-              </label>
-            </div>
-            <div class="col-lg-2">
-              <%= f.collection_select :impact, @settings.environmental_options[:impact],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
           </div>

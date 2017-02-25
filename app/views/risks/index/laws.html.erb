@@ -7,40 +7,38 @@
 
 <% content_for :table_headers do %>
     <tr>
-      <th>Ley</th>
-      <th>Artículo</th>
-      <th>Requerimiento</th>
-      <th>Encargado</th>
-      <th>Fecha</th>
+      <th>Organización</th>
+      <th>Norma</th>
       <th>Cumplimiento (%)</th>
     </tr>
 <% end %>
 
 <% content_for :table_body do %>
-    <% if @risks.size != 0 %>
-        <% @risks.each do |risk| %>
+    <% risks = Risk::RuleRisk.collection.aggregate(
+        [
+            {:$match => {
+                rule_type: 1
+            }},
+            {:$group => {
+                _id: '$rule_id',
+                average_compliance: {:$avg => '$compliance'}
+            }}
+        ]
+    ) %>
+    <% if risks.count != 0 %>
+        <% risks.each do |risk| %>
 
-            <% law = Law.find(risk.law_id) %>
-            <% article = law.articles.find(risk.article_id)%>
+            <% rule = Rule.find(risk[:_id]) %>
 
-            <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
-
-            <tr data-href="<%= risk_path(risk.id) %>">
-
-              <td><%= law.name %></td>
-              <td><%= article.name %></td>
-              <td><%= article.requirement %></td>
-
-              <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
-
-              <td><%= msrmnt != nil ? (msrmnt.compliance * 100).to_i.to_s : '-'%></td>
-
-              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
+            <tr data-href="<%= risks_path(risk[:_id]) %>">
+              <td><%= rule.institution %></td>
+              <td><%= rule.name %></td>
+              <td><%= risk[:average_compliance] %></td>
             </tr>
         <% end %>
     <% else %>
         <tr>
-          <td colspan="8"> No se encontraron riesgos de esta clase. </td>
+          <td colspan="3"> No se encontraron riesgos de esta clase. </td>
         </tr>
     <% end %>
 <% end %>

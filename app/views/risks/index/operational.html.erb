@@ -2,88 +2,90 @@
 <% end %>
 
 <% content_for :table_name_active do %>
-  Activos
+    Activos
 <% end %>
 
 <% content_for :table_headers do %>
-  <tr>
-    <th>Área</th>
-    <th>Proceso</th>
-    <th>Actividad</th>
-    <th>Riesgo</th>
-    <th>Encargado</th>
-    <th>Significativo</th>
-    <th>Fecha</th>
-    <th>Probabilidad (%)</th>
-    <th>Impacto</th>
-    <th>Magnitud</th>
-  </tr>
+    <tr>
+      <th>Área</th>
+      <th>Proceso</th>
+      <th>Actividad</th>
+      <th>Riesgo</th>
+      <th>Encargado</th>
+      <th>Significativo</th>
+      <th>Fecha</th>
+      <th>Probabilidad (%)</th>
+      <th>Impacto</th>
+      <th>Magnitud</th>
+    </tr>
 <% end %>
 
 <% content_for :table_body do %>
-  <% if @risks.size != 0 %>
-    <% @risks.each do |risk| %>
+    <% risks = Risk::OperationalRisk.order_by(significant: :desc) %>
 
-      <% sig = humanize_significant(risk.significant) %>
-      <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
+    <% if risks.size != 0 %>
+        <% risks.each do |risk| %>
 
-      <tr data-href="<%= risk_path(risk.id.to_s) %>">
+            <% sig = humanize_significant(risk.significant) %>
+            <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
-        <td><%= Position.find(risk.area_id).name %></td>
+            <tr data-href="<%= risk_path(risk.id.to_s) %>">
 
-        <td><%= BusinessProcess.find(risk.process_id).name %></td>
+              <td><%= Position.find(risk.area_id).name %></td>
 
-        <td><%= risk.activity %></td>
+              <td><%= BusinessProcess.find(risk.process_id).name %></td>
 
-        <td><%= risk.name %>
+              <td><%= risk.activity %></td>
 
-        <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
+              <td><%= risk.name %>
 
-        <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
+              <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
-        <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
+              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
 
-        <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s : '-'%></td>
-        <td><%= msrmnt != nil ? Settings::RiskSettings.first.operational_options[:impact][msrmnt.impact.to_s] : '-'%></td>
-        <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
-      </tr>
+              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-' %></td>
+
+              <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s : '-' %></td>
+              <td><%= msrmnt != nil ? Settings::RiskSettings.first.operational_options[:impact][msrmnt.impact.to_s] : '-' %></td>
+              <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="10"> No se encontraron riesgos de esta clase.</td>
+        </tr>
     <% end %>
-  <% else %>
-    <tr>
-      <td colspan="10"> No se encontraron riesgos de esta clase. </td>
-    </tr>
-  <% end %>
 <% end %>
 
 <% content_for :styles do %>
-  <!-- Risks' Index Page Styles -->
-  <style>
-    <%= significant_style_css %>
-  </style>
+    <!-- Risks' Index Page Styles -->
+    <style>
+      <%= significant_style_css %>
+    </style>
 <% end %>
 
 <% content_for :menu do %>
-  <div class="left">
-    <div class="header-buttons">
-      <div class="dropdown">
-        <%= link_to new_risk_path('operacional'), method: 'get', class: 'dropdown-inline-button' do %>
-          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
-          Nuevo
-        <% end %>
+    <div class="left">
+      <div class="header-buttons">
+        <div class="dropdown">
+          <%= link_to new_risk_path('operacional'), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+              Nuevo
+          <% end %>
+        </div>
       </div>
     </div>
-  </div>
 <% end %>
 
 <% content_for :breadcrumbs do %>
-  <div class="left">
-    <ul class="list-unstyled breadcrumb breadcrumb-custom">
-      <li>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
         <span>
           Riesgos Operacionales
         </span>
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
 <% end %>
 

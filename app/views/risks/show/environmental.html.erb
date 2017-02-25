@@ -12,25 +12,25 @@
 
 <%= content_for :main_col_1 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Área:</div>
+      <div class="col-lg-4 show-label">Área:</div>
       <div class="col-lg-8">
         <%= Position.find(@risk.area_id).name rescue '' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Proceso:</div>
+      <div class="col-lg-4 show-label">Proceso:</div>
       <div class="col-lg-8">
         <%= BusinessProcess.find(@risk.process_id).name rescue '' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Actividad:</div>
+      <div class="col-lg-4 show-label">Actividad:</div>
       <div class="col-lg-8">
         <%= @risk.activity %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Aspecto:</div>
+      <div class="col-lg-4 show-label">Aspecto:</div>
       <div class="col-lg-8">
         <%= @risk.aspect %>
       </div>
@@ -39,25 +39,25 @@
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Signo:</div>
+      <div class="col-lg-4 show-label">Signo:</div>
       <div class="col-lg-8">
         <%= @risk.positive ? 'Positivo' : 'Negativo' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Tiempo:</div>
+      <div class="col-lg-4 show-label">Tiempo:</div>
       <div class="col-lg-8">
         <%= @settings.environmental_options[:occ_time][@risk.occurrence_time.to_s] rescue '' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Sit. Operacional:</div>
+      <div class="col-lg-4 show-label">Sit. Operacional:</div>
       <div class="col-lg-8">
         <%= @settings.environmental_options[:op_situation][@risk.operational_situation.to_s] rescue '' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Directo:</div>
+      <div class="col-lg-4 show-label">Directo:</div>
       <div class="col-lg-8">
         <%= @risk.direct ? 'Directo' : 'Indirecto' %>
       </div>
@@ -66,35 +66,33 @@
 
 <%= content_for :main_col_3 do %>
     <div class="row">
-      <div class="col-lg-4 text-right"><strong>Riesgo:</strong></div>
+      <div class="col-lg-4 show-label">Riesgo:</div>
       <div class="col-lg-8">
-        <strong>
           <%= @risk.name %>
-        </strong>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">M. Regulatorio:</div>
+      <div class="col-lg-4 show-label">M. Regulatorio:</div>
       <div class="col-lg-8">
-        <% law = @risk.regulation_id.nil? ? nil : Risk::LawRisk.find(@risk.regulation_id) %>
+        <% law = @risk.regulation_id.nil? ? nil : Risk::RuleRisk.find(@risk.regulation_id) %>
         <%= law.nil? ? 'No regulado' : link_to(law.get_law_name, risk_path(law.id)) rescue 'No regulado' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Responsable:</div>
+      <div class="col-lg-4 show-label">Responsable:</div>
       <div class="col-lg-8">
         <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Frec. Medición:</div>
+      <div class="col-lg-4 show-label">Frec. Medición:</div>
       <div class="col-lg-8">
         <%= frequency_string(@risk.measurement_frequency).capitalize %>
       </div>
     </div>
 <% end %>
 
-<% if @risk.comments %>
+<% if @risk.comments? %>
     <%= content_for :extra_no_panel do %>
         <div class="panel">
           <div class="panel-heading">
@@ -122,7 +120,7 @@
             <th>Amplitud Geográfica</th>
             <th>Percepción Pública</th>
             <th>Reversibilidad</th>
-            <th>Impacto</th>
+            <th>Criticidad</th>
             <th>Cumplimiento Regulación (%)</th>
 
             <th>Probabilidad (%)</th>
@@ -150,7 +148,7 @@
                   <%= @settings.environmental_options[:reversibility][measurement.reversibility.to_s] %>
                 </td>
                 <td style="<%= txtcolor %>">
-                  <%= @settings.environmental_options[:impact][measurement.impact.to_s] %>
+                  <%= @settings.environmental_options[:criticity][measurement.criticity.to_s] %>
                 </td>
                 <td style="<%= txtcolor %>"><%= regulation_breach == -1 ? 'No regulado' : ((1 - regulation_breach) * 100).to_i %>
 
@@ -246,8 +244,7 @@
                                 return moment.unix(value)
                                     .format('<%= dt_form_format(false) %>')
                             }),
-                        axisY: generateAutoAxis(0,
-                            0 + <%= @settings.environmental_options[:impact].keys.last.to_i %>)
+                        axisY: generateAutoAxis(0, 13)
                     });
             });
         </script>

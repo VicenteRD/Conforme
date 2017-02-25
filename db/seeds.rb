@@ -111,11 +111,11 @@ proc2 = BusinessProcess.new(name: 'Processing process',
                             description: 'Process to process to processing of processes within the main process of the process.')
 proc2.save!
 
-stdd = Standard.new(name: 'ISO 9001')
+stdd = Rule.new(institution: 'ISO', name: '9001', rule_type: 2)
 stdd.save!
 s_art = stdd.articles.create(name: 'A', requirement: 'Do stuff right.')
 
-law = Law.new(name: 'Constitución')
+law = Rule.new(institution: 'Estado', name: 'Constitución', rule_type: 1)
 law.save!
 l_art = law.articles.create(name: '110011', requirement: 'Dont do stuff.')
 
@@ -133,7 +133,7 @@ Settings::RiskSettings.create(
         geo_amplitude: {1 => 'Local', 2 => 'Puntual', 3 => 'Externa'},
         pub_perception: {1 => 'Baja', 2 => 'Media', 3 => 'Alta'},
         reversibility: {1 => 'Reversible', 2 => 'Recuperable', 3 => 'Irrecuperable'},
-        impact: {1 => 'Bajo', 2 => 'Grave', 3 => 'Crítico'}
+        criticity: {1 => 'Baja', 2 => 'Grave', 3 => 'Crítico'}
     },
     safety_threshold: 0.5,
     safety_options: {
@@ -158,21 +158,23 @@ op_risk = Risk::OperationalRisk.new(
 op_risk.save!
 op_risk.log_creation(nil, body = 'Created by system')
 
-st_risk = Risk::StandardRisk.new(
+st_risk = Risk::RuleRisk.new(
     measurement_frequency: 30,
     responsible_id: cv.id,
 
-    standard_id: stdd.id,
+    rule_type: 2,
+    rule_id: stdd.id,
     article_id: s_art.id
 )
 st_risk.save!
 st_risk.log_creation(nil, body = 'Created by system')
 
-la_risk = Risk::LawRisk.new(
+la_risk = Risk::RuleRisk.new(
     measurement_frequency: 30,
     responsible_id: cv.id,
 
-    law_id: law.id,
+    rule_type: 1,
+    rule_id: law.id,
     article_id: l_art.id
 )
 la_risk.save!

@@ -72,11 +72,11 @@
             </div>
             <div class="col-lg-1">
               <label class="form-control-label">
-                Impacto
+                Criticidad
               </label>
             </div>
             <div class="col-lg-2">
-              <%= f.collection_select :impact, @settings.environmental_options[:impact],
+              <%= f.collection_select :criticity, @settings.environmental_options[:criticity],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
           </div>

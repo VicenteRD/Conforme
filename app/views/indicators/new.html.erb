@@ -25,35 +25,9 @@
                 Nombre
               </label>
             </div>
-            <div class="col-lg-2 input-group margin-right-20">
-              <%= f.text_field  :name, class: 'form-control' %>
-            </div>
-
-            <div class="col-lg-1">
-              <label class="form-control-label">
-                Responsable
-              </label>
-            </div>
-            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
-              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true %>
-              <span class="input-group-addon" style="cursor: pointer">
-              <i class="icmn-pencil5"></i>
-            </span>
-              <%= f.hidden_field :responsible_id, class: 'form-control-hidden' %>
-            </div>
-          </div>
-
-          <div class="row form-group margin-left-50">
-            <div class="col-lg-1">
-              <label class="form-control-label">
-                Criterio
-              </label>
-            </div>
             <div class="col-lg-2 margin-right-20">
-              <%= f.collection_select :criterion, Indicator.get_all_criteria.collect { |item| [ item, item ] },
-                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+              <%= f.text_field :name, class: 'form-control' %>
             </div>
-
             <div class="col-lg-1">
               <label class="form-control-label">
                 Descripción
@@ -62,28 +36,9 @@
             <div class="col-lg-2 margin-right-20">
               <%= f.text_field :description, class: 'form-control' %>
             </div>
-
-            <div class="col-lg-1">
-              <label class="form-control-label">
-                Frecuencia
-              </label>
-            </div>
-            <div class="col-lg-2 form-inline">
-              <%= f.collection_select :measurement_frequency, frequency_hash,
-                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
-            </div>
           </div>
 
           <div class="row form-group margin-left-50">
-            <div class="col-lg-1">
-              <label class="form-control-label">
-                Valor Esperado
-              </label>
-            </div>
-            <div class="col-lg-2 margin-right-20">
-              <%= f.number_field :threshold, step: :any, class: 'form-control' %>
-            </div>
-
             <div class="col-lg-1">
               <label class="form-control-label">
                 Método
@@ -92,13 +47,53 @@
             <div class="col-lg-2 margin-right-20">
               <%= f.text_field :method, class: 'form-control' %>
             </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Criterio
+              </label>
+            </div>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.collection_select :criterion, Indicator.get_all_criteria.collect { |item| [item, item] },
+                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Meta
+              </label>
+            </div>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.number_field :threshold, step: :any, class: 'form-control' %>
+            </div>
+          </div>
 
+          <div class="row form-group margin-left-50">
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Responsable
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
+              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :responsible_id, class: 'form-control-hidden' %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Frecuencia
+              </label>
+            </div>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.collection_select :measurement_frequency, frequency_hash,
+                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+            </div>
             <div class="col-lg-1">
               <label class="form-control-label">
                 Unidad
               </label>
             </div>
-            <div class="col-lg-2 form-inline">
+            <div class="col-lg-2 margin-right-20">
               <%= f.text_field :unit, class: 'form-control', style: 'width:100%' %>
             </div>
           </div>
@@ -106,16 +101,17 @@
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
-                Valor Esperado
+                Margen
               </label>
             </div>
             <div class="col-lg-2 margin-right-20 form-inline">
-              <%= number_field :raw, :margin, value: 0, within: 0..100, class: 'form-control', style: 'width:75px' %> %
+              <%= number_field :raw, :margin, value: 0, within: 0..100, class: 'form-control', style: 'width:75px' %>
+              %
             </div>
           </div>
 
           <div class="row form-group" style="margin: 30px 10px;height:400px">
-            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'}  %>
+            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
           </div>
 
           <div id="associables-container"></div>

@@ -6,7 +6,7 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
                         :geographical_amplitude,
                         :public_perception,
                         :reversibility,
-                        :impact
+                        :criticity
 
   field :pbb, as: :probability, type: Float
 
@@ -14,7 +14,7 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
   field :pub_p, as: :public_perception, type: Integer
   field :rev, as: :reversibility, type: Integer
 
-  field :imp, as: :impact, type: Integer
+  field :crt, as: :criticity, type: Integer
 
   field :reg_br, as: :regulation_breach, type: Float
 
@@ -27,7 +27,7 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
         :public_perception,
         :reversibility,
         :regulation_breach,
-        :impact
+        :criticity
     ]
   end
 
@@ -35,11 +35,12 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
     # regulation_breach is given via a hidden field in the form,
     # taken from the base risk
 
-    self.consequence = self.imp +
+    self.consequence = self.criticity +
         self.geographical_amplitude +
         self.public_perception +
         self.reversibility +
         [self.regulation_breach, 0].max
+
     self.magnitude = self.consequence * self.probability
 
     super

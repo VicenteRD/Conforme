@@ -1,6 +1,3 @@
-require 'concerns/enumerable_document'
-# require 'concerns/associable'
-
 class Task
   include Mongoid::Document
   include Mongoid::Timestamps::Short

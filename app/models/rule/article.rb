@@ -1,7 +1,7 @@
-class Standard::Article
+class Rule::Article
   include Mongoid::Document
 
-  embedded_in :standard, class_name: 'Standard'
+  embedded_in :rule, class_name: 'Rule'
 
   field :name, type: String
   field :req, as: :requirement, type: String

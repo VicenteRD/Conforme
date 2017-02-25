@@ -8,11 +8,10 @@ class RisksController < ApplicationController
     es_type = params[:type].to_sym
 
     if Risk.get_risk_types.key?(es_type)
-      klass = Risk.get_risk_types[es_type][:klass]
-
-      @risks = klass.order_by(significant: :desc)
-
       render "risks/index/#{Risk.get_risk_types[es_type][:en]}", layout: 'table'
+    elsif Rule.find(params[:type])
+      @risks = Risk::RuleRisk.where(rule_id: params[:type])
+      render 'risks/index/rule', layout: 'table'
     else
       redirect_to '/'
     end
@@ -33,6 +32,9 @@ class RisksController < ApplicationController
 
     if (type = Risk.get_risk_types[params[:type].to_sym])
       render "risks/new/#{type[:en]}", layout: 'form'
+    elsif (rule = Rule.find(params[:type]))
+      @rule = rule
+      render 'risks/new/rule', layout: 'form'
     else
       redirect_to '/'
     end
@@ -41,15 +43,25 @@ class RisksController < ApplicationController
   def create
     fields = params.require(:risk)
 
-    if params[:raw] && params[:raw][:process_name]
-      id = BusinessProcess.where(name: params[:raw][:process_name])
+    process_name = params.dig(:raw, :process_name)
+    if process_name
+      id = BusinessProcess.where(name: process_name)
                .pluck(:id).first
       fields[:process_id] = id.to_s if id
     end
 
-    if params[:type]
-      klass = Risk.get_risk_types[params[:type].to_sym][:klass]
+    type = params[:type]
+    if (klass = Risk.get_risk_types.dig(type.to_sym, :klass))
+      if type ==  'ley'
+        fields[:rule_type] = 1
+      elsif type == 'norma'
+        fields[:rule_type] = 2
+      end
+
       redirect_to risk_path create_risk(klass, fields)
+    elsif (fields[:rule_type] = Rule.find(type)&.rule_type)
+      puts fields.inspect
+      redirect_to risk_path create_risk(Risk::RuleRisk, fields)
     else
       redirect_to '/'
     end
@@ -72,8 +84,9 @@ class RisksController < ApplicationController
       redirect_to '/' and return
     end
 
-    if params[:raw] && params[:raw][:process_name]
-      id = BusinessProcess.where(name: params[:raw][:process_name])
+    process_name = params.dig(:raw, :process_name)
+    if process_name
+      id = BusinessProcess.where(name: process_name)
                .pluck(:id).first
       fields[:process_id] = id.to_s if id
     end
@@ -84,7 +97,7 @@ class RisksController < ApplicationController
       fields.set_from_hash(fields[:associables])
     end
 
-    risk.log_book.new_entry(@user.id, 'Editado', params[:log][:body])
+    risk.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
     risk.save!
 
     redirect_to risk_path(risk.id)
@@ -98,7 +111,7 @@ class RisksController < ApplicationController
 
   private
   def create_risk(klass, fields)
-    entry = params[:log][:body]
+    entry = params.dig(:log, :body)
 
     risk = klass.create!(fields.permit(klass.permitted_fields))
 

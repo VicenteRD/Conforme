@@ -11,21 +11,16 @@
     <table class="table table-hover">
       <thead>
       <tr>
+        <th>Institución</th>
         <th>Ley</th>
-        <th>Artículo</th>
-        <th>Requerimiento</th>
       </tr>
       </thead>
       <tbody>
-      <% Law.each do |law| %>
-          <% law.articles.each do |article| %>
-              <tr class="<%= picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-law_id="<%= law.id %>" data-art_id="<%= article.id %>">
-                <td id="law"><%= law.name %></td>
-                <td id="article"><%= article.name %></td>
-                <td><%= article.requirement %></td>
-                <td><%= article.requirement %></td>
-              </tr>
-          <% end %>
+      <% Rule.law.each do |law| %>
+          <tr class="<%= picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-law_id="<%= law.id %>">
+            <td id="institution"><%= law.institution %></td>
+            <td id="law"><%= law.name %></td>
+          </tr>
       <% end %>
       </tbody>
     </table>
@@ -40,11 +35,9 @@
         formGroup = $('#<%= picker_id %>');
 
         formGroup.find('.form-control')
-            .val(row.find('#law').html() + ': ' + row.find('#article').html());
+            .val(row.find('#institution').html() + ': ' + row.find('#law').html());
 
-        formGroup.find('.law-input').val(row.attr('data-law_id'));
-        formGroup.find('.article-input').val(row.attr('data-art_id'));
-
+        formGroup.find('.form-control-hidden').val(row.attr('data-law_id'));
 
         $('#table-modal').modal('hide');
     });
@@ -63,11 +56,11 @@
             container.append(
                 '<div id="' + selectedId + '">\n' +
                 '  <input class="form-control-hidden" type="hidden" ' +
-                'name="<%= @element %>[associables][laws][]" id="<%= @element %>_associable_law" ' +
+                'name="<%= @element %>[associables][rules][]" id="<%= @element %>_associable_rule" ' +
                 'value="' + selectedId + '">\n' +
                 '  <input class="form-control user-displayed-name" readonly="readonly" type="text" ' +
                 'name="associable_user_display" id="user_' + selectedId + '_display" ' +
-                'value="Ley: ' + row.find('#law').html() + ': ' + row.find('#article').html() + '">\n' +
+                'value="Ley: ' + row.find('#institution').html() + ': ' + row.find('#law').html() + '">\n' +
                 '</div>'
             );
         }

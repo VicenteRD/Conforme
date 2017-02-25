@@ -8,12 +8,18 @@ module RisksHelper
         'environmental'
       when 'Risk::SafetyRisk'
         'safety'
-      when 'Risk::LawRisk'
-        'laws'
-      when 'Risk::StandardRisk'
-        'standards'
+      when 'Risk::RuleRisk'
+        'rule'
       else
         nil
+    end
+  end
+
+  def rule_type_breadcrumb(type)
+    if type == 1
+      link_to 'Riesgos Legales', risks_path('ley')
+    elsif type == 2
+      link_to 'Riesgos Normativos', risks_path('norma')
     end
   end
 

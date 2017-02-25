@@ -6,7 +6,7 @@
 
 <%= content_for :main_col_1 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Objetivo:</div>
+      <div class="col-lg-4 show-label">Objetivo:</div>
       <div class="col-lg-8">
         <%= link_to objective_path(@indicator.objective_id) do %>
             <%= Objective.find(@indicator.objective_id).name %>
@@ -14,13 +14,13 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Descripción:</div>
+      <div class="col-lg-4 show-label">Descripción:</div>
       <div class="col-lg-8">
         <%= @indicator.description || '' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Criterio:</div>
+      <div class="col-lg-4 show-label">Criterio:</div>
       <div class="col-lg-8">
         <%= @indicator.criterion %>
       </div>
@@ -30,21 +30,19 @@
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 text-right"><strong>Nombre:</strong></div>
+      <div class="col-lg-4 show-label">Nombre:</div>
       <div class="col-lg-8">
-        <strong>
           <%= @indicator.name %>
-        </strong>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Método:</div>
+      <div class="col-lg-4 show-label">Método:</div>
       <div class="col-lg-8">
         <%= @indicator.method %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Valor Ideal:</div>
+      <div class="col-lg-4 show-label">Meta:</div>
       <div class="col-lg-8">
         <%= raw "#{@indicator.threshold.round(2).to_s} &plusmn; #{(@indicator.margin * 100).to_i}%" %>
       </div>
@@ -53,33 +51,36 @@
 
 <%= content_for :main_col_3 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Responsable:</div>
+      <div class="col-lg-4 show-label">Responsable:</div>
       <div class="col-lg-8">
         <%= link_to Person::User.find(@indicator.responsible_id).first_last_name, user_path(@indicator.responsible_id) %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Frec. Medición:</div>
+      <div class="col-lg-4 show-label">Frec. Medición:</div>
       <div class="col-lg-8">
         <%= frequency_string(@indicator.measurement_frequency).capitalize %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Unidad:</div>
+      <div class="col-lg-4 show-label">Unidad:</div>
       <div class="col-lg-8">
         <%= @indicator.unit %>
       </div>
     </div>
 <% end %>
 
-<%= content_for :heading_extra1 do %>
-    <h5>Notas</h5>
-<% end %>
-
-<%= content_for :body_extra1 do %>
-    <div class="margin-left-30 margin-bottom-30">
-      <%= raw @indicator.comments %>
-    </div>
+<% if @indicator.comments %>
+    <%= content_for :heading_extra1 do %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Descripción</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= raw @indicator.comments %>
+          </div>
+        </div>
+    <% end %>
 <% end %>
 
 <%= content_for :heading_extra2 do %>
@@ -140,7 +141,7 @@
               <%= link_to new_indicator_measurement_path(@indicator.id),
                           method: 'get', class: 'dropdown-inline-button' do %>
                   <i class="dropdown-inline-button-icon icmn-design"></i>
-                  Nueva Medición
+                  Medir
               <% end %>
             </div>
         <% end %>
@@ -187,7 +188,7 @@
                 $.ajax(
                     {
                         url: '/analisis/indicadores/detalle/<%= @indicator.id%>/' +
-                          $(this).attr('data-id')
+                        $(this).attr('data-id')
                     });
             });
 

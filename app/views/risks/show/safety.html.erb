@@ -12,25 +12,25 @@
 
 <%= content_for :main_col_1 do %>
     <div class="row">
-      <div class="col-lg-4 text-right" >Área:</div>
+      <div class="col-lg-4 show-label" >Área:</div>
       <div class="col-lg-8">
         <%= Position.find(@risk.area_id).name rescue '' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Proceso:</div>
+      <div class="col-lg-4 show-label">Proceso:</div>
       <div class="col-lg-8">
         <%= BusinessProcess.find(@risk.process_id).name rescue '' %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Actividad:</div>
+      <div class="col-lg-4 show-label">Actividad:</div>
       <div class="col-lg-8">
         <%= @risk.activity %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right" >Puesto de Trabajo:</div>
+      <div class="col-lg-4 show-label" >Puesto de Trabajo:</div>
       <div class="col-lg-8">
         <%= Position.find(@risk.position_id).name rescue '' %>
       </div>
@@ -39,25 +39,25 @@
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 text-right">Cond. de Operación:</div>
+      <div class="col-lg-4 show-label">Cond. de Operación:</div>
       <div class="col-lg-8">
         <%= @settings.safety_options[:condition][@risk.condition.to_s] %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Agente:</div>
+      <div class="col-lg-4 show-label">Agente:</div>
       <div class="col-lg-8">
         <%= @risk.agent %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right">Consecuencia:</div>
+      <div class="col-lg-4 show-label">Consecuencia:</div>
       <div class="col-lg-8">
         <%= @risk.consequence %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right"><strong>Riesgo:</strong></div>
+      <div class="col-lg-4 show-label"><strong>Riesgo:</strong></div>
       <div class="col-lg-8">
         <strong>
           <%= @risk.name %>
@@ -68,20 +68,20 @@
 
 <%= content_for :main_col_3 do %>
     <div class="row">
-      <div class="col-lg-4 text-right" >Responsable:</div>
+      <div class="col-lg-4 show-label" >Responsable:</div>
       <div class="col-lg-8">
         <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 text-right" >Frec. Medición:</div>
+      <div class="col-lg-4 show-label" >Frec. Medición:</div>
       <div class="col-lg-8">
         <%= frequency_string(@risk.measurement_frequency).capitalize %>
       </div>
     </div>
 <% end %>
 
-<% if @risk.comments %>
+<% if @risk.comments? %>
     <%= content_for :extra_no_panel do %>
         <div class="panel">
           <div class="panel-heading">

@@ -1,5 +1,4 @@
-<%= form_for @risk, as: :risk, url: edit_risk_path(@risk), method: :patch do |f| %>
-
+<%= form_for(:risk, url: new_risk_path) do |f| %>
 
     <section class="page-content">
       <div class="page-content-inner">
@@ -10,17 +9,27 @@
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
-                Norma
+                <%=  type_label %>
               </label>
             </div>
-            <div class="col-lg-5 input-group" id="standard-in">
-              <%= text_field :extra, :standard_name, class: 'form-control', readonly: true,
-                             value: @risk.get_standard_name %>
+            <div class="col-lg-2 input-group margin-right-20" id="rule-in">
+              <%= text_field :extra, :rule_name, class: 'form-control', readonly: true %>
               <span class="input-group-addon" style="cursor: pointer">
-              <i class="icmn-pencil5"></i>
-            </span>
-              <%= f.hidden_field :standard_id, class: 'form-control-hidden standard-input' %>
-              <%= f.hidden_field :article_id, class: 'form-control-hidden article-input' %>
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :rule_id, class: 'form-control-hidden standard-input' %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Artículo
+              </label>
+            </div>
+            <div class="col-lg-2 input-group" id="article-in">
+              <%= text_field :extra, :article_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :article_id, class: 'form-control-hidden standard-input' %>
             </div>
           </div>
 
@@ -31,8 +40,7 @@
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
-              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true,
-                             value: Person::User.find(@risk.responsible_id).first_last_name %>
+              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true %>
               <span class="input-group-addon" style="cursor: pointer">
                 <i class="icmn-pencil5"></i>
               </span>
@@ -46,12 +54,12 @@
             </div>
             <div class="col-lg-2 form-inline">
               <%= f.collection_select :measurement_frequency, frequency_hash,
-                                      :first, :last, {}, {class: 'form-control', style: 'width:90%'} %>
+                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
           </div>
 
           <div class="row form-group" style="margin: 30px 10px;height:400px">
-            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
+            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'}  %>
           </div>
 
           <div id="associables-container"></div>
@@ -87,40 +95,4 @@
       </div>
     </div>
 
-<% end %>
-
-<%= content_for :scripts do %>
-    <script>
-        $('#responsible-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Responsable');
-            $.ajax({url: '/associables/single_responsible-in/Person::User'});
-        });
-
-        $('#standard-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Norma');
-            $.ajax({url: '/associables/single_standard-in/Standard'});
-        });
-    </script>
-<% end %>
-
-<%= content_for :breadcrumbs do %>
-    <div class="left">
-      <ul class="list-unstyled breadcrumb breadcrumb-custom">
-        <li>
-          <%= link_to risks_path('norma') do %>
-              Riesgos Normativos
-          <% end %>
-        </li>
-        <li>
-          <%= link_to risk_path(@risk.id) do %>
-              <%= @risk.number %>
-          <% end %>
-        </li>
-        <li>
-          <span>
-            Editar
-          </span>
-        </li>
-      </ul>
-    </div>
 <% end %>

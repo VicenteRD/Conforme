@@ -92,4 +92,13 @@
     </script>
 <% end %>
 
+<%= content_for :styles do %>
+  <style>
+    .show-label {
+      font-weight: 600;
+      text-align: right;
+    }
+  </style>
+<% end %>
+
 <% parent_layout 'application' %>
