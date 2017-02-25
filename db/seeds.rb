@@ -189,7 +189,6 @@ en_risk = Risk::EnvironmentalRisk.new(
 
     aspect: 'Basura',
     name: 'Altera la condición del suelo',
-    regulation_id: la_risk.id,
     occurrence_time: 1,
     operational_situation: 2,
     positive: true,
