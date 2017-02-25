@@ -8,6 +8,8 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
                         :reversibility,
                         :criticity
 
+  field :reg_id, as: :regulation_id, type: BSON::ObjectId # => LawRisk
+
   field :pbb, as: :probability, type: Float
 
   field :geo_a, as: :geographical_amplitude, type: Integer
@@ -26,14 +28,13 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
         :geographical_amplitude,
         :public_perception,
         :reversibility,
-        :regulation_breach,
+        :regulation_id,
         :criticity
     ]
   end
 
   def calculate_magnitude
-    # regulation_breach is given via a hidden field in the form,
-    # taken from the base risk
+    self.set_regulation_breach
 
     self.consequence = self.criticity +
         self.geographical_amplitude +
@@ -44,5 +45,15 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
     self.magnitude = self.consequence * self.probability
 
     super
+  end
+
+  def set_regulation_breach
+    if self.regulation_id.nil?
+      self.regulation_breach = -1 and return
+    end
+
+    regulation = Risk::RuleRisk.find(self.regulation_id)
+
+    self.regulation_breach = regulation.nil? ? -1 : (1 - regulation.get_compliance)
   end
 end

@@ -168,8 +168,9 @@
         <!-- Risks' Show Page Scripts -->
         <script type="text/javascript">
             $('.measurement-row').click(function () {
-                // Show measurement's comments along with 'edit' and 'history' button
-                $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
+                var link = '/riesgos/<%= @risk.id %>/' + $(this).attr('data-id') + '/editar';
+
+                window.open(link, '_self');
             });
 
             $(document).ready(function () {

@@ -37,21 +37,21 @@ class RiskMeasurementsController < ApplicationController
 
     fields = params.require(:measurement)
 
-    measured_on = params[:raw][:measured_on]
+    measured_at = params.dig(:raw, :measured_at)
     fields[:measured_at] = DateTime.strptime(
-        "#{measured_on} #{server_timezone}",
-        dt_rb_format
-    ) if measured_on
+        "#{measured_at} #{server_timezone}",
+        dt_rb_format(true)
+    ) if measured_at
 
-    probability = params[:raw][:probability]
+    probability = params.dig(:raw, :probability)
     fields[:probability] = probability.to_f / 100.0 if probability
 
-    compliance = params[:raw][:compliance]
+    compliance = params.dig(:raw, :compliance)
     fields[:compliance] = compliance.to_f / 100.0 if compliance
 
-    if (klass = Risk.get_risk_types[params[:raw][:type].to_sym][:measurement_klass])
+    if (klass = Risk.get_risk_types.dig(params.dig(:raw, :type).to_sym, :measurement_klass))
       measurement = risk.new_measurement(fields.permit(klass.permitted_fields))
-      measurement.log_book.new_entry(@user.id, 'Creado', params[:log][:entry])
+      measurement.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
 
       redirect_to risk_path(risk.id)
     else
@@ -84,23 +84,23 @@ class RiskMeasurementsController < ApplicationController
 
     fields = params.require(:measurement)
 
-    measured_on = params[:raw][:measured_on]
+    measured_at = params.dig(:raw, :measured_at)
     fields[:measured_at] = DateTime.strptime(
-        "#{measured_on} #{server_timezone}",
-        dt_rb_format
-    ) if measured_on
+        "#{measured_at} #{server_timezone}",
+        dt_rb_format(true)
+    ) if measured_at
 
-    probability = params[:raw][:probability]
+    probability = params.dig(:raw, :probability)
     fields[:probability] = probability.to_f / 100.0 if probability
 
-    compliance = params[:raw][:compliance]
+    compliance = params.dig(:raw, :compliance)
     fields[:compliance] = compliance.to_f / 100.0 if compliance
 
 
-    if (klass = Risk.get_risk_types[params[:raw][:type].to_sym][:measurement_klass])
+    if (klass = Risk.get_risk_types.dig(params.dig(:raw, :type).to_sym, :measurement_klass))
       puts klass.permitted_fields
       measurement.update!(fields.permit(klass.permitted_fields))
-      measurement.log_book.new_entry(@user.id, 'Editado', params[:log][:entry])
+      measurement.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :entry))
 
       risk.update_significant(measurement.significant)
 

@@ -31,7 +31,7 @@
             <% rule = Rule.find(risk[:_id]) %>
 
             <tr data-href="<%= risks_path(risk[:_id]) %>">
-              <td><%= rule.institution %></td>
+              <td><div class="expand-collapse">+</div><%= rule.institution %></td>
               <td><%= rule.name %></td>
               <td><%= risk[:average_compliance] %></td>
             </tr>

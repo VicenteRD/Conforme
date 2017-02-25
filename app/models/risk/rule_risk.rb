@@ -37,7 +37,7 @@ class Risk::RuleRisk < Risk
   def get_full_name
     rule = Rule.find(self.rule_id)
 
-    rule.name + ': ' + rule.articles.find(self.article_id).name
+    rule.full_name + ', art. ' + rule.articles.find(self.article_id).name
   end
 
   def get_compliance

@@ -9,13 +9,13 @@
 <%= content_for :menu do %>
     <div class="left">
       <div class="header-buttons">
-
         <div class="dropdown">
           <a href="#confirmation-modal" class="dropdown-inline-button" data-toggle="modal">
             <i class="dropdown-inline-button-icon icmn-file-check"></i>
             Grabar
           </a>
         </div>
+        <%= yield :menu_extras %>
       </div>
     </div>
 <% end %>
@@ -32,7 +32,7 @@
 
             var datePicker = $('#date-picker');
             if (datePicker.length != 0) {
-                newDateTimePicker(datePicker, '<%= dt_form_format %>', '<% server_timezone %>');
+                newDateTimePicker(datePicker, '<%= dt_form_format(true) %>', '<% server_timezone %>');
             }
         });
     </script>

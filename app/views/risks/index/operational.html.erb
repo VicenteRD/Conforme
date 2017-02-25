@@ -31,7 +31,7 @@
 
             <tr data-href="<%= risk_path(risk.id.to_s) %>">
 
-              <td><%= Position.find(risk.area_id).name %></td>
+              <td><div class="expand-collapse">+</div><%= Position.find(risk.area_id).name %></td>
 
               <td><%= BusinessProcess.find(risk.process_id).name %></td>
 

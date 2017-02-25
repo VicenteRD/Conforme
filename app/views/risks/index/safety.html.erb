@@ -32,7 +32,7 @@
 
       <tr data-href="<%= risk_path(risk.id) %>">
 
-        <td><%= Position.find(risk.area_id).name %></td>
+        <td><div class="expand-collapse">+</div><%= Position.find(risk.area_id).name %></td>
         <td><%= Position.find(risk.position_id).name %></td>
         <td><%= risk.activity %></td>
         <td><%= @settings.safety_options[:condition][risk.condition.to_s] %></td>

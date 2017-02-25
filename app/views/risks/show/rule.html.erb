@@ -1,12 +1,3 @@
-<%= content_for :heading_main do %>
-    <div class="margin-left-50">
-      <h4 class="text-capitalize">
-      <span style="<%= significant_style(@risk.significant)%>; padding: 5px">
-        <%= humanize_significant @risk.significant %>
-      </span>
-      </h4>
-    </div>
-<% end %>
 
 <%# Populate all 3 columns of the view with keys & their values %>
 <% rule = Rule.find(@risk.rule_id) %>
@@ -82,7 +73,6 @@
           <tr>
             <th>Fecha</th>
             <th>Cumplimiento (%)</th>
-            <th>Método</th>
             <th>Magnitud</th>
           </tr>
           </thead>
@@ -94,7 +84,6 @@
               <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
                 <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
                 <td style="<%= txtcolor %>"><%= (measurement.compliance * 100).round %></td>
-                <td style="<%= txtcolor %>"><%= measurement.method %></td>
                 <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
               </tr>
           <% end %>
@@ -154,7 +143,7 @@
         </li>
         <li>
           <span>
-            Artículo <%= article.name %>
+            Art. <%= article.name %>
           </span>
         </li>
       </ul>
@@ -170,8 +159,9 @@
         <!-- Risks' Show Page Scripts -->
         <script type="text/javascript">
             $('.measurement-row').click(function () {
-                // Show measurement's comments along with 'edit' and 'history' button
-                $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
+                var link = '/riesgos/<%= @risk.id %>/' + $(this).attr('data-id') + '/editar';
+
+                window.open(link, '_self');
             });
 
             $(document).ready(function () {

@@ -31,7 +31,7 @@ module RisksHelper
     thresholds = []
 
     measurements.each do |m|
-      date = m.measured_at.to_time.to_i
+      date = m.measured_at.to_date.to_time.to_i
 
       raw_dates.add(date)
 

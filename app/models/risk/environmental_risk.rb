@@ -15,8 +15,6 @@ class Risk::EnvironmentalRisk < Risk
   field :asp, as: :aspect, type: String
   field :name, type: String
 
-  field :reg_id, as: :regulation_id, type: BSON::ObjectId # => LawRisk
-
   field :occ_t, as: :occurrence_time, type: Integer # -1, 0 or 1 (Past, present, future)
   field :op_s , as: :operational_situation, type: Integer # In settings, store possible values as keys of a hash with its literal names as values
 
@@ -32,7 +30,6 @@ class Risk::EnvironmentalRisk < Risk
         :aspect,
         :name,
 
-        :regulation_id,
         :occurrence_time,
         :operational_situation,
         :positive,
@@ -47,15 +44,4 @@ class Risk::EnvironmentalRisk < Risk
 
     measurement
   end
-
-  def get_compliance
-    if self.regulation_id.nil?
-      return nil
-    end
-
-    regulation = Risk::LawRisk.find(self.regulation_id)
-
-    regulation.nil? ? nil : regulation.get_compliance
-  end
-
 end

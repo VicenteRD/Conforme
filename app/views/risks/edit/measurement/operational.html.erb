@@ -20,8 +20,9 @@
             </div>
             <div class="col-lg-2">
               <div class='input-group date' id='date-picker'>
-                <%= text_field :raw, :measured_on, class: 'form-control', data: {date_format: dt_form_format},
-                                 value: @measurement.measured_at.to_time.to_i %>
+                <%= text_field :raw, :measured_at, class: 'form-control',
+                               data: {date_format: dt_form_format(true)},
+                               value: @measurement.measured_at.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
@@ -87,6 +88,25 @@
       </div>
     </div>
 
+<% end %>
+
+<%= content_for :menu_extras do %>
+    <div class="dropdown">
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @measurement.log_book})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+        <i class="dropdown-inline-button-icon icmn-history"></i>
+        Ver Bitácora
+      </a>
+    </div>
+<% end %>
+
+<%= content_for :scripts do %>
+    <script type="text/javascript">
+        function showHistory(bodyContent) {
+            $("#history-modal-body").html(bodyContent);
+            $("#history-modal").modal();
+        }
+    </script>
 <% end %>
 
 <% content_for :breadcrumbs do %>

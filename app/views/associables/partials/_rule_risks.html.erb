@@ -2,26 +2,37 @@
 
 <div class="tab-pane active" id="table" role="tabpanel" aria-expanded="false">
   <div class="input-group padding-10 inline" style="width: 80%; overflow: auto">
-    <%= text_field :search, :input, placeholder: 'Buscar', class: 'form-control'%>
+    <%=
+      text_field(
+          :search,
+          :input,
+          placeholder: 'Buscar',
+          class: 'form-control filterer'
+      )
+    %>
     <span class="input-group-addon">
       <i class="icmn-search"></i>
     </span>
   </div>
   <div class="table-responsive margin-bottom-30" style="height:301px; overflow:auto; width: auto">
-    <table class="table table-hover">
+    <table class="table table-hover filterable">
       <thead>
         <tr>
+          <th>Tipo</th>
+          <th>Institución</th>
           <th>Ley</th>
           <th>Artículo</th>
           <th>Requisito</th>
         </tr>
       </thead>
       <tbody>
-        <% Risk::LawRisk.each do |risk| %>
-            <% law = Law.find(risk.law_id) %>
-            <% article = law.articles.find(risk.article_id) %>
+        <% Risk::RuleRisk.each do |risk| %>
+            <% rule = Rule.find(risk.rule_id) %>
+            <% article = rule.articles.find(risk.article_id) %>
             <tr class="<%= picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-id="<%= risk.id %>">
-              <td id="risk-law"><%= law.name %></td>
+              <td><%= rule.get_rule_type_name[:es].capitalize %></td>
+              <td id="risk-inst"><%= rule.institution %></td>
+              <td id="risk-rule"><%= rule.name %></td>
               <td id="risk-article"><%= article.name %></td>
               <td><%= article.requirement %></td>
             </tr>
@@ -41,10 +52,14 @@
         formGroup = $('#<%= picker_id %>');
 
         formGroup.find('.form-control')
-            .val(row.find('#risk-law').html() + ' ' + row.find('#risk-article').html());
+            .val(row.find('#risk-inst').html() + ' ' +
+                 row.find('#risk-rule').html() + ' ' +
+                 row.find('#risk-article').html());
         formGroup.find('.form-control-hidden').val(row.attr('data-id'));
 
 
         $('#table-modal').modal('hide');
     });
+
+    $('.filterable').filterable();
 </script>

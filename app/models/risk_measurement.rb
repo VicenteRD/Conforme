@@ -10,15 +10,15 @@ class RiskMeasurement
 
   validates_presence_of :measured_at
 
-  field :m_at, as: :measured_at, type: Date # Fecha / TODO: need to change to 'on'
+  field :m_at, as: :measured_at, type: DateTime
 
-  field :sig, as: :significant, type: Integer # Significativo
+  field :sig, as: :significant, type: Integer
 
-  field :thr, as: :threshold, type: Float # Threshold / TODO - improve current system (ThrMeasurements)
+  field :thr, as: :threshold, type: Float
 
-  field :cmts, as: :comments, type: String # Comments
+  field :cmts, as: :comments, type: String
 
-  field :mag, as: :magnitude, type: Float # Magnitud
+  field :mag, as: :magnitude, type: Float
 
   def self.permitted_fields
     [:measured_at, :comments]
@@ -43,8 +43,6 @@ class RiskMeasurement
     if settings&.operational_threshold && settings.margin
 
       self.threshold = settings.operational_threshold
-
-      puts self.magnitude.to_s + ' vs. thr: ' + (self.threshold * (1.0 + settings.margin)).to_s
 
       if self.magnitude >= (self.threshold * (1.0 + settings.margin))
         self.significant = 2

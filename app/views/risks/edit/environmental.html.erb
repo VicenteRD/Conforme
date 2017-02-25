@@ -36,17 +36,11 @@
 
             <div class="col-lg-1">
               <label class="form-control-label">
-                M. Regulatorio
+                Riesgo
               </label>
             </div>
-            <div class="col-lg-2 input-group margin-right-20" id="regulation-in">
-              <%= text_field :extra, :regulation_name, class: 'form-control', readonly: true,
-                             value: @risk.regulation_id.nil? ? '' : Risk::LawRisk
-                                 .find(@risk.regulation_id).get_law_name %>
-              <span class="input-group-addon" style="cursor: pointer">
-                <i class="icmn-pencil5"></i>
-              </span>
-              <%= f.hidden_field :regulation_id, class: 'form-control-hidden' %>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.text_field :name, class: 'form-control' %>
             </div>
           </div>
 
@@ -71,11 +65,16 @@
 
             <div class="col-lg-1">
               <label class="form-control-label">
-                Riesgo
+                Responsable
               </label>
             </div>
-            <div class="col-lg-2 margin-right-20">
-              <%= f.text_field :name, class: 'form-control' %>
+            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
+              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true,
+                             value: Person::User.find(@risk.responsible_id).full_name %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :responsible_id, class: 'form-control-hidden' %>
             </div>
           </div>
 
@@ -102,16 +101,12 @@
 
             <div class="col-lg-1">
               <label class="form-control-label">
-                Responsable
+                Frecuencia
               </label>
             </div>
-            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
-              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true,
-                             value: Person::User.find(@risk.responsible_id).full_name %>
-              <span class="input-group-addon" style="cursor: pointer">
-                <i class="icmn-pencil5"></i>
-              </span>
-              <%= f.hidden_field :responsible_id, class: 'form-control-hidden' %>
+            <div class="col-lg-2 form-inline">
+              <%= f.collection_select :measurement_frequency, frequency_hash,
+                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
           </div>
 
@@ -133,16 +128,6 @@
             </div>
             <div class="col-lg-2 input-group margin-right-20">
               <%= f.collection_select :occurrence_time, @settings.environmental_options[:occ_time],
-                                      :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
-            </div>
-
-            <div class="col-lg-1">
-              <label class="form-control-label">
-                Frecuencia
-              </label>
-            </div>
-            <div class="col-lg-2 form-inline">
-              <%= f.collection_select :measurement_frequency, frequency_hash,
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
           </div>

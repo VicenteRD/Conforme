@@ -17,8 +17,9 @@
             </div>
             <div class="col-lg-2">
               <div class='input-group date' id='date-picker'>
-                <%= text_field :raw, :measured_on, class: 'form-control', data: {date_format: dt_form_format},
-                               value: Date.today.to_time.to_i %>
+                <%= text_field :raw, :measured_at, class: 'form-control',
+                               data: {date_format: dt_form_format(true)},
+                               value: DateTime.now.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
@@ -100,7 +101,7 @@
         </li>
         <li>
           <span>
-            Nueva Medición
+            Medir
           </span>
         </li>
       </ul>

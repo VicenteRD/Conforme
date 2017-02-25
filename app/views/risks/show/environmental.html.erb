@@ -72,13 +72,6 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 show-label">M. Regulatorio:</div>
-      <div class="col-lg-8">
-        <% law = @risk.regulation_id.nil? ? nil : Risk::RuleRisk.find(@risk.regulation_id) %>
-        <%= law.nil? ? 'No regulado' : link_to(law.get_law_name, risk_path(law.id)) rescue 'No regulado' %>
-      </div>
-    </div>
-    <div class="row">
       <div class="col-lg-4 show-label">Responsable:</div>
       <div class="col-lg-8">
         <%= link_to Person::User.find(@risk.responsible_id).first_last_name, user_path(@risk.responsible_id) %>
@@ -150,7 +143,7 @@
                 <td style="<%= txtcolor %>">
                   <%= @settings.environmental_options[:criticity][measurement.criticity.to_s] %>
                 </td>
-                <td style="<%= txtcolor %>"><%= regulation_breach == -1 ? 'No regulado' : ((1 - regulation_breach) * 100).to_i %>
+                <td style="<%= txtcolor %>"><%= regulation_breach == -1 ? 'No regulado' : ((1 - regulation_breach).round(2) * 100).to_i %>
 
                 <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %></td>
                 <td style="<%= txtcolor %>"><%= measurement.consequence %></td>
@@ -225,8 +218,9 @@
         <!-- Risks' Show Page Scripts -->
         <script type="text/javascript">
             $('.measurement-row').click(function () {
-                // Show measurement's comments along with 'edit' and 'history' button
-                $.ajax({url: '/riesgos/detalle/<%= @risk.id%>/' + $(this).attr('data-id')});
+                var link = '/riesgos/<%= @risk.id %>/' + $(this).attr('data-id') + '/editar';
+
+                window.open(link, '_self');
             });
 
             $(document).ready(function () {

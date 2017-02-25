@@ -1,7 +1,4 @@
-<%= form_for @measurement,
-             as: :measurement,
-             url: edit_risk_measurement_path(risk_id: @risk.id, id: @measurement.id),
-             method: :patch do |f| %>
+<%= form_for(:measurement, url: new_risk_measurement_path(@risk.id)) do |f| %>
     <%= hidden_field :raw, :type, value: 'ley' %>
 
     <section class="page-content">
@@ -20,8 +17,9 @@
             </div>
             <div class="col-lg-2">
               <div class='input-group date' id='date-picker'>
-                <%= text_field :raw, :measured_on, class: 'form-control', data: {date_format: dt_form_format},
-                               value: @measurement.measured_at.to_time.to_i %>
+                <%= text_field :raw, :measured_at, class: 'form-control',
+                               data: {date_format: dt_form_format(true)},
+                               value: DateTime.now.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
@@ -33,19 +31,8 @@
               </label>
             </div>
             <div class="col-lg-1 form-inline">
-              <%= number_field :raw, :compliance, value: (@measurement.compliance * 100).to_i,
-                               within: 0..100, class: 'form-control', style: 'width:75px' %> %
-            </div>
-
-          </div>
-          <div class="row form-group margin-left-50">
-            <div class="col-lg-1">
-              <label class="form-control-label">
-                Método
-              </label>
-            </div>
-            <div class="col-lg-8">
-              <%= f.text_area :method, class: 'form-control height-150' %>
+              <%= number_field :raw, :compliance, value: 0, within: 0..100, class: 'form-control', style: 'width:75px' %>
+              %
             </div>
           </div>
 
@@ -91,21 +78,21 @@
 <% end %>
 
 <% content_for :breadcrumbs do %>
+    <% rule = Rule.find(@risk.rule_id) %>
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('ley') do %>
-              Riesgos Legales
-          <% end %>
+          <%= rule_type_breadcrumb(@risk.rule_type) %>
         </li>
         <li>
-          <%= link_to risk_path(@risk.id) do %>
-              <%= @risk.number %>
-          <% end %>
+          <%= link_to rule.full_name, risks_path(rule.id) %>
+        </li>
+        <li>
+          <%= link_to "Art. #{rule.articles.find(@risk.article_id).name}", risk_path(@risk) %>
         </li>
         <li>
           <span>
-            Nueva Medición
+            Medir
           </span>
         </li>
       </ul>

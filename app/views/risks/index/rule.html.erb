@@ -24,7 +24,7 @@
 
             <tr data-href="<%= risk_path(risk.id) %>">
 
-              <td><%= article.name %></td>
+              <td><div class="expand-collapse">+</div><%= article.name %></td>
               <td><%= article.requirement %></td>
 
               <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>

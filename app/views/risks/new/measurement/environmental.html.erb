@@ -1,6 +1,5 @@
 <%= form_for(:measurement, url: new_risk_measurement_path(@risk.id)) do |f| %>
     <%= hidden_field :raw, :type, value: 'ambiente' %>
-    <%= f.hidden_field :regulation_breach, value: @risk.get_compliance ? (1 - @risk.get_compliance) : -1 %>
 
     <section class="page-content">
       <div class="page-content-inner">
@@ -17,8 +16,9 @@
             </div>
             <div class="col-lg-2">
               <div class='input-group date' id='date-picker'>
-                <%= text_field :raw, :measured_on, class: 'form-control', data: {date_format: dt_form_format},
-                               value: Date.today.to_time.to_i %>
+                <%= text_field :raw, :measured_at, class: 'form-control',
+                               data: {date_format: dt_form_format(true)},
+                               value: DateTime.now.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
@@ -41,6 +41,7 @@
               <%= f.collection_select :criticity, @settings.environmental_options[:criticity],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
+
           </div>
 
           <div class="row form-group margin-left-50">
@@ -53,7 +54,6 @@
               <%= f.collection_select :geographical_amplitude, @settings.environmental_options[:geo_amplitude],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
-
             <div class="col-lg-1">
               <label class="form-control-label">
                 Percepción Pública
@@ -71,6 +71,21 @@
             <div class="col-lg-2">
               <%= f.collection_select :reversibility, @settings.environmental_options[:reversibility],
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
+            </div>
+          </div>
+
+          <div class="row form-group margin-left-50">
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                M. Regulatorio (<a href="javascript:void(0);" id="regulation-clear">&times;</a>)
+              </label>
+            </div>
+            <div class="col-lg-2 input-group margin-right-20" id="regulation-in">
+              <%= text_field :extra, :regulation_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :regulation_id, class: 'form-control-hidden' %>
             </div>
           </div>
 
@@ -130,9 +145,24 @@
         </li>
         <li>
           <span>
-            Nueva Medición
+            Medir
           </span>
         </li>
       </ul>
     </div>
+<% end %>
+
+<% content_for :scripts do %>
+  <script>
+      $('#regulation-in').click(function () {
+          $('#table-modal-title').html('Seleccionar Regulación');
+          $.ajax({url: '/associables/single_regulation-in/Risk::RuleRisk'});
+      });
+
+      $('#regulation-clear').click(function() {
+          var regulationArea = $('#regulation-in');
+          regulationArea.find('.form-control').val('');
+          regulationArea.find('.form-control-hidden').val('');
+      });
+  </script>
 <% end %>
