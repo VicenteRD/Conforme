@@ -21,7 +21,8 @@ Rails.application.routes.draw do
 
   get '/personas'              => 'users#index'
   get '/personas/ficha/:id'    => 'users#show', as: :user
-  get '/personas/oganigrama'   => 'positions#show'
+  get '/personas/organigrama'   => 'positions#index', as: :positions
+  get '/personas/organigrama/detalle/:id'   => 'positions#show', as: :position
   get '/personas/competencias' => 'users#eval_competencies'
   get '/personas/performance'  => 'users#eval_performance'
   get '/personas/clima'        => 'users#work_environment'
@@ -60,10 +61,25 @@ Rails.application.routes.draw do
   post '/analisis/indicadores/:indicator_id/nueva' => 'indicator_measurements#create'
   patch '/analisis/indicadores/:indicator_id/:id/editar' => 'indicator_measurements#update'
 
+  # -------- Assets
 
-  get '/mantencion' => 'maintenance#index'
+  get 'activos/:id/editar' => 'assets#edit', as: :edit_asset
 
-  get '/documentos' => 'documents#show'
+  get '/activos/mantencion' => 'asset_maintenance#index', as: :asset_maintenance_jobs
+  get '/activos/mantencion/detalle/:id' => 'asset_maintenance#show', as: :asset_maintenance
+  get '/activos/mantencion/detalle/:asset_id/nueva' => 'asset_maintenance#new',
+      as: :new_maintenance_job
+  get '/activos/mantencion/detalle/:asset_id/:id/editar' => 'asset_maintenance#edit',
+      as: :edit_maintenance_job
+
+  get '/activos/calibracion' => 'asset_calibrations#index', as: :asset_calibrations
+  get '/activos/calibracion/detalle/:id' => 'asset_calibrations#show', as: :asset_calibration
+  get '/activos/mantencion/detalle/:asset_id/nueva' => 'asset_maintenance#new',
+      as: :new_calibration
+  get '/activos/mantencion/detalle/:asset_id/:id/editar' => 'asset_maintenance#edit',
+      as: :edit_calibration
+
+  # --------
 
   get '/normas' => 'standards#show'
   get '/leyes'  => 'laws#show'

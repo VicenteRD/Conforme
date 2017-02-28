@@ -1,0 +1,34 @@
+<section class="page-content">
+  <div class="page-content-inner">
+    <div class="panel">
+      <%= render partial: 'chart' %>
+    </div>
+  </div>
+</section>
+
+<% content_for :scripts do %>
+    <script>
+        $('.node').click(function() {
+            var positionId = $(this).find('p').attr('data-id');
+
+            window.open('/personas/organigrama/detalle/' + positionId, '_self')
+        })
+    </script>
+<% end %>
+
+<% content_for :styles do %>
+    <style>
+      .node {
+        color: #827ca1;
+        cursor: pointer !important;
+      }
+
+      .node p {
+        color: #827ca1;
+      }
+
+      .node:hover p {
+        color: #24222f;
+      }
+    </style>
+<% end %>

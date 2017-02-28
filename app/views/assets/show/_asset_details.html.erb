@@ -1,0 +1,29 @@
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Tipo:</div>
+      <div class="col-lg-8">
+        <%= @asset.asset_type %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+        <%= @asset.name %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Próx. Mantención:</div>
+      <div class="col-lg-8">
+        <%= @asset.next_maintenance_at.strftime(dt_rb_format(false, false)) %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Próx. Calibración:</div>
+      <div class="col-lg-8">
+        <%= @asset.next_calibration_at.strftime(dt_rb_format(false, false)) %>
+      </div>
+    </div>
+<% end %>

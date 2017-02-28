@@ -1,0 +1,71 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Tipo Activo</th>
+      <th>Activo</th>
+      <th>Fecha Siguiente</th>
+      <th>Fecha Última</th>
+      <th>Motivo</th>
+      <th>Resultado</th>
+    </tr>
+<% end %>
+
+<% content_for :table_body do %>
+    <% assets = Asset.order_by(next_calibration_at: :desc) %>
+
+    <% if assets.size != 0 %>
+        <% assets.each do |asset| %>
+
+            <% mntnnce = asset.maintenance_jobs.order_by(calibrated_at: :desc, created_at: :desc).first %>
+
+            <tr data-href="<%= asset_maintenance_path(asset) %>">
+
+              <td><div class="expand-collapse">+</div><%= asset.asset_type %></td>
+
+              <td><%= asset.name %></td>
+
+              <td><%= asset.next_maintenance_at.strftime(dt_rb_format(false,false)) %></td>
+
+              <td><%= mntnnce ? mntnnce.maintained_at.strftime(dt_rb_format(false, false)) : '-' %></td>
+
+              <td><%= mntnnce ? mntnnce.motive : '-' %></td>
+              <td><%= mntnnce ? mntnnce.result : '-' %></td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="6">No se encontraron activos.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+        <div class="dropdown">
+          <%= link_to '#', method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+              Nuevo
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Mantención Activos
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

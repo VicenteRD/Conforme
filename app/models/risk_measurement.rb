@@ -4,7 +4,9 @@ class RiskMeasurement
 
   embeds_one :log_book, class_name: 'Log::Book'
 
-  before_create :init
+  before_create do
+    self.log_book = Log::Book.new unless self.log_book
+  end
 
   around_save :calculate_magnitude
 
@@ -12,7 +14,7 @@ class RiskMeasurement
 
   field :m_at, as: :measured_at, type: DateTime
 
-  field :sig, as: :significant, type: Integer
+  field :sig, as: :significant, type: Integer, default: -1
 
   field :thr, as: :threshold, type: Float
 
@@ -22,15 +24,6 @@ class RiskMeasurement
 
   def self.permitted_fields
     [:measured_at, :comments]
-  end
-
-  def init
-    unless self.significant
-      self.significant = -1
-    end
-    unless self.log_book
-      self.log_book = Log::Book.new
-    end
   end
 
   def calculate_magnitude

@@ -40,6 +40,10 @@ class Risk::RuleRisk < Risk
     rule.full_name + ', art. ' + rule.articles.find(self.article_id).name
   end
 
+  def get_article_name
+    Rule.find(self.rule_id).articles.find(self.article_id).name
+  end
+
   def get_compliance
     if self.measurements&.last
       self.measurements.last.compliance

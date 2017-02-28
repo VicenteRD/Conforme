@@ -1,0 +1,29 @@
+table.dataTable.collapsed .expand-collapse {
+  background-color: #acb7bf;
+  border: none;
+  border-radius: 100px;
+  box-shadow: none;
+  box-sizing: content-box;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  height: 16px;
+  left: 6px;
+  line-height: 15px;
+  margin-right: 4px;
+  top: 13px;
+  width: 16px;
+  text-align: center;
+  -webkit-border-radius: 100px;
+  -webkit-box-shadow: none;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+}
+
+table.dataTable .expand-collapse {
+  display: none;
+}
+
+table.dataTable tr {
+  cursor: pointer;
+}

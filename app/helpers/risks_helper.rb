@@ -23,7 +23,7 @@ module RisksHelper
     end
   end
 
-  def chart_data(measurements, x_buffer)
+  def chart_data(measurements, x_buffer, field_key = 'magnitude')
 
     # Instantiate a set of raw holders
     raw_dates = Set.new
@@ -35,7 +35,7 @@ module RisksHelper
 
       raw_dates.add(date)
 
-      values.push({x: date, y: m.magnitude})
+      values.push({x: date, y: m[field_key.to_sym]})
       thresholds.push({x: date, y: m.threshold})
     end
 

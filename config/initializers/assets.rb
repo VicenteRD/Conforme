@@ -11,8 +11,9 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w( main.scss )
 Rails.application.config.assets.precompile += %w( show.js )
 Rails.application.config.assets.precompile += %w( form.js )
+Rails.application.config.assets.precompile += %w( table.scss )
 Rails.application.config.assets.precompile += %w( associables.scss )
 Rails.application.config.assets.precompile += %w( show.scss )
-Rails.application.config.assets.precompile += %w( new.scss )
+Rails.application.config.assets.precompile += %w( form.scss )
 
 Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|woff2|ttf)\z/

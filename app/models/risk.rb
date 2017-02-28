@@ -8,23 +8,19 @@ class Risk
 
   validates_presence_of :responsible_id, :measurement_frequency
 
-  before_create :init
+  before_create do
+    self.log_book = Log::Book.new unless self.log_book
+  end
 
   embeds_one :log_book, class_name: 'Log::Book'
 
   field :fq, as: :measurement_frequency, type: Integer
 
-  field :sig, as: :significant, type: Integer
+  field :sig, as: :significant, type: Integer, default: -1
 
   field :res_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
 
   field :cmts, as: :comments, type: String
-
-
-  def init
-    self.significant = -1
-    self.log_book = Log::Book.new
-  end
 
   def log_creation(author_id, body = '')
     self.log_book.new_entry(author_id, 'Creado', body)

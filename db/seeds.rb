@@ -117,7 +117,12 @@ s_art = stdd.articles.create(name: 'A', requirement: 'Do stuff right.')
 
 law = Rule.new(institution: 'Estado', name: 'Constitución', rule_type: 1)
 law.save!
-l_art = law.articles.create(name: '110011', requirement: 'Dont do stuff.')
+
+l_art = law.articles.create(name: '1.1', requirement: 'uno uno.')
+law.articles.create(name: '1.1.1', requirement: 'uno uno uno')
+law.articles.create(name: '1.2', requirement: 'uno dos')
+law.articles.create(name: '2.1', requirement: 'dos uno')
+law.articles.create(name: '3', requirement: 'tres')
 
 Settings::RiskSettings.create(
     margin: 0.05,
@@ -240,3 +245,15 @@ ind = Indicator.new(
 ind.save!
 
 obj.save!
+
+ast = Asset.new(
+    name: 'Activo 1',
+    asset_type: 'Vehículo',
+    next_maintenance_at: 15.days.from_now,
+    next_calibration_at: 10.days.from_now
+)
+ast.save!
+ast.log_book.new_entry(nil, 'Creado', 'Created by system')
+
+# calibrations, class_name: 'Asset::Calibration'
+# maintenance_jobs, class_name: 'Asset::Maintenance'

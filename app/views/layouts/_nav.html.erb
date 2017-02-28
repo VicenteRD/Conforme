@@ -26,12 +26,12 @@
           </li>
           <li>
             <div class="dropdown-header">
-              <a class="left-menu-link"  href="/tareas/hallazgos">Hallazgos</a>
+              <a class="left-menu-link" href="/tareas/hallazgos">Hallazgos</a>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <a class="left-menu-link"  href="/tareas/minute">Actas</a>
+              <a class="left-menu-link" href="/tareas/minute">Actas</a>
             </div>
           </li>
           <li>
@@ -108,7 +108,7 @@
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Organigrama', {controller: 'positions', action: 'show'}, class: 'left-menu-link' %>
+              <%= link_to 'Organigrama', {controller: 'positions', action: 'index'}, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
@@ -182,11 +182,23 @@
         </ul>
       </li>
 
-      <li class="left-menu-list">
-        <%= link_to(options = {controller: 'maintenance', action: 'index'}, {class: 'left-menu-link'}) do %>
-            <i class="left-menu-link-icon icmn-construction"></i>
-            Mantención
-        <% end %>
+      <li class="left-menu-list-submenu">
+        <a class="left-menu-link" href="javascript:void(0)">
+          <i class="left-menu-link-icon icmn-construction"></i>
+          Activos
+        </a>
+        <ul class="left-menu-list list-unstyled">
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Calibración', {controller: 'asset_calibrations', action: 'index'}, {class: 'left-menu-link'} %>
+            </div>
+          </li>
+          <li>
+            <div class="dropdown-header">
+              <%= link_to 'Mantención', {controller: 'asset_maintenance', action: 'index'}, {class: 'left-menu-link'} %>
+            </div>
+          </li>
+        </ul>
       </li>
 
       <li class="left-menu-list">
@@ -204,17 +216,17 @@
         <ul class="left-menu-list list-unstyled">
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Documents', {controller: 'documents', action: 'show'}, class: 'left-menu-link' %>
+              <%= link_to 'Documents', '#', class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <a class="left-menu-link"   href="/documentos_mantenedores/archivos">Registros</a>
+              <a class="left-menu-link" href="/documentos_mantenedores/archivos">Registros</a>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <a class="left-menu-link"   href="/documentos_mantenedores/archivos">Archivos</a>
+              <a class="left-menu-link" href="/documentos_mantenedores/archivos">Archivos</a>
             </div>
           </li>
           <li>

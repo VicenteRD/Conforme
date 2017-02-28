@@ -1,8 +1,22 @@
-<section class="page-content">
-  <div class="page-content-inner">
-    <div class="panel">
-      <%= render partial: 'chart' %>
+<% content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+        <%= @position.name %>
+      </div>
     </div>
-  </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Area:</div>
+      <div class="col-lg-8">
+        <%= @position.area ? 'Si' : 'No' %>
+      </div>
+    </div>
+<% end %>
 
-</section>
+<% content_for :main_col_2 do %>
+
+<% end %>
+
+<% content_for :main_col_3 do %>
+
+<% end %>
