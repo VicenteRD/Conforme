@@ -1,5 +1,7 @@
 class IndicatorMeasurementsController < ApplicationController
 
+  include DatesHelper
+
   before_action :check_permissions, only: [:new, :create, :edit, :update]
 
   def show_details
