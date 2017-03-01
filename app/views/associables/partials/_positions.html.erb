@@ -61,14 +61,10 @@
           formGroup = $('#<%= picker_id %>');
           clicked = $(this).find('p');
 
-          console.log(formGroup.find('.form-control-hidden'));
-
           formGroup.find('.form-control').val(clicked.html().replace(/^\s+|\s+$/g, ''));
           formGroup.find('.form-control-hidden').val(clicked.attr('data-id'));
 
-          console.log(formGroup.find('.form-control-hidden').val());
-
-          $('#table-modal').modal('hide');
+          $('#positions-modal').modal('hide');
       });
   </script>
 <% end %>

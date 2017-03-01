@@ -190,7 +190,7 @@ en_risk = Risk::EnvironmentalRisk.new(
     responsible_id: cv.id,
     area_id: pos_dv.id,
     process_id: proc2.id,
-    activity: 'Trashing the trashy trash can full of trashy trash',
+    activity: 'Mantención y reparación',
 
     aspect: 'Basura',
     name: 'Altera la condición del suelo',
@@ -246,7 +246,7 @@ ind.save!
 
 obj.save!
 
-ast = Asset.new(
+ast = BusinessAsset.new(
     name: 'Activo 1',
     asset_type: 'Vehículo',
     next_maintenance_at: 15.days.from_now,

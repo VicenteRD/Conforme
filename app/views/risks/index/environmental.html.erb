@@ -11,13 +11,12 @@
     <th>Proceso</th>
     <th>Actividad</th>
     <th>Aspecto</th>
-    <th>Impacto</th>
     <th>Encargado</th>
     <th>Significativo</th>
     <th>Fecha</th>
-    <th>Probabilidad(%)</th>
-    <th>Consecuencia</th>
-    <th>Magnitud</th>
+    <th>Prob. (%)</th>
+    <th>Cons.</th>
+    <th>Mag.</th>
   </tr>
 <% end %>
 
@@ -35,7 +34,6 @@
               <td><%= BusinessProcess.find(risk.process_id).name %></td>
               <td><%= risk.activity %></td>
               <td><%= risk.aspect %></td>
-              <td><%= risk.name %></td>
 
               <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 

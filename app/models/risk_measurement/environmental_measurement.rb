@@ -54,6 +54,7 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
 
     regulation = Risk::RuleRisk.find(self.regulation_id)
 
-    self.regulation_breach = regulation.nil? ? -1 : (1 - regulation.get_compliance)
+
+    self.regulation_breach = regulation&.get_compliance ? (1 - regulation.get_compliance) : -1
   end
 end
