@@ -2,10 +2,14 @@
 
 <div class="tab-pane active" id="table" role="tabpanel" aria-expanded="false">
   <div class="input-group padding-10 inline" style="width: 80%; overflow: auto">
-    <%= text_field :search, :input, placeholder: 'Buscar', class: 'form-control'%>
-    <span class="input-group-addon">
-      <i class="icmn-search"></i>
-    </span>
+    <%=
+      text_field(
+          :search,
+          :input,
+          placeholder: 'Buscar',
+          class: 'form-control filterer'
+      )
+    %>
   </div>
   <div class="table-responsive margin-bottom-30" style="height:301px; overflow:auto; width: auto">
     <table class="table table-hover filterable">

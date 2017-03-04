@@ -30,9 +30,11 @@
                 newSummernote($(this));
             });
 
-            var datePicker = $('#date-picker');
+            var datePicker = $('.date-picker');
             if (datePicker.length != 0) {
-                newDateTimePicker(datePicker, '<%= dt_form_format(true) %>', '<% server_timezone %>');
+                datePicker.each(function() {
+                  newDateTimePicker($(this), '<%= dt_form_format(true) %>', '<% server_timezone %>');
+                });
             }
         });
     </script>

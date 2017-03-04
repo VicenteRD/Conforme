@@ -1,0 +1,95 @@
+<%= content_for :heading_main do %>
+    <div class="margin-left-50">
+      <h4 class="text-capitalize">
+        <%= Swot.get_all_types[@swot.swot_type] %>
+      </h4>
+    </div>
+<% end %>
+
+<!--
+field :strategy, type: String
+
+field :term, type: DateTime
+
+field :cmts, as: :comments, type: String
+-->
+
+<%# Populate all 3 columns of the view with keys & their values %>
+
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+        <%= @swot.name %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Estrategia:</div>
+      <div class="col-lg-8">
+        <%= @swot.strategy %>
+      </div>
+    </div>
+
+<% end %>
+
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Tiempo:</div>
+      <div class="col-lg-8">
+        <%= @swot.term.strftime(dt_rb_format(false, false)) %>
+      </div>
+    </div>
+<% end %>
+
+
+<%= content_for :extra do %>
+
+<% end %>
+
+<%= content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+
+        <div class="dropdown">
+          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @swot.log_book})}" %>
+          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+            <i class="dropdown-inline-button-icon icmn-history"></i>
+            Bitácora
+          </a>
+        </div>
+
+        <div class="dropdown">
+          <%= link_to '#', method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-rulers"></i>
+              Revisar
+          <% end %>
+        </div>
+
+
+        <div class="dropdown">
+          <a class="dropdown-inline-button"><%# link_to edit_risk_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-pencil"></i>
+              Editar
+          <%# end %></a>
+        </div>
+
+      </div>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to risks_path('operacional') do %>
+              FODA
+          <% end %>
+        </li>
+        <li>
+          <span>
+            <%= @swot.name %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

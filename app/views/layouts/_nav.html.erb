@@ -183,19 +183,21 @@
       </li>
 
       <li class="left-menu-list-submenu">
-        <a class="left-menu-link" href="javascript:void(0)">
+        <a class="left-menu-link" href="javascript: void(0);">
           <i class="left-menu-link-icon icmn-construction"></i>
           Activos
         </a>
         <ul class="left-menu-list list-unstyled">
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Calibración', {controller: 'asset_calibrations', action: 'index'}, {class: 'left-menu-link'} %>
+              <%= link_to 'Mantención', business_assets_path('mantencion'),
+                          class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Mantención', {controller: 'asset_maintenance', action: 'index'}, {class: 'left-menu-link'} %>
+              <%= link_to 'Calibración', business_assets_path('calibracion'),
+                          class: 'left-menu-link' %>
             </div>
           </li>
         </ul>
@@ -216,7 +218,7 @@
         <ul class="left-menu-list list-unstyled">
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Documents', '#', class: 'left-menu-link' %>
+              <%= link_to 'Documentos', '#', class: 'left-menu-link' %>
             </div>
           </li>
           <li>
@@ -265,7 +267,7 @@
         <ul class="left-menu-list list-unstyled">
           <li>
             <div class="dropdown-header">
-              <%= link_to 'FODA', {controller: 'swot', action: 'show'}, class: 'left-menu-link' %>
+              <%= link_to 'FODA', {controller: 'swot', action: 'index'}, class: 'left-menu-link' %>
             </div>
           </li>
           <li>

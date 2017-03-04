@@ -38,7 +38,6 @@ Rails.application.routes.draw do
   get '/tareas'           => 'tasks#index'      , as: :tasks
   get '/tareas/:type'     => 'tasks#index'      , as: :tasks_type
   get '/tareas/detalle/:id'       => 'tasks#show'       , as: :task
-  get '/tareas/modal/:id' => 'tasks#show_modal' # , as: :modal_task
 
   get '/hallazgos'    => 'findings#index'
   get 'hallazgos/:id' => 'findings#show', as: :finding
@@ -56,35 +55,32 @@ Rails.application.routes.draw do
   get '/analisis/indicadores/:indicator_id/:id/editar' => 'indicator_measurements#edit',
       as: :edit_indicator_measurement
 
-  post '/analisis/indicadores/nuevo' => 'indicators#create'
+  post  '/analisis/indicadores/nuevo' => 'indicators#create'
   patch '/analisis/indicadores/editar/:id' => 'indicators#update'
-  post '/analisis/indicadores/:indicator_id/nueva' => 'indicator_measurements#create'
+  post  '/analisis/indicadores/:indicator_id/nueva' => 'indicator_measurements#create'
   patch '/analisis/indicadores/:indicator_id/:id/editar' => 'indicator_measurements#update'
 
   # -------- Assets
 
-  get 'activos/:id/editar' => 'assets#edit', as: :edit_asset
+  get '/activos/:job_type'            => 'business_assets#index', as: :business_assets
+  get '/activos/:job_type/nuevo'                => 'business_assets#new'  , as: :new_business_asset
+  get '/activos/:job_type/:id'        => 'business_assets#show' , as: :business_asset
+  get '/activos/:job_type/:id/editar' => 'business_assets#edit' , as: :edit_business_asset
 
-  get '/activos/mantencion' => 'asset_maintenance#index', as: :asset_maintenance_jobs
-  get '/activos/mantencion/detalle/:id' => 'asset_maintenance#show', as: :asset_maintenance
-  get '/activos/mantencion/detalle/:asset_id/nueva' => 'asset_maintenance#new',
-      as: :new_maintenance_job
-  get '/activos/mantencion/detalle/:asset_id/:id/editar' => 'asset_maintenance#edit',
-      as: :edit_maintenance_job
+  post  '/activos/:job_type/nuevo'        => 'business_assets#create'
+  patch '/activos/:job_type/:id/editar'   => 'business_assets#update'
 
-  get '/activos/calibracion' => 'asset_calibrations#index', as: :asset_calibrations
-  get '/activos/calibracion/detalle/:id' => 'asset_calibrations#show', as: :asset_calibration
-  get '/activos/mantencion/detalle/:asset_id/nueva' => 'asset_maintenance#new',
-      as: :new_calibration
-  get '/activos/mantencion/detalle/:asset_id/:id/editar' => 'asset_maintenance#edit',
-      as: :edit_calibration
+  get '/activos/:job_type/:asset_id/nuevo'       => 'business_asset_jobs#new' , as: :new_asset_job
+  get '/activos/:job_type/:asset_id/editar/:id'  => 'business_asset_jobs#edit', as: :edit_asset_job
+
+  post  '/activos/:job_type/:asset_id/nuevo'       => 'business_asset_jobs#create'
+  patch '/activos/:job_type/:asset_id/editar/:id'  => 'business_asset_jobs#update'
+
 
   # --------
 
   get '/normas' => 'standards#show'
   get '/leyes'  => 'laws#show'
-
-  get '/foda' => 'swot#show'
 
   get '/partes-interesadas' => 'concerned_parties#show'
 
@@ -94,20 +90,20 @@ Rails.application.routes.draw do
 
   # -------- Risks
 
-  get '/riesgos/:type'                       => 'risks#index',            as: :risks
-  get '/riesgos/:type/nuevo'                 => 'risks#new',              as: :new_risk
-  get '/riesgos/editar/:id'                  => 'risks#edit',             as: :edit_risk
-  get '/riesgos/detalle/:id'                 => 'risks#show',             as: :risk
-  get '/riesgos/detalle/:risk_id/nueva'      => 'risk_measurements#new',  as: :new_risk_measurement
-  get '/riesgos/:risk_id/:id/editar'         => 'risk_measurements#edit', as: :edit_risk_measurement
-  get '/riesgos/detalle/:id/historial'       => 'risks#history',          as: :risk_history
+  get '/riesgos/:type'                 => 'risks#index',            as: :risks
+  get '/riesgos/:type/nuevo'           => 'risks#new',              as: :new_risk
+  get '/riesgos/:id/editar'            => 'risks#edit',             as: :edit_risk
+  get '/riesgos/:id'                   => 'risks#show',             as: :risk
+  get '/riesgos/:risk_id/nueva'        => 'risk_measurements#new',  as: :new_risk_measurement
+  get '/riesgos/:risk_id/:id/editar'   => 'risk_measurements#edit', as: :edit_risk_measurement
+  get '/riesgos/:id/historial'         => 'risks#history',          as: :risk_history
 
-  get '/riesgos/detalle/:id/:msrmnt_id'      => 'risk_measurements#show_details'
+  get '/riesgos/:id/:msrmnt_id'        => 'risk_measurements#show_details'
 
-  post  '/riesgos/:type/nuevo'               => 'risks#create'
-  patch '/riesgos/editar/:id'                => 'risks#update'
-  post  '/riesgos/detalle/:risk_id/nueva'    => 'risk_measurements#create'
-  patch '/riesgos/:risk_id/:id/editar'       => 'risk_measurements#update'
+  post  '/riesgos/:type/nuevo'         => 'risks#create'
+  patch '/riesgos/editar/:id'          => 'risks#update'
+  post  '/riesgos/:risk_id/nueva'      => 'risk_measurements#create'
+  patch '/riesgos/:risk_id/:id/editar' => 'risk_measurements#update'
 
   # -------- Configuration - TODO Maybe move them into their kind as 'settings' ?
 
@@ -117,6 +113,11 @@ Rails.application.routes.draw do
   get '/configuracion/comunicaciones' => 'settings#communication'
   get '/configuracion/normas'         => 'settings#standards'
   get '/configuracion/cuestionarios'  => 'settings#questionnaires'
+
+  # -------- SWOT
+
+  get '/FODA' => 'swot#index'
+  get '/FODA/:id' => 'swot#show'
 
   # -------- Other
 

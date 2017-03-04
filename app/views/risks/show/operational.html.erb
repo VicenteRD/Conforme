@@ -56,8 +56,8 @@
     </div>
 <% end %>
 
-<% if @risk.comments? %>
-    <%= content_for :extra_no_panel do %>
+<%= content_for :extra do %>
+    <% if @risk.comments? %>
         <div class="panel">
           <div class="panel-heading">
             <h5>Descripción</h5>
@@ -67,47 +67,55 @@
           </div>
         </div>
     <% end %>
-<% end %>
 
-<%= content_for :extra_panel_heading do %>
-    <h5>Mediciones</h5>
-<% end %>
+    <% if @risk.measurements? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Mediciones</h5>
+          </div>
+          <div class="panel-body">
+            <div class="row margin-left-20 margin-right-20">
+              <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Probabilidad (%)</th>
+                    <th>Impacto</th>
+                    <th>Magnitud</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @risk.measurements.order(measured_at: :desc, created_at: :desc).each do |measurement| %>
+                      <% bgcolor = significant_bgcolor(measurement.significant) %>
+                      <% txtcolor = significant_txtcolor(measurement.significant) %>
 
-<%= content_for :extra_panel_body do %>
-    <div class="row margin-left-20 margin-right-20">
-      <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Fecha</th>
-            <th>Probabilidad (%)</th>
-            <th>Impacto</th>
-            <th>Magnitud</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @risk.measurements.order(measured_at: :desc, created_at: :desc).each do |measurement| %>
-              <% bgcolor = significant_bgcolor(measurement.significant) %>
-              <% txtcolor = significant_txtcolor(measurement.significant) %>
+                      <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
+                        <td style="<%= txtcolor %>">
+                          <%= measurement.measured_at.strftime(dt_rb_format(false, false)) %>
+                        </td>
+                        <td style="<%= txtcolor %>">
+                          <%= (measurement.probability * 100).to_i %>
+                        </td>
+                        <td style="<%= txtcolor %>">
+                          <%= @settings.operational_options[:impact][measurement.impact.to_s] %>
+                        </td>
+                        <td style="<%= txtcolor %>">
+                          <%= measurement.magnitude.round(2) %>
+                        </td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
 
-              <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
-                <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
-                <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %></td>
-                <td style="<%= txtcolor %>"><%= Settings::RiskSettings.first.operational_options[:impact][measurement.impact.to_s] %></td>
-                <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
-              </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-      <script>
-
-      </script>
-
-      <div class="margin-top-50">
-        <div class="ct-chart height-400" id="risk-chart"></div>
-      </div>
-    </div>
+              <div class="margin-top-50">
+                <div class="ct-chart height-400" id="risk-chart"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+    <% end %>
 <% end %>
 
 <%= content_for :menu do %>
@@ -188,8 +196,7 @@
                                 return moment.unix(value)
                                     .format('<%= dt_form_format(false) %>')
                             }),
-                        axisY: generateAutoAxis(0,
-                            0 + <%= @settings.operational_options[:impact].keys.last.to_i %>)
+                        axisY: generateAutoAxis(0)
                     });
             });
         </script>

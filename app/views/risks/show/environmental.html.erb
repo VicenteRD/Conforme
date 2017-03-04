@@ -68,7 +68,7 @@
     <div class="row">
       <div class="col-lg-4 show-label">Riesgo:</div>
       <div class="col-lg-8">
-          <%= @risk.name %>
+        <%= @risk.name %>
       </div>
     </div>
     <div class="row">
@@ -85,8 +85,8 @@
     </div>
 <% end %>
 
-<% if @risk.comments? %>
-    <%= content_for :extra_no_panel do %>
+<%= content_for :extra do %>
+    <% if @risk.comments? %>
         <div class="panel">
           <div class="panel-heading">
             <h5>Descripción</h5>
@@ -96,68 +96,84 @@
           </div>
         </div>
     <% end %>
-<% end %>
 
-<%= content_for :extra_panel_heading do %>
-    <h5>Mediciones</h5>
-<% end %>
+    <% if @risk.measurements? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Mediciones</h5>
+          </div>
+          <div class="panel-body">
+            <div class="row margin-left-20 margin-right-20">
+              <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Fecha</th>
 
-<%= content_for :extra_panel_body do %>
-    <div class="row margin-left-20 margin-right-20">
-      <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Fecha</th>
+                    <th>Amplitud Geográfica</th>
+                    <th>Percepción Pública</th>
+                    <th>Reversibilidad</th>
+                    <th>Criticidad</th>
+                    <th>Cumplimiento Regulación (%)</th>
 
-            <th>Amplitud Geográfica</th>
-            <th>Percepción Pública</th>
-            <th>Reversibilidad</th>
-            <th>Criticidad</th>
-            <th>Cumplimiento Regulación (%)</th>
+                    <th>Probabilidad (%)</th>
+                    <th>Consecuencia</th>
+                    <th>Magnitud</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @risk.measurements.order(measured_at: :desc, created_at: :desc).each do |measurement| %>
+                      <% bgcolor = significant_bgcolor(measurement.significant) %>
+                      <% txtcolor = significant_txtcolor(measurement.significant) %>
 
-            <th>Probabilidad (%)</th>
-            <th>Consecuencia</th>
-            <th>Magnitud</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @risk.measurements.order(measured_at: :desc, created_at: :desc).each do |measurement| %>
-              <% bgcolor = significant_bgcolor(measurement.significant) %>
-              <% txtcolor = significant_txtcolor(measurement.significant) %>
+                      <% regulation_breach = measurement.regulation_breach %>
+                      <% env_options = @settings.environmental_options %>
 
-              <% regulation_breach = measurement.regulation_breach %>
+                      <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
+                        <td style="<%= txtcolor %>">
+                          <%= measurement.measured_at.strftime(dt_rb_format(false, false)) %>
+                        </td>
 
-              <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
-                <td style="<%= txtcolor %>"><%= measurement.measured_at.strftime(dt_rb_format(false, false)) %></td>
+                        <td style="<%= txtcolor %>">
+                          <%= env_options[:geo_amplitude][measurement.geographical_amplitude.to_s] %>
+                        </td>
+                        <td style="<%= txtcolor %>">
+                          <%= env_options[:pub_perception][measurement.public_perception.to_s] %>
+                        </td>
+                        <td style="<%= txtcolor %>">
+                          <%= env_options[:reversibility][measurement.reversibility.to_s] %>
+                        </td>
+                        <td style="<%= txtcolor %>">
+                          <%= env_options[:criticity][measurement.criticity.to_s] %>
+                        </td>
+                        <td style="<%= txtcolor %>">
+                          <%= regulation_breach == -1 ?
+                                  'No regulado' :
+                                  ((1 - regulation_breach).round(2) * 100).to_i %>
+                        </td>
 
-                <td style="<%= txtcolor %>">
-                  <%= @settings.environmental_options[:geo_amplitude][measurement.geographical_amplitude.to_s] %>
-                </td>
-                <td style="<%= txtcolor %>">
-                  <%= @settings.environmental_options[:pub_perception][measurement.public_perception.to_s] %>
-                </td>
-                <td style="<%= txtcolor %>">
-                  <%= @settings.environmental_options[:reversibility][measurement.reversibility.to_s] %>
-                </td>
-                <td style="<%= txtcolor %>">
-                  <%= @settings.environmental_options[:criticity][measurement.criticity.to_s] %>
-                </td>
-                <td style="<%= txtcolor %>"><%= regulation_breach == -1 ? 'No regulado' : ((1 - regulation_breach).round(2) * 100).to_i %>
+                        <td style="<%= txtcolor %>">
+                          <%= (measurement.probability * 100).to_i %>
+                        </td>
+                        <td style="<%= txtcolor %>">
+                          <%= measurement.consequence %>
+                        </td>
+                        <td style="<%= txtcolor %>">
+                          <%= measurement.magnitude.round(2) %>
+                        </td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
 
-                <td style="<%= txtcolor %>"><%= (measurement.probability * 100).to_i %></td>
-                <td style="<%= txtcolor %>"><%= measurement.consequence %></td>
-                <td style="<%= txtcolor %>"><%= measurement.magnitude.round(2) %></td>
-              </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="margin-top-50">
-        <div class="ct-chart height-400" id="risk-chart"></div>
-      </div>
-    </div>
+              <div class="margin-top-50">
+                <div class="ct-chart height-400" id="risk-chart"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+    <% end %>
 <% end %>
 
 <%= content_for :menu do %>
@@ -238,7 +254,7 @@
                                 return moment.unix(value)
                                     .format('<%= dt_form_format(false) %>')
                             }),
-                        axisY: generateAutoAxis(0, 13)
+                        axisY: generateAutoAxis(0)
                     });
             });
         </script>

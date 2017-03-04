@@ -3,22 +3,7 @@ class RiskMeasurementsController < ApplicationController
   include RisksHelper
   include DatesHelper
 
-  before_action :check_permissions, only: [:new, :create, :edit, :update]
-
-  def show_details
-    @risk = Risk.find(params[:id])
-
-    if @risk.nil? || !(defined? @risk.measurements)
-      return
-    end
-
-    @measurement = @risk.measurements.find(params[:msrmnt_id])
-    if @measurement.nil?
-      return
-    end
-
-    render 'risks/show/measurement_comments/show', layout: false
-  end
+  before_action :check_permissions
 
   def new
     @settings = Settings::RiskSettings.first
