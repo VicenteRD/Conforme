@@ -39,6 +39,7 @@ function newSummernote(field) {
 
 function newDateTimePicker(field, format, tz) {
     var date = moment.unix(parseInt(field.find('.form-control').val()));
+    console.log(field.find('.form-control'));
 
     field.datetimepicker({
         locale: moment.locale('es'),
