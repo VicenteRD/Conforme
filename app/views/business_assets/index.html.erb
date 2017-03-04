@@ -1,0 +1,83 @@
+<%# Cheeky fix %>
+<% presentable_type = @type.capitalize.sub('o', 'ó') %>
+
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Tipo Activo</th>
+      <th>Activo</th>
+      <th>Próxima <%= presentable_type %></th>
+      <th>Última <%= presentable_type %></th>
+    </tr>
+<% end %>
+
+
+<% content_for :table_body do %>
+    <% assets = BusinessAsset.order_by(next_calibration_at: :desc) %>
+
+    <% if assets.size != 0 %>
+        <% assets.each do |asset| %>
+            <% ordered_jobs = asset.jobs.order_by(e_at: :desc, c_at: :desc) %>
+            <% job = if @type == 'mantencion'
+                       ordered_jobs.maintenance.first
+                     elsif @type == 'calibracion'
+                       ordered_jobs.calibration.first
+                     end %>
+
+            <tr data-href="<%= business_asset_path(@type, asset) %>">
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= asset.asset_type %>
+              </td>
+              <td>
+                <%= asset.name %>
+              </td>
+              <td>
+                <%= if @type == 'mantencion'
+                      asset.next_maintenance_at.strftime(dt_rb_format(false, false))
+                    elsif @type == 'calibracion'
+                      asset.next_calibration_at.strftime(dt_rb_format(false, false))
+                    end %>
+              </td>
+              <td>
+                <%= job ? job.executed_at.strftime(dt_rb_format(false, false)) : '-' %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="6">No se encontraron activos.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+        <div class="dropdown">
+          <%= link_to new_business_asset_path(@type), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+              Nuevo
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          <%= presentable_type %> Activos
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

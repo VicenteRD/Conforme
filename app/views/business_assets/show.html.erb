@@ -1,0 +1,147 @@
+<%# Cheeky fix %>
+<% presentable_type = @type.capitalize.sub('o', 'ó') %>
+
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Tipo:</div>
+      <div class="col-lg-8">
+        <%= @business_asset.asset_type %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+        <%= @business_asset.name %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Próx. Mantención:</div>
+      <div class="col-lg-8">
+        <%= @business_asset.next_maintenance_at.strftime(dt_rb_format(false, false)) %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Próx. Calibración:</div>
+      <div class="col-lg-8">
+        <%= @business_asset.next_calibration_at.strftime(dt_rb_format(false, false)) %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :extra do %>
+    <% if @business_asset.comments? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Descripción</h5>
+          </div>
+          <div class="panel-body">
+            <div class="margin-left-30 margin-bottom-30">
+              <%= raw @business_asset.comments %>
+            </div>
+          </div>
+        </div>
+    <% end %>
+
+    <% ordered_jobs = @business_asset.jobs.order_by(e_at: :desc, c_at: :desc) %>
+    <% ordered_jobs = if @type == 'mantencion'
+                        ordered_jobs.maintenance
+                      elsif @type == 'calibracion'
+                        ordered_jobs.calibration
+                      else
+                        nil
+                      end %>
+
+    <% if ordered_jobs %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Trabajos de <%= presentable_type %></h5>
+          </div>
+          <div class="panel-body">
+            <div class="row margin-left-20 margin-right-20">
+              <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <% if @type == 'mantencion' %>
+                        <th>Motivo</th>
+                        <th>Resultado</th>
+                    <% end %>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% ordered_jobs.each do |job| %>
+                      <tr class="job-row" data-id="<%= job.id %>">
+                        <td><%= job.e_at.strftime(dt_rb_format(false, false)) %></td>
+                        <% if @type == 'mantencion' %>
+                            <td><%= job.motive %></td>
+                            <td><%= job.result %></td>
+                        <% end %>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    <% end %>
+<% end %>
+
+
+<%= content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+
+        <div class="dropdown">
+          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @business_asset.log_book})}" %>
+          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+            <i class="dropdown-inline-button-icon icmn-history"></i>
+            Bitácora
+          </a>
+        </div>
+        <div class="dropdown">
+
+          <%= link_to new_asset_job_path(@type, @business_asset.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-traffic-cone"></i>
+              Registrar Trabajo
+          <% end %>
+        </div>
+        <div class="dropdown">
+          <%= link_to edit_business_asset_path(@type, @business_asset.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-pencil"></i>
+              Editar
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to presentable_type + ' Activos', business_assets_path(@type)%>
+        </li>
+        <li>
+          <span>
+            <%= @business_asset.number %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>
+
+<% content_for :scripts do %>
+    <script type="text/javascript">
+        $('.job-row').click(function () {
+            var link = '/activos/<%= @type %>/<%= @business_asset.id %>/editar/' + $(this).attr('data-id');
+
+            window.open(link, '_self');
+        });
+    </script>
+<% end %>

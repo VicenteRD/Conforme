@@ -1,5 +1,7 @@
-class Asset
+class BusinessAsset
   include Mongoid::Document
+
+  include EnumerableDocument
 
   embeds_one :log_book, class_name: 'Log::Book'
 
@@ -7,8 +9,7 @@ class Asset
     self.log_book = Log::Book.new unless self.log_book
   end
 
-  embeds_many :calibrations, class_name: 'Asset::Calibration'
-  embeds_many :maintenance_jobs, class_name: 'Asset::Maintenance'
+  embeds_many :jobs, class_name: 'BusinessAssetJob'
 
   field :name, type: String
 

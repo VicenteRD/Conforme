@@ -255,5 +255,16 @@ ast = BusinessAsset.new(
 ast.save!
 ast.log_book.new_entry(nil, 'Creado', 'Created by system')
 
+swot = Swot.new(
+    swot_type: 1,
+    name: 'A',
+    strategy: 'fgbndyuif',
+
+    term: DateTime.now
+)
+swot.save!
+swot.log_book.new_entry(nil, 'Creado', 'Created by system')
+
+
 # calibrations, class_name: 'Asset::Calibration'
 # maintenance_jobs, class_name: 'Asset::Maintenance'
