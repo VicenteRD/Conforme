@@ -13,8 +13,8 @@
       <th>Método</th>
       <th>Encargado</th>
       <th>Criterio</th>
-      <th>Fecha Última Medición</th>
       <th>Unidad</th>
+      <th>Fecha Última Medición</th>
       <th>Valor Esperado</th>
       <th>Valor Obtenido</th>
     </tr>
@@ -35,7 +35,7 @@
               <td><%= Person::User.find(indicator.responsible_id).first_last_name %></td>
               <td><%= indicator.criterion %></td>
               <td><%= indicator.unit %></td>
-              <td><%= measurement&.measured_on || '-' %></td>
+              <td><%= measurement&.measured_at&.strftime(dt_rb_format(false, false)) || '-' %></td>
               <td><%= measurement&.threshold || '-' %></td>
               <td><%= measurement&.value || '-' %></td>
 

@@ -3,13 +3,15 @@ class Indicator
 
   include EnumerableDocument
 
-  before_create :init
-
   #has_many :tasks, class_name: 'Indicator::Task'
 
   embeds_one :log_book, class_name: 'Log::Book'
 
-  embeds_many :measurements, class_name: 'Indicator::Measurement'
+  before_create do
+    self.log_book ||= Log::Book.new
+  end
+
+  embeds_many :measurements, class_name: 'IndicatorMeasurement'
 
   belongs_to :objective
 
@@ -29,10 +31,9 @@ class Indicator
   field :freq, as: :measurement_frequency, type: Integer
 
   def init
-    self.log_book = Log::Book.new
   end
 
   def self.get_all_criteria
-    %w(<= < = > >=)
+    %w(≤ < = > ≥)
   end
 end

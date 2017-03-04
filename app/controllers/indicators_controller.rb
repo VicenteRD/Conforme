@@ -19,17 +19,19 @@ class IndicatorsController < ApplicationController
   def create
     fields = params.require(:indicator)
 
-    margin = params[:raw][:margin]
+    margin = params.dig(:raw, :margin)
     fields[:margin] = margin.to_f / 100.0 if margin
 
-    fields = fields.permit(
+    indicator = Indicator.create!(fields.permit(
         :objective_id,
         :name, :description, :method,
         :threshold, :criterion, :margin,
         :unit, :responsible_id, :measurement_frequency
-    )
+    ))
 
-    redirect_to indicator_path Indicator.create!(fields)
+    indicator.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
+
+    redirect_to indicator_path(indicator)
   end
 
   def edit
@@ -43,17 +45,18 @@ class IndicatorsController < ApplicationController
 
     fields = params.require(:indicator)
 
-    margin = params[:raw][:margin]
+    margin = params.dig(:raw, :margin)
     fields[:margin] = margin.to_f / 100.0 if margin
 
-    fields = fields.permit(
+    indicator.update!(fields.permit(
         :objective_id,
         :name, :description, :method,
         :threshold, :criterion, :margin,
         :unit, :responsible_id, :measurement_frequency
-    )
+    ))
 
-    indicator.update!(fields)
+    indicator.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+
     redirect_to indicator_path(indicator.id)
   end
 

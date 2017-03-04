@@ -11,7 +11,7 @@ class Minute
   field :participants_ids, type: Array # BSON::ObjectId => Person::User
   field :tasks_ids, type: Array # BSON::ObjectId => Minute::Task
 
-  field :u_file_id, class_name: BSON::ObjectId # => UploadedFile
+  field :u_file_id, class_name: BSON::ObjectId # => UploadedFile # Array
 
   field :start, type: DateTime
   field :finish, type: DateTime
