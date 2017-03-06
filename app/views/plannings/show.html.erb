@@ -1,0 +1,165 @@
+<%= content_for :heading_main do %>
+    <div class="margin-left-50">
+      <h4 class="text-capitalize">
+        Progreso: <%= @planning.progress || 0 %>%
+      </h4>
+    </div>
+<% end %>
+
+<%# Populate all 3 columns of the view with keys & their values %>
+
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+        <%= @planning.name %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Descripción:</div>
+      <div class="col-lg-8">
+        <%= @planning.description %>
+      </div>
+    </div>
+
+<% end %>
+
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Fecha planificada:</div>
+      <div class="col-lg-8">
+        <%= @planning.due_at.strftime(dt_rb_format(true, false)) %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Fecha real:</div>
+      <div class="col-lg-8">
+        <%= @planning.executed_at&.strftime(dt_rb_format(true, false)) %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :extra do %>
+    <% if @planning.comments? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Descripción</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= raw @planning.comments %>
+          </div>
+        </div>
+    <% end %>
+
+    <% if @planning.activities? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Actividades</h5>
+          </div>
+          <div class="panel-body">
+            <div class="row margin-left-20 margin-right-20">
+              <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Fecha Planificada</th>
+                    <th>Progreso (%)</th>
+                    <th>Fecha Real</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @planning.activities.order(due_at: :asc).each do |measurement| %>
+                      <% bgcolor = significant_bgcolor(measurement.significant) %>
+                      <% txtcolor = significant_txtcolor(measurement.significant) %>
+
+                      <tr class="activity-row" data-id="<%= measurement.id %>">
+                        <td>
+                          <%= measurement.name %>
+                        </td>
+                        <td>
+                          <%= measurement.description %>
+                        </td>
+                        <td>
+                          <%= measurement.due_at.strftime(dt_rb_format(false, false)) %>
+                        </td>
+                        <td>
+                          <%= (measurement.progress * 100).to_i %>
+                        </td>
+
+                        <td>
+                          <%= measurement.executed_at.strftime(dt_rb_format(false, false)) %>
+                        </td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    <% end %>
+<% end %>
+
+<%= content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+
+        <div class="dropdown">
+          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @planning.log_book})}" %>
+          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+            <i class="dropdown-inline-button-icon icmn-history"></i>
+            Bitácora
+          </a>
+        </div>
+
+        <div class="dropdown">
+          <%= link_to new_planning_activity_path(@planning), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-design"></i>
+              Nueva Actividad
+          <% end %>
+        </div>
+
+        <div class="dropdown">
+          <%= link_to edit_planning_path(@planning.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-pencil"></i>
+              Editar
+          <% end %>
+        </div>
+
+      </div>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to plannings_path do %>
+              Planificiación
+          <% end %>
+        </li>
+        <li>
+          <span>
+            <%= @planning.number %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>
+
+<%= content_for :scripts do %>
+    <!-- Planning's Show Page Scripts -->
+    <script type="text/javascript">
+        $('.activity-row').click(function () {
+            var link = '/planificacion/<%= @planning.id %>/'
+                + $(this).attr('data-id') + '/editar';
+
+            window.open(link, '_self');
+        });
+    </script>
+<% end %>

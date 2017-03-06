@@ -14,4 +14,15 @@ module DatesHelper
   def server_timezone
     Time.zone.now.strftime('%z')
   end
+
+  def parse_datetime(date_string, time = true)
+    if date_string
+      DateTime.strptime(
+          "#{date_string} #{server_timezone}",
+          dt_rb_format(time)
+       )
+    else
+      nil
+    end
+  end
 end
