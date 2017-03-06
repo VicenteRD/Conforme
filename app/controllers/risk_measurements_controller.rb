@@ -22,11 +22,7 @@ class RiskMeasurementsController < ApplicationController
 
     fields = params.require(:measurement)
 
-    measured_at = params.dig(:raw, :measured_at)
-    fields[:measured_at] = DateTime.strptime(
-        "#{measured_at} #{server_timezone}",
-        dt_rb_format(true)
-    ) if measured_at
+    fields[:measured_at] = parse_datetime(params.dig(:raw, :measured_at))
 
     probability = params.dig(:raw, :probability)
     fields[:probability] = probability.to_f / 100.0 if probability
@@ -69,11 +65,7 @@ class RiskMeasurementsController < ApplicationController
 
     fields = params.require(:measurement)
 
-    measured_at = params.dig(:raw, :measured_at)
-    fields[:measured_at] = DateTime.strptime(
-        "#{measured_at} #{server_timezone}",
-        dt_rb_format(true)
-    ) if measured_at
+    fields[:measured_at] = parse_datetime(params.dig(:raw, :measured_at))
 
     probability = params.dig(:raw, :probability)
     fields[:probability] = probability.to_f / 100.0 if probability

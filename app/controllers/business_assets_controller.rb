@@ -30,16 +30,8 @@ class BusinessAssetsController < ApplicationController
   def create
     fields = params.require(:business_asset)
 
-    next_maintenance_at = params.dig(:raw, :next_maintenance_at)
-    fields[:next_maintenance_at] = DateTime.strptime(
-        "#{next_maintenance_at} #{server_timezone}",
-        dt_rb_format(true)
-    ) if next_maintenance_at
-    next_calibration_at = params.dig(:raw, :next_calibration_at)
-    fields[:next_calibration_at] = DateTime.strptime(
-        "#{next_calibration_at} #{server_timezone}",
-        dt_rb_format(true)
-    ) if next_calibration_at
+    fields[:next_maintenance_at] = parse_datetime(params.dig(:raw, :next_maintenance_at))
+    fields[:next_calibration_at] = parse_datetime(params.dig(:raw, :next_calibration_at))
 
     business_asset = BusinessAsset.create!(fields.permit(
         :asset_type,
@@ -69,16 +61,8 @@ class BusinessAssetsController < ApplicationController
 
     fields = params.require(:business_asset)
 
-    next_maintenance_at = params.dig(:raw, :next_maintenance_at)
-    fields[:next_maintenance_at] = DateTime.strptime(
-        "#{next_maintenance_at} #{server_timezone}",
-        dt_rb_format(true)
-    ) if next_maintenance_at
-    next_calibration_at = params.dig(:raw, :next_calibration_at)
-    fields[:next_calibration_at] = DateTime.strptime(
-        "#{next_calibration_at} #{server_timezone}",
-        dt_rb_format(true)
-    ) if next_calibration_at
+    fields[:next_maintenance_at] = parse_datetime(params.dig(:raw, :next_maintenance_at))
+    fields[:next_calibration_at] = parse_datetime(params.dig(:raw, :next_calibration_at))
 
     business_asset.update!(fields.permit(
         :asset_type,

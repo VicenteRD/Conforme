@@ -19,13 +19,7 @@ class IndicatorMeasurementsController < ApplicationController
 
     fields = params.require(:measurement)
 
-    measured_at = params.dig(:raw, :measured_at)
-    puts 'params.measured_at: ' + measured_at
-    fields[:measured_at] = DateTime.strptime(
-        "#{measured_at} #{server_timezone}",
-        dt_rb_format(true)
-    ) if measured_at
-    puts 'fields.measured_at: ' + fields[:measured_at].to_s
+    fields[:measured_at] = parse_datetime(params.dig(:raw, :measured_at))
     fields[:threshold] = indicator.threshold
 
     measurement = indicator.measurements.create!(fields.permit(
@@ -61,12 +55,7 @@ class IndicatorMeasurementsController < ApplicationController
 
     fields = params.require(:measurement)
 
-    measured_at = params.dig(:raw, :measured_at)
-    fields[:measured_at] = DateTime.strptime(
-        "#{measured_at} #{server_timezone}",
-        dt_rb_format(true)
-    ) if measured_at
-    fields[:threshold] = indicator.threshold
+    fields[:measured_at] = parse_datetime(params.dig(:raw, :measured_at))
 
     measurement.update!(fields.permit(
         :measured_at,

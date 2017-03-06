@@ -25,12 +25,7 @@ class BusinessAssetJobsController < ApplicationController
                           2
                         end
 
-    # Turn the given date string into a date object
-    executed_at = params.dig(:raw, :executed_at)
-    fields[:executed_at] = DateTime.strptime(
-        "#{executed_at} #{server_timezone}",
-        dt_rb_format(true, false)
-    ) if executed_at
+    fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
 
     job = business_asset.jobs.create!(fields.permit(
         :job_type,
@@ -66,12 +61,7 @@ class BusinessAssetJobsController < ApplicationController
 
     fields = params.require(:asset_job)
 
-    # Turn the given date string into a date object
-    executed_at = params.dig(:raw, :executed_at)
-    fields[:executed_at] = DateTime.strptime(
-        "#{executed_at} #{server_timezone}",
-        dt_rb_format(true, false)
-    ) if executed_at
+    fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
 
     job.update!(fields.permit(
             :executed_at,
