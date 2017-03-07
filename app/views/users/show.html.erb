@@ -1,0 +1,15 @@
+<%= content_for :profile_specifics do %>
+  <h6>/User/</h6>
+  <dl class="dl-horizontal user-profile-dl">
+    <dt>/Last login/</dt>
+    <dd><%= @person.ll_at %></dd>
+    <dt>/Joined at/</dt>
+    <dd><%= @person.j_at %></dd>
+    <dt>/Contract Type/</dt>
+    <dd><%= @person.contract_type %></dd>
+  </dl>
+<% end %>
+
+<%= content_for :profile_person_type do %>
+  User
+<% end %>

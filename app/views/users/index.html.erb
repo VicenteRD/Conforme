@@ -1,0 +1,80 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>/RUT/</th>
+      <th>/NAME/</th>
+      <th>/L_NAME1/</th>
+      <th>/L_NAME2/</th>
+      <th>/DOB/</th>
+      <th>/EMAIL/</th>
+      <th>/PHONE/</th>
+      <th>/ADDRESS/</th>
+      <th>/ROLE/</th>
+      <th>/LL_AT/</th>
+      <th>/J_AT/</th>
+    </tr>
+<% end %>
+
+<% content_for :table_body do %>
+    <% if @person.size != 0 %>
+        <% @person.each do |user| %>
+
+            <tr data-href="<%= user_path(user.id) %>">
+
+              <td><%= user.rut %></td>
+              <td><%= user.name %></td>
+              <td><%= user.l_name1 %></td>
+              <td><%= user.l_name2 %></td>
+              <td><%= user.dob %></td>
+              <td><%= user.email %></td>
+              <td><%= user.phone %></td>
+              <td><%= user.address %></td>
+              <td><%= user.role %></td>
+              <td><%= user.ll_at %></td>
+              <td><%= user.j_at %></td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="8"> No se encontraron /PERSON::USER/ de esta clase. </td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :styles do %>
+  <!-- Risks' Index Page Styles -->
+  <style>
+    <%= significant_style_css %>
+  </style>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="left">
+      <div class="header-buttons">
+        <div class="dropdown">
+          <%= link_to new_risk_path('ley'), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+              Nuevo
+          <% end %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Riesgos Legales
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

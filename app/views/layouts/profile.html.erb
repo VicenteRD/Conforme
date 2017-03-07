@@ -1,0 +1,358 @@
+<section class="page-content">
+<div class="page-content-inner">
+
+    <!-- Profile Header -->
+    <nav class="top-submenu top-submenu-with-background">
+        <div class="profile-header">
+            <div class="profile-header-info">
+                <div class="row">
+                    <div class="col-xl-8 col-xl-offset-4">
+                        <div class="profile-header-title">
+                          <h2><%= @person.name %> <small><%= @person.l_name1%> <%= @person.l_name2%></small></h2>
+                          <p><%= yield :profile_person_type %></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- End Profile Header -->
+
+    <!-- Profile -->
+    <div class="row">
+        <div class="col-xl-4">
+          <section class="panel profile-user" style="background-image: url(<%= asset_path 'avatar_background_4.jpeg' %>)">
+                <div class="panel-body">
+                    <div class="profile-user-title text-center">
+                        <a class="avatar" href="javascript:void(0);">
+                            <img src="../assets/common/img/temp/avatars/1.jpg" alt="Alternative text to the image">
+                        </a>
+                    </div>
+                </div>
+            </section>
+            <section class="panel">
+                <div class="panel-body">
+                  <%= yield :profile_specifics %>
+                </div>
+            </section>
+        </div>
+        <div class="col-xl-8">
+            <section class="panel profile-user-content">
+                <div class="panel-body">
+                    <div class="nav-tabs-horizontal">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="javascript: void(0);" data-toggle="tab" data-target="#posts" role="tab">
+                                    <i class="icmn-menu3"></i>
+                                    /Information/
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#messaging" role="tab">
+                                    <i class="icmn-bubbles5"></i>
+                                    Messages
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="javascript: void(0);" data-toggle="tab" data-target="#settings" role="tab">
+                                    <i class="icmn-cog"></i>
+                                    Settings
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content padding-vertical-20">
+                            <div class="tab-pane active" id="posts" role="tabpanel">
+                              <div class="user-wall">
+                                <dl class="dl-horizontal user-profile-dl">
+                                  <dt>/RUT/</dt>
+                                  <dd><%= @person.rut %></dd>
+                                  <dt>/Name/</dt>
+                                  <dd><%= @person.name %> <%= @person.l_name1 %> <%= @person.l_name2 %></dd>
+                                  <dt>/Date of Birth/</dt>
+                                  <dd><%= @person.dob %></dd>
+                                  <dt>/E-mail/</dt>
+                                  <dd><%= @person.email %></dd>
+                                  <dt>/Phone/</dt>
+                                  <dd><%= @person.phone %></dd>
+                                  <dt>/Address/</dt>
+                                  <dd><%= @person.address %></dd>
+                                  <dt>/Role/</dt>
+                                  <dd><%= @person.role %></dd>
+                                </dl>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="messaging" role="tabpanel">
+                                <div class="conversation-block">
+                                    <div class="conversation-item">
+                                        <div class="s1">
+                                            <a class="avatar" href="javascript:void(0);">
+                                                <img src="../assets/common/img/temp/avatars/3.jpg" alt="Alternative text to the image" />
+                                            </a>
+                                        </div>
+                                        <div class="s2">
+                                            <strong>David Scott</strong>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-item">
+                                        <div class="s1">
+                                            <a class="avatar" href="javascript:void(0);">
+                                                <img src="../assets/common/img/temp/avatars/3.jpg" alt="Alternative text to the image" />
+                                            </a>
+                                        </div>
+                                        <div class="s2">
+                                            <strong>Chris Smith</strong>
+                                            <p>Lorem Ipsum is simply dummy text of the printing</p>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-item you">
+                                        <div class="s1">
+                                            <a class="avatar" href="javascript:void(0);">
+                                                <img src="../assets/common/img/temp/avatars/4.jpg" alt="Alternative text to the image" />
+                                            </a>
+                                        </div>
+                                        <div class="s2">
+                                            <strong>Donald Trump</strong>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy</p>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-item">
+                                        <div class="s1">
+                                            <a class="avatar" href="javascript:void(0);">
+                                                <img src="../assets/common/img/temp/avatars/3.jpg" alt="Alternative text to the image" />
+                                            </a>
+                                        </div>
+                                        <div class="s2">
+                                            <strong>David Scott</strong>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-item you">
+                                        <div class="s1">
+                                            <a class="avatar" href="javascript:void(0);">
+                                                <img src="../assets/common/img/temp/avatars/4.jpg" alt="Alternative text to the image" />
+                                            </a>
+                                        </div>
+                                        <div class="s2">
+                                            <strong>Donald Trump</strong>
+                                            <p>Ok. Thanks!</p>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-item you">
+                                        <div class="s1">
+                                            <a class="avatar" href="javascript:void(0);">
+                                                <img src="../assets/common/img/temp/avatars/4.jpg" alt="Alternative text to the image" />
+                                            </a>
+                                        </div>
+                                        <div class="s2">
+                                            <strong>Donald Trump</strong>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy</p>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-item">
+                                        <div class="s1">
+                                            <a class="avatar" href="javascript:void(0);">
+                                                <img src="../assets/common/img/temp/avatars/3.jpg" alt="Alternative text to the image" />
+                                            </a>
+                                        </div>
+                                        <div class="s2">
+                                            <strong>David Scott</strong>
+                                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                        </div>
+                                    </div>
+                                    <div class="conversation-item you">
+                                        <div class="s1">
+                                            <a class="avatar" href="javascript:void(0);">
+                                                <img src="../assets/common/img/temp/avatars/4.jpg" alt="Alternative text to the image" />
+                                            </a>
+                                        </div>
+                                        <div class="s2">
+                                            <strong>Donald Trump</strong>
+                                            <p>Ok. Thanks!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group padding-top-20 margin-bottom-0">
+                                    <textarea class="form-control adjustable-textarea" placeholder="Type and press enter"></textarea>
+                                    <button class="btn btn-primary width-200 margin-top-10">
+                                        <i class="fa fa-send margin-right-5"></i>
+                                        Send
+                                    </button>
+                                    <button class="btn btn-link margin-top-10">
+                                        Attach File
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="settings" role="tabpanel">
+                                <br />
+                                <h5>Personal Information</h5>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="l0">Username</label>
+                                            <input type="text" class="form-control" id="l0">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="l1">Email</label>
+                                            <input type="email" class="form-control" id="l1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <h5>Password</h5>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="l3">Password</label>
+                                            <input type="password" class="form-control" id="l3">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="l4">Password</label>
+                                            <input type="password" class="form-control" id="l4">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <br />
+                                        <h5>Profile Avatar</h5>
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="l6">File Upload</label>
+                                            <input type="file" id="l6">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <br />
+                                        <h5>Profile Background</h5>
+                                        <div class="form-group">
+                                            <label class="form-control-label" for="l5">File Upload</label>
+                                            <input type="file" id="l5">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <div class="form-group">
+                                        <button type="button" class="btn width-150 btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-default">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- End Profile -->
+
+</div>
+
+<!-- Page Scripts -->
+<script>
+    $(function() {
+
+        ///////////////////////////////////////////////////////////
+        // ADJUSTABLE TEXTAREA
+        autosize($('.adjustable-textarea'));
+
+        ///////////////////////////////////////////////////////////
+        // MEDIA PLAYER
+        if (!(typeof angular === 'undefined')) {
+            $('.mediatec-cleanaudioplayer').cleanaudioplayer();
+            $('.mediatec-cleanvideoplayer').cleanvideoplayer();
+        }
+
+        ///////////////////////////////////////////////////////////
+        // CALENDAR
+        $('.example-calendar-block').fullCalendar({
+            //aspectRatio: 2,
+            height: 450,
+            header: {
+                left: 'prev, next',
+                center: 'title',
+                right: 'month, agendaWeek, agendaDay'
+            },
+            buttonIcons: {
+                prev: 'none fa fa-arrow-left',
+                next: 'none fa fa-arrow-right',
+                prevYear: 'none fa fa-arrow-left',
+                nextYear: 'none fa fa-arrow-right'
+            },
+            Actionable: true,
+            eventLimit: true, // allow "more" link when too many events
+            viewRender: function(view, element) {
+                if (!cleanUI.hasTouch) {
+                    $('.fc-scroller').jScrollPane({
+                        autoReinitialise: true,
+                        autoReinitialiseDelay: 100
+                    });
+                }
+            },
+            eventClick: function(calEvent, jsEvent, view) {
+                if (!$(this).hasClass('event-clicked')) {
+                    $('.fc-event').removeClass('event-clicked');
+                    $(this).addClass('event-clicked');
+                }
+            },
+            defaultDate: '2016-05-12',
+            events: [
+                {
+                    title: 'All Day Event',
+                    start: '2016-05-01',
+                    className: 'fc-event-success'
+                },
+                {
+                    id: 999,
+                    title: 'Repeating Event',
+                    start: '2016-05-09T16:00:00',
+                    className: 'fc-event-default'
+                },
+                {
+                    id: 999,
+                    title: 'Repeating Event',
+                    start: '2016-05-16T16:00:00',
+                    className: 'fc-event-success'
+                },
+                {
+                    title: 'Conference',
+                    start: '2016-05-11',
+                    end: '2016-05-14',
+                    className: 'fc-event-danger'
+                }
+            ]
+        });
+
+        ///////////////////////////////////////////////////////////
+        // SWAL ALERTS
+        $('.swal-btn-success').click(function(e){
+            e.preventDefault();
+            swal({
+                title: "Following",
+                text: "Now you are following Artour Scott",
+                type: "success",
+                confirmButtonClass: "btn-success",
+                confirmButtonText: "Ok"
+            });
+        });
+
+        $('.swal-btn-success-2').click(function(e){
+            e.preventDefault();
+            swal({
+                title: "Friends request",
+                text: "Friends request was succesfully sent to Artour Scott",
+                type: "success",
+                confirmButtonClass: "btn-success",
+                confirmButtonText: "Ok"
+            });
+        });
+
+    });
+</script>
+<!-- End Page Scripts -->
+</section>
+
+<% parent_layout 'application' %>
