@@ -1,13 +1,14 @@
 class UsersController < ApplicationController
   def index
-
+    @person = Person::User.all
+    render "users/index", layout: 'table'
   end
 
   def show
-    @user = Person::User.find(params[:id])
-    if @user.nil?
+    unless (@person = Person::User.find(params[:id]))
       redirect_to '/' and return
     end
+    render layout: 'profile'
   end
 
   def organization_chart
