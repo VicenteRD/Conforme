@@ -23,6 +23,7 @@ class RisksController < ApplicationController
     if (@risk = Risk.find(params[:id])) && (type = minimize_type (@risk._type))
       render "risks/show/#{type}", layout: 'show'
     else
+      puts @risk, type
       redirect_to '/'
     end
   end
@@ -58,10 +59,10 @@ class RisksController < ApplicationController
         fields[:rule_type] = 2
       end
 
-      redirect_to risk_path create_risk(klass, fields)
+      redirect_to risk_path(params[:type], create_risk(klass, fields))
     elsif (fields[:rule_type] = Rule.find(type)&.rule_type)
       puts fields.inspect
-      redirect_to risk_path create_risk(Risk::RuleRisk, fields)
+      redirect_to risk_path(params[:type], create_risk(Risk::RuleRisk, fields))
     else
       redirect_to '/'
     end
@@ -100,13 +101,7 @@ class RisksController < ApplicationController
     risk.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
     risk.save!
 
-    redirect_to risk_path(risk.id)
-  end
-
-  def history
-    @book = Risk.find(params[:id]).log_book
-
-    render 'log/show'
+    redirect_to risk_path(params[:type], risk.id)
   end
 
   private

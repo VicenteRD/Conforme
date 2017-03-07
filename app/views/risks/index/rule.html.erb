@@ -22,7 +22,7 @@
             <% article = Rule.find(risk.rule_id).articles.find(risk.article_id) %>
             <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
-            <tr data-href="<%= risk_path(risk.id) %>">
+            <tr data-href="<%= risk_path((risk.rule_type == 1 ? 'ley' : 'norma'), risk) %>">
 
               <td><div class="expand-collapse">+</div><%= article.name %></td>
               <td><%= article.requirement %></td>

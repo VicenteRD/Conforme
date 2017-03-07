@@ -1,6 +1,7 @@
 <%= form_for @measurement,
              as: :measurement,
-             url: edit_risk_measurement_path(risk_id: @risk.id, id: @measurement.id),
+             url: edit_risk_measurement_path(type: 'seguridad',
+                                             risk_id: @risk.id, id: @measurement.id),
              method: :patch do |f| %>
     <%= hidden_field :raw, :type, value: 'ambiente' %>
 
@@ -21,7 +22,7 @@
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker'>
                 <%= text_field :raw, :measured_at, class: 'form-control',
-                               data: {date_format: dt_form_format(true)},
+                               data: {format: dt_form_format(true)},
                                value: @measurement.measured_at.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
@@ -118,7 +119,7 @@
           <% end %>
         </li>
         <li>
-          <%= link_to risk_path(@risk.id) do %>
+          <%= link_to risk_path('seguridad', @risk.id) do %>
               <%= @risk.number %>
           <% end %>
         </li>

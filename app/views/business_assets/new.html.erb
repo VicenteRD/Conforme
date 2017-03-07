@@ -27,7 +27,7 @@
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker1'>
                 <%= text_field :raw, :next_maintenance_at, class: 'form-control',
-                               data: {date_format: dt_form_format(true)},
+                               data: {format: dt_form_format(true), max: 0},
                                value: DateTime.now.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
@@ -43,13 +43,14 @@
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker2'>
                 <%= text_field :raw, :next_calibration_at, class: 'form-control',
-                               data: {date_format: dt_form_format(true)},
+                               data: {format: dt_form_format(true), max: 0},
                                value: DateTime.now.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
               </div>
             </div>
+
           </div>
 
           <div class="row form-group margin-left-50">

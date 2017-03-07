@@ -34,11 +34,12 @@ class BusinessAssetsController < ApplicationController
     fields[:next_calibration_at] = parse_datetime(params.dig(:raw, :next_calibration_at))
 
     business_asset = BusinessAsset.create!(fields.permit(
-        :asset_type,
+        :type_id,
         :name,
+        :description,
+        :identifier,
         :comments,
-        :next_maintenance_at,
-        :next_calibration_at
+        :responsible_id
     ))
     business_asset.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
 
@@ -65,15 +66,20 @@ class BusinessAssetsController < ApplicationController
     fields[:next_calibration_at] = parse_datetime(params.dig(:raw, :next_calibration_at))
 
     business_asset.update!(fields.permit(
-        :asset_type,
+        :type_id,
         :name,
+        :description,
+        :identifier,
         :comments,
-        :next_maintenance_at,
-        :next_calibration_at
+        :responsible_id
     ))
     business_asset.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
 
     redirect_to business_asset_path(params[:job_type], business_asset)
+  end
+
+  def create_type
+    BusinessAssetType.create!(params.require(:asset_type).permit(:name, :description))
   end
 
   private

@@ -22,29 +22,42 @@
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker'>
                 <%= text_field :raw, :executed_at, class: 'form-control',
-                               data: {date_format: dt_form_format(true)},
+                               data: {format: dt_form_format(true), max: 0},
                                value: @job.executed_at.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
               </div>
             </div>
-            <div class="col-lg-1 text-right">
-              <label class="form-control-label">
-                Motivo
-              </label>
-            </div>
-            <div class="col-lg-2">
-              <%= f.text_field :motive, class: 'form-control' %>
-            </div>
+            <% if @type == 'mantencion' %>
+                <div class="col-lg-1 text-right">
+                  <label class="form-control-label">
+                    Motivo
+                  </label>
+                </div>
+                <div class="col-lg-2">
+                  <%= f.text_field :motive, class: 'form-control' %>
+                </div>
 
-            <div class="col-lg-1 text-right">
+                <div class="col-lg-1 text-right">
+                  <label class="form-control-label">
+                    Resultado
+                  </label>
+                </div>
+                <div class="col-lg-2">
+                  <%= f.text_field :result, class: 'form-control' %>
+                </div>
+            <% end %>
+          </div>
+
+          <div class="row form-group margin-left-50">
+            <div class="col-lg-1">
               <label class="form-control-label">
-                Resultado
+                Ejecutado?
               </label>
             </div>
             <div class="col-lg-2">
-              <%= f.text_field :result, class: 'form-control' %>
+              <%= f.check_box :executed, class: 'form-control' %>
             </div>
           </div>
 

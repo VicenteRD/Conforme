@@ -9,7 +9,7 @@ class Risk::RuleRisk < Risk
 
   index({rule_type: 1}, {name: 'type_index'})
 
-  scope :law,    -> { where(rule_type: 1) }
+  scope :law,      -> { where(rule_type: 1) }
   scope :standard, -> { where(rule_type: 2) }
 
   field :rule_id, type: BSON::ObjectId

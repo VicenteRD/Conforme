@@ -37,16 +37,24 @@ function newSummernote(field) {
     });
 }
 
-function newDateTimePicker(field, format, tz) {
-    var date = moment.unix(parseInt(field.find('.form-control').val()));
-    console.log(field.find('.form-control'));
+function newDateTimePicker(inputArea, tz) {
+    var inputField = inputArea.find('.form-control');
+    // Save the value for later use before it gets reset
+    var intValue = inputField.val();
 
-    field.datetimepicker({
+    var maxDate;
+    if (inputField.attr('data-max') === undefined) {
+        maxDate = Date.now();
+    } else {
+        maxDate = false; // Should parse data-max
+    }
+    var format = inputField.attr('data-format');
+
+    inputArea.datetimepicker({
         locale: moment.locale('es'),
         format: format,
         useCurrent: false,
-        //defaultDate: moment.unix(parseInt(field.find('.form-control').val())).toDate(),
-        maxDate: Date.now(),
+        maxDate: maxDate,
         timeZone: tz,
         icons: {
             time: "fa fa-clock-o",
@@ -57,6 +65,7 @@ function newDateTimePicker(field, format, tz) {
             next: "fa fa-arrow-right"
         }
     });
-    field.find('.form-control').val(date.format(format));
+
+    inputField.val(moment.unix(parseInt(intValue)).format(format));
 }
 

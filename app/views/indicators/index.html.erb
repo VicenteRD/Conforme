@@ -14,16 +14,17 @@
       <th>Encargado</th>
       <th>Criterio</th>
       <th>Unidad</th>
-      <th>Fecha Última Medición</th>
+      <th>Fecha</th>
       <th>Valor Esperado</th>
       <th>Valor Obtenido</th>
+      <th>Significativo</th>
     </tr>
 <% end %>
 
 <% content_for :table_body do %>
     <% if @indicators.size != 0 %>
         <% @indicators.each do |indicator| %>
-            <% measurement = indicator.measurements.order_by(measured_on: :desc, created_at: :desc).first %>
+            <% measurement = indicator.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
             <tr data-href="<%= indicator_path(indicator.id) %>">
 
@@ -38,6 +39,9 @@
               <td><%= measurement&.measured_at&.strftime(dt_rb_format(false, false)) || '-' %></td>
               <td><%= measurement&.threshold || '-' %></td>
               <td><%= measurement&.value || '-' %></td>
+              <td class="<%= 'sig-' + indicator.significant.to_s %>">
+                <%= humanize_significant(indicator.significant) %>
+              </td>
 
             </tr>
         <% end %>
@@ -46,6 +50,13 @@
           <td colspan="10"> No se encontraron indicadores. </td>
         </tr>
     <% end %>
+<% end %>
+
+<% content_for :styles do %>
+    <!-- Indicators' Index Page Styles -->
+    <style>
+      <%= significant_style_css %>
+    </style>
 <% end %>
 
 <% content_for :menu do %>

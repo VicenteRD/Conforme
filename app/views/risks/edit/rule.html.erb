@@ -1,4 +1,7 @@
-<%= form_for @risk, as: :risk, url: edit_risk_path(@risk), method: :patch do |f| %>
+<%= form_for @risk,
+             as: :risk,
+             url: edit_risk_path(es_type(@risk.rule_type), @risk),
+             method: :patch do |f| %>
 
     <section class="page-content">
       <div class="page-content-inner">
@@ -86,16 +89,22 @@
 <% end %>
 
 <%= content_for :breadcrumbs do %>
+    <% rule = Rule.find(@risk.rule_id) %>
+    <% article = rule.articles.find(@risk.article_id) %>
+
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('ley') do %>
-              Riesgos Legales
+          <%= rule_type_breadcrumb(@risk.rule_type) %>
+        </li>
+        <li>
+          <%= link_to risks_path(rule) do %>
+              <%= rule.full_name %>
           <% end %>
         </li>
         <li>
-          <%= link_to risk_path(@risk.id) do %>
-              <%= @risk.number %>
+          <%= link_to risk_path(es_type(@risk.rule_type), @risk) do %>
+              Art. <%= article.name %>
           <% end %>
         </li>
         <li>

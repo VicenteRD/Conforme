@@ -24,29 +24,31 @@
     <% if assets.size != 0 %>
         <% assets.each do |asset| %>
             <% ordered_jobs = asset.jobs.order_by(e_at: :desc, c_at: :desc) %>
-            <% job = if @type == 'mantencion'
-                       ordered_jobs.maintenance.first
+            <% ordered_jobs = if @type == 'mantencion'
+                       ordered_jobs.maintenance
                      elsif @type == 'calibracion'
-                       ordered_jobs.calibration.first
+                       ordered_jobs.calibration
                      end %>
 
             <tr data-href="<%= business_asset_path(@type, asset) %>">
               <td>
                 <div class="expand-collapse">+</div>
-                <%= asset.asset_type %>
+                <%= BusinessAssetType.find(asset.type_id).name %>
               </td>
               <td>
                 <%= asset.name %>
               </td>
               <td>
                 <%= if @type == 'mantencion'
-                      asset.next_maintenance_at.strftime(dt_rb_format(false, false))
+                      ordered_jobs.where(executed: false)
+                          .last&.strftime(dt_rb_format(false, false)) || '-'
                     elsif @type == 'calibracion'
-                      asset.next_calibration_at.strftime(dt_rb_format(false, false))
+                      ordered_jobs.where(executed: false)
+                          .last&.strftime(dt_rb_format(false, false)) || '-'
                     end %>
               </td>
               <td>
-                <%= job ? job.executed_at.strftime(dt_rb_format(false, false)) : '-' %>
+                <%= ordered_jobs.first&.executed_at&.strftime(dt_rb_format(false, false)) || '-' %>
               </td>
             </tr>
         <% end %>

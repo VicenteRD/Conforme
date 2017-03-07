@@ -1,32 +1,49 @@
 <%# Cheeky fix %>
 <% presentable_type = @type.capitalize.sub('o', 'ó') %>
 
+<% ordered_jobs = @business_asset.jobs.order_by(e_at: :desc, c_at: :desc) %>
+
 <%= content_for :main_col_1 do %>
     <div class="row">
       <div class="col-lg-4 show-label">Tipo:</div>
       <div class="col-lg-8">
-        <%= @business_asset.asset_type %>
+        <%= BusinessAssetType.find(@business_asset.type_id).name %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-4 show-label">Descripción:</div>
       <div class="col-lg-8">
-        <%= @business_asset.name %>
+        <%= @business_asset.description %>
       </div>
     </div>
 <% end %>
 
 <%= content_for :main_col_2 do %>
     <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+        <%= @business_asset.name %>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-lg-4 show-label">Próx. Mantención:</div>
       <div class="col-lg-8">
-        <%= @business_asset.next_maintenance_at.strftime(dt_rb_format(false, false)) %>
+        <%= ordered_jobs.maintenance.where(executed: false).last || '-' %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Identificación:</div>
+      <div class="col-lg-8">
+        <%= @business_asset.identification %>
       </div>
     </div>
     <div class="row">
       <div class="col-lg-4 show-label">Próx. Calibración:</div>
       <div class="col-lg-8">
-        <%= @business_asset.next_calibration_at.strftime(dt_rb_format(false, false)) %>
+        <%= ordered_jobs.calibration.where(executed: false).last || '-' %>
       </div>
     </div>
 <% end %>
@@ -45,16 +62,16 @@
         </div>
     <% end %>
 
-    <% ordered_jobs = @business_asset.jobs.order_by(e_at: :desc, c_at: :desc) %>
-    <% ordered_jobs = if @type == 'mantencion'
-                        ordered_jobs.maintenance
-                      elsif @type == 'calibracion'
-                        ordered_jobs.calibration
-                      else
-                        nil
-                      end %>
 
-    <% if ordered_jobs %>
+    <% filtered_ordered_jobs = if @type == 'mantencion'
+                                 ordered_jobs.maintenance.where(executed: true).last
+                               elsif @type == 'calibracion'
+                                 ordered_jobs.calibration.where(executed: true).last
+                               else
+                                 nil
+                               end %>
+
+    <% if filtered_ordered_jobs %>
         <div class="panel">
           <div class="panel-heading">
             <h5>Trabajos de <%= presentable_type %></h5>
@@ -73,7 +90,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <% ordered_jobs.each do |job| %>
+                  <% filtered_ordered_jobs.each do |job| %>
                       <tr class="job-row" data-id="<%= job.id %>">
                         <td><%= job.e_at.strftime(dt_rb_format(false, false)) %></td>
                         <% if @type == 'mantencion' %>
@@ -125,7 +142,7 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to presentable_type + ' Activos', business_assets_path(@type)%>
+          <%= link_to presentable_type + ' Activos', business_assets_path(@type) %>
         </li>
         <li>
           <span>

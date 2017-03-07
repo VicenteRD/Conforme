@@ -26,10 +26,9 @@
     <% if risks.size != 0 %>
         <% risks.each do |risk| %>
 
-            <% sig = humanize_significant(risk.significant) %>
             <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
-            <tr data-href="<%= risk_path(risk.id.to_s) %>">
+            <tr data-href="<%= risk_path('operacional', risk) %>">
 
               <td><div class="expand-collapse">+</div><%= Position.find(risk.area_id).name %></td>
 
@@ -41,7 +40,9 @@
 
               <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
-              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
+              <td class="<%= 'sig-' + risk.significant.to_s %>">
+                <%= humanize_significant(risk.significant) %>
+              </td>
 
               <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-' %></td>
 

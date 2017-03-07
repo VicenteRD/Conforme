@@ -1,6 +1,7 @@
 <%= form_for @measurement,
              as: :measurement,
-             url: edit_risk_measurement_path(risk_id: @risk.id, id: @measurement.id),
+             url: edit_risk_measurement_path(type: es_type(@risk.rule_type),
+                                             risk_id: @risk.id, id: @measurement.id),
              method: :patch do |f| %>
     <%= hidden_field :raw, :type, value: 'ley' %>
 
@@ -21,7 +22,7 @@
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker'>
                 <%= text_field :raw, :measured_at, class: 'form-control',
-                               data: {date_format: dt_form_format(true)},
+                               data: {format: dt_form_format(true)},
                                value: @measurement.measured_at.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
@@ -111,7 +112,8 @@
           <%= link_to rule.full_name, risks_path(rule.id) %>
         </li>
         <li>
-          <%= link_to "Art. #{rule.articles.find(@risk.article_id).name}", risk_path(@risk) %>
+          <%= link_to "Art. #{rule.articles.find(@risk.article_id).name}",
+                      risk_path(es_type(@risk.rule_type), @risk) %>
         </li>
         <li>
           <span>

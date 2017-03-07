@@ -30,7 +30,7 @@
       <% sig = humanize_significant(risk.significant) %>
       <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
-      <tr data-href="<%= risk_path(risk.id) %>">
+      <tr data-href="<%= risk_path('seguridad', risk) %>">
 
         <td><div class="expand-collapse">+</div><%= Position.find(risk.area_id).name %></td>
         <td><%= Position.find(risk.position_id).name %></td>

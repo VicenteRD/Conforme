@@ -12,11 +12,11 @@ class BusinessAsset
   embeds_many :jobs, class_name: 'BusinessAssetJob'
 
   field :name, type: String
+  field :idn, as: :identification, type: String
+  field :desc, as: :description, type: String
 
-  field :a_type, as: :asset_type, type: String
-
-  field :nm_at, as: :next_maintenance_at, type: DateTime
-  field :nc_at, as: :next_calibration_at, type: DateTime
+  field :t_id, as: :type_id, type: BSON::ObjectId # => BusinessAssetType
+  field :r_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
 
   field :cmts, as: :comments, type: String
 end

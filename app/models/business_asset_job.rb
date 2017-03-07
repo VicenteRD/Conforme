@@ -18,6 +18,8 @@ class BusinessAssetJob
 
   field :e_at, as: :executed_at, type: DateTime
 
+  field :exd, as: :executed, type: Boolean
+
   field :mtv, as: :motive, type: String
   field :rst, as: :result, type: String
 

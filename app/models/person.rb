@@ -1,5 +1,6 @@
 class Person
   include Mongoid::Document
+  include Mongoid::Paperclip
 
   include Activatable
 
@@ -9,12 +10,11 @@ class Person
 
   validates :name, presence: true, format: {with: /\A[a-z]+\Z/i}
 
-
   ## Creates 'c_at' and 'u_at' fields, representing the times
   ## at which the user was created and updated, respectively.
   include Mongoid::Timestamps::Short
 
-  has_one :photo, class_name: 'UploadedFile'
+  has_mongoid_attached_file :avatar
 
   ## Other fields
   field :rut, type: String

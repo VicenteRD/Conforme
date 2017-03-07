@@ -69,6 +69,9 @@ Rails.application.routes.draw do
   post  '/activos/:job_type/nuevo'                 => 'business_assets#create'
   patch '/activos/:job_type/:id/editar'            => 'business_assets#update'
 
+  post  '/activos/nuevo_tipo'                      => 'business_assets#create_type',
+        as: :new_business_asset_type
+
   post  '/activos/:job_type/:asset_id/nuevo'       => 'business_asset_jobs#create'
   patch '/activos/:job_type/:asset_id/editar/:id'  => 'business_asset_jobs#update'
 
@@ -92,19 +95,19 @@ Rails.application.routes.draw do
 
   # -------- Risks
 
-  get '/riesgos/:type'                 => 'risks#index',            as: :risks
-  get '/riesgos/:type/nuevo'           => 'risks#new',              as: :new_risk
-  get '/riesgos/:id/editar'            => 'risks#edit',             as: :edit_risk
-  get '/riesgos/:id'                   => 'risks#show',             as: :risk
+  get '/riesgos/:type'            => 'risks#index', as: :risks
+  get '/riesgos/:type/nuevo'      => 'risks#new'  , as: :new_risk
+  get '/riesgos/:type/:id'        => 'risks#show' , as: :risk
+  get '/riesgos/:type/:id/editar' => 'risks#edit' , as: :edit_risk
 
-  get '/riesgos/:risk_id/nueva'        => 'risk_measurements#new',  as: :new_risk_measurement
-  get '/riesgos/:risk_id/:id/editar'   => 'risk_measurements#edit', as: :edit_risk_measurement
+  get '/riesgos/:type/:risk_id/nueva'      => 'risk_measurements#new' , as: :new_risk_measurement
+  get '/riesgos/:type/:risk_id/:id/editar' => 'risk_measurements#edit', as: :edit_risk_measurement
 
   post  '/riesgos/:type/nuevo'         => 'risks#create'
-  patch '/riesgos/editar/:id'          => 'risks#update'
+  patch '/riesgos/:type/:id/editar/'   => 'risks#update'
 
-  post  '/riesgos/:risk_id/nueva'      => 'risk_measurements#create'
-  patch '/riesgos/:risk_id/:id/editar' => 'risk_measurements#update'
+  post  '/riesgos/:type/:risk_id/nueva'      => 'risk_measurements#create'
+  patch '/riesgos/:type/:risk_id/:id/editar' => 'risk_measurements#update'
 
   # -------- Configuration - TODO Maybe move them into their kind as 'settings' ?
 
@@ -134,6 +137,8 @@ Rails.application.routes.draw do
   # -------- Other
 
   get '/associables/:element/:name' => 'associables#list'
+
+  post '/uploads/new' => 'uploaded_files#create', as: :new_upload
 
   # -------- Obsolete
 

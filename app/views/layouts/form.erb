@@ -20,22 +20,64 @@
     </div>
 <% end %>
 
+
 <%= yield %>
+
+<div id="uploads-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <%= form_for(:uploaded_file, url: new_upload_path) do |f| %>
+
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Subir Archivo</h4>
+          </div>
+          <div class="modal-body">
+            <%= f.file_field :upload %>
+          </div>
+          <div class="modal-footer">
+            <div class="text-right">
+              <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50',
+                           id: 'upload-button' %>
+            </div>
+          </div>
+    <% end %>
+    </div>
+  </div>
+</div>
 
 <%= content_for :scripts do %>
     <!-- Form scripts -->
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('[data-provider="summernote"]').each(function(){
+        $(document).ready(function () {
+            $('[data-provider="summernote"]').each(function () {
                 newSummernote($(this));
             });
 
             var datePicker = $('.date-picker');
             if (datePicker.length != 0) {
-                datePicker.each(function() {
-                  newDateTimePicker($(this), '<%= dt_form_format(true) %>', '<% server_timezone %>');
+                datePicker.each(function () {
+                    var field = $(this);
+                    newDateTimePicker(field, '<% server_timezone %>');
                 });
             }
+        });
+
+        $('#upload-button').click(function () {
+            var filename = $('#uploaded_file_upload').val();
+            var lastIndex = filename.lastIndexOf("\\");
+            if (lastIndex >= 0) {
+                filename = filename.substring(lastIndex + 1);
+            }
+            console.log(filename);
+
+            var uploadArea = $('#uploads-in');
+            uploadArea.find('.form-control')
+                .val(filename);
+
+
+            $('#uploads-modal').modal('hide');
         });
     </script>
 <% end %>

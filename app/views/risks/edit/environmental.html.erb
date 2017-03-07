@@ -1,4 +1,4 @@
-<%= form_for @risk, as: :risk, url: edit_risk_path(@risk), method: :patch do |f| %>
+<%= form_for @risk, as: :risk, url: edit_risk_path('ambiente', @risk), method: :patch do |f| %>
 
     <section class="page-content">
       <div class="page-content-inner">
@@ -203,7 +203,7 @@
           <% end %>
         </li>
         <li>
-          <%= link_to risk_path(@risk.id) do %>
+          <%= link_to risk_path('ambiente', @risk.id) do %>
               <%= @risk.number %>
           <% end %>
         </li>

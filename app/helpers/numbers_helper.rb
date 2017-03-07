@@ -45,4 +45,9 @@ module NumbersHelper
 
     data
   end
+
+  private
+  def ruby_to_js_hash(hash)
+    hash.to_s.gsub(':x=>', 'x: ').gsub(':y=>', 'y: ')
+  end
 end

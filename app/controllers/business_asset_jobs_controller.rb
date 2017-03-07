@@ -32,6 +32,7 @@ class BusinessAssetJobsController < ApplicationController
         :executed_at,
         :motive,
         :result,
+        :executed,
         :comments
     ))
 
@@ -67,6 +68,7 @@ class BusinessAssetJobsController < ApplicationController
             :executed_at,
             :motive,
             :result,
+            :executed,
             :comments
     ))
 

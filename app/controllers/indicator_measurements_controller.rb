@@ -22,13 +22,12 @@ class IndicatorMeasurementsController < ApplicationController
     fields[:measured_at] = parse_datetime(params.dig(:raw, :measured_at))
     fields[:threshold] = indicator.threshold
 
-    measurement = indicator.measurements.create!(fields.permit(
+    measurement = indicator.new_measurement(fields.permit(
         :measured_at,
         :value,
         :threshold,
         :comments
     ))
-
     measurement.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
 
     redirect_to indicator_path(indicator)
@@ -64,8 +63,6 @@ class IndicatorMeasurementsController < ApplicationController
         :comments
     ))
     measurement.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
-
-    puts measurement.log_book.print_all
 
     redirect_to indicator_path(indicator)
   end

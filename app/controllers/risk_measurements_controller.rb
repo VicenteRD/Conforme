@@ -34,7 +34,7 @@ class RiskMeasurementsController < ApplicationController
       measurement = risk.new_measurement(fields.permit(klass.permitted_fields))
       measurement.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
 
-      redirect_to risk_path(risk.id)
+      redirect_to risk_path(params[:type], risk)
     else
       redirect_to '/'
     end
@@ -81,7 +81,7 @@ class RiskMeasurementsController < ApplicationController
 
       risk.update_significant(measurement.significant)
 
-      redirect_to risk_path(risk.id)
+      redirect_to risk_path(params[:type], risk)
     else
       redirect_to '/'
     end
@@ -102,7 +102,7 @@ class RiskMeasurementsController < ApplicationController
       if (user && risk) && user.id == risk.responsible_id
         return true
       else
-        redirect_to risk_path(params[:risk_id]) and return false
+        redirect_to '/' and return false
       end
     else
       redirect_to '/'

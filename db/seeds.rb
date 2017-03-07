@@ -13,7 +13,6 @@ vr = Person::User.new(
   address: 'Padre Hurtado Sur XXXX, depto X-XX',
 
   dob: Date.new(1993, 10, 2),
-  photo: nil,
 
   role: 'SuperAdmin',
   contract_type: 'Lol nope',
@@ -36,7 +35,6 @@ tst = Person::User.new(
     address: 'address',
 
     dob: Date.new(1991, 2, 19),
-    photo: nil,
 
     role: 'SuperAdmin',
     contract_type: 'Lol nope',
@@ -60,7 +58,6 @@ cv = Person::User.new(
     address: 'Colon XXXX',
 
     dob: Date.new(1960, 1, 1),
-    photo: nil,
 
     role: 'SuperAdmin',
     contract_type: 'self',
@@ -246,11 +243,18 @@ ind.save!
 
 obj.save!
 
+a_t = BusinessAssetType.new(
+    name: 'Vehículo',
+    description: 'Cosa que se mueve'
+)
+a_t.save!
+
 ast = BusinessAsset.new(
     name: 'Activo 1',
-    asset_type: 'Vehículo',
-    next_maintenance_at: 15.days.from_now,
-    next_calibration_at: 10.days.from_now
+    type_id: a_t.id,
+    idn: 'AAAA11',
+    desc: 'a',
+    responsible_id: vr.id
 )
 ast.save!
 ast.log_book.new_entry(nil, 'Creado', 'Created by system')

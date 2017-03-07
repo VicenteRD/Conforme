@@ -157,7 +157,7 @@
 
         <% if @risk.responsible_id == @user.id %>
             <div class="dropdown">
-              <%= link_to new_risk_measurement_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <%= link_to new_risk_measurement_path('seguridad', @risk.id), method: 'get', class: 'dropdown-inline-button' do %>
                   <i class="dropdown-inline-button-icon icmn-design"></i>
                   Medir
               <% end %>
@@ -165,7 +165,7 @@
         <% end %>
 
         <div class="dropdown">
-          <%= link_to edit_risk_path(@risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+          <%= link_to edit_risk_path('seguridad', @risk.id), method: 'get', class: 'dropdown-inline-button' do %>
               <i class="dropdown-inline-button-icon icmn-pencil"></i>
               Editar
           <% end %>
@@ -201,7 +201,8 @@
         <!-- Risks' Show Page Scripts -->
         <script type="text/javascript">
             $('.measurement-row').click(function () {
-                var link = '/riesgos/<%= @risk.id %>/' + $(this).attr('data-id') + '/editar';
+                var link = '/riesgos/seguridad/<%= @risk.id %>/' +
+                    $(this).attr('data-id') + '/editar';
 
                 window.open(link, '_self');
             });

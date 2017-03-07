@@ -1,5 +1,11 @@
 <%= content_for :heading_main do %>
-
+    <div class="margin-left-50">
+      <h4 class="text-capitalize">
+      <span style="<%= significant_style(@indicator.significant)%>; padding: 5px">
+        <%= humanize_significant @indicator.significant %>
+      </span>
+      </h4>
+    </div>
 <% end %>
 
 <%# Populate all 3 columns of the view with keys & their values %>
@@ -100,15 +106,17 @@
                   </thead>
                   <tbody>
                   <% @indicator.measurements.order(measured_at: :desc, created_at: :desc).each do |measurement| %>
+                      <% bgcolor = significant_bgcolor(measurement.significant) %>
+                      <% txtcolor = significant_txtcolor(measurement.significant) %>
 
-                      <tr class="measurement-row" data-id="<%= measurement.id %>">
-                        <td>
+                      <tr class="measurement-row" data-id="<%= measurement.id %>" style="<%= bgcolor %>; cursor: pointer">
+                        <td style="<%= txtcolor %>">
                           <%= measurement.measured_at.strftime(dt_rb_format(false, false)) %>
                         </td>
-                        <td>
+                        <td style="<%= txtcolor %>">
                           <%= measurement.value.round(2) %>
                         </td>
-                        <td>
+                        <td style="<%= txtcolor %>">
                           <%= measurement.threshold.round(2) %>
                         </td>
                       </tr>

@@ -16,7 +16,7 @@
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker'>
                 <%= text_field :raw, :measured_at, class: 'form-control',
-                               data: {date_format: dt_form_format(true)},
+                               data: {format: dt_form_format(true)},
                                value: DateTime.now.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
