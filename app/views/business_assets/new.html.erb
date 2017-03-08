@@ -15,52 +15,52 @@
                 Tipo
               </label>
             </div>
-            <div class="col-lg-2 margin-right-20" id="area-in">
-              <%= f.text_field :asset_type, class: 'form-control' %>
+            <div class="col-lg-2 input-group margin-right-20" id="type-in">
+              <%= text_field :extra, :type_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :type_id, class: 'form-control-hidden' %>
             </div>
 
             <div class="col-lg-1">
               <label class="form-control-label">
-                Próx. Mantención
+                Responsable
               </label>
             </div>
-            <div class="col-lg-2">
-              <div class='input-group date date-picker' id='date-picker1'>
-                <%= text_field :raw, :next_maintenance_at, class: 'form-control',
-                               data: {format: dt_form_format(true), max: 0},
-                               value: DateTime.now.to_i %>
-                <span class="input-group-addon">
-                <i class="icmn-calendar"></i>
-              </span>
-              </div>
+            <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
+              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+              <i class="icmn-pencil5"></i>
+            </span>
+              <%= f.hidden_field :responsible_id, class: 'form-control-hidden' %>
             </div>
-
-            <div class="col-lg-1">
-              <label class="form-control-label">
-                Próx. Calibración
-              </label>
-            </div>
-            <div class="col-lg-2">
-              <div class='input-group date date-picker' id='date-picker2'>
-                <%= text_field :raw, :next_calibration_at, class: 'form-control',
-                               data: {format: dt_form_format(true), max: 0},
-                               value: DateTime.now.to_i %>
-                <span class="input-group-addon">
-                <i class="icmn-calendar"></i>
-              </span>
-              </div>
-            </div>
-
           </div>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
+                Identificador
+              </label>
+            </div>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.text_field :identification, class: 'form-control' %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
                 Nombre
               </label>
             </div>
-            <div class="col-lg-2 margin-right-20" id="area-in">
+            <div class="col-lg-2 margin-right-20">
               <%= f.text_field :name, class: 'form-control' %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Descripción
+              </label>
+            </div>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.text_field :description, class: 'form-control' %>
             </div>
           </div>
 

@@ -23,11 +23,15 @@ class Person::User < Person
   has_secure_password
 
   def name_and_position
+    "(#{self.all_positions}) #{self.full_name}"
+  end
+
+  def all_positions
     pos_names = []
     for pos_id in self.positions
       pos_names.push(pos_id.name)
     end
 
-    "(#{pos_names.join('/')}) #{self.full_name}"
+    pos_names.join('/')
   end
 end

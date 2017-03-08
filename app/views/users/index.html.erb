@@ -7,17 +7,13 @@
 
 <% content_for :table_headers do %>
     <tr>
-      <th>/RUT/</th>
-      <th>/NAME/</th>
-      <th>/L_NAME1/</th>
-      <th>/L_NAME2/</th>
-      <th>/DOB/</th>
-      <th>/EMAIL/</th>
-      <th>/PHONE/</th>
-      <th>/ADDRESS/</th>
-      <th>/ROLE/</th>
-      <th>/LL_AT/</th>
-      <th>/J_AT/</th>
+      <th>RUT</th>
+      <th>Nombre</th>
+      <th>Rol</th>
+      <th>E-mail</th>
+      <th>Teléfono</th>
+      <th>Dirección</th>
+      <th>Cargos</th>
     </tr>
 <% end %>
 
@@ -28,21 +24,17 @@
             <tr data-href="<%= user_path(user.id) %>">
 
               <td><%= user.rut %></td>
-              <td><%= user.name %></td>
-              <td><%= user.l_name1 %></td>
-              <td><%= user.l_name2 %></td>
-              <td><%= user.dob %></td>
+              <td><%= user.full_name %></td>
+              <td><%= user.role %></td>
               <td><%= user.email %></td>
               <td><%= user.phone %></td>
               <td><%= user.address %></td>
-              <td><%= user.role %></td>
-              <td><%= user.ll_at %></td>
-              <td><%= user.j_at %></td>
+              <td><%= user.all_positions %></td>
             </tr>
         <% end %>
     <% else %>
         <tr>
-          <td colspan="8"> No se encontraron /PERSON::USER/ de esta clase. </td>
+          <td colspan="8"> No se encontraron empleados. </td>
         </tr>
     <% end %>
 <% end %>
@@ -58,7 +50,7 @@
     <div class="left">
       <div class="header-buttons">
         <div class="dropdown">
-          <%= link_to new_risk_path('ley'), method: 'get', class: 'dropdown-inline-button' do %>
+          <%= link_to new_user_path, method: 'get', class: 'dropdown-inline-button' do %>
               <i class="dropdown-inline-button-icon icmn-file-plus"></i>
               Nuevo
           <% end %>
@@ -72,7 +64,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
         <span>
-          Riesgos Legales
+          Personas
         </span>
         </li>
       </ul>

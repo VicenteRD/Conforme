@@ -1,11 +1,11 @@
 <%= content_for :profile_specifics do %>
-  <h6>/ Provider/</h6>
+  <h6>Proveedor</h6>
   <dl class="dl-horizontal user-profile-dl">
-    <dt>/Type_Of/</dt>
-    <dd><%= @person.type_of %></dd>
-    <dt>/Competencies/</dt>
+    <dt>Tipo</dt>
+    <dd><%= @person.provider_type %></dd>
+    <dt>Competencias</dt>
     <dd><%= @person.competencies %></dd>
-    <dt>/Performance/</dt>
+    <dt>Desempeño</dt>
     <dd><%= @person.performance %></dd>
   </dl>
 <%= end %>

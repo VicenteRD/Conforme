@@ -11,17 +11,18 @@ Rails.application.routes.draw do
   post 'login'    => 'sessions#create'
   delete 'logout' => 'sessions#destroy'
 
-  # -------- Uploads
+  # -------- Employees
 
-  post '/upload'  => 'uploaded_files#create'
+  get '/personas/fichas'          => 'users#index'            , as: :users
+  get '/personas/fichas/nuevo'    => 'users#new'              , as: :new_user
+  get '/personas/fichas/:id'      => 'users#show'             , as: :user
 
-  get '/personas'              => 'users#index'
-  get '/personas/ficha/:id'    => 'users#show', as: :user
-  get '/personas/organigrama'   => 'positions#index', as: :positions
-  get '/personas/organigrama/detalle/:id'   => 'positions#show', as: :position
-  get '/personas/competencias' => 'users#eval_competencies'
-  get '/personas/performance'  => 'users#eval_performance'
-  get '/personas/clima'        => 'users#work_environment'
+  get '/personas/organigrama'     => 'positions#index'        , as: :positions
+  get '/personas/organigrama/:id' => 'positions#show'         , as: :position
+
+  get '/personas/competencias'    => 'users#eval_competencies'
+  get '/personas/desempeno'       => 'users#eval_performance'
+  get '/personas/clima'           => 'users#work_environment'
 
   get '/clientes'              => 'clients#show'
   get '/clientes/satisfaccion' => 'clients#satisfaction'

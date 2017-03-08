@@ -1,5 +1,5 @@
 class Person::Client
   include Mongoid::Document
 
-  field :type_of, type: String
+  field :client_type, type: String
 end

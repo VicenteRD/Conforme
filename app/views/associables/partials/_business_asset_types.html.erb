@@ -66,7 +66,7 @@
         formGroup = $('#<%= picker_id %>');
 
         formGroup.find('.form-control')
-            .val(row.find('#user-name').html() + ' ' + row.find('#user-last-names').html());
+            .val(row.find('#type-name').html());
         formGroup.find('.form-control-hidden').val(row.attr('data-id'));
 
 
@@ -87,11 +87,11 @@
             container.append(
                 '<div id="' + selectedId + '">\n' +
                 '<input class="form-control-hidden" type="hidden" ' +
-                'name="<%= @element %>[associables][users][]" id="<%= @element %>_associable_user" ' +
+                'name="<%= @element %>[associables][business_asset_types][]" id="<%= @element %>_associable_asset_type" ' +
                 'value="' + selectedId + '">\n' +
                 '<input class="form-control user-displayed-name" readonly="readonly" type="text" ' +
                 'name="associable_user_display" id="user_' + selectedId + '_display" ' +
-                'value="Empleado: ' + row.find('#user-name').html() + ' ' + row.find('#user-last-names').html() + '">\n' +
+                'value="Empleado: ' + row.find('#type-name').html() +  '">\n' +
                 '</div>'
             );
         }

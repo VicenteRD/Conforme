@@ -4,6 +4,9 @@ vr = Person::User.new(
   email: 'vicente.drd@gmail.com',
   password: 'vicente8',
 
+  avatar: File.new('vendor/assets/images/avatars/1.jpg'),
+  background_image: File.new('vendor/assets/images/photos/4.jpeg'),
+
   rut: '18635551-2',
   name: 'Vicente',
   l_name1: 'Rivera',
@@ -25,6 +28,9 @@ vr = Person::User.new(
 tst = Person::User.new(
     email: 'a@a',
     password: '88888888',
+
+    avatar: File.new('vendor/assets/images/avatars/1.jpg'),
+    background_image: File.new('vendor/assets/images/photos/4.jpeg'),
 
     rut: '17700224-0',
     name: 'a',
@@ -48,6 +54,9 @@ tst.save!
 cv = Person::User.new(
     email: 'cvillaseca@eworks.cl',
     password: 'picton1950',
+
+    avatar: File.new('vendor/assets/images/avatars/1.jpg'),
+    background_image: File.new('vendor/assets/images/photos/4.jpeg'),
 
     rut: '11345343-5',
     name: 'Claudio',

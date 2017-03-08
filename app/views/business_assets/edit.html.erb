@@ -19,7 +19,8 @@
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="type-in">
-              <%= text_field :extra, :type_name, class: 'form-control', readonly: true %>
+              <%= text_field :extra, :type_name, class: 'form-control', readonly: true,
+                             value: BusinessAssetType.find(@business_asset.type_id).name %>
               <span class="input-group-addon" style="cursor: pointer">
                 <i class="icmn-pencil5"></i>
               </span>
@@ -32,7 +33,9 @@
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
-              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true %>
+              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true,
+                             value: Person::User
+                                 .find(@business_asset.responsible_id).first_last_name %>
               <span class="input-group-addon" style="cursor: pointer">
               <i class="icmn-pencil5"></i>
             </span>
@@ -130,7 +133,7 @@
             $.ajax({url: '/associables/single_responsible-in/Person::User'});
         });
 
-        $('#asset_type-in').click(function () {
+        $('#type-in').click(function () {
             $('#table-modal-title').html('Seleccionar Tipo');
             $.ajax({url: '/associables/single_type-in/BusinessAssetType'});
         });

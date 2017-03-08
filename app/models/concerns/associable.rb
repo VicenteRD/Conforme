@@ -65,7 +65,7 @@ module Associable
   end # included
 
   ## Helper methods
-
+  private
   def is_document?(class_type)
     class_type < Mongoid::Document
   end

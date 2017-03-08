@@ -1,15 +1,27 @@
 <%= content_for :profile_specifics do %>
-  <h6>/ User/</h6>
-  <dl class="dl-horizontal user-profile-dl">
-    <dt>/Last login/</dt>
-    <dd><%= @person.ll_at %></dd>
-    <dt>/Joined at/</dt>
-    <dd><%= @person.j_at %></dd>
-    <dt>/Contract Type/</dt>
-    <dd><%= @person.contract_type %></dd>
-  </dl>
+    <h6>Empleado</h6>
+    <dl class="dl-horizontal user-profile-dl">
+      <dt>Última conexión</dt>
+      <dd><%= @person.ll_at.strftime(dt_rb_format(true, false)) %></dd>
+      <dt>Fecha Incorporación</dt>
+      <dd><%= @person.j_at.strftime(dt_rb_format(true, false)) %></dd>
+      <dt>Tipo de Contrato</dt>
+      <dd><%= @person.contract_type %></dd>
+    </dl>
+<% end %>
+
+<%= content_for :avatar_extra do %>
+    <!--<p>
+      <%# if @person.online? %>
+          <span class="donut donut-success"></span>
+          En línea
+      <%# else %>
+          <span class="donut donut-danger"></span>
+          Fuera de linea
+      <%# end %>
+    </p>-->
 <% end %>
 
 <%= content_for :profile_person_type do %>
-  User
+    Empleado
 <% end %>

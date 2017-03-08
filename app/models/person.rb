@@ -15,6 +15,10 @@ class Person
   include Mongoid::Timestamps::Short
 
   has_mongoid_attached_file :avatar
+  has_mongoid_attached_file :background_image
+
+  validates_attachment_content_type :avatar, content_type: %w(image/jpg image/jpeg image/png image/gif)
+  validates_attachment_content_type :background_image, content_type: %w(image/jpg image/jpeg image/png image/gif)
 
   ## Other fields
   field :rut, type: String
