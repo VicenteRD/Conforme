@@ -37,7 +37,7 @@
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker'>
                 <%= text_field :raw, :due_at, class: 'form-control',
-                               data: {date_format: dt_form_format(true)},
+                               data: {format: dt_form_format(true), max: 0},
                                value: @planning.due_at.to_i %>
                 <span class="input-group-addon">
                   <i class="icmn-calendar"></i>
@@ -49,14 +49,24 @@
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
+                Ejecutado?
+              </label>
+            </div>
+            <div class="col-lg-2 text-left margin-right-20">
+              <%= check_box :raw, :executed, class: 'vertical-align-middle' %>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
                 Fecha Real
               </label>
             </div>
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker'>
                 <%= text_field :raw, :executed_at, class: 'form-control',
-                               data: {date_format: dt_form_format(true)},
-                               value: DateTime.now.to_i %>
+                               data: {format: dt_form_format(true), max: 0},
+                               value: DateTime.now.to_i,
+                               readonly: true %>
                 <span class="input-group-addon">
                   <i class="icmn-calendar"></i>
                 </span>
@@ -65,7 +75,7 @@
           </div>
 
           <div class="row form-group" style="margin: 30px 10px;height:400px">
-            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'}  %>
+            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
           </div>
 
           <div id="associables-container"></div>
@@ -112,10 +122,27 @@
           <% end %>
         </li>
         <li>
+          <%= link_to @planning.number, planning_path(@planning) %>
+        </li>
+        <li>
           <span>
-            Nuevo Plan
+            Editar Plan
           </span>
         </li>
       </ul>
     </div>
 <% end %>
+
+<%= content_for :scripts do %>
+    <script>
+        $('#raw_executed').click(function () {
+            var execAt = $('#raw_executed_at');
+            if ($(this).is(':checked')) {
+                execAt.removeAttr('readonly');
+            } else {
+                execAt.prop('readonly', 'readonly')
+            }
+        });
+    </script>
+<% end %>
+

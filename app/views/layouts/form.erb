@@ -7,45 +7,15 @@
 <% end %>
 
 <%= content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-        <div class="dropdown">
-          <a href="#confirmation-modal" class="dropdown-inline-button" data-toggle="modal">
-            <i class="dropdown-inline-button-icon icmn-file-check"></i>
-            Grabar
-          </a>
-        </div>
-        <%= yield :menu_extras %>
-      </div>
+    <div class="dropdown">
+      <a href="#confirmation-modal" class="dropdown-inline-button" data-toggle="modal">
+        <i class="dropdown-inline-button-icon icmn-file-check"></i>
+        Grabar
+      </a>
     </div>
 <% end %>
 
-
 <%= yield %>
-
-<div id="uploads-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <%= form_for(:uploaded_file, url: new_upload_path) do |f| %>
-
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Subir Archivo</h4>
-          </div>
-          <div class="modal-body">
-            <%= f.file_field :upload %>
-          </div>
-          <div class="modal-footer">
-            <div class="text-right">
-              <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50',
-                           id: 'upload-button' %>
-            </div>
-          </div>
-    <% end %>
-    </div>
-  </div>
-</div>
 
 <%= content_for :scripts do %>
     <!-- Form scripts -->

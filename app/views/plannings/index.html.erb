@@ -41,15 +41,11 @@
 
 
 <% content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-        <div class="dropdown">
-          <%= link_to new_planning_path, method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
-              Nuevo
-          <% end %>
-        </div>
-      </div>
+    <div class="dropdown">
+      <%= link_to new_planning_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
     </div>
 <% end %>
 

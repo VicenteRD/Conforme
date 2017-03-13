@@ -17,7 +17,7 @@ class PlanningActivity
   field :prog, as: :progress, type: Float
 
   field :name, type: String
-  field :desc, type: String
+  field :desc, as: :description, type: String
 
   field :cmts, as: :comments, type: String
 end

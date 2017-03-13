@@ -73,26 +73,24 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <% @planning.activities.order(due_at: :asc).each do |measurement| %>
-                      <% bgcolor = significant_bgcolor(measurement.significant) %>
-                      <% txtcolor = significant_txtcolor(measurement.significant) %>
+                  <% @planning.activities.order(due_at: :asc).each do |activity| %>
 
-                      <tr class="activity-row" data-id="<%= measurement.id %>">
+                      <tr class="activity-row" data-id="<%= activity.id %>">
                         <td>
-                          <%= measurement.name %>
+                          <%= activity.name %>
                         </td>
                         <td>
-                          <%= measurement.description %>
+                          <%= activity.description %>
                         </td>
                         <td>
-                          <%= measurement.due_at.strftime(dt_rb_format(false, false)) %>
+                          <%= activity.due_at.strftime(dt_rb_format(false, false)) %>
                         </td>
                         <td>
-                          <%= (measurement.progress * 100).to_i %>
+                          <%= (activity.progress * 100).round %>
                         </td>
 
                         <td>
-                          <%= measurement.executed_at.strftime(dt_rb_format(false, false)) %>
+                          <%= activity.executed_at&.strftime(dt_rb_format(false, false)) %>
                         </td>
                       </tr>
                   <% end %>
@@ -106,32 +104,26 @@
 <% end %>
 
 <%= content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
+    <div class="dropdown">
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @planning.log_book})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+        <i class="dropdown-inline-button-icon icmn-history"></i>
+        Bitácora
+      </a>
+    </div>
 
-        <div class="dropdown">
-          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @planning.log_book})}" %>
-          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
-            <i class="dropdown-inline-button-icon icmn-history"></i>
-            Bitácora
-          </a>
-        </div>
+    <div class="dropdown">
+      <%= link_to new_planning_activity_path(@planning), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-calendar"></i>
+          Nueva Actividad
+      <% end %>
+    </div>
 
-        <div class="dropdown">
-          <%= link_to new_planning_activity_path(@planning), method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-design"></i>
-              Nueva Actividad
-          <% end %>
-        </div>
-
-        <div class="dropdown">
-          <%= link_to edit_planning_path(@planning.id), method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-pencil"></i>
-              Editar
-          <% end %>
-        </div>
-
-      </div>
+    <div class="dropdown">
+      <%= link_to edit_planning_path(@planning), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
     </div>
 <% end %>
 
@@ -140,7 +132,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
           <%= link_to plannings_path do %>
-              Planificiación
+              Planificación
           <% end %>
         </li>
         <li>

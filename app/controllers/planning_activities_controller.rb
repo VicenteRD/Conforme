@@ -56,7 +56,9 @@ class PlanningActivitiesController < ApplicationController
     fields = params.require(:planning_activity)
 
     fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
-    fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
+    if params.dig(:raw, :executed)&.to_i != 0
+      fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
+    end
 
     progress = params.dig(:raw, :progress)
     fields[:progress] = progress.to_f / 100.0 if progress

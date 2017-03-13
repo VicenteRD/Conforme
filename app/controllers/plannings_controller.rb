@@ -31,7 +31,7 @@ class PlanningsController < ApplicationController
     ))
     planning.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
 
-    redirect_to planning_activities_path(planning)
+    redirect_to planning_path(planning)
   end
 
   def edit
@@ -50,8 +50,9 @@ class PlanningsController < ApplicationController
     fields = params.require(:planning)
 
     fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
-    fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
-
+    if params.dig(:raw, :executed)&.to_i != 0
+      fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
+    end
     planning.update!(fields.permit(
         :due_at,
         :executed_at,
