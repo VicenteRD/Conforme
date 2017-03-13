@@ -1,17 +1,55 @@
 class BusinessProcessesController < ApplicationController
-  def list
-    @element = params[:element].to_sym
+  def index
+    render layout: 'table'
+  end
 
-    render layout: false
+  def show
+    if (@process = BusinessProcess.find(params[:id]))
+      render layout: 'show'
+    else
+      redirect_to '/'
+    end
   end
 
   def new
-    @element = params[:element].to_sym
-
-    render layout: false
+    render layout: 'form'
   end
 
   def create
-    BusinessProcess.create!(name: params[:process][:name], description: params[:process][:description])
+    fields = params.require(:process)
+
+    process = BusinessProcess.create!(fields.permit(
+        :name,
+        :description
+    ))
+
+    process.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
+
+    redirect_to business_process_path(process)
+  end
+
+  def edit
+    if (@process = BusinessProcess.find(params[:id]))
+      render layout: 'form'
+    else
+      redirect_to '/'
+    end
+  end
+
+  def update
+    unless (process = BusinessProcess.find(params[:id]))
+      redirect_to '/' and return
+    end
+
+    fields = params.require(:process)
+
+    process.update!(fields.permit(
+        :name,
+        :description
+    ))
+
+    process.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+
+    redirect_to business_process_path(process)
   end
 end

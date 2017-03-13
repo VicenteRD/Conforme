@@ -1,0 +1,64 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Tipo</th>
+      <th>Nombre</th>
+      <th>Estrategia</th>
+      <th>Fecha</th>
+    </tr>
+<% end %>
+<% content_for :table_body do %>
+    <% all_swot = Swot.order_by(swot_type: :asc) %>
+    <% if all_swot.size != 0 %>
+        <% all_swot.each do |swot| %>
+
+            <tr data-href="<%= swot_path(swot) %>">
+
+              <td data-sort="<%= swot.swot_type %>">
+                <div class="expand-collapse">+</div>
+                <%= swot.presentable_type %>
+              </td>
+              <td>
+                <%= swot.name %>
+              </td>
+              <td>
+                <%= swot.strategy %>
+              </td>
+              <td>
+                <%= swot.term.strftime(dt_rb_format(false, false)) %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron elementos FODA.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_swot_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Estrategias: FODA
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

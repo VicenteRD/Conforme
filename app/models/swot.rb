@@ -21,4 +21,7 @@ class Swot
     { 0 => 'Fortaleza', 1 => 'Oportunidad', 2 => 'Debilidad', 3 => 'Amenaza' }
   end
 
+  def presentable_type
+    Swot.get_all_types[self.swot_type]
+  end
 end
