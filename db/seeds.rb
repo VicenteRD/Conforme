@@ -109,6 +109,8 @@ Task::DocumentTask.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En 
 Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'No matar el servidor', rejected: false,
                  p_at: Time.now, r_at: Time.now)
 
+# Business Processes
+
 proc1 = BusinessProcess.new(name: 'Going to sleep',
                             description: 'Something some humans do.')
 proc1.save!
@@ -117,18 +119,14 @@ proc2 = BusinessProcess.new(name: 'Processing process',
                             description: 'Process to process to processing of processes within the main process of the process.')
 proc2.save!
 
+# Rules
+
 stdd = Rule.new(institution: 'ISO', name: '9001', rule_type: 2)
 stdd.save!
-s_art = stdd.articles.create(name: 'A', requirement: 'Do stuff right.')
-
 law = Rule.new(institution: 'Estado', name: 'Constitución', rule_type: 1)
 law.save!
 
-l_art = law.articles.create(name: '1.1', requirement: 'uno uno.')
-law.articles.create(name: '1.1.1', requirement: 'uno uno uno')
-law.articles.create(name: '1.2', requirement: 'uno dos')
-law.articles.create(name: '2.1', requirement: 'dos uno')
-law.articles.create(name: '3', requirement: 'tres')
+# Risks
 
 Settings::RiskSettings.create(
     margin: 0.05,
@@ -175,7 +173,9 @@ st_risk = Risk::RuleRisk.new(
 
     rule_type: 2,
     rule_id: stdd.id,
-    article_id: s_art.id
+    numeral: '2.0.1',
+    title: 'Not-so-important title',
+    requirement: 'Do stuff right'
 )
 st_risk.save!
 st_risk.log_creation(nil, body = 'Created by system')
@@ -186,7 +186,9 @@ la_risk = Risk::RuleRisk.new(
 
     rule_type: 1,
     rule_id: law.id,
-    article_id: l_art.id
+    numeral: '1.1',
+    title: 'Important Title',
+    requirement: "Don't do stuff"
 )
 la_risk.save!
 la_risk.log_creation(nil, body = 'Created by system')
@@ -226,6 +228,7 @@ sa_risk = Risk::SafetyRisk.new(
 sa_risk.save!
 sa_risk.log_creation(nil, body = 'Created by system')
 
+# Objectives
 
 obj = Objective.new(
     creator_id: vr.id,
@@ -234,6 +237,8 @@ obj = Objective.new(
     phrase: 'Order 66'
 )
 obj.save!
+
+# Indicators
 
 ind = Indicator.new(
     objective_id: obj.id,
@@ -252,6 +257,8 @@ ind.save!
 
 obj.save!
 
+# Assets
+
 a_t = BusinessAssetType.new(
     name: 'Vehículo',
     description: 'Cosa que se mueve'
@@ -268,6 +275,8 @@ ast = BusinessAsset.new(
 ast.save!
 ast.log_book.new_entry(nil, 'Creado', 'Created by system')
 
+# SWOT
+
 swot = Swot.new(
     swot_type: 1,
     name: 'A',
@@ -277,7 +286,3 @@ swot = Swot.new(
 )
 swot.save!
 swot.log_book.new_entry(nil, 'Creado', 'Created by system')
-
-
-# calibrations, class_name: 'Asset::Calibration'
-# maintenance_jobs, class_name: 'Asset::Maintenance'

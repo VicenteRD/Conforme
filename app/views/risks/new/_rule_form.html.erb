@@ -9,7 +9,7 @@
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
-                <%=  type_label %>
+                <%= type_label %>
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="rule-in">
@@ -21,15 +21,19 @@
             </div>
             <div class="col-lg-1">
               <label class="form-control-label">
-                Artículo
+                Numeral
               </label>
             </div>
-            <div class="col-lg-2 input-group" id="article-in">
-              <%= text_field :extra, :article_name, class: 'form-control', readonly: true %>
-              <span class="input-group-addon" style="cursor: pointer">
-                <i class="icmn-pencil5"></i>
-              </span>
-              <%= f.hidden_field :article_id, class: 'form-control-hidden standard-input' %>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.text_field :numeral, class: 'form-control' %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Titulo
+              </label>
+            </div>
+            <div class="col-lg-2 margin-right-20">
+              <%= f.text_field :title, class: 'form-control' %>
             </div>
           </div>
 

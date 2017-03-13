@@ -8,15 +8,6 @@
             $.ajax({url: '/associables/single_rule-in/Law'});
         });
 
-        $('#article-in').click(function() {
-            var ruleId = $('#rule-in').find('.form-control-hidden').val();
-
-            if (ruleId) {
-                $('#table-modal-title').html('Seleccionar Artículo');
-                $.ajax({url: '/associables/single_article-in_' + ruleId + '/Rule::Article'});
-            }
-        });
-
         $('#responsible-in').click(function () {
             $('#table-modal-title').html('Seleccionar Responsable');
             $.ajax({url: '/associables/single_responsible-in/Person::User'});

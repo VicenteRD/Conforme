@@ -2,22 +2,22 @@
 <% end %>
 
 <% content_for :table_name_active do %>
-  Activos
+    Activos
 <% end %>
 
 <% content_for :table_headers do %>
-  <tr>
-    <th>Área</th>
-    <th>Proceso</th>
-    <th>Actividad</th>
-    <th>Aspecto</th>
-    <th>Encargado</th>
-    <th>Significativo</th>
-    <th>Fecha</th>
-    <th>Prob. (%)</th>
-    <th>Cons.</th>
-    <th>Mag.</th>
-  </tr>
+    <tr>
+      <th>Área</th>
+      <th>Proceso</th>
+      <th>Actividad</th>
+      <th>Aspecto</th>
+      <th>Encargado</th>
+      <th>Fecha</th>
+      <th>Prob. (%)</th>
+      <th>Cons.</th>
+      <th>Mag.</th>
+      <th>Significativo</th>
+    </tr>
 <% end %>
 
 <% content_for :table_body do %>
@@ -30,58 +30,56 @@
 
             <tr data-href="<%= risk_path('ambiente', risk) %>">
 
-              <td><div class="expand-collapse">+</div><%= Position.find(risk.area_id).name %></td>
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= Position.find(risk.area_id).name %>
+              </td>
               <td><%= BusinessProcess.find(risk.process_id).name %></td>
               <td><%= risk.activity %></td>
               <td><%= risk.aspect %></td>
 
               <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
 
-              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
+              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-' %></td>
 
-              <td><%= msrmnt != nil ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-'%></td>
-
-              <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s : '-'%></td>
-              <td><%= msrmnt != nil ? msrmnt.consequence.round(2) : '-'%></td>
+              <td><%= msrmnt != nil ? (msrmnt.probability * 100).to_i.to_s : '-' %></td>
+              <td><%= msrmnt != nil ? msrmnt.consequence.round(2) : '-' %></td>
               <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
 
+              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
             </tr>
         <% end %>
     <% else %>
         <tr>
-          <td colspan="11"> No se encontraron riesgos de esta clase. </td>
+          <td colspan="11"> No se encontraron riesgos de esta clase.</td>
         </tr>
     <% end %>
 <% end %>
 
 <% content_for :styles do %>
-  <!-- Risks' Index Page Styles -->
-  <style>
-    <%= significant_style_css %>
-  </style>
+    <!-- Risks' Index Page Styles -->
+    <style>
+      <%= significant_style_css %>
+    </style>
 <% end %>
 
 <% content_for :menu do %>
-  <div class="left">
-    <div class="header-buttons">
-      <div class="dropdown">
-        <%= link_to new_risk_path('ambiente'), method: 'get', class: 'dropdown-inline-button' do %>
+    <div class="dropdown">
+      <%= link_to new_risk_path('ambiente'), method: 'get', class: 'dropdown-inline-button' do %>
           <i class="dropdown-inline-button-icon icmn-file-plus"></i>
           Nuevo
-        <% end %>
-      </div>
+      <% end %>
     </div>
-  </div>
 <% end %>
 
 <% content_for :breadcrumbs do %>
-  <div class="left">
-    <ul class="list-unstyled breadcrumb breadcrumb-custom">
-      <li>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
         <span>
           Riesgos Ambientales
         </span>
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
 <% end %>

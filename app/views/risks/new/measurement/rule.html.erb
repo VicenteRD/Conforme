@@ -88,8 +88,7 @@
           <%= link_to rule.full_name, risks_path(rule.id) %>
         </li>
         <li>
-          <%= link_to "Art. #{rule.articles.find(@risk.article_id).name}",
-                      risk_path(es_type(@risk.rule_type), @risk) %>
+          <%= link_to "Art. #{@risk.numeral}", risk_path(es_type(@risk.rule_type), @risk) %>
         </li>
         <li>
           <span>

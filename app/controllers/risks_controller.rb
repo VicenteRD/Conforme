@@ -10,7 +10,7 @@ class RisksController < ApplicationController
     if Risk.get_risk_types.key?(es_type)
       render "risks/index/#{Risk.get_risk_types[es_type][:en]}", layout: 'table'
     elsif Rule.find(params[:type])
-      @risks = Risk::RuleRisk.where(rule_id: params[:type]).order_by('get_article_name ASC')
+      @risks = Risk::RuleRisk.where(rule_id: params[:type]).order_by(numeral: :asc)
       render 'risks/index/rule', layout: 'table'
     else
       redirect_to '/'

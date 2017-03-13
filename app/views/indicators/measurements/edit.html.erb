@@ -20,7 +20,7 @@
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker'>
                 <%= text_field :raw, :measured_at, class: 'form-control',
-                               data: {date_format: dt_form_format(true)},
+                               data: {format: dt_form_format(true)},
                                value: @measurement.measured_at.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
@@ -81,7 +81,7 @@
 
 <% end %>
 
-<%= content_for :menu_extras do %>
+<%= content_for :menu do %>
     <div class="dropdown">
       <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @measurement.log_book})}" %>
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
@@ -105,7 +105,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
           <%= link_to indicators_path do %>
-              Indicadores
+              Análisis: Indicadores
           <% end %>
         </li>
         <li>

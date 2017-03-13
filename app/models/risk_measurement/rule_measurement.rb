@@ -16,4 +16,8 @@ class RiskMeasurement::RuleMeasurement < RiskMeasurement
 
     super
   end
+
+  def show_compliance
+    (self.compliance * 100).round.to_s
+  end
 end

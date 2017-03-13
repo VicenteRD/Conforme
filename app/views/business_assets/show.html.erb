@@ -64,9 +64,9 @@
 
 
     <% filtered_ordered_jobs = if @type == 'mantencion'
-                                 ordered_jobs.maintenance.where(executed: true).last
+                                 ordered_jobs.maintenance
                                elsif @type == 'calibracion'
-                                 ordered_jobs.calibration.where(executed: true).last
+                                 ordered_jobs.calibration
                                else
                                  nil
                                end %>
@@ -110,31 +110,26 @@
 
 
 <%= content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
+    <div class="dropdown">
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @business_asset.log_book})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+        <i class="dropdown-inline-button-icon icmn-history"></i>
+        Bitácora
+      </a>
+    </div>
 
-        <div class="dropdown">
-          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @business_asset.log_book})}" %>
-          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
-            <i class="dropdown-inline-button-icon icmn-history"></i>
-            Bitácora
-          </a>
-        </div>
-        <div class="dropdown">
+    <div class="dropdown">
+      <%= link_to new_asset_job_path(@type, @business_asset.id), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-traffic-cone"></i>
+          Programar <%= presentable_type %>
+      <% end %>
+    </div>
 
-          <%= link_to new_asset_job_path(@type, @business_asset.id), method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-traffic-cone"></i>
-              Registrar <%= presentable_type %>
-          <% end %>
-        </div>
-        <div class="dropdown">
-          <%= link_to edit_business_asset_path(@type, @business_asset.id), method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-pencil"></i>
-              Editar
-          <% end %>
-        </div>
-
-      </div>
+    <div class="dropdown">
+      <%= link_to edit_business_asset_path(@type, @business_asset.id), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
     </div>
 <% end %>
 
@@ -156,7 +151,7 @@
 <% content_for :scripts do %>
     <script type="text/javascript">
         $('.job-row').click(function () {
-            var link = '/activos/<%= @type %>/<%= @business_asset.id %>/editar/' + $(this).attr('data-id');
+            var link = '/activos/<%= @type %>/<%= @business_asset.id %>/' + $(this).attr('data-id') + '/editar';
 
             window.open(link, '_self');
         });

@@ -25,10 +25,10 @@
         <% assets.each do |asset| %>
             <% ordered_jobs = asset.jobs.order_by(e_at: :desc, c_at: :desc) %>
             <% ordered_jobs = if @type == 'mantencion'
-                       ordered_jobs.maintenance
-                     elsif @type == 'calibracion'
-                       ordered_jobs.calibration
-                     end %>
+                                ordered_jobs.maintenance
+                              elsif @type == 'calibracion'
+                                ordered_jobs.calibration
+                              end %>
 
             <tr data-href="<%= business_asset_path(@type, asset) %>">
               <td>
@@ -60,15 +60,11 @@
 <% end %>
 
 <% content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-        <div class="dropdown">
-          <%= link_to new_business_asset_path(@type), method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
-              Nuevo
-          <% end %>
-        </div>
-      </div>
+    <div class="dropdown">
+      <%= link_to new_business_asset_path(@type), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
     </div>
 <% end %>
 

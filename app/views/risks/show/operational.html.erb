@@ -36,7 +36,7 @@
     <div class="row">
       <div class="col-lg-4 show-label">Riesgo:</div>
       <div class="col-lg-8">
-          <%= @risk.name %>
+        <%= @risk.name %>
       </div>
     </div>
 <% end %>
@@ -119,34 +119,28 @@
 <% end %>
 
 <%= content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
+    <div class="dropdown">
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @risk.log_book})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+        <i class="dropdown-inline-button-icon icmn-history"></i>
+        Bitácora
+      </a>
+    </div>
 
+    <% if @risk.responsible_id == @user.id %>
         <div class="dropdown">
-          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @risk.log_book})}" %>
-          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
-            <i class="dropdown-inline-button-icon icmn-history"></i>
-            Bitácora
-          </a>
-        </div>
-
-        <% if @risk.responsible_id == @user.id %>
-            <div class="dropdown">
-              <%= link_to new_risk_measurement_path('operacional', @risk.id), method: 'get', class: 'dropdown-inline-button' do %>
-                  <i class="dropdown-inline-button-icon icmn-design"></i>
-                  Medir
-              <% end %>
-            </div>
-        <% end %>
-
-        <div class="dropdown">
-          <%= link_to edit_risk_path('operacional', @risk.id), method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-pencil"></i>
-              Editar
+          <%= link_to new_risk_measurement_path('operacional', @risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+              <i class="dropdown-inline-button-icon icmn-design"></i>
+              Medir
           <% end %>
         </div>
+    <% end %>
 
-      </div>
+    <div class="dropdown">
+      <%= link_to edit_risk_path('operacional', @risk.id), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
     </div>
 <% end %>
 

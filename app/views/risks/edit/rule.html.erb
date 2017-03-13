@@ -90,7 +90,6 @@
 
 <%= content_for :breadcrumbs do %>
     <% rule = Rule.find(@risk.rule_id) %>
-    <% article = rule.articles.find(@risk.article_id) %>
 
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
@@ -103,9 +102,7 @@
           <% end %>
         </li>
         <li>
-          <%= link_to risk_path(es_type(@risk.rule_type), @risk) do %>
-              Art. <%= article.name %>
-          <% end %>
+          <%= link_to "Art. #{@risk.numeral}", risk_path(es_type(@risk.rule_type), @risk) %>
         </li>
         <li>
           <span>

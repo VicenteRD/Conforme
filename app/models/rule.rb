@@ -1,9 +1,6 @@
 class Rule
   include Mongoid::Document
 
-  embeds_one :log_book, class_name: 'Log::Book'
-  embeds_many :articles, class_name: 'Rule::Article'
-
   field :rule_type, type: Integer
 
   index({rule_type: 1}, {name: 'type_index'})

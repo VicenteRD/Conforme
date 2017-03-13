@@ -11,11 +11,6 @@
             ruleArea.find('.form-control-hidden').val('<%= @rule.id %>');
         });
 
-        $('#article-in').click(function() {
-            $('#table-modal-title').html('Seleccionar Artículo');
-            $.ajax({url: '/associables/single_article-in_<%= @rule.id %>/Rule::Article'});
-        });
-
         $('#responsible-in').click(function () {
             $('#table-modal-title').html('Seleccionar Responsable');
             $.ajax({url: '/associables/single_responsible-in/Person::User'});

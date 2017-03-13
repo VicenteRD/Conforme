@@ -26,9 +26,9 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 show-label">Criterio:</div>
+      <div class="col-lg-4 show-label">Frec. Medición:</div>
       <div class="col-lg-8">
-        <%= @indicator.criterion %>
+        <%= frequency_string(@indicator.measurement_frequency).capitalize %>
       </div>
     </div>
 
@@ -47,12 +47,7 @@
         <%= @indicator.method %>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-4 show-label">Meta:</div>
-      <div class="col-lg-8">
-        <%= raw "#{@indicator.threshold.round(2).to_s} &plusmn; #{(@indicator.margin * 100).to_i}%" %>
-      </div>
-    </div>
+
 <% end %>
 
 <%= content_for :main_col_3 do %>
@@ -63,15 +58,9 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 show-label">Frec. Medición:</div>
+      <div class="col-lg-4 show-label">Meta:</div>
       <div class="col-lg-8">
-        <%= frequency_string(@indicator.measurement_frequency).capitalize %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-4 show-label">Unidad:</div>
-      <div class="col-lg-8">
-        <%= @indicator.unit %>
+        <%= raw "#{@indicator.criterion} #{@indicator.threshold.round(2).to_s} (&plusmn; #{(@indicator.margin * 100).to_i}%) #{@indicator.unit}" %>
       </div>
     </div>
 <% end %>
@@ -135,36 +124,30 @@
 <% end %>
 
 <%= content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
+    <div class="dropdown">
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @indicator.log_book})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+        <i class="dropdown-inline-button-icon icmn-history"></i>
+        Bitácora
+      </a>
+    </div>
 
+    <% if @indicator.responsible_id == @user.id %>
         <div class="dropdown">
-          <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @indicator.log_book})}" %>
-          <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
-            <i class="dropdown-inline-button-icon icmn-history"></i>
-            Bitácora
-          </a>
-        </div>
-
-        <% if @indicator.responsible_id == @user.id %>
-            <div class="dropdown">
-              <%= link_to new_indicator_measurement_path(@indicator.id),
-                          method: 'get', class: 'dropdown-inline-button' do %>
-                  <i class="dropdown-inline-button-icon icmn-design"></i>
-                  Medir
-              <% end %>
-            </div>
-        <% end %>
-
-        <div class="dropdown">
-          <%= link_to edit_indicator_path(@indicator.id),
+          <%= link_to new_indicator_measurement_path(@indicator.id),
                       method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-pencil"></i>
-              Editar
+              <i class="dropdown-inline-button-icon icmn-design"></i>
+              Medir
           <% end %>
         </div>
+    <% end %>
 
-      </div>
+    <div class="dropdown">
+      <%= link_to edit_indicator_path(@indicator.id),
+                  method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
     </div>
 <% end %>
 
@@ -173,7 +156,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
           <%= link_to indicators_path do %>
-              Indicadores
+              Análisis: Indicadores
           <% end %>
         </li>
         <li>

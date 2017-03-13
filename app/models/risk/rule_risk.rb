@@ -1,7 +1,7 @@
 class Risk::RuleRisk < Risk
   include Mongoid::Document
 
-  validates_presence_of :rule_type, :rule_id, :article_id
+  validates_presence_of :rule_type, :rule_id, :numeral, :title
 
   embeds_many :measurements, class_name: 'RiskMeasurement::RuleMeasurement'
 
@@ -13,10 +13,13 @@ class Risk::RuleRisk < Risk
   scope :standard, -> { where(rule_type: 2) }
 
   field :rule_id, type: BSON::ObjectId
-  field :art_id, as: :article_id, type: BSON::ObjectId
+
+  field :numeral, type: String
+  field :title, type: String
+  field :requirement, type: String
 
   def self.permitted_fields
-    super + [:rule_type, :rule_id, :article_id]
+    super + [:rule_type, :rule_id, :numeral, :title, :requirement]
   end
 
   def new_measurement(values)

@@ -91,7 +91,7 @@
 
 <% end %>
 
-<%= content_for :menu_extras do %>
+<%= content_for :menu do %>
     <div class="dropdown">
       <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @measurement.log_book})}" %>
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">

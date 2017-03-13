@@ -12,10 +12,8 @@
       <th>Description</th>
       <th>Método</th>
       <th>Encargado</th>
-      <th>Criterio</th>
-      <th>Unidad</th>
       <th>Fecha</th>
-      <th>Valor Esperado</th>
+      <th>Meta</th>
       <th>Valor Obtenido</th>
       <th>Significativo</th>
     </tr>
@@ -26,6 +24,9 @@
         <% @indicators.each do |indicator| %>
             <% measurement = indicator.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
+            <% threshold = "#{measurement&.threshold || indicator.threshold}
+            (&plusmn; #{(indicator.margin * 100).round(2)} %)" %>
+
             <tr data-href="<%= indicator_path(indicator.id) %>">
 
               <td><%= Objective.find(indicator.objective_id).name %></td>
@@ -34,10 +35,8 @@
               <td><%= indicator.description %></td>
               <td><%= indicator.method %></td>
               <td><%= Person::User.find(indicator.responsible_id).first_last_name %></td>
-              <td><%= indicator.criterion %></td>
-              <td><%= indicator.unit %></td>
-              <td><%= measurement&.measured_at&.strftime(dt_rb_format(false, false)) || '-' %></td>
-              <td><%= measurement&.threshold || '-' %></td>
+              <td><%= measurement&.measured_at.strftime(dt_rb_format(false, false)) || '-' %></td>
+              <td><%= raw "#{indicator.criterion} #{threshold} #{indicator.unit}" %></td>
               <td><%= measurement&.value || '-' %></td>
               <td class="<%= 'sig-' + indicator.significant.to_s %>">
                 <%= humanize_significant(indicator.significant) %>
@@ -47,7 +46,7 @@
         <% end %>
     <% else %>
         <tr>
-          <td colspan="10"> No se encontraron indicadores. </td>
+          <td colspan="10"> No se encontraron indicadores.</td>
         </tr>
     <% end %>
 <% end %>
@@ -60,15 +59,11 @@
 <% end %>
 
 <% content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-        <div class="dropdown">
-          <%= link_to new_indicator_path, method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
-              Nuevo
-          <% end %>
-        </div>
-      </div>
+    <div class="dropdown">
+      <%= link_to new_indicator_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
     </div>
 <% end %>
 
@@ -77,7 +72,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
         <span>
-          Indicadores
+          Análisis: Indicadores
         </span>
         </li>
       </ul>

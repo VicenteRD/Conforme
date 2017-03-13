@@ -9,7 +9,7 @@
     <tr>
       <th>Organización</th>
       <th>Norma</th>
-      <th>Cumplimiento (%)</th>
+      <th>%</th>
     </tr>
 <% end %>
 
@@ -31,7 +31,10 @@
             <% rule = Rule.find(risk[:_id]) %>
 
             <tr data-href="<%= risks_path(risk[:_id]) %>">
-              <td><div class="expand-collapse">+</div><%= rule.institution %></td>
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= rule.institution %>
+              </td>
               <td><%= rule.name %></td>
               <td><%= risk[:average_compliance] %></td>
             </tr>
@@ -44,15 +47,11 @@
 <% end %>
 
 <% content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-        <div class="dropdown">
-          <%= link_to new_risk_path('norma'), method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
-              Nuevo
-          <% end %>
-        </div>
-      </div>
+    <div class="dropdown">
+      <%= link_to new_risk_path('norma'), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
     </div>
 <% end %>
 

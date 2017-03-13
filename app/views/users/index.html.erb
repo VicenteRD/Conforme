@@ -34,28 +34,17 @@
         <% end %>
     <% else %>
         <tr>
-          <td colspan="8"> No se encontraron empleados. </td>
+          <td colspan="7"> No se encontraron empleados.</td>
         </tr>
     <% end %>
 <% end %>
 
-<% content_for :styles do %>
-  <!-- Risks' Index Page Styles -->
-  <style>
-    <%= significant_style_css %>
-  </style>
-<% end %>
-
 <% content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-        <div class="dropdown">
-          <%= link_to new_user_path, method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
-              Nuevo
-          <% end %>
-        </div>
-      </div>
+    <div class="dropdown">
+      <%= link_to new_user_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
     </div>
 <% end %>
 

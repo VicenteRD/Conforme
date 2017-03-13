@@ -26,7 +26,8 @@ class IndicatorsController < ApplicationController
         :objective_id,
         :name, :description, :method,
         :threshold, :criterion, :margin,
-        :unit, :responsible_id, :measurement_frequency
+        :unit, :responsible_id, :measurement_frequency,
+        :comments
     ))
 
     indicator.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
@@ -52,7 +53,8 @@ class IndicatorsController < ApplicationController
         :objective_id,
         :name, :description, :method,
         :threshold, :criterion, :margin,
-        :unit, :responsible_id, :measurement_frequency
+        :unit, :responsible_id, :measurement_frequency,
+        :comments
     ))
 
     indicator.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))

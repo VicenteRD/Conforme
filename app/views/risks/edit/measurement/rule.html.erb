@@ -82,7 +82,7 @@
 
 <% end %>
 
-<%= content_for :menu_extras do %>
+<%= content_for :menu do %>
     <div class="dropdown">
       <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @measurement.log_book})}" %>
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
@@ -112,8 +112,7 @@
           <%= link_to rule.full_name, risks_path(rule.id) %>
         </li>
         <li>
-          <%= link_to "Art. #{rule.articles.find(@risk.article_id).name}",
-                      risk_path(es_type(@risk.rule_type), @risk) %>
+          <%= link_to "Art. #{@risk.numeral}", risk_path(es_type(@risk.rule_type), @risk) %>
         </li>
         <li>
           <span>

@@ -8,10 +8,11 @@
 <% content_for :table_headers do %>
     <tr>
       <th>Artículo</th>
+      <th>Título</th>
       <th>Requerimiento</th>
       <th>Encargado</th>
       <th>Fecha</th>
-      <th>Cumplimiento (%)</th>
+      <th>%</th>
     </tr>
 <% end %>
 
@@ -19,19 +20,31 @@
     <% if @risks.size != 0 %>
         <% @risks.each do |risk| %>
 
-            <% article = Rule.find(risk.rule_id).articles.find(risk.article_id) %>
             <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
             <tr data-href="<%= risk_path((risk.rule_type == 1 ? 'ley' : 'norma'), risk) %>">
 
-              <td><div class="expand-collapse">+</div><%= article.name %></td>
-              <td><%= article.requirement %></td>
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= risk.numeral %>
+              </td>
+              <td>
+                <%= risk.title %>
+              </td>
+              <td>
+                <%= risk.requirement %>
+              </td>
+              <td>
+                <%= Person::User.find(risk.responsible_id).first_last_name %>
+              </td>
 
-              <td><%= Person::User.find(risk.responsible_id).first_last_name %></td>
+              <td>
+                <%= msrmnt&.measured_at&.strftime(dt_rb_format(false, false)) || '-' %>
+              </td>
 
-              <td><%= msrmnt ? msrmnt.measured_at.strftime(dt_rb_format(false, false)) : '-' %></td>
-
-              <td><%= msrmnt ? (msrmnt.compliance * 100).to_i.to_s : '-' %></td>
+              <td>
+                <%= msrmnt&.show_compliance || '-' %>
+              </td>
             </tr>
         <% end %>
     <% else %>
@@ -42,16 +55,12 @@
 <% end %>
 
 <% content_for :menu do %>
-    <div class="left">
-      <div class="header-buttons">
-        <div class="dropdown">
-          <%= link_to new_risk_path(@risks.first.rule_id),
-                      method: 'get', class: 'dropdown-inline-button' do %>
-              <i class="dropdown-inline-button-icon icmn-file-plus"></i>
-              Nuevo
-          <% end %>
-        </div>
-      </div>
+    <div class="dropdown">
+      <%= link_to new_risk_path(@risks.first.rule_id),
+                  method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
     </div>
 <% end %>
 
