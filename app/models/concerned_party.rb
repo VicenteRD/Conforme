@@ -1,15 +1,20 @@
 class ConcernedParty
   include Mongoid::Document
 
-  field :type_of, type: String
+  embeds_one :log_book, class_name: 'Log::Book'
+
+  before_create do
+    self.log_book ||= Log::Book.new
+  end
+
+  field :p_type, as: :party_type, type: String
   field :name, type: String
-  field :version, type: String
 
-  field :description, type: String
-  field :expectancy, type: String
+  field :desc, as: :description, type: String
+  field :exp, as: :expectation, type: String
 
-  field :responsible_id, type: BSON::ObjectId # => Person::User
-  field :time_limit, type: Time
+  field :r_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
+  field :due_at, type: DateTime
 
-  # Has a date
+  field :cmts, as: :comments, type: String
 end

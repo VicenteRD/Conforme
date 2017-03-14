@@ -267,27 +267,27 @@
         <ul class="left-menu-list list-unstyled">
           <li>
             <div class="dropdown-header">
-              <%= link_to 'FODA', {controller: 'swot', action: 'index'}, class: 'left-menu-link' %>
+              <%= link_to 'FODA', swot_index_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Partes Interesadas', {controller: 'concerned_parties', action: 'show'}, class: 'left-menu-link' %>
+              <%= link_to 'Partes Interesadas', concerned_parties_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Objetivos', {controller: 'objectives', action: 'show'}, class: 'left-menu-link' %>
+              <%= link_to 'Objetivos', objectives_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Procesos', {controller: 'dashboard', action: 'index'}, class: 'left-menu-link' %>
+              <%= link_to 'Procesos', business_processes_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Comunicacion', {controller: 'dashboard', action: 'index'}, class: 'left-menu-link' %>
+              <%= link_to 'Comunicacion', '#', class: 'left-menu-link' %>
             </div>
           </li>
         </ul>

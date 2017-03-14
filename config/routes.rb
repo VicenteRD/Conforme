@@ -17,8 +17,9 @@ Rails.application.routes.draw do
   get '/personas/fichas/nuevo'    => 'users#new'              , as: :new_user
   get '/personas/fichas/:id'      => 'users#show'             , as: :user
 
-  get '/personas/organigrama'     => 'positions#index'        , as: :positions
-  get '/personas/organigrama/:id' => 'positions#show'         , as: :position
+  get '/personas/organigrama'                  => 'positions#index', as: :positions
+  get '/personas/organigrama/:parent_id/nueva' => 'positions#new'  , as: :new_position
+  get '/personas/organigrama/:id'              => 'positions#show' , as: :position
 
   get '/personas/competencias'    => 'users#eval_competencies'
   get '/personas/desempeno'       => 'users#eval_performance'
@@ -70,7 +71,7 @@ Rails.application.routes.draw do
   post  '/activos/:job_type/nuevo'                 => 'business_assets#create'
   patch '/activos/:job_type/:id/editar'            => 'business_assets#update'
 
-  post  '/activos/nuevo_tipo'                      => 'business_assets#create_type',
+  post  '/activos/nuevo-tipo'                      => 'business_assets#create_type',
         as: :new_business_asset_type
 
   post  '/activos/:job_type/:asset_id/nuevo'       => 'business_asset_jobs#create'
@@ -159,27 +160,9 @@ Rails.application.routes.draw do
   get '/configuracion/normas'         => 'settings#standards'
   get '/configuracion/cuestionarios'  => 'settings#questionnaires'
 
-  # -------- To be sorted
-
-  get '/normas' => 'standards#show'
-  get '/leyes'  => 'laws#show'
-
-  get '/partes-interesadas' => 'concerned_parties#show'
-
-  get '/objetivos' => 'objectives#show', as: :objective
-
-  get 'posicion/:parent_id/nueva' => 'positions#new'
-
   # -------- Other
 
   get '/associables/:element/:name' => 'associables#list'
 
   post '/uploads/new' => 'uploaded_files#create', as: :new_upload
-
-  # -------- Obsolete
-
-  get '/processes/:element'      => 'business_processes#list'
-  get '/processes/:element/new'  => 'business_processes#new', as: :new_business_process
-  post '/processes/:element/new' => 'business_processes#create'
-
 end

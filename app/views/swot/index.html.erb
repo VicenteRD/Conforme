@@ -10,7 +10,8 @@
       <th>Tipo</th>
       <th>Nombre</th>
       <th>Estrategia</th>
-      <th>Fecha</th>
+      <th>Responsable</th>
+      <th>Plazo</th>
     </tr>
 <% end %>
 <% content_for :table_body do %>
@@ -31,7 +32,10 @@
                 <%= swot.strategy %>
               </td>
               <td>
-                <%= swot.term.strftime(dt_rb_format(false, false)) %>
+                <%= Person::User.find(swot.responsible_id).first_last_name %>
+              </td>
+              <td>
+                <%= swot.due_at.strftime(dt_rb_format(false, false)) %>
               </td>
             </tr>
         <% end %>

@@ -282,7 +282,8 @@ swot = Swot.new(
     name: 'A',
     strategy: 'fgbndyuif',
 
-    term: DateTime.now
+    responsible_id: vr.id,
+    due_at: DateTime.now
 )
 swot.save!
 swot.log_book.new_entry(nil, 'Creado', 'Created by system')

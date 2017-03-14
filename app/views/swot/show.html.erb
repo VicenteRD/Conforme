@@ -34,12 +34,22 @@ field :cmts, as: :comments, type: String
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Tiempo:</div>
+      <div class="col-lg-4 show-label">Plazo:</div>
       <div class="col-lg-8">
-        <%= @swot.term.strftime(dt_rb_format(false, false)) %>
+        <%= @swot.due_at.strftime(dt_rb_format(false, false)) %>
       </div>
     </div>
 <% end %>
+
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Responsable:</div>
+      <div class="col-lg-8">
+        <%= Person::User.find(@swot.responsible_id).first_last_name %>
+      </div>
+    </div>
+<% end %>
+
 
 
 <%= content_for :extra do %>
@@ -77,8 +87,8 @@ field :cmts, as: :comments, type: String
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to risks_path('operacional') do %>
-              FODA
+          <%= link_to swot_index_path do %>
+              Estrategias: FODA
           <% end %>
         </li>
         <li>
