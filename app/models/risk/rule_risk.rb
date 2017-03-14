@@ -14,6 +14,8 @@ class Risk::RuleRisk < Risk
 
   field :rule_id, type: BSON::ObjectId
 
+  field :compliance, type: Float
+
   field :numeral, type: String
   field :title, type: String
   field :requirement, type: String
@@ -53,5 +55,16 @@ class Risk::RuleRisk < Risk
     else
       nil
     end
+  end
+
+  def calculate_compliance
+    if (measurement = measurements.order(measured_at: :desc, created_at: :desc).first)
+      puts 'HELLOOOOO'
+      self.compliance = measurement.compliance
+    else
+      self.compliance = 0
+    end
+
+    self.save!
   end
 end

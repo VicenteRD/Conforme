@@ -15,12 +15,6 @@
         <%= rule.name %>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-4 show-label">Requerimiento:</div>
-      <div class="col-lg-8">
-        <%= @risk.requirement %>
-      </div>
-    </div>
 <% end %>
 
 <%= content_for :main_col_2 do %>
@@ -54,13 +48,13 @@
 <% end %>
 
 <%= content_for :extra do %>
-    <% if @risk.comments? %>
+    <% if @risk.requirement? %>
         <div class="panel">
           <div class="panel-heading">
-            <h5>Descripción</h5>
+            <h5>Requisito</h5>
           </div>
           <div class="margin-left-30 margin-bottom-30">
-            <%= raw @risk.comments %>
+            <%= raw @risk.requirement %>
           </div>
         </div>
     <% end %>

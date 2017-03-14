@@ -25,6 +25,12 @@
                 newSummernote($(this));
             });
 
+            $('.dropzone').dropzone({
+                url: '/uploads/multiple',
+                uploadMultiple: true,
+                addRemoveLinks: true
+            });
+
             var datePicker = $('.date-picker');
             if (datePicker.length != 0) {
                 datePicker.each(function () {

@@ -1,0 +1,63 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Tipo</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Responsable</th>
+    </tr>
+<% end %>
+<% content_for :table_body do %>
+    <% processes = BusinessProcess.all %>
+    <% if processes.size != 0 %>
+        <% processes.each do |process| %>
+
+            <tr data-href="<%= business_process_path(process) %>">
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= process.presentable_type %>
+              </td>
+              <td>
+                <%= process.name %>
+              </td>
+              <td>
+                <%= process.description %>
+              </td>
+              <td>
+                <%= print_responsible process.responsible_id %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron procesos.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_objective_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Estrategias: Procesos
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

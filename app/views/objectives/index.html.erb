@@ -1,0 +1,63 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Nombre</th>
+      <th>Frase</th>
+      <th>Creador</th>
+      <th>Responsable</th>
+    </tr>
+<% end %>
+<% content_for :table_body do %>
+    <% objectives = Objectives.all %>
+    <% if objectives.size != 0 %>
+        <% objectives.each do |objective| %>
+
+            <tr data-href="<%= objective_path(objective) %>">
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= objective.name %>
+              </td>
+              <td>
+                <%= objective.phrase %>
+              </td>
+              <td>
+                <%= print_responsible objective.creator_id %>
+              </td>
+              <td>
+                <%= print_responsible objective.responsible_id %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron objetivos.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_objective_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Estrategias: Objetivos
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

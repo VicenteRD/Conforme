@@ -34,6 +34,10 @@ class RiskMeasurementsController < ApplicationController
       measurement = risk.new_measurement(fields.permit(klass.permitted_fields))
       measurement.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
 
+      if risk._type == 'Risk::RuleRisk'
+        risk.calculate_compliance
+      end
+
       redirect_to risk_path(params[:type], risk)
     else
       redirect_to '/'

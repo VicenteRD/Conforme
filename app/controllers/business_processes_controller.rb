@@ -20,7 +20,10 @@ class BusinessProcessesController < ApplicationController
 
     process = BusinessProcess.create!(fields.permit(
         :name,
-        :description
+        :description,
+        :process_type,
+        :responsible_id,
+        :comments
     ))
 
     process.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
@@ -45,7 +48,10 @@ class BusinessProcessesController < ApplicationController
 
     process.update!(fields.permit(
         :name,
-        :description
+        :description,
+        :process_type,
+        :responsible_id,
+        :comments
     ))
 
     process.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))

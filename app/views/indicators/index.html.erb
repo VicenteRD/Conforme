@@ -10,12 +10,12 @@
       <th>Objetivo</th>
       <th>Nombre</th>
       <th>Description</th>
-      <th>Método</th>
       <th>Encargado</th>
       <th>Fecha</th>
+      <th>Método</th>
       <th>Meta</th>
       <th>Valor Obtenido</th>
-      <th>Significativo</th>
+      <th>Significancia</th>
     </tr>
 <% end %>
 
@@ -33,9 +33,9 @@
 
               <td><%= indicator.name %></td>
               <td><%= indicator.description %></td>
-              <td><%= indicator.method %></td>
               <td><%= Person::User.find(indicator.responsible_id).first_last_name %></td>
-              <td><%= measurement&.measured_at.strftime(dt_rb_format(false, false)) || '-' %></td>
+              <td><%= measurement&.measured_at&.strftime(dt_rb_format(false, false)) || '-' %></td>
+              <td><%= indicator.method %></td>
               <td><%= raw "#{indicator.criterion} #{threshold} #{indicator.unit}" %></td>
               <td><%= measurement&.value || '-' %></td>
               <td class="<%= 'sig-' + indicator.significant.to_s %>">

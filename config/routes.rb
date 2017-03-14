@@ -165,4 +165,5 @@ Rails.application.routes.draw do
   get '/associables/:element/:name' => 'associables#list'
 
   post '/uploads/new' => 'uploaded_files#create', as: :new_upload
+  post '/uploads/multiple' => 'uploaded_files#create_multi', as: :new_uploads
 end

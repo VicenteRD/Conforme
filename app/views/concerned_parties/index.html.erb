@@ -1,0 +1,72 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Tipo</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Expectativa</th>
+      <th>Responsable</th>
+      <th>Plazo</th>
+    </tr>
+<% end %>
+<% content_for :table_body do %>
+    <% parties = ConcernedParty.all %>
+    <% if parties.size != 0 %>
+        <% parties.each do |party| %>
+
+            <tr data-href="<%= concerned_party_path(party) %>">
+
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= party.presentable_type %>
+              </td>
+              <td>
+                <%= party.name %>
+              </td>
+              <td>
+                <%= party.description %>
+              </td>
+              <td>
+                <%= party.expectation %>
+              </td>
+              <td>
+                <%= Person::User.find(party.responsible_id).first_last_name %>
+              </td>
+              <td>
+                <%= party.due_at.strftime(dt_rb_format(false, false)) %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron partes interesadas.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_concerned_party_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Estrategias: Partes Interesadas
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

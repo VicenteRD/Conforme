@@ -36,7 +36,7 @@
                 <%= rule.institution %>
               </td>
               <td><%= rule.name %></td>
-              <td><%= risk[:average_compliance] %></td>
+              <td><%= (risk[:average_compliance] * 100).round(2) %></td>
             </tr>
         <% end %>
     <% else %>
