@@ -52,11 +52,11 @@ class RisksController < ApplicationController
     end
 
     #upload_ids = []
-    #params.dig(:attachments, :uploads).each { |attachment|
-     # ul_file = UploadedFile.create!(attachment)
+    params.dig(:attachments, :uploads).each { |attachment|
+      ul_file = UploadedFile.create!(attachment)
      # upload_ids.append(ul_file.id)
     #  puts "created uploaded_file for #{ul_file.upload_file}_name with ID #{ul_file.id}"
-    #}
+    }
 
     type = params[:type]
     if (klass = Risk.get_risk_types.dig(type.to_sym, :klass))
