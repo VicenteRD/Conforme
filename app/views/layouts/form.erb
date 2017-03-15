@@ -37,7 +37,22 @@
                 });
             }
 
-            $('.dropify').dropify();
+            $('.dropify').dropify({
+                messages: {
+                    'default': 'Arrastre un archivo hasta aquí o haga click',
+                    'replace': 'Arraste un archivo hasta aquí o haga click para reemplazar',
+                    'remove':  'Quitar',
+                    'error':   'Oops, algo salió mal.'
+                },
+                error: {
+                    'fileSize': 'Archivo excede peso máximo ({{ value }}).',
+                    'minWidth': 'La imagenes demasiado angosta (ancho mínimo: {{ value }}}px).',
+                    'maxWidth': 'La imagen es demasiado ancha ({{ value }}}px máximo).',
+                    'minHeight': 'La imagen es demasiado chata (largo mínimo: {{ value }}}px).',
+                    'maxHeight': 'La imagen es demasiado larga ({{ value }}px máximo).',
+                    'imageFormat': 'Formato de imagen no válido (Permitidos: {{ value }}).'
+                }
+            });
         });
 
         $('#upload-button').click(function () {

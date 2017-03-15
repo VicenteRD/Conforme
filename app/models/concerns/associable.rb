@@ -48,6 +48,8 @@ module Associable
             self.associations[hash_key].push(val)
         end
       }
+
+      puts self.references.to_s
     end
 
     # Loads all the associations from an already set hash,
@@ -55,6 +57,7 @@ module Associable
     def add_from_hash(hashed_values)
       hashed_values.each { |k, v| self.add_associated(k, v) }
       # TODO - Add the other way around
+      self.save!
     end
 
     def set_from_hash(hashed_values)

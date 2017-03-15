@@ -23,7 +23,6 @@ class RisksController < ApplicationController
     if (@risk = Risk.find(params[:id])) && (type = minimize_type (@risk._type))
       render "risks/show/#{type}", layout: 'show'
     else
-      puts @risk, type
       redirect_to '/'
     end
   end
@@ -51,13 +50,15 @@ class RisksController < ApplicationController
       fields[:process_id] = id.to_s if id
     end
 
-    upload_ids = []
-    fields[:attachments].each { |attachment|
-      if attachment
-        ul_file = UploadedFile.create!(upload: attachment)
-        upload_ids.append(ul_file.id)
-      end
-    }
+    if fields[:attachments]
+      upload_ids = []
+      fields[:attachments].each { |attachment|
+        if attachment
+          ul_file = UploadedFile.create!(upload: attachment)
+          upload_ids.append(ul_file.id)
+        end
+      }
+    end
 
     type = params[:type]
     if (klass = Risk.get_risk_types.dig(type.to_sym, :klass))
@@ -69,7 +70,6 @@ class RisksController < ApplicationController
 
       redirect_to risk_path(params[:type], create_risk(klass, fields))
     elsif (fields[:rule_type] = Rule.find(type)&.rule_type)
-      puts fields.inspect
       redirect_to risk_path(params[:type], create_risk(Risk::RuleRisk, fields))
     else
       redirect_to '/'
@@ -118,7 +118,8 @@ class RisksController < ApplicationController
 
     risk = klass.create!(fields.permit(klass.permitted_fields))
 
-    risk.set_from_hash(params[:associables]) if params[:associables]
+    risk.set_from_hash(fields[:associables].to_unsafe_h) if fields[:associables]
+
     risk.log_creation(session[:id], entry.present? ? entry : '')
   end
 end

@@ -28,7 +28,14 @@ class BusinessProcessesController < ApplicationController
 
     process.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
 
-    redirect_to business_process_path(process)
+    respond_to do |format|
+      format.html {
+        redirect_to business_process_path(process)
+      }
+      format.json {
+        render json: { process_id: process.id.to_s }
+      }
+    end
   end
 
   def edit
