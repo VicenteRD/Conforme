@@ -1,9 +1,13 @@
 <%= content_for :script_tags do %>
     <%= javascript_include_tag 'form' %>
+
+    <%= javascript_include_tag '/assets/vendors/dropify/dist/js/dropify.min.js' %>
 <% end %>
 
 <%= content_for :style_tags do %>
     <%= stylesheet_link_tag 'form' %>
+
+    <%= stylesheet_link_tag '/assets/vendors/dropify/dist/css/dropify.min.css' %>
 <% end %>
 
 <%= content_for :menu do %>
@@ -25,12 +29,6 @@
                 newSummernote($(this));
             });
 
-            $('.dropzone').dropzone({
-                url: '/uploads/multiple',
-                uploadMultiple: true,
-                addRemoveLinks: true
-            });
-
             var datePicker = $('.date-picker');
             if (datePicker.length != 0) {
                 datePicker.each(function () {
@@ -38,6 +36,8 @@
                     newDateTimePicker(field, '<% server_timezone %>');
                 });
             }
+
+            $('.dropify').dropify();
         });
 
         $('#upload-button').click(function () {

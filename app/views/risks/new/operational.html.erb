@@ -75,15 +75,10 @@
             </div>
           </div>
 
-          <div style="margin: 50px 50px 0 50px">
-            <%= fields_for :attachments, html: { class: 'dropzone', multipart: true} do |uploaded_files| %>
-
-                <div class="fallback">
-                  <%= uploaded_files.file_field 'uploads', multiple: true %>
-                </div>
-            <% end %>
+          <div style="margin:50px 50px 0 50px">
+            <%= f.file_field :attachments, class: 'dropify', multiple: true,
+                           data: {height: '90px', width: '100%'} %>
           </div>
-
 
           <div class="row form-group" style="margin: 30px 10px;height:400px">
             <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>

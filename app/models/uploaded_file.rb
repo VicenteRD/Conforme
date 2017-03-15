@@ -12,5 +12,5 @@ class UploadedFile
                            application/vnd.openxmlformats-officedocument.wordprocessingml.document
                            text/plain
                            )
-  validates_uniqueness_of :upload_file_name
+  #validates_uniqueness_of :upload_file_name
 end

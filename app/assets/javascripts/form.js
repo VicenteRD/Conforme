@@ -4,8 +4,6 @@
 //
 //= require bootstrap-datetimepicker
 //
-//= require dropzone
-//
 
 
 function sendFile(file, toSummernote) {
