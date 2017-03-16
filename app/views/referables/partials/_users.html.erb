@@ -1,0 +1,47 @@
+<% picker_id = (@element.to_s.starts_with?('single') ? @element.to_s.split('_').to_a.last : nil) %>
+
+<%= content_for :references_table_content do %>
+    <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Cargos</th>
+      <th>Rol</th>
+    </tr>
+    </thead>
+    <tbody style="cursor: pointer">
+    <% Person::User.each do |user| %>
+
+        <% positions = []; user.positions.each { |pos| positions.push(pos.name) } %>
+
+        <tr class="user-row" data-id="<%= user.id %>">
+          <td id="name-row"><%= user.full_name %></td>
+          <td><%= positions.join(', ') %></td>
+          <td><%= user.role %></td>
+        </tr>
+
+    <% end %>
+    </tbody>
+<% end %>
+
+<%= content_for :references_scripts do %>
+    <script>
+        $(function () {
+            $('#new-tab').hide()
+        });
+
+        $('.user-row').click(function () {
+            var row = $(this);
+            var result = processReferenceRowClick(
+                row,
+                row.attr('data-id'),
+                row.find('#name-row').html()
+            );
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        $('.filterable').filterable();
+    </script>
+<% end %>

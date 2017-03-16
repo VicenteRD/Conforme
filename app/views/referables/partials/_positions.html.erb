@@ -1,0 +1,28 @@
+<% extra_parameters = (extra || '').split('-') %>
+<% area = extra_parameters[0] == 'area' %>
+<% position = extra_parameters.length >= 2 ? extra_parameters[1] : '' %>
+
+
+<div class="row">
+  <%= render partial: 'positions/chart', locals: {parent: position}, layout: false %>
+</div>
+
+<%= raw (area ? area_selector_style : position_selector_style) %>
+
+<script>
+    var classSelector = (true && <%= area %>) ? $('.area-position') : $('.node');
+
+    classSelector.click(function () {
+
+        var selector = $(this).find('p');
+        var result = processReferenceRowClick(
+            $(this),
+            selector.attr('data-id'),
+            selector.html().trim()
+        );
+
+        if (result) {
+            $('#positions-modal').modal('hide');
+        }
+    });
+</script>

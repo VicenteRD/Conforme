@@ -43,4 +43,45 @@ module PositionsHelper
 
     branches_text
   end
+
+  def area_selector_style
+    return <<-EOS
+<style>
+  .position {
+    color: #827ca1;
+  }
+  .area-position {
+    color: #827ca1;
+    cursor: pointer !important;
+  }
+
+  .area-position p {
+    color: #827ca1;
+  }
+
+  .area-position:hover p {
+    color: #24222f;
+  }
+</style>
+    EOS
+  end
+
+  def position_selector_style
+    return <<-EOS
+<style>
+  .node {
+    color: #827ca1;
+    cursor: pointer !important;
+  }
+
+  .node p {
+    color: #827ca1;
+  }
+
+  .node:hover p {
+    color: #24222f;
+  }
+</style>
+    EOS
+  end
 end

@@ -1,0 +1,7 @@
+var modalName = '<%= @reference_key == 'positions' ? '#positions-modal' : '#table-modal' %>';
+
+<% lout = (@reference_key == 'positions' ? false : 'referables/partials/references_table_layout') %>
+
+
+$(modalName + '-body')
+    .html("<%= escape_javascript(render partial: 'referables/partials/' + @reference_key, layout: lout, locals: {extra: @element}) %>");

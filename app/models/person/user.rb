@@ -2,12 +2,13 @@ class Person::User < Person
   include Mongoid::Document
 
   include ActiveModel::SecurePassword
+  include Referable
 
   ## Make sure we have the minimum fields.
 
   validates :email, confirmation: true, uniqueness: true, format: {with: /@/}
 
-  validates :password, length: {minimum: 8, maximum: 20, too_short: 'La contraseña debe tener entre 8 y 20 caracteres'}
+  #validates :password, length: {minimum: 8, maximum: 20, too_short: 'La contraseña debe tener entre 8 y 20 caracteres'}
 
   has_and_belongs_to_many :positions
   has_many :read_status

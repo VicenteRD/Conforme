@@ -4,7 +4,7 @@
       <div class="page-content-inner">
 
         <div class="panel">
-          <%= render partial: 'associables/associations_nav', locals: {element: 'risk'} %>
+          <%= render partial: 'referables/references_nav', locals: {element: 'risk'} %>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
@@ -28,8 +28,9 @@
             <div class="col-lg-2 input-group margin-right-20" id="process-in">
               <%= text_field :raw, :process_name, class: 'form-control', readonly: true %>
               <span class="input-group-addon" style="cursor: pointer">
-              <i class="icmn-pencil5"></i>
-            </span>
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :process_id, class: 'form-control-hidden' %>
             </div>
 
             <div class="col-lg-1">
@@ -84,7 +85,7 @@
             <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
           </div>
 
-          <div id="associables-container"></div>
+          <div id="references-container"></div>
 
         </div>
       </div>
@@ -122,21 +123,18 @@
 <%= content_for :scripts do %>
     <script>
         $('#process-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Proceso');
-            $.ajax({url: '/associables/single_process-in/BusinessProcess'});
+            setCurrentModalOptions('BusinessProcess', 'Proceso', false, $(this));
+            renderAndShowReferencesModal();
         });
 
         $('#responsible-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Responsable');
-            $.ajax({url: '/associables/single_responsible-in/Person::User'});
+            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            renderAndShowReferencesModal();
         });
 
         $('#area-in').click(function () {
-            $('#positions-modal-title').html('Seleccionar Área');
-            $.ajax({url: '/associables/single_area-in/Position'});
-        });
-        $('#uploads-in').click(function () {
-            $('#uploads-modal').modal()
+            setCurrentModalOptions('Position', 'Área', false, $(this));
+            renderAndShowReferencesModal('area');
         });
     </script>
 <% end %>

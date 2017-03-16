@@ -3,8 +3,8 @@ class Risk
   include Mongoid::Timestamps::Created::Short
 
   include EnumerableDocument
-
-  include Associable
+  include Describable
+  include Referable
 
   validates_presence_of :responsible_id, :measurement_frequency
 
@@ -19,8 +19,6 @@ class Risk
   field :sig, as: :significant, type: Integer, default: -1
 
   field :res_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
-
-  field :cmts, as: :comments, type: String
 
   def log_creation(author_id, body = '')
     self.log_book.new_entry(author_id, 'Creado', body)

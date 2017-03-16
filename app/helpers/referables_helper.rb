@@ -1,4 +1,4 @@
-module AssociablesHelper
+module ReferablesHelper
 
   def generate_relations_dropdown
     <<-EOS

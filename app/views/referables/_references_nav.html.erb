@@ -1,0 +1,321 @@
+<%= content_for :script_tags do %>
+    <%= javascript_include_tag 'referables' %>
+<% end %>
+
+<%= content_for :style_tags do %>
+    <%= stylesheet_link_tag 'referables' %>
+<% end %>
+
+<%= content_for :menu do %>
+    <div class="dropdown">
+      <a href="javascript:showReferencesMenu()" class="dropdown-inline-button">
+        <i class="dropdown-inline-button-icon icmn-pushpin"></i>
+        Referencias
+      </a>
+    </div>
+<% end %>
+
+<div class="margin-bottom-30">
+  <div class="referables-menu margin-bottom-20" id="referables">
+
+    <div class="menu-item menu-item-drop-down">
+      <p class="item-content">
+        Mejora
+      </p>
+      <div class="referables-sub-menu">
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Finding">
+            Hallazgos
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Audit">
+            Auditorías
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="ManagementReview">
+            Revisiones Gerenciales
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item menu-item-drop-down">
+      <p class="item-content">
+        Análisis
+      </p>
+      <div class="referables-sub-menu">
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Indicator">
+            Indicadores
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Report">
+            Informes
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item menu-item-drop-down">
+      <p class="item-content">
+        Personas
+      </p>
+      <div class="referables-sub-menu">
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Person::User">Fichas</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Position">Organigrama</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="UserCompetency">Competencias</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="UserPerformance">Desempeño</p>
+        </div>
+
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="UserClimate">Clima</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item menu-item-drop-down">
+      <p class="item-content">
+        Clientes
+      </p>
+      <div class="referables-sub-menu">
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Client">Fichas</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="ClientType">Tipos</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="ClientSatisfaction">Satisfacción</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item menu-item-drop-down">
+      <p class="item-content">
+        Proveedores
+      </p>
+      <div class="referables-sub-menu">
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Person::Provider">
+            Fichas
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="ProviderType">
+            Tipos
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="ProviderCompetency">
+            Competencias
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="ProviderPerformance">
+            Desempeño
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <p class="item-content referable-item" data-linked_class="BusinessAsset">
+        Mantención
+      </p>
+    </div>
+
+    <div class="menu-item">
+      <p class="item-content referable-item" data-linked_class="Planning">
+        Planificación
+      </p>
+    </div>
+
+    <div class="menu-item menu-item-drop-down">
+      <p class="item-content">
+        Documentos
+      </p>
+      <div class="referables-sub-menu">
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Person">Documentos</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Person">Registros</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Person">Archivos</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Person">Actas</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Person">Definiciones</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Person">Cuestionarios</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Rule">
+            Normas
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Rule">
+            Leyes
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item menu-item-drop-down">
+      <p class="item-content">
+        Estrategias
+      </p>
+      <div class="referables-sub-menu">
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Swot">
+            FODA
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="ConcernedParty">
+            Partes Interesadas</p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Objective">
+            Objetivos
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="BusinessProcess">
+            Procesos
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Person">
+            Comunicación
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item menu-item-drop-down">
+      <p class="item-content">
+        Riesgos
+      </p>
+      <div class="referables-sub-menu">
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Risk::OperationalRisk">
+            Operacional
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Risk::EnvironmentalRisk">
+            Ambientales
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Risk::SafetyRisk">
+            Seguridad
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Risk::RuleRisk">
+            Normas
+          </p>
+        </div>
+        <div class="sub-menu-item">
+          <p class="item-content referable-item" data-linked_class="Risk::RuleRisk">
+            Leyes
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for :modals do %>
+    <div id="table-modal" class="modal fade modal-size-large" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content" id="table-modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="table-modal-title">?</h4>
+          </div>
+          <div class="nav-tabs-horizontal" style="width: 100%">
+            <ul class="nav nav-tabs" id="references-tabs" role="tablist" style="margin: 0">
+              <li class="nav-item" style="width: 50%; margin: 0" id="table-tab">
+                <a class="nav-link nav-tab active" href="javascript: void(0);" data-toggle="tab" data-target="#table" role="tab" style="text-align: center; font-weight: 600; color: #827ca1">
+                  <i class="icmn-database" style="font-weight: normal"></i>
+                  Seleccionar
+                </a>
+              </li>
+              <li class="nav-item" style="width: 50%; margin:0" id="new-tab">
+                <a class="nav-link nav-tab" href="javascript: void(0);" data-toggle="tab" data-target="#new" role="tab" style="text-align: center; font-weight: 600; color: #827ca1">
+                  <i class="icmn-file-plus" style="font-weight: normal"></i>
+                  Nuevo
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="tab-content" id="table-modal-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="positions-modal" class="modal fade modal-size-large" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content" id="new-modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="positions-modal-title">?</h4>
+          </div>
+          <div class="modal-body" id="positions-modal-body">
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :scripts do %>
+    <!-- References Menu Scripts -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#referables').hide();
+        });
+
+        $('.referable-item').click(function () {
+            var item = $(this);
+            setCurrentModalOptions(item.attr('data-linked_class'), item.html(), true);
+            renderAndShowReferencesModal();
+        });
+
+        function showReferencesMenu() {
+            var menu = $('#referables');
+            menu.is(':visible') ? menu.hide() : menu.fadeIn();
+        }
+    </script>
+<% end %>
+
+<% content_for :modal_scripts do %>
+    <script>
+        $('#table-modal').on('hidden.bs.modal', function() {
+            $('#references-tabs').find('a[data-target="#table"]').tab('show');
+            setCurrentModalOptions();
+        });
+        $('#positions-modal').on('hidden.bs.modal', function() {
+            setCurrentModalOptions();
+        });
+    </script>
+<% end %>

@@ -42,23 +42,7 @@ class RisksController < ApplicationController
 
   def create
     fields = params.require(:risk)
-
-    process_name = params.dig(:raw, :process_name)
-    if process_name
-      id = BusinessProcess.where(name: process_name)
-               .pluck(:id).first
-      fields[:process_id] = id.to_s if id
-    end
-
-    if fields[:attachments]
-      upload_ids = []
-      fields[:attachments].each { |attachment|
-        if attachment
-          ul_file = UploadedFile.create!(upload: attachment)
-          upload_ids.append(ul_file.id)
-        end
-      }
-    end
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
 
     type = params[:type]
     if (klass = Risk.get_risk_types.dig(type.to_sym, :klass))
@@ -116,9 +100,9 @@ class RisksController < ApplicationController
   def create_risk(klass, fields)
     entry = params.dig(:log, :body)
 
-    risk = klass.create!(fields.permit(klass.permitted_fields))
+    risk = klass.create!(fields.permit(klass.permitted_fields, :attachment_ids => []))
 
-    risk.set_from_hash(fields[:associables].to_unsafe_h) if fields[:associables]
+    create_references(risk, params[:references].to_unsafe_h) if params[:references]
 
     risk.log_creation(session[:id], entry.present? ? entry : '')
   end

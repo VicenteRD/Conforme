@@ -1,0 +1,15 @@
+<div class="tab-pane active" id="table" role="tabpanel" aria-expanded="false">
+  <div class="input-group padding-10 inline" style="width: 80%; overflow: auto">
+    <%= text_field :search, :input, placeholder: 'Buscar', class: 'form-control filterer' %>
+  </div>
+  <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto; width: auto">
+    <table class="table table-hover filterable">
+      <%= content_for :references_table_content %>
+    </table>
+  </div>
+</div>
+<div class="tab-pane" id="new" role="tabpanel" style="height:360px; overflow:auto">
+  <%= content_for :references_form %>
+</div>
+
+<%= content_for :references_scripts %>

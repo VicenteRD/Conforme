@@ -33,7 +33,8 @@ class BusinessProcessesController < ApplicationController
         redirect_to business_process_path(process)
       }
       format.json {
-        render json: { process_id: process.id.to_s }
+        render json: { object_id: process.id.to_s,
+                       object_name: process.name }
       }
     end
   end

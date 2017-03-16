@@ -1,0 +1,77 @@
+<%= content_for :references_table_content do %>
+    <thead>
+    <tr>
+      <th>Nombre</th>
+      <th style="width: 70%">Descripción</th>
+    </tr>
+    </thead>
+    <tbody style="cursor: pointer">
+    <% if BusinessProcess.count > 0 %>
+        <% BusinessProcess.each do |business_process| %>
+            <tr class="business_process-row" data-id="<%= business_process.id %>">
+              <td id="name-row"><%= business_process.name %></td>
+              <td><%= business_process.description %></td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td>No se encontraron procesos</td>
+        </tr>
+    <% end %>
+    </tbody>
+<% end %>
+
+<%= content_for :references_form do %>
+    <%= form_for(:process,
+                 url: new_business_process_path(format: :json),
+                 remote: true,
+                 html: {id: 'new_process'}) do |f| %>
+        <div class="form-group padding-left-10">
+          <label class="form-control-label">Nombre</label>
+          <%= f.text_field :name, class: 'form-control', style: 'width: 80%' %>
+          <label class="form-control-label">Descripción</label>
+          <%= f.text_area :description, class: 'form-control', style: 'width: 80%' %>
+        </div>
+
+        <div class="form-actions text-center">
+          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+        </div>
+    <% end %>
+<% end %>
+
+<%= content_for :references_scripts do %>
+    <script>
+        var rowSelector = $('.business_process-row');
+
+        rowSelector.click(function () {
+            var row = $(this);
+            var result = processReferenceRowClick(
+                row,
+                row.attr('data-id'),
+                row.find('#name-row').html()
+            );
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        var process_form = $('#new_process');
+        process_form.on("ajax:success", function (e, data, status, xhr) {
+            var result = processNewReferenceCreated(data);
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        $('.filterable').filterable();
+
+        rowSelector.each(function () {
+            var row = $(this);
+            styleSelection(row, isSelectedReference('BusinessProcess', row.attr('data-id')));
+        });
+
+        //styleSelectedRows(rowSelector)
+    </script>
+<% end %>

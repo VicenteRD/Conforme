@@ -79,47 +79,7 @@
 
 </body>
 
-<div id="table-modal" class="modal fade modal-size-large" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content" id="table-modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" id="table-modal-title">?</h4>
-      </div>
-      <div class="nav-tabs-horizontal" style="width: 100%">
-        <ul class="nav nav-tabs" role="tablist" style="margin: 0">
-          <li class="nav-item" style="width: 50%; margin: 0" id="table-tab">
-            <a class="nav-link nav-tab active" href="javascript: void(0);" data-toggle="tab" data-target="#table" role="tab" style="text-align: center; font-weight: 600; color: #827ca1">
-              <i class="icmn-database" style="font-weight: normal"></i>
-              Seleccionar
-            </a>
-          </li>
-          <li class="nav-item" style="width: 50%; margin:0" id="new-tab">
-            <a class="nav-link nav-tab" href="javascript: void(0);" data-toggle="tab" data-target="#new" role="tab" style="text-align: center; font-weight: 600; color: #827ca1">
-              <i class="icmn-file-plus" style="font-weight: normal"></i> Nuevo
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="tab-content" id="table-modal-body"></div>
-    </div>
-  </div>
-</div>
-
-<div id="positions-modal" class="modal fade modal-size-large" role="dialog">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content" id="new-modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" id="positions-modal-title">?</h4>
-      </div>
-      <div class="modal-body" id="positions-modal-body">
-      </div>
-    </div>
-  </div>
-</div>
+<%= yield :modals %>
 
 <div id="history-modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -137,14 +97,6 @@
   </div>
 </div>
 
-<script>
-    $('#table-modal').on('hidden.bs.modal', function (e) {
-        var footer = $('#table-modal-content').find('.modal-footer');
-        if (footer != null) {
-            footer.remove()
-        }
-    })
-</script>
-
+<%= yield :modal_scripts %>
 
 </html>
