@@ -58,10 +58,12 @@ class IndicatorsController < ApplicationController
         :name, :description, :method,
         :threshold, :criterion, :margin,
         :unit, :responsible_id, :measurement_frequency,
-        :comments
+        :comments, attachment_ids: []
     ))
 
     indicator.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+
+    #create_references(business_asset, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to indicator_path(indicator.id)
   end

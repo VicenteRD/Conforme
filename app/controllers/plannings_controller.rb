@@ -21,15 +21,21 @@ class PlanningsController < ApplicationController
   def create
     fields = params.require(:planning)
 
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
     fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
 
     planning = Planning.create!(fields.permit(
         :due_at,
         :name,
         :description,
-        :comments
+        :comments,
+        attachment_ids: []
     ))
+
     planning.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
+
+    create_references(planning, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to planning_path(planning)
   end
@@ -58,7 +64,8 @@ class PlanningsController < ApplicationController
         :executed_at,
         :name,
         :description,
-        :comments
+        :comments,
+        attachment_ids: []
     ))
     planning.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
 

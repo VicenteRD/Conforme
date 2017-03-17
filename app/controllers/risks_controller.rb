@@ -77,21 +77,11 @@ class RisksController < ApplicationController
       redirect_to '/' and return
     end
 
-    process_name = params.dig(:raw, :process_name)
-    if process_name
-      id = BusinessProcess.where(name: process_name)
-               .pluck(:id).first
-      fields[:process_id] = id.to_s if id
-    end
-
-    risk.update!(fields.permit(risk.class.permitted_fields))
-
-    if fields[:associables]
-      fields.set_from_hash(fields[:associables])
-    end
+    risk.update!(fields.permit(risk.class.permitted_fields, attachment_ids: []))
 
     risk.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
-    risk.save!
+
+    #create_references(business_asset, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to risk_path(params[:type], risk.id)
   end
@@ -100,7 +90,7 @@ class RisksController < ApplicationController
   def create_risk(klass, fields)
     entry = params.dig(:log, :body)
 
-    risk = klass.create!(fields.permit(klass.permitted_fields, :attachment_ids => []))
+    risk = klass.create!(fields.permit(klass.permitted_fields, attachment_ids: []))
 
     create_references(risk, params[:references].to_unsafe_h) if params[:references]
 

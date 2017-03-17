@@ -2,6 +2,8 @@ class Planning
   include Mongoid::Document
 
   include EnumerableDocument
+  include Describable
+  include Referable
 
   embeds_one :log_book, class_name: 'Log::Book'
 

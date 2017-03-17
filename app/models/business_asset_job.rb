@@ -24,4 +24,10 @@ class BusinessAssetJob
   field :rst, as: :result, type: String
 
   field :cmts, as: :comments, type: String
+
+  def self.last_non_executed_datetime(jobs, time_format)
+    job = jobs.where(:executed.nin => [false]).last
+
+    job ? job.executed_at.strftime(time_format) : '-'
+  end
 end

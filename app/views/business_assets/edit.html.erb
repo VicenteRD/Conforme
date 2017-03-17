@@ -10,7 +10,7 @@
       <div class="page-content-inner">
 
         <div class="panel">
-          <%= render partial: 'associables/associations_nav', locals: {element: 'risk'} %>
+          <%= render partial: 'referables/references_nav' %>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
@@ -74,7 +74,7 @@
             <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
           </div>
 
-          <div id="associables-container"></div>
+          <div id="references-container"></div>
 
         </div>
       </div>
@@ -129,13 +129,13 @@
 <%= content_for :scripts do %>
     <script>
         $('#responsible-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Responsable');
-            $.ajax({url: '/associables/single_responsible-in/Person::User'});
+            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            renderAndShowReferencesModal();
         });
 
         $('#type-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Tipo');
-            $.ajax({url: '/associables/single_type-in/BusinessAssetType'});
+            setCurrentModalOptions('BusinessAssetType', 'Tipo', false, $(this));
+            renderAndShowReferencesModal();
         });
     </script>
 <% end %>

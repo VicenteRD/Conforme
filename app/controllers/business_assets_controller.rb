@@ -30,6 +30,8 @@ class BusinessAssetsController < ApplicationController
   def create
     fields = params.require(:business_asset)
 
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
     fields[:next_maintenance_at] = parse_datetime(params.dig(:raw, :next_maintenance_at))
     fields[:next_calibration_at] = parse_datetime(params.dig(:raw, :next_calibration_at))
 
@@ -37,11 +39,15 @@ class BusinessAssetsController < ApplicationController
         :type_id,
         :name,
         :description,
-        :identifier,
+        :identification,
         :comments,
-        :responsible_id
+        :responsible_id,
+        attachment_ids: []
     ))
+
     business_asset.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
+
+    create_references(business_asset, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to business_asset_path(params[:job_type], business_asset)
   end
@@ -71,11 +77,15 @@ class BusinessAssetsController < ApplicationController
         :type_id,
         :name,
         :description,
-        :identifier,
+        :identification,
         :comments,
-        :responsible_id
+        :responsible_id,
+        attachment_ids: []
     ))
+
     business_asset.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+
+    #create_references(business_asset, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to business_asset_path(params[:job_type], business_asset)
   end

@@ -7,7 +7,7 @@
       <div class="page-content-inner">
 
         <div class="panel">
-          <%= render partial: 'associables/associations_nav', locals: {element: 'risk'} %>
+          <%= render partial: 'referables/references_nav' %>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
@@ -78,7 +78,7 @@
             <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
           </div>
 
-          <div id="associables-container"></div>
+          <div id="references-container"></div>
 
         </div>
       </div>

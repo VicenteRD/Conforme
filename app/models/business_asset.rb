@@ -2,6 +2,8 @@ class BusinessAsset
   include Mongoid::Document
 
   include EnumerableDocument
+  include Describable
+  include Referable
 
   embeds_one :log_book, class_name: 'Log::Book'
 
@@ -17,6 +19,4 @@ class BusinessAsset
 
   field :t_id, as: :type_id, type: BSON::ObjectId # => BusinessAssetType
   field :r_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
-
-  field :cmts, as: :comments, type: String
 end

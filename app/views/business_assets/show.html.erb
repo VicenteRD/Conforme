@@ -28,7 +28,7 @@
     <div class="row">
       <div class="col-lg-4 show-label">Próx. Mantención:</div>
       <div class="col-lg-8">
-        <%= ordered_jobs.maintenance.where(executed: false).last || '-' %>
+        <%= BusinessAssetJob.last_non_executed_datetime(ordered_jobs.maintenance, dt_rb_format(true, false)) %>
       </div>
     </div>
 <% end %>
@@ -43,7 +43,7 @@
     <div class="row">
       <div class="col-lg-4 show-label">Próx. Calibración:</div>
       <div class="col-lg-8">
-        <%= ordered_jobs.calibration.where(executed: false).last || '-' %>
+        <%= BusinessAssetJob.last_non_executed_datetime(ordered_jobs.calibration, dt_rb_format(true, false)) %>
       </div>
     </div>
 <% end %>
@@ -62,6 +62,16 @@
         </div>
     <% end %>
 
+    <% if @business_asset.references? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Referencias</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= render partial: 'referables/show_all_for', locals: {element: @business_asset} %>
+          </div>
+        </div>
+    <% end %>
 
     <% filtered_ordered_jobs = if @type == 'mantencion'
                                  ordered_jobs.maintenance
@@ -115,6 +125,14 @@
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
         <i class="dropdown-inline-button-icon icmn-history"></i>
         Bitácora
+      </a>
+    </div>
+
+    <div class="dropdown">
+      <% files_table = "#{escape_javascript(render partial: 'uploaded_files/modal', locals: {attachments: @business_asset.attachment_ids})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showAttachments('<%= files_table %>')">
+        <i class="dropdown-inline-button-icon icmn-folder-open"></i>
+        Adjuntos
       </a>
     </div>
 

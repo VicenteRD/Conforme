@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'rules/create'
-
   # -------- Root and Dashboard
 
   get '/'          => redirect('/dashboard')
