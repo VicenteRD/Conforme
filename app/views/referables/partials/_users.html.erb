@@ -1,5 +1,3 @@
-<% picker_id = (@element.to_s.starts_with?('single') ? @element.to_s.split('_').to_a.last : nil) %>
-
 <%= content_for :references_table_content do %>
     <thead>
     <tr>
@@ -14,7 +12,7 @@
         <% positions = []; user.positions.each { |pos| positions.push(pos.name) } %>
 
         <tr class="user-row" data-id="<%= user.id %>">
-          <td id="name-row"><%= user.full_name %></td>
+          <td id="name-cell"><%= user.full_name %></td>
           <td><%= positions.join(', ') %></td>
           <td><%= user.role %></td>
         </tr>
@@ -29,17 +27,24 @@
             $('#new-tab').hide()
         });
 
-        $('.user-row').click(function () {
+        var rowSelector = $('.user-row');
+
+        rowSelector.click(function () {
             var row = $(this);
             var result = processReferenceRowClick(
                 row,
                 row.attr('data-id'),
-                row.find('#name-row').html()
+                row.find('#name-cell').html()
             );
 
             if (result) {
                 $('#table-modal').modal('hide');
             }
+        });
+
+        rowSelector.each(function () {
+            var row = $(this);
+            styleSelection(row, isSelectedReference('Person::User', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

@@ -46,6 +46,8 @@ class BusinessAssetsController < ApplicationController
     redirect_to business_asset_path(params[:job_type], business_asset)
   end
 
+
+
   def edit
     if (@type = parse_job_type(params[:job_type])) &&
         (@business_asset = BusinessAsset.find(params[:id]))
@@ -79,7 +81,11 @@ class BusinessAssetsController < ApplicationController
   end
 
   def create_type
-    BusinessAssetType.create!(params.require(:asset_type).permit(:name, :description))
+    asset_type = BusinessAssetType.create!(params.require(:asset_type).permit(:name, :description))
+
+    respond_to do |format|
+      format.json { render json: { object_id: asset_type.id, object_name: asset_type.name } }
+    end
   end
 
   private

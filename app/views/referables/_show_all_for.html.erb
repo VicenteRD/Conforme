@@ -1,0 +1,32 @@
+<% if element && element.class < Referable %>
+
+    <% if (employees = element.get_all_referred(Person::User)) %>
+        Personas:
+        <% employees.each do |user| %>
+            <%= link_to user.full_name, user_path(user) %>  /
+        <% end %>
+        <br>
+    <% end %>
+    <% if (processes = element.get_all_referred(BusinessProcess)) %>
+        Procesos:
+        <% processes.each do |process| %>
+            <%= link_to process.name, business_process_path(process) %>  /
+        <% end %>
+        <br>
+    <% end %>
+    <% if (positions = element.get_all_referred(Position)) %>
+        Posiciones:
+        <% positions.each do |position| %>
+            <%= link_to position.name, position_path(position) %>  /
+        <% end %>
+        <br>
+    <% end %>
+    <% if (environmental_risks = element.get_all_referred(Risk::EnvironmentalRisk)) %>
+        Riesgos Ambientales:
+        <% environmental_risks.each do |risk| %>
+            <%= link_to risk.name, risk_path('ambiente', risk) %>  /
+        <% end %>
+        <br>
+    <% end %>
+
+<% end %>

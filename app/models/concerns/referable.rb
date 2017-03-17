@@ -5,27 +5,24 @@ module Referable
 
     field :ref, as: :references, type: Hash # {class_name: [BSON::ObjectId]}
 
-    def get_all_referred(class_type) # TODO - test this monster
-      unless is_document? class_type
-        return
+    def get_all_referred(klass) # TODO - test this monster
+      unless is_referable_document? klass
+        return nil
       end
 
+      class_key = klass.name
       ret_array = []
 
-      class_sym = class_as_key class_type
-
-      if self.references[class_sym]
-        self.references[class_sym].each { |object_id|
-          ret_array.push(class_type.find(object_id)) # might need to use send()
-        }
+      if self.references[class_key]
+        self.references[class_key].each do |object_id|
+          ret_array.append(klass.find(object_id))
+        end
       end
 
-      ret_array
+      ret_array == [] ? nil : ret_array
     end
 
     def add_references(key, *values)
-      puts 'Adding reference of ' + key.to_s + ' with ID(s) ' + values.to_s + ' for ' + self.to_s
-
       case key
         when Class
           hash_key = key.name
@@ -43,29 +40,29 @@ module Referable
         self.references[hash_key] = []
       end
 
-      values.each { |val|
+      values.each do |val|
         case val
           when Array
             self.references[hash_key].push(*val)
           else
             self.references[hash_key].push(val)
         end
-      }
+      end
     end
 
     # Loads all the associations from an already set hash,
     # without overriding already-set values.
     def add_references_from_hash(hashed_values)
-      hashed_values.each { |k, v|
+      hashed_values.each do |k, v|
         klass = k.constantize
-        v.each { |id|
+        v.each do |id|
           obj = klass.find(id)
           obj.add_references(self.class.name, self.id.to_s)
           obj.save!
-        }
+        end
 
         self.add_references(k, v)
-      }
+      end
 
       self.save!
     end
@@ -79,8 +76,8 @@ module Referable
 
   ## Helper methods
   private
-  def is_document?(class_type)
-    class_type < Mongoid::Document
+  def is_referable_document?(klass)
+    (klass < Mongoid::Document) && (klass < Referable)
   end
 
 end

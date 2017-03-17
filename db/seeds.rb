@@ -111,11 +111,15 @@ Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extrac
 
 # Business Processes
 
-proc1 = BusinessProcess.new(name: 'Going to sleep',
+proc1 = BusinessProcess.new(process_type: 'Gestión',
+                            responsible_id: cv.id,
+                            name: 'Going to sleep',
                             description: 'Something some humans do.')
 proc1.save!
 
-proc2 = BusinessProcess.new(name: 'Processing process',
+proc2 = BusinessProcess.new(process_type: 'Estrategia',
+                            responsible_id: vr.id,
+                            name: 'Processing process',
                             description: 'Process to process to processing of processes within the main process of the process.')
 proc2.save!
 

@@ -1,8 +1,59 @@
-<% picker_id = (@element.to_s.starts_with?('single') ? @element.to_s.split('_').to_a.last : nil) %>
+<% rules = case extra
+             when 'law'
+               Rule.law
+             when 'standard'
+               Rule.standard
+             else
+               Rule.all
+           end
+%>
 
+<%= content_for :references_table_content do %>
+    <thead>
+    <tr>
+      <th>Institución</th>
+      <th>Nombre</th>
+    </tr>
+    </thead>
+    <tbody style="cursor: pointer">
+    <% rules.each do |rule| %>
+
+        <tr class="rule-row" data-id="<%= rule.id %>">
+          <td><%= rule.institution %></td>
+          <td id="name-cell"><%= rule.name %></td>
+        </tr>
+
+    <% end %>
+    </tbody>
+<% end %>
+
+<%= content_for :references_scripts do %>
+    <script>
+        $(function () {
+            $('#new-tab').hide()
+        });
+
+        $('.rule-row').click(function () {
+            var row = $(this);
+            var result = processReferenceRowClick(
+                row,
+                row.attr('data-id'),
+                row.find('#name-cell').html()
+            );
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        $('.filterable').filterable();
+    </script>
+<% end %>
+
+<!--
 <div class="tab-pane active" id="table" role="tabpanel" aria-expanded="false">
   <div class="input-group padding-10 inline" style="width: 80%; overflow: auto">
-    <%= text_field :search, :input, placeholder: 'Buscar', class: 'form-control'%>
+    <%# text_field :search, :input, placeholder: 'Buscar', class: 'form-control'%>
     <span class="input-group-addon">
       <i class="icmn-search"></i>
     </span>
@@ -16,12 +67,12 @@
       </tr>
       </thead>
       <tbody>
-      <% Rule.law.each do |law| %>
-          <tr class="<%= picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-law_id="<%= law.id %>">
-            <td id="institution"><%= law.institution %></td>
-            <td id="law"><%= law.name %></td>
+      <%#  %>
+          <tr class="<%# picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-law_id="<%# law.id %>">
+            <td id="institution"><%# law.institution %></td>
+            <td id="law"><%# law.name %></td>
           </tr>
-      <% end %>
+      <%#  %>
       </tbody>
     </table>
   </div>
@@ -32,7 +83,7 @@
 <script>
     $('.user-selectable').click(function () {
         row = $(this);
-        formGroup = $('#<%= picker_id %>');
+        formGroup = $('#<%# picker_id %>');
 
         formGroup.find('.form-control')
             .val(row.find('#institution').html() + ': ' + row.find('#law').html());
@@ -56,7 +107,7 @@
             container.append(
                 '<div id="' + selectedId + '">\n' +
                 '  <input class="form-control-hidden" type="hidden" ' +
-                'name="<%= @element %>[associables][rules][]" id="<%= @element %>_associable_rule" ' +
+                'name="<%# @element %>[associables][rules][]" id="<%# @element %>_associable_rule" ' +
                 'value="' + selectedId + '">\n' +
                 '  <input class="form-control user-displayed-name" readonly="readonly" type="text" ' +
                 'name="associable_user_display" id="user_' + selectedId + '_display" ' +
@@ -67,4 +118,4 @@
     });
 
     $('.filterable').filterable();
-</script>
+</script>-->

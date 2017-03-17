@@ -1,30 +1,32 @@
-<div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
-  <table class="table table-hover">
-    <thead>
-    <tr>
-      <th>Fecha</th>
-      <th>Autor</th>
-      <th>Acción</th>
-      <th width="50%">Detalle</th>
-
-    </tr>
-    </thead>
-    <tbody>
-    <% book.entries.order_by(c_at: :desc).each do |entry| %>
+<% if book %>
+    <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto">
+      <table class="table table-hover">
+        <thead>
         <tr>
-          <td><%= entry.c_at.strftime(dt_rb_format(true, false)) %></td>
+          <th>Fecha</th>
+          <th>Autor</th>
+          <th>Acción</th>
+          <th width="50%">Detalle</th>
 
-          <% if entry.author_id %>
-              <td><%= Person::User.find(entry.author_id).first_last_name %></td>
-          <% else %>
-              <td>-</td>
-          <% end %>
-
-          <td><%= entry.title %></td>
-
-          <td><%= entry.body %></td>
         </tr>
-    <% end %>
-    </tbody>
-  </table>
-</div>
+        </thead>
+        <tbody>
+        <% book.entries.order_by(c_at: :desc).each do |entry| %>
+            <tr>
+              <td><%= entry.c_at.strftime(dt_rb_format(true, false)) %></td>
+
+              <% if entry.author_id %>
+                  <td><%= Person::User.find(entry.author_id).first_last_name %></td>
+              <% else %>
+                  <td>-</td>
+              <% end %>
+
+              <td><%= entry.title %></td>
+
+              <td><%= entry.body %></td>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+<% end %>

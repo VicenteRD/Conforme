@@ -1,8 +1,8 @@
 class ReferablesController < ApplicationController
 
-  def list
+  def render_list
     @reference_key = class_as_key(params[:class_name].constantize).to_s.split('/').to_a.last
-    @element = params[:extra]
+    @extra = params[:extra]
 
     render layout: false
   end

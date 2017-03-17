@@ -39,6 +39,12 @@
             <%= yield :profile_specifics %>
           </div>
         </section>
+        <section class="panel">
+          <div class="panel-body">
+            <h6>Referencias</h6>
+            <%= render partial: 'referables/show_all_for', locals: {element: @person} %>
+          </div>
+        </section>
       </div>
       <div class="col-xl-8">
         <section class="panel profile-user-content">

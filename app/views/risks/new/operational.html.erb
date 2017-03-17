@@ -4,7 +4,7 @@
       <div class="page-content-inner">
 
         <div class="panel">
-          <%= render partial: 'referables/references_nav', locals: {element: 'risk'} %>
+          <%= render partial: 'referables/references_nav' %>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
@@ -26,7 +26,7 @@
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="process-in">
-              <%= text_field :raw, :process_name, class: 'form-control', readonly: true %>
+              <%= text_field :extra, :process_name, class: 'form-control', readonly: true %>
               <span class="input-group-addon" style="cursor: pointer">
                 <i class="icmn-pencil5"></i>
               </span>

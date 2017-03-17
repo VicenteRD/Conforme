@@ -162,8 +162,7 @@ Rails.application.routes.draw do
 
   # -------- Other
 
-  get '/referables/:class_name/:extra' => 'referables#list'
+  get '/referables/:class_name/:extra' => 'referables#render_list'
 
   post '/uploads/new' => 'uploaded_files#create', as: :new_upload
-  post '/uploads/multiple' => 'uploaded_files#create_multi', as: :new_uploads
 end

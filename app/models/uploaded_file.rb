@@ -15,4 +15,14 @@ class UploadedFile
       )
 
   validates_uniqueness_of :upload_file_name
+
+  def self.all_from(ids)
+    files = []
+    ids.each do |id|
+      uploaded = UploadedFile.find(id)
+      files.append(uploaded)
+    end
+
+    files
+  end
 end

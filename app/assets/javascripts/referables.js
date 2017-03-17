@@ -37,6 +37,16 @@ function setCurrentModalOptions(modalKey, modalTitle, multipleSelection, target)
     }
 }
 
+function setSelectedReferences(referencesHash, target) {
+    selectedReferences = referencesHash == null ? {} : referencesHash;
+
+    for (var key in selectedReferences) {
+        for (var i = 0; i < selectedReferences[key].length; i++) {
+            addReferenceToTarget(key, selectedReferences[key][i], null, target);
+        }
+    }
+}
+
 function getModalId(className) {
     return className == 'Position' ? '#positions-modal' : '#table-modal';
 }
@@ -141,9 +151,10 @@ function removeReference(classKey, objectId) {
     }
 }
 
-function addReferenceToTarget(classKey, id, name) {
-    var target = currentModalOptions['target'];
-
+function addReferenceToTarget(classKey, id, name, target) {
+    if (target === undefined) {
+        target = currentModalOptions['target'];
+    }
     target.append(
         '<div id="reference-' + id + '" style="margin: 0 50px">\n' +
 

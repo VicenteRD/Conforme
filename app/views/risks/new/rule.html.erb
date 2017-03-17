@@ -12,10 +12,9 @@
         });
 
         $('#responsible-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Responsable');
-            $.ajax({url: '/associables/single_responsible-in/Person::User'});
+            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            renderAndShowReferencesModal();
         });
-
     </script>
 <% end %>
 

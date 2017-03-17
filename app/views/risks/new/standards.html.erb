@@ -2,16 +2,15 @@
 
 <%= content_for :scripts do %>
     <script>
-        $('#rule-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Artículo');
-            $.ajax({url: '/associables/single_rule-in/Standard'});
+        $('#rule-in').click(function() {
+            setCurrentModalOptions('Rule', 'Norma', false, $(this));
+            renderAndShowReferencesModal('standard');
         });
 
         $('#responsible-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Responsable');
-            $.ajax({url: '/associables/single_responsible-in/Person::User'});
+            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            renderAndShowReferencesModal();
         });
-
     </script>
 <% end %>
 

@@ -6,7 +6,7 @@
 
         <div class="panel">
 
-          <%= render partial: 'associables/associations_nav', locals: {element: 'measurement'} %>
+          <%= render partial: 'referables/references_nav' %>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
@@ -93,7 +93,7 @@
             <%= f.text_area :comments, class: 'form-control', style: 'width:100%;height:300px', data: {provider: 'summernote'} %>
           </div>
 
-          <div id="associables-container"></div>
+          <div id="references-container"></div>
 
         </div>
 

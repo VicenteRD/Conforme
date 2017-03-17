@@ -68,6 +68,17 @@
         </div>
     <% end %>
 
+    <% if @risk.references? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Referencias</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= render partial: 'referables/show_all_for', locals: {element: @risk} %>
+          </div>
+        </div>
+    <% end %>
+
     <% if @risk.measurements? %>
         <div class="panel">
           <div class="panel-heading">
@@ -124,6 +135,14 @@
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
         <i class="dropdown-inline-button-icon icmn-history"></i>
         Bitácora
+      </a>
+    </div>
+
+    <div class="dropdown">
+      <% files_table = "#{escape_javascript(render partial: 'uploaded_files/modal', locals: {attachments: @risk.attachment_ids})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showAttachments('<%= files_table %>')">
+        <i class="dropdown-inline-button-icon icmn-folder-open"></i>
+        Adjuntos
       </a>
     </div>
 
