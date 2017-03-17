@@ -14,4 +14,7 @@ Rails.application.config.assets.precompile += %w( form.js form.scss )
 Rails.application.config.assets.precompile += %w( referables.js referables.scss )
 Rails.application.config.assets.precompile += %w( table.scss )
 
+# Vendor -> Assets
+Rails.application.config.assets.precompile += %w( filetypes/* )
+
 Rails.application.config.assets.precompile << /\.(?:svg|eot|woff|woff2|ttf)\z/
