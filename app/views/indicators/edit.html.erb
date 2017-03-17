@@ -4,7 +4,7 @@
       <div class="page-content-inner">
 
         <div class="panel">
-          <%= render partial: 'associables/associations_nav', locals: {element: 'indicator'} %>
+          <%= render partial: 'referables/references_nav' %>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
@@ -121,7 +121,7 @@
             <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
           </div>
 
-          <div id="associables-container"></div>
+          <div id="references-container"></div>
 
         </div>
       </div>
@@ -165,14 +165,18 @@
 
 <%= content_for :scripts do %>
     <script>
+        $(function (){
+            setSelectedReferences(<%= raw @indicator.references.to_json %>, $('#references-container'));
+        });
+
         $('#responsible-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Responsable');
-            $.ajax({url: '/associables/single_responsible-in/Person::User'});
+            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            renderAndShowReferencesModal();
         });
 
         $('#objective-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Objetivo');
-            $.ajax({url: '/associables/single_objective-in/Objective'});
+            setCurrentModalOptions('Objective', 'Objetivo', false, $(this));
+            renderAndShowReferencesModal();
         });
     </script>
 <% end %>

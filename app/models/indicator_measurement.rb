@@ -1,6 +1,9 @@
 class IndicatorMeasurement
   include Mongoid::Document
 
+  include Describable
+  include Referable
+
   validates_presence_of :measured_at, :value, :threshold
 
   before_create do
@@ -16,7 +19,4 @@ class IndicatorMeasurement
 
   field :val, as: :value, type: Float
   field :thr, as: :threshold, type: Float
-
-  field :cmts, as: :comments, type: String
-
 end

@@ -20,12 +20,18 @@ class ObjectivesController < ApplicationController
 
     objective = Objective.create!(fields.permit(
         :name,
-        :description
+        :phrase
     ))
 
     objective.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
 
-    redirect_to objective_path(objective)
+    respond_to do |format|
+      format.html { redirect_to objective_path(objective) }
+      format.json {
+        render json: { object_id: objective.id.to_s,
+                       object_name: objective.name }
+      }
+    end
   end
 
   def edit

@@ -4,7 +4,7 @@
       <div class="page-content-inner">
 
         <div class="panel">
-          <%= render partial: 'associables/associations_nav', locals: {element: 'indicator'} %>
+          <%= render partial: 'referables/references_nav' %>
 
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
@@ -110,11 +110,16 @@
             </div>
           </div>
 
+          <div style="margin:50px 50px 0 50px">
+            <%= f.file_field :attachments, class: 'dropify', multiple: true,
+                             data: {height: '90px', width: '100%'} %>
+          </div>
+
           <div class="row form-group" style="margin: 30px 10px;height:400px">
             <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
           </div>
 
-          <div id="associables-container"></div>
+          <div id="references-container"></div>
 
         </div>
       </div>
@@ -159,13 +164,13 @@
 <%= content_for :scripts do %>
     <script>
         $('#responsible-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Responsable');
-            $.ajax({url: '/associables/single_responsible-in/Person::User'});
+            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            renderAndShowReferencesModal();
         });
 
         $('#objective-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Objetivo');
-            $.ajax({url: '/associables/single_objective-in/Objective'});
+            setCurrentModalOptions('Objective', 'Objetivo', false, $(this));
+            renderAndShowReferencesModal();
         });
     </script>
 <% end %>

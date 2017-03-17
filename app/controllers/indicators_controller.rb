@@ -19,6 +19,8 @@ class IndicatorsController < ApplicationController
   def create
     fields = params.require(:indicator)
 
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
     margin = params.dig(:raw, :margin)
     fields[:margin] = margin.to_f / 100.0 if margin
 
@@ -27,10 +29,12 @@ class IndicatorsController < ApplicationController
         :name, :description, :method,
         :threshold, :criterion, :margin,
         :unit, :responsible_id, :measurement_frequency,
-        :comments
+        :comments, attachment_ids: []
     ))
 
     indicator.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
+
+    create_references(indicator, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to indicator_path(indicator)
   end

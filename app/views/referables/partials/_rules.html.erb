@@ -27,13 +27,59 @@
     </tbody>
 <% end %>
 
+<%= content_for :references_form do %>
+    <%= form_for(:rule,
+                 url: new_rule_path(format: :json),
+                 remote: true,
+                 html: {id: 'new_rule'}) do |f| %>
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Insitución</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :institution, class: 'form-control', style: 'width: 100%' %>
+          </div>
+
+          <%= raw case extra
+                    when 'law'
+                      f.hidden_field(:rule_type, value: 1)
+                    when 'standard'
+                      f.hidden_field(:rule_type, value: 2)
+                    else
+                      '<div class="col-md-1">
+                         <label class="form-control-label">
+                           Tipo
+                         </label>
+                       </div>
+                       <div class="col-md-3">' +
+                          f.collection_select(:rule_type, {1 => 'Ley', 2 => 'Norma'},
+                                              :first, :second,
+                                              {}, {class: 'form-control', style:'100%'}) +
+                      '</div>'
+                  end
+          %>
+        </div>
+
+
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Nombre</label>
+          </div>
+          <div class="col-md-11">
+            <%= f.text_field :name, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+
+        <div class="form-actions text-center" style="position:absolute; bottom: 0; width: 100%">
+          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50', style: 'text-align: center' %>
+        </div>
+    <% end %>
+<% end %>
+
 <%= content_for :references_scripts do %>
     <script>
-        $(function () {
-            $('#new-tab').hide()
-        });
-
-        $('.rule-row').click(function () {
+        var rowSelector = $('.rule-row');
+        rowSelector.click(function () {
             var row = $(this);
             var result = processReferenceRowClick(
                 row,
@@ -46,76 +92,20 @@
             }
         });
 
+        var process_form = $('#new_rule');
+        process_form.on("ajax:success", function (e, data, status, xhr) {
+            var result = processNewReferenceCreated(data);
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        rowSelector.each(function () {
+            var row = $(this);
+            styleSelection(row, isSelectedReference('Objective', row.attr('data-id')));
+        });
+
         $('.filterable').filterable();
     </script>
 <% end %>
-
-<!--
-<div class="tab-pane active" id="table" role="tabpanel" aria-expanded="false">
-  <div class="input-group padding-10 inline" style="width: 80%; overflow: auto">
-    <%# text_field :search, :input, placeholder: 'Buscar', class: 'form-control'%>
-    <span class="input-group-addon">
-      <i class="icmn-search"></i>
-    </span>
-  </div>
-  <div class="table-responsive margin-bottom-30" style="height:301px; overflow:auto; width: auto">
-    <table class="table table-hover filterable">
-      <thead>
-      <tr>
-        <th>Institución</th>
-        <th>Ley</th>
-      </tr>
-      </thead>
-      <tbody>
-      <%#  %>
-          <tr class="<%# picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-law_id="<%# law.id %>">
-            <td id="institution"><%# law.institution %></td>
-            <td id="law"><%# law.name %></td>
-          </tr>
-      <%#  %>
-      </tbody>
-    </table>
-  </div>
-</div>
-<div class="tab-pane" id="new" role="tabpanel" style="height:360px">
-</div>
-
-<script>
-    $('.user-selectable').click(function () {
-        row = $(this);
-        formGroup = $('#<%# picker_id %>');
-
-        formGroup.find('.form-control')
-            .val(row.find('#institution').html() + ': ' + row.find('#law').html());
-
-        formGroup.find('.form-control-hidden').val(row.attr('data-law_id'));
-
-        $('#table-modal').modal('hide');
-    });
-
-    $('.associable-data-row').click(function () {
-        row = $(this);
-        container = $('#associables-container');
-
-        selectedId = row.attr('data-id');
-
-        selectedField = container.find('#' + selectedId);
-
-        if (selectedField.length > 0) {
-            selectedField.remove();
-        } else {
-            container.append(
-                '<div id="' + selectedId + '">\n' +
-                '  <input class="form-control-hidden" type="hidden" ' +
-                'name="<%# @element %>[associables][rules][]" id="<%# @element %>_associable_rule" ' +
-                'value="' + selectedId + '">\n' +
-                '  <input class="form-control user-displayed-name" readonly="readonly" type="text" ' +
-                'name="associable_user_display" id="user_' + selectedId + '_display" ' +
-                'value="Ley: ' + row.find('#institution').html() + ': ' + row.find('#law').html() + '">\n' +
-                '</div>'
-            );
-        }
-    });
-
-    $('.filterable').filterable();
-</script>-->

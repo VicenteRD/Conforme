@@ -2,6 +2,9 @@ class RiskMeasurement
   include Mongoid::Document
   include Mongoid::Timestamps::Created::Short
 
+  include Describable
+  include Referable
+
   embeds_one :log_book, class_name: 'Log::Book'
 
   before_create do
@@ -17,8 +20,6 @@ class RiskMeasurement
   field :sig, as: :significant, type: Integer, default: -1
 
   field :thr, as: :threshold, type: Float
-
-  field :cmts, as: :comments, type: String
 
   field :mag, as: :magnitude, type: Float
 

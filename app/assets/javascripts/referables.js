@@ -52,7 +52,7 @@ function getModalId(className) {
 }
 
 function renderReferencesModal(resetTabs, extra) {
-    addedParam = extra === undefined ? '/noextra' : ('/' + extra);
+    addedParam = extra === undefined || extra == '' ? '/noextra' : ('/' + extra);
 
     $.ajax({url: '/referables/' + currentModalOptions['modalKey'] + addedParam});
 

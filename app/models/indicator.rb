@@ -3,6 +3,9 @@ class Indicator
 
   include EnumerableDocument
 
+  include Referable
+  include Describable
+
   validates_presence_of :objective_id, :responsible_id,
                         :name, :description,
                         :method, :threshold, :margin, :criterion, :unit,
@@ -30,8 +33,6 @@ class Indicator
   field :mrg, as: :margin, type: Float
   field :crt, as: :criterion, type: String
   field :unit, type: String
-
-  field :cmts, as: :comments, type: String
 
   field :freq, as: :measurement_frequency, type: Integer
 

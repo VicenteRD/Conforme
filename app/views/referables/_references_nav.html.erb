@@ -164,12 +164,12 @@
           <p class="item-content referable-item" data-linked_class="Person">Cuestionarios</p>
         </div>
         <div class="sub-menu-item">
-          <p class="item-content referable-item" data-linked_class="Rule">
+          <p class="item-content referable-item" data-linked_class="Rule" data-extra="standard">
             Normas
           </p>
         </div>
         <div class="sub-menu-item">
-          <p class="item-content referable-item" data-linked_class="Rule">
+          <p class="item-content referable-item" data-linked_class="Rule" data-extra="law">
             Leyes
           </p>
         </div>
@@ -229,12 +229,12 @@
           </p>
         </div>
         <div class="sub-menu-item">
-          <p class="item-content referable-item" data-linked_class="Risk::RuleRisk">
+          <p class="item-content referable-item" data-linked_class="Risk::RuleRisk" data-extra="standard">
             Normas
           </p>
         </div>
         <div class="sub-menu-item">
-          <p class="item-content referable-item" data-linked_class="Risk::RuleRisk">
+          <p class="item-content referable-item" data-linked_class="Risk::RuleRisk" data-extra="law">
             Leyes
           </p>
         </div>
@@ -297,8 +297,9 @@
 
         $('.referable-item').click(function () {
             var item = $(this);
+            var extra = item.attr('data-extra');
             setCurrentModalOptions(item.attr('data-linked_class'), item.html(), true);
-            renderAndShowReferencesModal();
+            renderAndShowReferencesModal(extra === undefined ? '' : extra);
         });
 
         function showReferencesMenu() {
@@ -312,6 +313,7 @@
     <script>
         $('#table-modal').on('hidden.bs.modal', function() {
             $('#references-tabs').find('a[data-target="#table"]').tab('show');
+            $('#new-tab').show();
             setCurrentModalOptions();
         });
         $('#positions-modal').on('hidden.bs.modal', function() {

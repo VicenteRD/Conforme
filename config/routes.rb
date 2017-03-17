@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'rules/create'
+
   # -------- Root and Dashboard
 
   get '/'          => redirect('/dashboard')
@@ -163,6 +165,8 @@ Rails.application.routes.draw do
   # -------- Other
 
   get '/referables/:class_name/:extra' => 'referables#render_list'
+
+  post '/documentos/reglas/nuevo' => 'rules#create', as: :new_rule
 
   post '/uploads/new' => 'uploaded_files#create', as: :new_upload
 end

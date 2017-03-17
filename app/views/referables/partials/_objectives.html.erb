@@ -1,76 +1,96 @@
-<% picker_id = (@element.to_s.starts_with?('single') ? @element.to_s.split('_').to_a.last : nil) %>
+<%= content_for :references_table_content do %>
+    <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Frase</th>
+      <th>Creador</th>
+      <th>Encargado</th>
+    </tr>
+    </thead>
+    <tbody style="cursor:pointer">
+    <% Objective.each do |objective| %>
+        <tr class="objective-row" data-id="<%= objective.id %>">
+          <td id="name-cell"><%= objective.name %></td>
+          <td ><%= objective.phrase %></td>
+          <td>
+            <%= if objective.creator_id
+                    Person::User.find(objective.creator_id)&.first_last_name ||  ''
+                  end %>
+          </td>
+          <td>
+            <%= if objective.responsible_id
+                  Person::User.find(objective.responsible_id)&.first_last_name ||  ''
+                end %>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+<% end %>
 
-<div class="tab-pane active" id="table" role="tabpanel" aria-expanded="false">
-  <div class="input-group padding-10 inline" style="width: 80%; overflow: auto">
-    <%=
-      text_field(
-        :search,
-        :input,
-        placeholder: 'Buscar',
-        class: 'form-control filterer'
-      )
-    %>
-  </div>
-  <div class="table-responsive" style="height:301px; overflow:auto; width: auto">
-    <table class="table table-hover filterable">
-      <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Frase</th>
-        <th>Encargado</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% Objective.each do |objective| %>
-          <tr class="<%= picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-id="<%= objective.id %>">
-            <td id="objective-name"><%= objective.name %></td>
-            <td ><%= objective.phrase %></td>
-            <td><%= Person::User.find(objective.responsible_id).first_last_name ||  '' %></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
-<div class="tab-pane" id="new" role="tabpanel" style="height:360px">
-</div>
+<%= content_for :references_form do %>
+    <%= form_for(:objective,
+                 url: new_objective_path(format: :json),
+                 remote: true,
+                 html: {id: 'new_objective'}) do |f| %>
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Nombre</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :name, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
 
-<script>
-    $('.user-selectable').click(function () {
-        row = $(this);
-        formGroup = $('#<%= picker_id %>');
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Frase</label>
+          </div>
+          <div class="col-md-11">
+            <%= f.text_area :phrase, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
 
-        formGroup.find('.form-control')
-            .val(row.find('#objective-name').html());
-        formGroup.find('.form-control-hidden').val(row.attr('data-id'));
+        <%= f.hidden_field :creator_id, value: @user.id %>
 
+        <div class="form-actions text-center" style="position:absolute; bottom: 0; width: 100%">
+          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50', style: 'text-align: center' %>
+        </div>
+    <% end %>
+<% end %>
 
-        $('#table-modal').modal('hide');
-    });
+<%= content_for :references_scripts do %>
+    <script>
+        var rowSelector = $('.objective-row');
 
-    $('.associable-data-row').click(function () {
-        row = $(this);
-        container = $('#associables-container');
-
-        selectedId = row.attr('data-id');
-
-        selectedField = container.find('#' + selectedId);
-
-        if (selectedField.length > 0) {
-            selectedField.remove();
-        } else {
-            container.append(
-                '<div id="' + selectedId + '">\n' +
-                '<input class="form-control-hidden" type="hidden" ' +
-                'name="<%= @element %>[associables][objectives][]" id="<%= @element %>_associable_objective" ' +
-                'value="' + selectedId + '">\n' +
-                '<input class="form-control objective-name" readonly="readonly" type="text" ' +
-                'name="associable_objective_display" id="objective_' + selectedId + '_display" ' +
-                'value="Objetivo: ' + row.find('#objective-name').html() + '">\n' +
-                '</div>'
+        rowSelector.click(function () {
+            var row = $(this);
+            var result = processReferenceRowClick(
+                row,
+                row.attr('data-id'),
+                row.find('#name-cell').html()
             );
-        }
-    });
 
-  $('.filterable').filterable();
-</script>
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        var process_form = $('#new_objective');
+        process_form.on("ajax:success", function (e, data, status, xhr) {
+            var result = processNewReferenceCreated(data);
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        $('.filterable').filterable();
+
+        rowSelector.each(function () {
+            var row = $(this);
+            styleSelection(row, isSelectedReference('Objective', row.attr('data-id')));
+        });
+
+        //styleSelectedRows(rowSelector); // Add checkForMultipleSelection ?
+    </script>
+<% end %>
