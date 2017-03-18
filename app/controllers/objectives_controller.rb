@@ -18,12 +18,20 @@ class ObjectivesController < ApplicationController
   def create
     fields = params.require(:objective)
 
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
     objective = Objective.create!(fields.permit(
         :name,
-        :phrase
+        :phrase,
+        :creator_id,
+        :responsible_id,
+        :comments,
+        attachment_ids: []
     ))
 
     objective.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
+
+    create_references(objective, params[:references].to_unsafe_h) if params[:references]
 
     respond_to do |format|
       format.html { redirect_to objective_path(objective) }
@@ -49,12 +57,20 @@ class ObjectivesController < ApplicationController
 
     fields = params.require(:objective)
 
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
     objective.update!(fields.permit(
         :name,
-        :description
+        :phrase,
+        :creator_id,
+        :responsible_id,
+        :comments,
+        attachment_ids: []
     ))
 
     objective.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+
+    #create_references(objective, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to objective_path(objective)
   end

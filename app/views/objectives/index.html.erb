@@ -14,7 +14,7 @@
     </tr>
 <% end %>
 <% content_for :table_body do %>
-    <% objectives = Objectives.all %>
+    <% objectives = Objective.all %>
     <% if objectives.size != 0 %>
         <% objectives.each do |objective| %>
 

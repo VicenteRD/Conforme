@@ -1,9 +1,5 @@
 <%= content_for :heading_main do %>
-    <div class="margin-left-50">
-      <h4 class="text-capitalize">
-        <%= Swot.get_all_types[@swot.swot_type] %>
-      </h4>
-    </div>
+
 <% end %>
 
 <%# Populate all 3 columns of the view with keys & their values %>
@@ -12,23 +8,22 @@
     <div class="row">
       <div class="col-lg-4 show-label">Nombre:</div>
       <div class="col-lg-8">
-        <%= @swot.name %>
+        <%= @objective.name %>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 show-label">Estrategia:</div>
+      <div class="col-lg-4 show-label">Creador:</div>
       <div class="col-lg-8">
-        <%= @swot.strategy %>
+        <%= Person::User.find(@objective.creator_id).first_last_name %>
       </div>
     </div>
-
 <% end %>
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Plazo:</div>
+      <div class="col-lg-4 show-label">Frase:</div>
       <div class="col-lg-8">
-        <%= @swot.due_at.strftime(dt_rb_format(false, false)) %>
+        <%= @objective.phrase %>
       </div>
     </div>
 <% end %>
@@ -37,32 +32,30 @@
     <div class="row">
       <div class="col-lg-4 show-label">Responsable:</div>
       <div class="col-lg-8">
-        <%= Person::User.find(@swot.responsible_id).first_last_name %>
+        <%= Person::User.find(@objective.responsible_id).first_last_name %>
       </div>
     </div>
 <% end %>
 
-
-
 <%= content_for :extra do %>
-    <% if @swot.comments? %>
+    <% if @objective.comments? %>
         <div class="panel">
           <div class="panel-heading">
             <h5>Descripción</h5>
           </div>
           <div class="margin-left-30 margin-bottom-30">
-            <%= raw @swot.comments %>
+            <%= raw @objective.comments %>
           </div>
         </div>
     <% end %>
 
-    <% if @swot.references? %>
+    <% if @objective.references? %>
         <div class="panel">
           <div class="panel-heading">
             <h5>Referencias</h5>
           </div>
           <div class="margin-left-30 margin-bottom-30">
-            <%= render partial: 'referables/show_all_for', locals: {element: @swot} %>
+            <%= render partial: 'referables/show_all_for', locals: {element: @objective} %>
           </div>
         </div>
     <% end %>
@@ -70,7 +63,7 @@
 
 <%= content_for :menu do %>
     <div class="dropdown">
-      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @swot.log_book})}" %>
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @objective.log_book})}" %>
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
         <i class="dropdown-inline-button-icon icmn-history"></i>
         Bitácora
@@ -78,7 +71,7 @@
     </div>
 
     <div class="dropdown">
-      <% files_table = "#{escape_javascript(render partial: 'uploaded_files/modal', locals: {attachments: @swot.attachment_ids})}" %>
+      <% files_table = "#{escape_javascript(render partial: 'uploaded_files/modal', locals: {attachments: @objective.attachment_ids})}" %>
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showAttachments('<%= files_table %>')">
         <i class="dropdown-inline-button-icon icmn-folder-open"></i>
         Adjuntos
@@ -95,9 +88,9 @@
 
     <div class="dropdown">
       <a class="dropdown-inline-button">
-        <%= link_to edit_swot_path(@swot), method: 'get', class: 'dropdown-inline-button' do %>
-          <i class="dropdown-inline-button-icon icmn-pencil"></i>
-          Editar
+        <%= link_to edit_objective_path(@objective), method: 'get', class: 'dropdown-inline-button' do %>
+            <i class="dropdown-inline-button-icon icmn-pencil"></i>
+            Editar
         <% end %>
       </a>
     </div>
@@ -107,16 +100,13 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to swot_index_path do %>
-              Estrategias: FODA
+          <%= link_to objectives_path do %>
+              Estrategias: Objetivos
           <% end %>
         </li>
         <li>
-          <a>hola</a>
-        </li>
-        <li>
           <span>
-            <%= @swot.name %>
+            <%= @objective.number %>
           </span>
         </li>
       </ul>

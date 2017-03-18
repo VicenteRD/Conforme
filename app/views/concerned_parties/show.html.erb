@@ -1,0 +1,127 @@
+<%= content_for :heading_main do %>
+
+<% end %>
+
+<%# Populate all 3 columns of the view with keys & their values %>
+
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Tipo:</div>
+      <div class="col-lg-8">
+        <%= @concerned_party.party_type %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Expectativa:</div>
+      <div class="col-lg-8">
+        <%= @concerned_party.expectation %>
+      </div>
+    </div>
+
+<% end %>
+
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+        <%= @concerned_party.name %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Plazo:</div>
+      <div class="col-lg-8">
+        <%= @concerned_party.due_at.strftime(dt_rb_format(false, false)) %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Descripción:</div>
+      <div class="col-lg-8">
+        <%= @concerned_party.description %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Responsable:</div>
+      <div class="col-lg-8">
+        <%= Person::User.find(@concerned_party.responsible_id).first_last_name %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :extra do %>
+    <% if @concerned_party.comments? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Descripción</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= raw @concerned_party.comments %>
+          </div>
+        </div>
+    <% end %>
+
+    <% if @concerned_party.references? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Referencias</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= render partial: 'referables/show_all_for', locals: {element: @concerned_party} %>
+          </div>
+        </div>
+    <% end %>
+<% end %>
+
+<%= content_for :menu do %>
+    <div class="dropdown">
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @swot.log_book})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+        <i class="dropdown-inline-button-icon icmn-history"></i>
+        Bitácora
+      </a>
+    </div>
+
+    <div class="dropdown">
+      <% files_table = "#{escape_javascript(render partial: 'uploaded_files/modal', locals: {attachments: @swot.attachment_ids})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showAttachments('<%= files_table %>')">
+        <i class="dropdown-inline-button-icon icmn-folder-open"></i>
+        Adjuntos
+      </a>
+    </div>
+
+    <div class="dropdown">
+      <%= link_to '#', method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-rulers"></i>
+          Revisar
+      <% end %>
+    </div>
+
+
+    <div class="dropdown">
+      <a class="dropdown-inline-button">
+        <%= link_to edit_concerned_party_path(@concerned_party), method: 'get', class: 'dropdown-inline-button' do %>
+            <i class="dropdown-inline-button-icon icmn-pencil"></i>
+            Editar
+        <% end %>
+      </a>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to concerned_parties_path do %>
+              Estrategias: Partes Interesadas
+          <% end %>
+        </li>
+        <li>
+          <span>
+            <%= @concerned_party.number %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

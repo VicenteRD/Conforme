@@ -11,6 +11,8 @@ class UploadedFile
           application/msword
           application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
           application/vnd.openxmlformats-officedocument.wordprocessingml.document
+          application/vnd.oasis.opendocument.spreadsheet
+          application/vnd.oasis.opendocument.text
           text/plain
       )
 

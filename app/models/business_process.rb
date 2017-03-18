@@ -1,6 +1,7 @@
 class BusinessProcess
   include Mongoid::Document
 
+  include Describable
   include Referable
 
   embeds_one :log_book, class_name: 'Log::Book'
@@ -16,18 +17,12 @@ class BusinessProcess
 
   field :r_id, as: :responsible_id, type: BSON::ObjectId
 
-  field :cmts, as: :comments, type: String
-
-  index({name: 1}, {unique: true, name: 'name_index'})
-
   def self.get_all_types
     ['Cadena de Valor', 'Gestión', 'Apoyo', 'Estrategia']
   end
 
   def presentable_type
-    if self.process_type.nil?
-      'ERR'
-    else
+    unless self.process_type.nil?
       BusinessProcess.get_all_types[self.process_type]
     end
   end

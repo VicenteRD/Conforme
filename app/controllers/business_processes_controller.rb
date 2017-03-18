@@ -18,15 +18,20 @@ class BusinessProcessesController < ApplicationController
   def create
     fields = params.require(:process)
 
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
     process = BusinessProcess.create!(fields.permit(
         :name,
         :description,
         :process_type,
         :responsible_id,
-        :comments
+        :comments,
+        attachment_ids: []
     ))
 
     process.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
+
+    create_references(process, params[:references].to_unsafe_h) if params[:references]
 
     respond_to do |format|
       format.html {
@@ -54,15 +59,20 @@ class BusinessProcessesController < ApplicationController
 
     fields = params.require(:process)
 
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
     process.update!(fields.permit(
+        :process_type,
         :name,
         :description,
-        :process_type,
         :responsible_id,
-        :comments
+        :comments,
+        attachment_ids: []
     ))
 
     process.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+
+    #create_references(process, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to business_process_path(process)
   end

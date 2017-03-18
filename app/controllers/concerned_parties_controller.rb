@@ -18,12 +18,22 @@ class ConcernedPartiesController < ApplicationController
   def create
     fields = params.require(:concerned_party)
 
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
     concerned_party = ConcernedParty.create!(fields.permit(
+        :party_type,
         :name,
-        :description
+        :description,
+        :expectation,
+        :responsible_id,
+        :due_at,
+        :comments,
+        attachment_ids: []
     ))
 
     concerned_party.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
+
+    create_references(concerned_party, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to concerned_party_path(concerned_party)
   end
@@ -43,12 +53,22 @@ class ConcernedPartiesController < ApplicationController
 
     fields = params.require(:process)
 
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
     concerned_party.update!(fields.permit(
+        :party_type,
         :name,
-        :description
+        :description,
+        :expectation,
+        :responsible_id,
+        :due_at,
+        :comments,
+        attachment_ids: []
     ))
 
     concerned_party.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+
+    #create_references(concerned_party, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to concerned_party_path(concerned_party)
   end
