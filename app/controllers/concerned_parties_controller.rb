@@ -4,7 +4,7 @@ class ConcernedPartiesController < ApplicationController
   end
 
   def show
-    if (@concerned_party = BusinessProcess.find(params[:id]))
+    if (@concerned_party = ConcernedParty.find(params[:id]))
       render layout: 'show'
     else
       redirect_to '/'
@@ -51,7 +51,7 @@ class ConcernedPartiesController < ApplicationController
       redirect_to '/' and return
     end
 
-    fields = params.require(:process)
+    fields = params.require(:concerned_party)
 
     fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
 

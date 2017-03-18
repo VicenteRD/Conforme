@@ -1,6 +1,7 @@
 class BusinessProcess
   include Mongoid::Document
 
+  include EnumerableDocument
   include Describable
   include Referable
 
@@ -19,11 +20,5 @@ class BusinessProcess
 
   def self.get_all_types
     ['Cadena de Valor', 'Gestión', 'Apoyo', 'Estrategia']
-  end
-
-  def presentable_type
-    unless self.process_type.nil?
-      BusinessProcess.get_all_types[self.process_type]
-    end
   end
 end

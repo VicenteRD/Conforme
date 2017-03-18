@@ -38,7 +38,7 @@ class SwotController < ApplicationController
   end
 
   def edit
-    if (@swot = Swot.find(param[:id]))
+    if (@swot = Swot.find(params[:id]))
       render layout: 'form'
     else
       redirect_to '/'

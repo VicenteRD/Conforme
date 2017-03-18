@@ -85,14 +85,11 @@
       <% end %>
     </div>
 
-
     <div class="dropdown">
-      <a class="dropdown-inline-button">
-        <%= link_to edit_objective_path(@objective), method: 'get', class: 'dropdown-inline-button' do %>
-            <i class="dropdown-inline-button-icon icmn-pencil"></i>
-            Editar
-        <% end %>
-      </a>
+      <%= link_to edit_objective_path(@objective), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
     </div>
 <% end %>
 

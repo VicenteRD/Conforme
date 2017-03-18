@@ -21,7 +21,7 @@
             <tr data-href="<%= business_process_path(process) %>">
               <td>
                 <div class="expand-collapse">+</div>
-                <%= process.presentable_type %>
+                <%= process.process_type %>
               </td>
               <td>
                 <%= process.name %>
@@ -43,7 +43,7 @@
 
 <% content_for :menu do %>
     <div class="dropdown">
-      <%= link_to new_objective_path, method: 'get', class: 'dropdown-inline-button' do %>
+      <%= link_to new_business_process_path, method: 'get', class: 'dropdown-inline-button' do %>
           <i class="dropdown-inline-button-icon icmn-file-plus"></i>
           Nuevo
       <% end %>

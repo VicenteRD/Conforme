@@ -39,7 +39,7 @@
                 <%= Person::User.find(party.responsible_id).first_last_name %>
               </td>
               <td>
-                <%= party.due_at.strftime(dt_rb_format(false, false)) %>
+                <%= party.due_at&.strftime(dt_rb_format(false, false)) || '-' %>
               </td>
             </tr>
         <% end %>

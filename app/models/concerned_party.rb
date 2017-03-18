@@ -12,7 +12,7 @@ class ConcernedParty
     self.log_book ||= Log::Book.new
   end
 
-  field :p_type, as: :party_type, type: String
+  field :p_type, as: :party_type, type: Integer
   field :name, type: String
 
   field :desc, as: :description, type: String
@@ -20,4 +20,12 @@ class ConcernedParty
 
   field :r_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
   field :due_at, type: DateTime
+
+  def self.get_all_types
+    {0 => 'Interna', 1 => 'Externa'}
+  end
+
+  def presentable_type
+    ConcernedParty.get_all_types[self.party_type]
+  end
 end

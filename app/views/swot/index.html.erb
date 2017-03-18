@@ -35,7 +35,7 @@
                 <%= Person::User.find(swot.responsible_id).first_last_name %>
               </td>
               <td>
-                <%= swot.due_at.strftime(dt_rb_format(false, false)) %>
+                <%= swot.due_at&.strftime(dt_rb_format(false, false)) || '-' %>
               </td>
             </tr>
         <% end %>
