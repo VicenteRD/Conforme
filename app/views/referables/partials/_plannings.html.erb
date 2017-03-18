@@ -1,48 +1,47 @@
 <%= content_for :references_table_content do %>
     <thead>
     <tr>
-      <th>Tipo</th>
       <th>Nombre</th>
-      <th style="width: 50%">Descripción</th>
+      <th>Descripción</th>
+      <th>Fecha</th>
     </tr>
     </thead>
     <tbody style="cursor: pointer">
-    <% if BusinessProcess.count > 0 %>
-        <% BusinessProcess.each do |business_process| %>
-            <tr class="business_process-row" data-id="<%= business_process.id %>">
-              <td><%= business_process.process_type %>
-              <td id="name-cell"><%= business_process.name %></td>
-              <td><%= business_process.description %></td>
-            </tr>
-        <% end %>
-    <% else %>
-        <tr>
-          <td>No se encontraron procesos</td>
+    <% Planning.each do |planning| %>
+        <tr class="planning-row" data-id="<%= planning.id %>">
+          <td><%= planning.name %></td>
+          <td id="name-cell"><%= planning.description %></td>
+          <td><%= planning.due_at.strftime(dt_rb_format(true, false)) %></td>
         </tr>
     <% end %>
     </tbody>
 <% end %>
 
 <%= content_for :references_form do %>
-    <%= form_for(:process,
-                 url: new_business_process_path(format: :json),
+    <%= form_for(:planning,
+                 url: new_planning_path(format: :json),
                  remote: true,
-                 html: {id: 'new_process'}) do |f| %>
+                 html: {id: 'new_planning'}) do |f| %>
         <div class="row form-group" style="margin: 15px 10px 0 10px">
-          <div class="col-md-1">
-            <label class="form-control-label">Tipo</label>
-          </div>
-          <div class="col-md-3">
-            <%= f.collection_select :process_type,
-                                    BusinessProcess.get_all_types.collect { |c| [c, c] },
-                                    :first, :last,
-                                    {}, {class: 'form-control', style: 'width: 100%'} %>
-          </div>
           <div class="col-md-1">
             <label class="form-control-label">Nombre</label>
           </div>
           <div class="col-md-7">
             <%= f.text_field :name, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Fecha</label>
+          </div>
+          <div class="col-md-7 input-group date date-picker" id="plannings-datetime-picker" >
+              <%= text_field :raw, :due_at, class: 'form-control',
+                             data: {format: dt_form_format(true)},
+                             value: DateTime.now.to_i %>
+              <span class="input-group-addon">
+                <i class="icmn-calendar"></i>
+              </span>
           </div>
         </div>
 
@@ -55,15 +54,6 @@
           </div>
         </div>
 
-        <%# f.hidden_field :responsible_id, value: @user.id %>
-        <!--<div class="row" style="margin: 15px 10px 0 10px">
-          <p>
-            Usted será asignado como responsable de este proceso.
-            <br>
-            Puede editar esto accediendo a la página del proceso directamente y haciendo click en <i>Editar</i>.
-          </p>
-        </div>-->
-
         <div class="form-actions text-center" style="position:absolute; bottom: 0; width: 100%">
           <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50', style: 'text-align: center' %>
         </div>
@@ -72,7 +62,7 @@
 
 <%= content_for :references_scripts do %>
     <script>
-        var rowSelector = $('.business_process-row');
+        var rowSelector = $('.planning-row');
 
         rowSelector.click(function () {
             var row = $(this);
@@ -87,7 +77,8 @@
             }
         });
 
-        $('#new_process').on("ajax:success", function (e, data, status, xhr) {
+        var planning_form = $('#new_planning');
+        planning_form.on("ajax:success", function (e, data, status, xhr) {
             var result = processNewReferenceCreated(data);
 
             if (result) {
@@ -97,11 +88,10 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('BusinessProcess', row.attr('data-id')));
+            styleSelection(row, isSelectedReference('Planning', row.attr('data-id')));
         });
 
         $('.filterable').filterable();
-
-        //styleSelectedRows(rowSelector); // Add checkForMultipleSelection ?
+        newDateTimePicker($('#plannings-datetime-picker'), '<% server_timezone %>')
     </script>
 <% end %>

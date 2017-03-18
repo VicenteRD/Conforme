@@ -34,9 +34,7 @@ class BusinessProcessesController < ApplicationController
     create_references(process, params[:references].to_unsafe_h) if params[:references]
 
     respond_to do |format|
-      format.html {
-        redirect_to business_process_path(process)
-      }
+      format.html { redirect_to business_process_path(process) }
       format.json {
         render json: { object_id: process.id.to_s,
                        object_name: process.name }

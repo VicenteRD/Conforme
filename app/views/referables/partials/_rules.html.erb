@@ -17,12 +17,10 @@
     </thead>
     <tbody style="cursor: pointer">
     <% rules.each do |rule| %>
-
         <tr class="rule-row" data-id="<%= rule.id %>">
-          <td><%= rule.institution %></td>
+          <td id="institution-cell"><%= rule.institution %></td>
           <td id="name-cell"><%= rule.name %></td>
         </tr>
-
     <% end %>
     </tbody>
 <% end %>
@@ -54,12 +52,11 @@
                        <div class="col-md-3">' +
                           f.collection_select(:rule_type, {1 => 'Ley', 2 => 'Norma'},
                                               :first, :second,
-                                              {}, {class: 'form-control', style:'100%'}) +
-                      '</div>'
+                                              {}, {class: 'form-control', style: '100%'}) +
+                          '</div>'
                   end
           %>
         </div>
-
 
         <div class="row form-group" style="margin: 15px 10px 0 10px">
           <div class="col-md-1">
@@ -81,10 +78,17 @@
         var rowSelector = $('.rule-row');
         rowSelector.click(function () {
             var row = $(this);
+            var name = <%= raw (
+            extra == 'law' ?
+              "row.find('#name-cell').html()"
+            :
+              "row.find('#institution-cell').html() + ' ' + row.find('#name-cell').html()"
+            ) %>;
+
             var result = processReferenceRowClick(
                 row,
                 row.attr('data-id'),
-                row.find('#name-cell').html()
+                name
             );
 
             if (result) {

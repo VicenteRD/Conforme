@@ -39,15 +39,24 @@ class Risk::RuleRisk < Risk
   #  end
   #end
 
-  def get_full_name
-    rule = Rule.find(self.rule_id)
+  def full_rule_name
 
-    rule.full_name + ', art. ' + rule.articles.find(self.article_id).name
-  end
 
-  def get_article_name
-    Rule.find(self.rule_id).articles.find(self.article_id).name
+    if (rule = Rule.find(self.rule_id))
+      rule.rule_type == 1 ? rule.name : rule.full_name
+    else
+      nil
+    end
   end
+  #def get_full_name
+  #  rule = Rule.find(self.rule_id)
+
+  #   rule.full_name + ', art. ' + rule.articles.find(self.article_id).name
+  #end
+
+  #def get_article_name
+  #  Rule.find(self.rule_id).articles.find(self.article_id).name
+  #end
 
   def get_compliance
     if self.measurements&.last

@@ -1,19 +1,19 @@
 <%= content_for :references_table_content do %>
     <thead>
     <tr>
-      <th>Objetivo</th>
+      <th>Tipo</th>
+      <th>Identificador</th>
       <th>Nombre</th>
       <th>Descripción</th>
-      <th>Método</th>
     </tr>
     </thead>
     <tbody style="cursor: pointer">
-    <% Indicator.each do |indicator| %>
-        <tr class="indicator-row" data-id="<%= indicator.id %>">
-          <td><%= Objective.find(indicator.objective_id).name %></td>
-          <td id="name-cell"><%= indicator.name %></td>
-          <td><%= indicator.description %></td>
-          <td><%= indicator.method %></td>
+    <% BusinessAsset.each do |asset| %>
+        <tr class="asset-row" data-id="<%= asset.id %>">
+          <td><%= BusinessAssetType.find(asset.type_id).name %></td>
+          <td><%= asset.identification %></td>
+          <td id="name-cell"><%= asset.name %></td>
+          <td><%= asset.description %></td>
         </tr>
     <% end %>
     </tbody>
@@ -25,7 +25,7 @@
             $('#new-tab').hide()
         });
 
-        var rowSelector = $('.indicator-row');
+        var rowSelector = $('.asset-row');
 
         rowSelector.click(function () {
             var row = $(this);
@@ -42,7 +42,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('Indicator', row.attr('data-id')));
+            styleSelection(row, isSelectedReference('BusinessAsset', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

@@ -34,7 +34,10 @@ class SwotController < ApplicationController
 
     create_references(swot, params[:references].to_unsafe_h) if params[:references]
 
-    redirect_to(swot_path(swot))
+    respond_to do |format|
+      format.html { redirect_to(swot_path(swot)) }
+      format.json { render json: { object_id: swot.id.to_s, object_name: swot.name } }
+    end
   end
 
   def edit

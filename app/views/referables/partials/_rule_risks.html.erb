@@ -1,65 +1,59 @@
-<% picker_id = (@element.to_s.starts_with?('single') ? @element.to_s.split('_').to_a.last : nil) %>
+<% risks = case extra
+             when 'law'
+               Risk::RuleRisk.law
+             when 'standard'
+               Risk::RuleRisk.standard
+             else
+               Risk::RuleRisk.all
+           end
+%>
 
-<div class="tab-pane active" id="table" role="tabpanel" aria-expanded="false">
-  <div class="input-group padding-10 inline" style="width: 80%; overflow: auto">
-    <%=
-      text_field(
-          :search,
-          :input,
-          placeholder: 'Buscar',
-          class: 'form-control filterer'
-      )
-    %>
-    <span class="input-group-addon">
-      <i class="icmn-search"></i>
-    </span>
-  </div>
-  <div class="table-responsive margin-bottom-30" style="height:301px; overflow:auto; width: auto">
-    <table class="table table-hover filterable">
-      <thead>
-        <tr>
-          <th>Tipo</th>
-          <th>Institución</th>
-          <th>Ley</th>
-          <th>Artículo</th>
-          <th>Requisito</th>
+<%= content_for :references_table_content do %>
+    <thead>
+    <tr>
+      <th>Ley</th>
+      <th>Numeral</th>
+      <th>Título</th>
+    </tr>
+    </thead>
+    <tbody style="cursor: pointer">
+    <% risks.each do |risk| %>
+        <tr class="risk-row" data-id="<%= risk.id %>">
+          <td id="rule-cell"><%= risk.full_rule_name %></td>
+          <td id="numeral-cell"><%= risk.numeral %></td>
+          <td><%= risk.title %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% Risk::RuleRisk.each do |risk| %>
-            <% rule = Rule.find(risk.rule_id) %>
-            <% article = rule.articles.find(risk.article_id) %>
-            <tr class="<%= picker_id.nil? ? 'associable-data-row' : 'user-selectable' %>" data-id="<%= risk.id %>">
-              <td><%= rule.get_rule_type_name[:es].capitalize %></td>
-              <td id="risk-inst"><%= rule.institution %></td>
-              <td id="risk-rule"><%= rule.name %></td>
-              <td id="risk-article"><%= article.name %></td>
-              <td><%= article.requirement %></td>
-            </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
 
-<script>
-    $(function() {
-        $('#new-tab').hide()
-    });
+    <% end %>
+    </tbody>
+<% end %>
 
-    $('.user-selectable').click(function () {
-        row = $(this);
-        formGroup = $('#<%= picker_id %>');
+<%= content_for :references_scripts do %>
+    <script>
+        $(function () {
+            $('#new-tab').hide()
+        });
 
-        formGroup.find('.form-control')
-            .val(row.find('#risk-inst').html() + ' ' +
-                 row.find('#risk-rule').html() + ' ' +
-                 row.find('#risk-article').html());
-        formGroup.find('.form-control-hidden').val(row.attr('data-id'));
+        var rowSelector = $('.risk-row');
 
+        rowSelector.click(function () {
+            var row = $(this);
+            var result = processReferenceRowClick(
+                row,
+                row.attr('data-id'),
+                row.find('#rule-cell').html() + ', art. ' + row.find('#numeral-cell').html()
+            );
 
-        $('#table-modal').modal('hide');
-    });
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
 
-    $('.filterable').filterable();
-</script>
+        rowSelector.each(function () {
+            var row = $(this);
+            styleSelection(row, isSelectedReference('Risk::RuleRisk', row.attr('data-id')));
+        });
+
+        $('.filterable').filterable();
+    </script>
+<% end %>

@@ -37,7 +37,12 @@ class PlanningsController < ApplicationController
 
     create_references(planning, params[:references].to_unsafe_h) if params[:references]
 
-    redirect_to planning_path(planning)
+    respond_to do |format|
+      format.html { redirect_to planning_path(planning) }
+      format.json { render json: { object_id: planning.id.to_s, object_name: planning.name } }
+    end
+
+
   end
 
   def edit

@@ -35,7 +35,14 @@ class ConcernedPartiesController < ApplicationController
 
     create_references(concerned_party, params[:references].to_unsafe_h) if params[:references]
 
-    redirect_to concerned_party_path(concerned_party)
+    respond_to do |format|
+      format.html { redirect_to concerned_party_path(concerned_party) }
+      format.json { render json: {
+          object_id: concerned_party.id.to_s,
+          object_name: concerned_party.name }
+      }
+    end
+
   end
 
   def edit

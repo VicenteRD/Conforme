@@ -3,38 +3,35 @@
     <tr>
       <th>Tipo</th>
       <th>Nombre</th>
-      <th style="width: 50%">Descripción</th>
+      <th>Descripción</th>
+      <th>Expectativa</th>
     </tr>
     </thead>
     <tbody style="cursor: pointer">
-    <% if BusinessProcess.count > 0 %>
-        <% BusinessProcess.each do |business_process| %>
-            <tr class="business_process-row" data-id="<%= business_process.id %>">
-              <td><%= business_process.process_type %>
-              <td id="name-cell"><%= business_process.name %></td>
-              <td><%= business_process.description %></td>
-            </tr>
-        <% end %>
-    <% else %>
-        <tr>
-          <td>No se encontraron procesos</td>
+    <% ConcernedParty.each do |concerned_party| %>
+        <tr class="concerned_party-row" data-id="<%= concerned_party.id %>">
+          <td><%= concerned_party.presentable_type %></td>
+          <td id="name-cell"><%= concerned_party.name %></td>
+          <td><%= concerned_party.description %></td>
+          <td><%= concerned_party.expectation %></td>
         </tr>
+
     <% end %>
     </tbody>
 <% end %>
 
 <%= content_for :references_form do %>
-    <%= form_for(:process,
-                 url: new_business_process_path(format: :json),
+    <%= form_for(:concerned_party,
+                 url: new_concerned_party_path(format: :json),
                  remote: true,
-                 html: {id: 'new_process'}) do |f| %>
+                 html: {id: 'new_concerned_party'}) do |f| %>
         <div class="row form-group" style="margin: 15px 10px 0 10px">
           <div class="col-md-1">
             <label class="form-control-label">Tipo</label>
           </div>
           <div class="col-md-3">
-            <%= f.collection_select :process_type,
-                                    BusinessProcess.get_all_types.collect { |c| [c, c] },
+            <%= f.collection_select :party_type,
+                                    ConcernedParty.get_all_types,
                                     :first, :last,
                                     {}, {class: 'form-control', style: 'width: 100%'} %>
           </div>
@@ -50,17 +47,25 @@
           <div class="col-md-1">
             <label class="form-control-label">Descripción</label>
           </div>
-          <div class="col-md-11">
-            <%= f.text_area :description, class: 'form-control', style: 'width: 100%' %>
+          <div class="col-md-7">
+            <%= f.text_field :description, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Expectativa</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :expectation, class: 'form-control', style: 'width: 100%' %>
           </div>
         </div>
 
-        <%# f.hidden_field :responsible_id, value: @user.id %>
+        <%= f.hidden_field :responsible_id, value: @user.id %>
         <!--<div class="row" style="margin: 15px 10px 0 10px">
           <p>
-            Usted será asignado como responsable de este proceso.
+            Usted será asignado como responsable de este elemento.
             <br>
-            Puede editar esto accediendo a la página del proceso directamente y haciendo click en <i>Editar</i>.
+            Puede editar esto accediendo a la página del elemento directamente y haciendo click en <i>Editar</i>.
           </p>
         </div>-->
 
@@ -72,7 +77,7 @@
 
 <%= content_for :references_scripts do %>
     <script>
-        var rowSelector = $('.business_process-row');
+        var rowSelector = $('.concerned_party-row');
 
         rowSelector.click(function () {
             var row = $(this);
@@ -87,7 +92,7 @@
             }
         });
 
-        $('#new_process').on("ajax:success", function (e, data, status, xhr) {
+        $('#new_concerned_party').on("ajax:success", function (e, data, status, xhr) {
             var result = processNewReferenceCreated(data);
 
             if (result) {
@@ -97,11 +102,9 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('BusinessProcess', row.attr('data-id')));
+            styleSelection(row, isSelectedReference('ConcernedParty', row.attr('data-id')));
         });
 
         $('.filterable').filterable();
-
-        //styleSelectedRows(rowSelector); // Add checkForMultipleSelection ?
     </script>
 <% end %>

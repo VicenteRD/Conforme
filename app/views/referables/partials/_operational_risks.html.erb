@@ -1,20 +1,21 @@
 <%= content_for :references_table_content do %>
     <thead>
     <tr>
-      <th>Objetivo</th>
+      <th>Área</th>
+      <th>Proceso</th>
+      <th>Actividad</th>
       <th>Nombre</th>
-      <th>Descripción</th>
-      <th>Método</th>
     </tr>
     </thead>
     <tbody style="cursor: pointer">
-    <% Indicator.each do |indicator| %>
-        <tr class="indicator-row" data-id="<%= indicator.id %>">
-          <td><%= Objective.find(indicator.objective_id).name %></td>
-          <td id="name-cell"><%= indicator.name %></td>
-          <td><%= indicator.description %></td>
-          <td><%= indicator.method %></td>
+    <% Risk::OperationalRisk.each do |risk| %>
+        <tr class="risk-row" data-id="<%= risk.id %>">
+          <td><%= Position.find(risk.area_id).name %></td>
+          <td><%= BusinessProcess.find(risk.process_id).name %></td>
+          <td><%= risk.activity %></td>
+          <td id="name-cell"><%= risk.name %></td>
         </tr>
+
     <% end %>
     </tbody>
 <% end %>
@@ -25,7 +26,7 @@
             $('#new-tab').hide()
         });
 
-        var rowSelector = $('.indicator-row');
+        var rowSelector = $('.risk-row');
 
         rowSelector.click(function () {
             var row = $(this);
@@ -42,7 +43,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('Indicator', row.attr('data-id')));
+            styleSelection(row, isSelectedReference('Risk::OperationalRisk', row.attr('data-id')));
         });
 
         $('.filterable').filterable();
