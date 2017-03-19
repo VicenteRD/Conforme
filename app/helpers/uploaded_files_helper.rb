@@ -17,6 +17,6 @@ module UploadedFilesHelper
         return
     end
 
-    image_tag image_url(icon_path), alt: icon_alt, style: 'height: 1em'
+    image_tag image_url(icon_path), alt: icon_alt, style: 'height: 1.5em'
   end
 end

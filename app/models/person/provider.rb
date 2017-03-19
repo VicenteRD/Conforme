@@ -1,8 +1,8 @@
-class Person::Provider
+class Person::Provider < Person
   include Mongoid::Document
 
-  field :provider_type, type: String
+  include Referable
 
-  field :competencies, type: String
-  field :performance, type: String
+  has_and_belongs_to_many :types, class_name: 'ProviderType'
+  has_many :evaluations, class_name: 'ProviderEvaluation'
 end

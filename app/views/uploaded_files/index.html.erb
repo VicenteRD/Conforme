@@ -1,0 +1,60 @@
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th width="1%"></th>
+      <th>Nombre</th>
+      <th>Fecha</th>
+      <th>Peso</th>
+    </tr>
+<% end %>
+
+<% content_for :table_body do %>
+    <% files = UploadedFile.order_by(created_at: :desc) %>
+    <% if files.size != 0 %>
+        <% files.each do |file| %>
+            <tr data-href="<%= file.upload.url %>">
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= icon_for file.upload_content_type %>
+              </td>
+              <td>
+                <%= file.upload_file_name %>
+              </td>
+              <td>
+                <%= file.created_at.strftime(dt_rb_format(true, false)) %>
+              </td>
+              <td>
+                <%= number_to_human_size(file.upload_file_size) %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron archivos.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_uploaded_file_path, class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Documentos: Archivos
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

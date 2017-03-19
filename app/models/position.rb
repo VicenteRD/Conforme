@@ -12,7 +12,9 @@ class Position
 
   # The functions this role performs.
   field :functions, type: String
-  field :competencies, type: String
+
+  field :comp, as: :competencies, type: Array
+  field :perf, as: :expected_performance, type: Array
 
   def get_area
     if self.area

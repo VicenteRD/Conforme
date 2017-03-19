@@ -43,7 +43,9 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('Risk::EnvironmentalRisk', row.attr('data-id')));
+            styleSelection(row, isSelectedReference(
+                'Risk::EnvironmentalRisk',
+                row.attr('data-id')));
         });
 
         $('.filterable').filterable();

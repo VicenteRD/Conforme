@@ -40,9 +40,11 @@ class IndicatorsController < ApplicationController
   end
 
   def edit
-    @indicator = Indicator.find(params[:id])
-
-    render layout: 'form'
+    if (@indicator = Indicator.find(params[:id]))
+      render layout: 'form'
+    else
+      redirect_to '/'
+    end
   end
 
   def update

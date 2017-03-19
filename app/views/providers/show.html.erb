@@ -8,4 +8,19 @@
     <dt>Desempeño</dt>
     <dd><%= @person.performance %></dd>
   </dl>
-<%= end %>
+<% end %>
+
+<%= content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to 'Proveedores', providers_path %>
+        </li>
+        <li>
+          <span>
+            <%= @person.rut %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

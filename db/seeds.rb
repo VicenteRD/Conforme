@@ -20,7 +20,7 @@ vr = Person::User.new(
   role: 'SuperAdmin',
   contract_type: 'Lol nope',
 
-  active: true,
+  #active: true,
   ll_at: Time.now,
   j_at: Time.now
 )
@@ -45,7 +45,7 @@ tst = Person::User.new(
     role: 'SuperAdmin',
     contract_type: 'Lol nope',
 
-    active: true,
+    #active: true,
     ll_at: Time.now,
     j_at: Time.now
 )
@@ -71,7 +71,7 @@ cv = Person::User.new(
     role: 'SuperAdmin',
     contract_type: 'self',
 
-    active: true,
+    #active: true,
     ll_at: Time.now,
     j_at: Time.now
 )
@@ -291,3 +291,43 @@ swot = Swot.new(
 )
 swot.save!
 swot.log_book.new_entry(nil, 'Creado', 'Created by system')
+
+prov = Person::Provider.new(
+    email: 'mail@provider.example',
+
+    avatar: File.new('vendor/assets/images/avatars/2.jpg'),
+    background_image: File.new('vendor/assets/images/photos/1.jpeg'),
+
+    rut: '7658986-0',
+    name: 'Nombre',
+    l_name1: 'Apellido Paterno',
+    l_name2: 'Apellido Materno',
+
+    phone: '(+56) 2 0000XXXX',
+    address: 'Provider address',
+
+    dob: Date.new(2000, 1, 1),
+
+    role: 'Provider',
+)
+prov.save!
+
+cli = Person::Client.new(
+    email: 'mail@client.example',
+
+    avatar: File.new('vendor/assets/images/avatars/3.jpg'),
+    background_image: File.new('vendor/assets/images/photos/2.jpeg'),
+
+    rut: '9706952-2',
+    name: 'Nombre',
+    l_name1: 'Apellido Paterno',
+    l_name2: 'Apellido Materno',
+
+    phone: '(+56) 2 0000XXXX',
+    address: 'Client address',
+
+    dob: Date.new(2000, 1, 1),
+
+    role: 'Client',
+)
+cli.save!

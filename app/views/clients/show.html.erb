@@ -1,7 +1,22 @@
 <%= content_for :profile_specifics do %>
-  <h6>Client</h6>
+  <h6>Cliente</h6>
   <dl class="dl-horizontal user-profile-dl">
     <dt>Tipo</dt>
     <dd><%= @person.client_type %></dd>
   </dl>
-<%= end %>
+<% end %>
+
+<%= content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to 'Clientes', clients_path %>
+        </li>
+        <li>
+          <span>
+            <%= @person.rut %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

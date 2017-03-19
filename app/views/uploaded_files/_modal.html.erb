@@ -17,9 +17,7 @@
               </td>
 
               <td>
-                <%= link_to attachment.upload.url, target: :_blank do %>
-                    <%= attachment.upload_file_name %>
-                <% end %>
+                <%= link_to attachment.upload_file_name, attachment.upload.url, target: '_blank' %>
               </td>
 
               <td><%= attachment.created_at.strftime(dt_rb_format(true, false)) %></td>

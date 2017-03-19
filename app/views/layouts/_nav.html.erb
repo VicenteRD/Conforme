@@ -103,27 +103,27 @@
         <ul class="left-menu-list list-unstyled">
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Ficha', {controller: 'users', action: 'index'}, class: 'left-menu-link' %>
+              <%= link_to 'Ficha', users_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Organigrama', {controller: 'positions', action: 'index'}, class: 'left-menu-link' %>
+              <%= link_to 'Organigrama', positions_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Competencias', {controller: 'users', action: 'eval_competencies'}, class: 'left-menu-link' %>
+              <%= link_to 'Competencias', employee_evaluations_path('competencias'), class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Desempeño', {controller: 'users', action: 'eval_performance'}, class: 'left-menu-link' %>
+              <%= link_to 'Desempeño', employee_evaluations_path('performance'), class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Clima', {controller: 'users', action: 'work_environment'}, class: 'left-menu-link' %>
+              <%= link_to 'Clima', '#', class: 'left-menu-link' %>
             </div>
           </li>
         </ul>
@@ -137,17 +137,17 @@
         <ul class="left-menu-list list-unstyled">
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Ficha', {controller: 'clients', action: 'show'}, class: 'left-menu-link' %>
+              <%= link_to 'Ficha', clients_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <a class="left-menu-link" href="#/pages/register">Tipos</a>
+              <%= link_to 'Tipos', client_types_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Satisfacción', {controller: 'clients', action: 'satisfaction'}, class: 'left-menu-link' %>
+              <%= link_to 'Satisfacción', '#', class: 'left-menu-link' %>
             </div>
           </li>
         </ul>
@@ -161,22 +161,24 @@
         <ul class="left-menu-list list-unstyled">
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Ficha', {controller: 'providers', action: 'show'}, class: 'left-menu-link' %>
+              <%= link_to 'Ficha', providers_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Tipos', {controller: 'providers', action: 'types'}, class: 'left-menu-link' %>
+              <%= link_to 'Tipos', provider_types_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Competencias', {controller: 'providers', action: 'eval_competencies'}, class: 'left-menu-link' %>
+              <%= link_to 'Competencias', provider_evaluations_path('competencias'),
+                          class: 'left-menu-link' %>
             </div>
           </li>
           <li>
             <div class="dropdown-header">
-              <%= link_to 'Desempeño', {controller: 'providers', action: 'eval_performance'}, class: 'left-menu-link' %>
+              <%= link_to 'Desempeño', provider_evaluations_path('performance'),
+                          class: 'left-menu-link' %>
             </div>
           </li>
         </ul>
@@ -228,7 +230,7 @@
           </li>
           <li>
             <div class="dropdown-header">
-              <a class="left-menu-link" href="/documentos_mantenedores/archivos">Archivos</a>
+              <%= link_to 'Archivos', uploaded_files_path, class: 'left-menu-link' %>
             </div>
           </li>
           <li>

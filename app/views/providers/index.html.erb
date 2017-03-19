@@ -1,0 +1,60 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>RUT</th>
+      <th>Nombre</th>
+      <th>Rol</th>
+      <th>E-mail</th>
+      <th>Teléfono</th>
+      <th>Dirección</th>
+    </tr>
+<% end %>
+
+<% content_for :table_body do %>
+    <% providers = Person::Provider.all %>
+    <% if providers.size != 0 %>
+        <% providers.each do |provider| %>
+
+            <tr data-href="<%= provider_path(provider) %>">
+
+              <td><%= provider.rut %></td>
+              <td><%= provider.full_name %></td>
+              <td><%= provider.role %></td>
+              <td><%= provider.email %></td>
+              <td><%= provider.phone %></td>
+              <td><%= provider.address %></td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="6"> No se encontraron proveedores.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_provider_path, class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Proveedores: Fichas
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

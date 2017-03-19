@@ -2,7 +2,6 @@ class Person::User < Person
   include Mongoid::Document
 
   include ActiveModel::SecurePassword
-  include Referable
 
   ## Make sure we have the minimum fields.
 

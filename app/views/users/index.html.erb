@@ -18,10 +18,11 @@
 <% end %>
 
 <% content_for :table_body do %>
-    <% if @person.size != 0 %>
-        <% @person.each do |user| %>
+    <% people = Person::User.all %>
+    <% if people.size != 0 %>
+        <% people.each do |user| %>
 
-            <tr data-href="<%= user_path(user.id) %>">
+            <tr data-href="<%= user_path(user) %>">
 
               <td><%= user.rut %></td>
               <td><%= user.full_name %></td>
@@ -53,7 +54,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
         <span>
-          Personas
+          Personas: Fichas
         </span>
         </li>
       </ul>

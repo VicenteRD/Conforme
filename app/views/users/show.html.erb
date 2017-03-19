@@ -25,3 +25,18 @@
 <%= content_for :profile_person_type do %>
     Empleado
 <% end %>
+
+<%= content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to 'Personas', users_path %>
+        </li>
+        <li>
+          <span>
+            <%= @person.rut %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

@@ -1,18 +1,14 @@
 class UsersController < ApplicationController
   def index
-    @person = Person::User.all
-    render "users/index", layout: 'table'
+    render layout: 'table'
   end
 
   def show
-    unless (@person = Person::User.find(params[:id]))
-      redirect_to '/' and return
+    if (@person = Person::User.find(params[:id]))
+      render layout: 'profile'
+    else
+      redirect_to '/'
     end
-    render layout: 'profile'
-  end
-
-  def organization_chart
-
   end
 
   def eval_competencies

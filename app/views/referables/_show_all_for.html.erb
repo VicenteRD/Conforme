@@ -1,4 +1,4 @@
-<% if element && element.class < Referable %>
+<% if element && element.class < Referable && element.references? %>
 
     <% if (employees = element.get_all_referred(Person::User)) %>
         Personas:

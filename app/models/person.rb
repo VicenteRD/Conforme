@@ -2,7 +2,8 @@ class Person
   include Mongoid::Document
   include Mongoid::Paperclip
 
-  include Activatable
+  #include Activatable
+  include Referable
 
   ## Make sure we have the minimum fields.
 
