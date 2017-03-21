@@ -76,13 +76,13 @@ cv = Person::User.new(
     j_at: Time.now
 )
 
-pos_gg = Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: ' ', area: true)
+pos_gg = Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: [], area: true)
 
-pos_dp = Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: ' ', area: true)
+pos_dp = Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: [], area: true)
 
-pos_go = Position.new(name: 'Goma', functions: 'Ser administrado', competencies: ' ')
+pos_go = Position.new(name: 'Goma', functions: 'Ser administrado', competencies: [])
 
-pos_dv = Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: ' ', area: true)
+pos_dv = Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: [], area: true)
 
 pos_go.parent_id = pos_dp.id
 pos_go.save!
