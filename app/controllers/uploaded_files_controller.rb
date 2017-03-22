@@ -4,6 +4,14 @@ class UploadedFilesController < ApplicationController
     render layout: 'table'
   end
 
+  def show
+    if (@file = UploadedFile.find(params[:id]))
+      render layout: 'show'
+    else
+      redirect_to '/'
+    end
+  end
+
   def new
     render layout: 'form'
   end

@@ -1,6 +1,7 @@
 <%= content_for :heading_main do %>
     <div class="margin-left-50">
       <h4 class="text-capitalize">
+        <%= icon_for(@file.upload_content_type) %>
         <%= link_to 'Descargar', @file.upload.url, target: '_blank' %>
       </h4>
     </div>
@@ -12,28 +13,25 @@
     <div class="row">
       <div class="col-lg-4 show-label">Nombre:</div>
       <div class="col-lg-8">
+        <%= @file.upload_file_name %>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-4 show-label">Estrategia:</div>
-      <div class="col-lg-8">
-      </div>
-    </div>
-
 <% end %>
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Plazo:</div>
+      <div class="col-lg-4 show-label">Tamaño:</div>
       <div class="col-lg-8">
+        <%= number_to_human_size(@file.upload_file_size) %>
       </div>
     </div>
 <% end %>
 
 <%= content_for :main_col_3 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Fecha:</div>
+      <div class="col-lg-4 show-label">Subido:</div>
       <div class="col-lg-8">
+        <%= @file.created_at.strftime(dt_rb_format(true, false)) %>
       </div>
     </div>
 <% end %>
@@ -51,16 +49,6 @@
           </div>
         </div>
     <% end %>
-
-    <% if @swot.references? %>
-        <div class="panel">
-          <div class="panel-heading">
-            <h5>Referencias</h5>
-          </div>
-          <div class="margin-left-30 margin-bottom-30">
-          </div>
-        </div>
-    <% end %>
 <% end %>
 
 <% content_for :breadcrumbs do %>
@@ -73,7 +61,7 @@
         </li>
         <li>
           <span>
-            <%= @file.uploaded_file_name %>
+            <%= @file.upload_file_name %>
           </span>
         </li>
       </ul>

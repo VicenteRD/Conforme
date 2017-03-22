@@ -235,7 +235,6 @@ sa_risk.log_creation(nil, body = 'Created by system')
 # Objectives
 
 obj = Objective.new(
-    creator_id: vr.id,
     responsible_id: vr.id,
     name: 'Objective 1',
     phrase: 'Order 66'

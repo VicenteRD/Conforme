@@ -74,23 +74,29 @@
               </ul>
               <div class="tab-content padding-vertical-20">
                 <div class="tab-pane active" id="posts" role="tabpanel">
-                  <div class="user-wall">
-                    <dl class="dl-horizontal user-profile-dl">
-                      <dt>RUT</dt>
-                      <dd><%= @person.rut %></dd>
-                      <dt>Nombre</dt>
-                      <dd><%= @person.full_name %></dd>
-                      <dt>Fecha de Nacimiento</dt>
-                      <dd><%= @person.dob.strftime(dt_rb_format(false, false)) %></dd>
-                      <dt>E-mail</dt>
-                      <dd><%= @person.email %></dd>
-                      <dt>Teléfono</dt>
-                      <dd><%= @person.phone %></dd>
-                      <dt>Dirección</dt>
-                      <dd><%= @person.address %></dd>
-                      <dt>Rol</dt>
-                      <dd><%= @person.role %></dd>
-                    </dl>
+                  <div class="user-wall row">
+                    <div class="col-md-4">
+                      <dl class="dl-horizontal user-profile-dl">
+                        <dt>RUT</dt>
+                        <dd><%= @person.rut %></dd>
+                        <dt>Nombre</dt>
+                        <dd><%= @person.full_name %></dd>
+                        <dt>Fecha de Nacimiento</dt>
+                        <dd><%= @person.dob.strftime(dt_rb_format(false, false)) %></dd>
+                        <dt>Rol</dt>
+                        <dd><%= @person.role %></dd>
+                      </dl>
+                    </div>
+                    <div class="col-md-4">
+                      <dl class="dl-horizontal user-profile-dl">
+                        <dt>E-mail</dt>
+                        <dd><%= @person.email %></dd>
+                        <dt>Teléfono</dt>
+                        <dd><%= @person.phone %></dd>
+                        <dt>Dirección</dt>
+                        <dd><%= @person.address %></dd>
+                      </dl>
+                    </div>
                   </div>
                 </div>
                 <div class="tab-pane" id="messaging" role="tabpanel">

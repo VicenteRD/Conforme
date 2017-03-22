@@ -1,11 +1,13 @@
 module Referable
   extend ActiveSupport::Concern
 
+  EMBED_CHAR = '#'
+
   included do
 
     field :ref, as: :references, type: Hash # {class_name: [BSON::ObjectId]}
 
-    def get_all_referred(klass) # TODO - test this monster
+    def get_all_referred(klass, base_klass = nil, embeds_list = '')
       unless is_referable_document? klass
         return nil
       end
@@ -15,7 +17,23 @@ module Referable
 
       if self.references[class_key]
         self.references[class_key].each do |object_id|
-          ret_array.append(klass.find(object_id))
+          if object_id.include? EMBED_CHAR
+            if base_klass.nil? || embeds_list.nil? || embeds_list.empty?
+              next
+            end
+
+            ids = object_id.sub(EMBED_CHAR)
+
+            if (base_object = base_klass.find(ids[0]))
+              element = base_object[embeds_list].find(ids[1])
+            else
+              next
+            end
+          else
+            element = klass.find(object_id)
+          end
+
+          ret_array.append(element)
         end
       end
 
