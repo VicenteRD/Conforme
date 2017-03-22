@@ -9,7 +9,6 @@
     <tr>
       <th>Nombre</th>
       <th>Frase</th>
-      <th>Creador</th>
       <th>Responsable</th>
     </tr>
 <% end %>
@@ -25,9 +24,6 @@
               </td>
               <td>
                 <%= objective.phrase %>
-              </td>
-              <td>
-                <%= print_responsible objective.creator_id %>
               </td>
               <td>
                 <%= print_responsible objective.responsible_id %>

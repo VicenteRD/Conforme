@@ -21,7 +21,6 @@ class ApplicationController < ActionController::Base
 
   def create_references(object, reference_ids)
     object.set_references_from_hash(reference_ids)
-    #asdf
   end
 
   #

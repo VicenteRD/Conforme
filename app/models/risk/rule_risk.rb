@@ -15,6 +15,7 @@ class Risk::RuleRisk < Risk
   field :rule_id, type: BSON::ObjectId
 
   field :compliance, type: Float
+  field :real_compliance, type: Float, default: 0
 
   field :numeral, type: String
   field :title, type: String
@@ -40,8 +41,6 @@ class Risk::RuleRisk < Risk
   #end
 
   def full_rule_name
-
-
     if (rule = Rule.find(self.rule_id))
       rule.rule_type == 1 ? rule.name : rule.full_name
     else
@@ -68,10 +67,11 @@ class Risk::RuleRisk < Risk
 
   def calculate_compliance
     if (measurement = measurements.order(measured_at: :desc, created_at: :desc).first)
-      puts 'HELLOOOOO'
       self.compliance = measurement.compliance
+      self.real_compliance = self.compliance
     else
       self.compliance = 0
+      self.real_compliance = 0
     end
 
     self.save!

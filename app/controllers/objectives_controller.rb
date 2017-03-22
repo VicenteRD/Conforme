@@ -23,7 +23,6 @@ class ObjectivesController < ApplicationController
     objective = Objective.create!(fields.permit(
         :name,
         :phrase,
-        :creator_id,
         :responsible_id,
         :comments,
         attachment_ids: []
@@ -62,7 +61,6 @@ class ObjectivesController < ApplicationController
     objective.update!(fields.permit(
         :name,
         :phrase,
-        :creator_id,
         :responsible_id,
         :comments,
         attachment_ids: []

@@ -37,7 +37,7 @@
               <div class='input-group date date-picker' id='date-picker'>
                 <%= text_field :raw, :due_at, class: 'form-control',
                                data: {format: dt_form_format(true), max: 0},
-                               value: DateTime.now.to_i %>
+                               value: @planning_activity.due_at.to_i %>
                 <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
               </span>
@@ -48,11 +48,27 @@
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
+                Fecha real
+              </label>
+            </div>
+            <div class="col-lg-2">
+              <div class='input-group date date-picker' id='date-picker'>
+                <%= text_field :raw, :executed_at, class: 'form-control',
+                               data: {format: dt_form_format(true), max: 0},
+                               value: DateTime.now.to_i %>
+                <span class="input-group-addon">
+                <i class="icmn-calendar"></i>
+              </span>
+              </div>
+            </div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
                 Progreso
               </label>
             </div>
             <div class="col-lg-1 form-inline">
-              <%= number_field :raw, :progress, value: @planning_activity.progress.round(2),
+              <%= number_field :raw, :progress, value: (@planning_activity.progress * 100).round(2),
                                step: :any, within: 0..100,
                                class: 'form-control', style: 'width:75px' %>
               %
@@ -131,7 +147,7 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to indicators_path do %>
+          <%= link_to plannings_path do %>
               Planificación
           <% end %>
         </li>

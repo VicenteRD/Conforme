@@ -173,6 +173,7 @@ Rails.application.routes.draw do
   # -- Uploads
   get '/documentos/archivos'       => 'uploaded_files#index', as: :uploaded_files
   get '/documentos/archivos/nuevo' => 'uploaded_files#new'  , as: :new_uploaded_file
+  get '/documentos/archivos/:id'   => 'uploaded_files#show' , as: :uploaded_file
 
   post '/documentos/archivos/nuevo' => 'uploaded_files#create'
 

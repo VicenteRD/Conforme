@@ -15,7 +15,7 @@
     <% files = UploadedFile.order_by(created_at: :desc) %>
     <% if files.size != 0 %>
         <% files.each do |file| %>
-            <tr data-href="<%= file.upload.url %>">
+            <tr data-href="<%= uploaded_file_path(file.id) %>">
               <td>
                 <div class="expand-collapse">+</div>
                 <%= icon_for file.upload_content_type %>

@@ -92,10 +92,13 @@
                 <table class="table">
                   <thead>
                   <tr>
-                    <th>Fecha</th>
+                    <th>Planificada</th>
                     <% if @type == 'mantencion' %>
                         <th>Motivo</th>
+                        <th>Ejecutada</th>
                         <th>Resultado</th>
+                    <% else %>
+                        <th>Ejecutada</th>
                     <% end %>
                   </tr>
                   </thead>

@@ -1,0 +1,81 @@
+<%= content_for :heading_main do %>
+    <div class="margin-left-50">
+      <h4 class="text-capitalize">
+        <%= link_to 'Descargar', @file.upload.url, target: '_blank' %>
+      </h4>
+    </div>
+<% end %>
+
+<%# Populate all 3 columns of the view with keys & their values %>
+
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Estrategia:</div>
+      <div class="col-lg-8">
+      </div>
+    </div>
+
+<% end %>
+
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Plazo:</div>
+      <div class="col-lg-8">
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Fecha:</div>
+      <div class="col-lg-8">
+      </div>
+    </div>
+<% end %>
+
+
+
+<%= content_for :extra do %>
+    <% if @file.attached_to? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Adjunto en</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= render partial: 'referables/show_all_for', locals: {element: @file, list: 'attached_to'} %>
+          </div>
+        </div>
+    <% end %>
+
+    <% if @swot.references? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Referencias</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+          </div>
+        </div>
+    <% end %>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to uploaded_files_path do %>
+              Documentos: Archivos
+          <% end %>
+        </li>
+        <li>
+          <span>
+            <%= @file.uploaded_file_name %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

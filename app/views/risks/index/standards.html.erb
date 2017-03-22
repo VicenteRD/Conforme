@@ -21,7 +21,7 @@
             }},
             {:$group => {
                 _id: '$rule_id',
-                average_compliance: {:$avg => '$compliance'}
+                average_compliance: {:$avg => '$real_compliance'}
             }}
         ]
     ) %>
@@ -36,7 +36,9 @@
                 <%= rule.institution %>
               </td>
               <td><%= rule.name %></td>
-              <td><%= (risk[:average_compliance] * 100).round(2) %></td>
+              <td class="<%= 'sig-' + risk.significant.to_s %>">
+                <%= (risk[:average_compliance] * 100).round(2) %>
+              </td>
             </tr>
         <% end %>
     <% else %>
@@ -44,6 +46,13 @@
           <td colspan="3">No se encontraron riesgos de esta clase.</td>
         </tr>
     <% end %>
+<% end %>
+
+<% content_for :styles do %>
+    <!-- Risks' Index Page Styles -->
+    <style>
+      <%= significant_style_css %>
+    </style>
 <% end %>
 
 <% content_for :menu do %>

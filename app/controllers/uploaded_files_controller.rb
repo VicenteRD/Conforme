@@ -9,6 +9,8 @@ class UploadedFilesController < ApplicationController
   end
 
   def create
-    UploadedFile.create!(params.require(:uploaded_file).permit(:upload))
+    uploaded_file = UploadedFile.create!(params.require(:uploaded_file).permit(:upload))
+
+    uploaded_file.add_as_attachment_to(params[:references].to_unsafe_h)
   end
 end

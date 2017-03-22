@@ -11,12 +11,6 @@
         <%= @objective.name %>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-4 show-label">Creador:</div>
-      <div class="col-lg-8">
-        <%= Person::User.find(@objective.creator_id).first_last_name %>
-      </div>
-    </div>
 <% end %>
 
 <%= content_for :main_col_2 do %>

@@ -185,8 +185,8 @@
 <% content_for :scripts do %>
     <script>
         $('#regulation-in').click(function () {
-            $('#table-modal-title').html('Seleccionar Regulación');
-            $.ajax({url: '/associables/single_regulation-in/Risk::RuleRisk'});
+            setCurrentModalOptions('Risk::RuleRisk', 'Marco Regulatorio', false, $(this));
+            renderAndShowReferencesModal('law');
         });
 
         $('#regulation-clear').click(function() {

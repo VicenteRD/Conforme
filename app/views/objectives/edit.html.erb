@@ -40,23 +40,6 @@
             </div>
           </div>
 
-          <div class="row form-group margin-left-50">
-            <div class="col-lg-1">
-              <label class="form-control-label">
-                Creador
-              </label>
-            </div>
-            <div class="col-lg-2 input-group margin-right-20" id="creator-in">
-              <%= text_field :extra, :creator_name, class: 'form-control',
-                             value: Person::User.find(@objective.creator_id).first_last_name,
-                             readonly: true %>
-              <span class="input-group-addon" style="cursor: pointer">
-                <i class="icmn-pencil5"></i>
-              </span>
-              <%= f.hidden_field :creator_id, class: 'form-control-hidden' %>
-            </div>
-          </div>
-
           <div style="margin:50px 50px 0 50px">
             <%= f.file_field :attachments, class: 'dropify', multiple: true,
                              data: {height: '90px', width: '100%'} %>
@@ -101,10 +84,6 @@
     <script>
         $('#responsible-in').click(function () {
             setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
-            renderAndShowReferencesModal();
-        });
-        $('#creator-in').click(function () {
-            setCurrentModalOptions('Person::User', 'Creador', false, $(this));
             renderAndShowReferencesModal();
         });
     </script>

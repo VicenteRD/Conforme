@@ -42,7 +42,7 @@
                 <%= msrmnt&.measured_at&.strftime(dt_rb_format(false, false)) || '-' %>
               </td>
 
-              <td>
+              <td class="<%= 'sig-' + risk.significant.to_s %>">
                 <%= msrmnt&.show_compliance || '-' %>
               </td>
             </tr>
@@ -52,6 +52,13 @@
           <td colspan="5"> No se encontraron riesgos de esta clase.</td>
         </tr>
     <% end %>
+<% end %>
+
+<% content_for :styles do %>
+    <!-- Risks' Index Page Styles -->
+    <style>
+      <%= significant_style_css %>
+    </style>
 <% end %>
 
 <% content_for :menu do %>

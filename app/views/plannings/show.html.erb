@@ -1,7 +1,7 @@
 <%= content_for :heading_main do %>
     <div class="margin-left-50">
       <h4 class="text-capitalize">
-        Progreso: <%= @planning.progress || 0 %>%
+        Progreso: <%= (@planning.progress * 100).round || 0 %>%
       </h4>
     </div>
 <% end %>

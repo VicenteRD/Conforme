@@ -16,7 +16,39 @@ class UploadedFile
           text/plain
       )
 
+  field :attached_to, type: Hash, default: {}
+
   validates_uniqueness_of :upload_file_name
+
+  # Adds the file to the list of attachments of each element in the given hash
+  # as well as adding all the elements to the attached_to hash.
+  # The format of the given hash must be:
+  #   {:class_name => [doc_ids]}
+  # Where:
+  #   [doc_keys] => Is the list of document IDs that this file will be attached to.
+  #   class_name => Is the name of the class that the documents previously mentioned belong to.
+  #                 This class must include Describable.
+  #
+  def add_as_attachment_to(elements)
+    elements.each do |k, v|
+      klass = k.constantize
+      unless klass < Describable
+        return
+      end
+
+      v.each do |element_id|
+        obj = klass.find(element_id)
+        obj.add_attachments(self.id)
+        obj.save!
+      end
+
+      if self.attached_to[k].nil? || !self.attached_to.key?(k)
+        self.attached_to[k] = []
+      end
+
+      self.attached_to[k].append(v).flatten!
+    end
+  end
 
   def self.all_from(ids)
     files = []

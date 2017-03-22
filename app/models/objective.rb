@@ -14,7 +14,6 @@ class Objective
 
   has_many :indicators
 
-  field :c_id, as: :creator_id, type: BSON::ObjectId # => Person:: User
   field :r_id, as: :responsible_id, type: BSON::ObjectId # => Person:: User
 
   field :name, type: String
