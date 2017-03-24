@@ -70,12 +70,13 @@ module Referable
 
     # Loads all the associations from an already set hash,
     # without overriding already-set values.
-    def add_references_from_hash(hashed_values)
+    def add_references_from_hash(hashed_values, base_id = '')
       hashed_values.each do |k, v|
         klass = k.constantize
         v.each do |id|
           obj = klass.find(id)
-          obj.add_references(self.class.name, self.id.to_s)
+          prefix = base_id.empty? ? '' : base_id + '#'
+          obj.add_references(self.class.name, prefix + self.id.to_s)
           obj.save!
         end
 
@@ -85,9 +86,9 @@ module Referable
       self.save!
     end
 
-    def set_references_from_hash(hashed_values)
+    def set_references_from_hash(hashed_values, base_id = '')
       self.references = {}
-      add_references_from_hash(hashed_values)
+      add_references_from_hash(hashed_values, base_id)
     end
 
   end # included

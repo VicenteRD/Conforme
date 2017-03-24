@@ -13,12 +13,12 @@
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
-                Fecha de ejecución
+                Fecha
               </label>
             </div>
             <div class="col-lg-2">
               <div class='input-group date date-picker' id='date-picker'>
-                <%= text_field :raw, :executed_at, class: 'form-control',
+                <%= text_field :raw, :due_at, class: 'form-control',
                                data: {format: dt_form_format(true), max: 0},
                                value: DateTime.now.to_i %>
                 <span class="input-group-addon">

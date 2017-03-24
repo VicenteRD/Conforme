@@ -67,17 +67,31 @@
           </div>
         </div>
     <% end %>
-
-    <% if @risk.references? %>
-        <div class="panel">
-          <div class="panel-heading">
-            <h5>Referencias</h5>
-          </div>
-          <div class="margin-left-30 margin-bottom-30">
-            <%= render partial: 'referables/show_all_for', locals: {element: @risk} %>
-          </div>
-        </div>
-    <% end %>
+    <div class="row is-flex">
+      <div class="col-lg-5">
+        <% unless @risk.attachment_ids.empty? %>
+            <div class="panel">
+              <div class="panel-heading">
+                <h5>Adjuntos</h5>
+              </div>
+              <%= render partial: 'uploaded_files/attachments_table',
+                         locals: {attachments: @risk.attachment_ids} %>
+            </div>
+        <% end %>
+      </div>
+      <div class="col-lg-1"></div>
+      <div class="col-lg-6">
+        <% if @risk.references? %>
+            <div class="panel padding-bottom-25" style="height: 100%">
+              <div class="panel-heading">
+                <h5>Referencias</h5>
+              </div>
+              <%= render partial: 'referables/show_all_for',
+                         locals: {element: @risk} %>
+            </div>
+        <% end %>
+      </div>
+    </div>
 
     <% if @risk.measurements? %>
         <div class="panel">
@@ -135,14 +149,6 @@
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
         <i class="dropdown-inline-button-icon icmn-history"></i>
         Bitácora
-      </a>
-    </div>
-
-    <div class="dropdown">
-      <% files_table = "#{escape_javascript(render partial: 'uploaded_files/modal', locals: {attachments: @risk.attachment_ids})}" %>
-      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showAttachments('<%= files_table %>')">
-        <i class="dropdown-inline-button-icon icmn-folder-open"></i>
-        Adjuntos
       </a>
     </div>
 

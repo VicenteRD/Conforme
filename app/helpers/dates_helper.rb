@@ -11,6 +11,14 @@ module DatesHelper
     'DD/MM/YYYY' + (time ? ' - HH:mm' : '')
   end
 
+  def show_formatted_date(date)
+    show_dt(date, dt_rb_format(false, false))
+  end
+
+  def show_formatted_datetime(datetime)
+    show_dt(datetime, dt_rb_format(true, false))
+  end
+
   def server_timezone
     Time.zone.now.strftime('%z')
   end
@@ -24,5 +32,12 @@ module DatesHelper
     else
       nil
     end
+  end
+
+  private
+  def show_dt(dt, format = nil)
+    return dt if format.nil?
+
+    dt ? dt.strftime(format) : '-'
   end
 end

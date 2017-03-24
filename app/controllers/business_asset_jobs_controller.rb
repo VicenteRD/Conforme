@@ -25,14 +25,14 @@ class BusinessAssetJobsController < ApplicationController
                           2
                         end
 
+    fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
     fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
 
     job = business_asset.jobs.create!(fields.permit(
         :job_type,
-        :executed_at,
+        :due_at,
         :motive,
         :result,
-        :executed,
         :comments
     ))
 
@@ -62,13 +62,13 @@ class BusinessAssetJobsController < ApplicationController
 
     fields = params.require(:asset_job)
 
-    fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
+    fields[:executed_at] = params.dig(:raw, :executed) == '1' ? parse_datetime(params.dig(:raw, :executed_at)) : nil
+
 
     job.update!(fields.permit(
             :executed_at,
             :motive,
             :result,
-            :executed,
             :comments
     ))
 

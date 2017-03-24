@@ -19,8 +19,8 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def create_references(object, reference_ids)
-    object.set_references_from_hash(reference_ids)
+  def create_references(object, reference_ids, base_id = '')
+    object.set_references_from_hash(reference_ids, base_id)
   end
 
   #

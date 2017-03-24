@@ -16,18 +16,11 @@ class BusinessAssetJob
   scope :maintenance, -> { where(job_type: 1) }
   scope :calibration, -> { where(job_type: 2) }
 
+  field :d_at, as: :due_at, type: DateTime
   field :e_at, as: :executed_at, type: DateTime
-
-  field :exd, as: :executed, type: Boolean
 
   field :mtv, as: :motive, type: String
   field :rst, as: :result, type: String
 
   field :cmts, as: :comments, type: String
-
-  def self.last_non_executed_datetime(jobs, time_format)
-    job = jobs.where(:executed.nin => [false]).last
-
-    job ? job.executed_at.strftime(time_format) : '-'
-  end
 end

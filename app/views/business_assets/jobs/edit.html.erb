@@ -13,20 +13,20 @@
 
           <%= render partial: 'referables/references_nav' %>
 
-          <div class="row form-group margin-left-50">
+          <div class="row form-group margin-left-15 margin-right-15">
             <div class="col-lg-1">
               <label class="form-control-label">
-                Fecha de ejecución
+                Planificada
               </label>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-3">
               <div class='input-group date date-picker' id='date-picker'>
-                <%= text_field :raw, :executed_at, class: 'form-control',
+                <%= text_field :raw, :due_at, class: 'form-control',
                                data: {format: dt_form_format(true), max: 0},
-                               value: @job.executed_at.to_i %>
+                               value: @job.due_at.to_i %>
                 <span class="input-group-addon">
-                <i class="icmn-calendar"></i>
-              </span>
+                  <i class="icmn-calendar"></i>
+                </span>
               </div>
             </div>
             <% if @type == 'mantencion' %>
@@ -35,7 +35,7 @@
                     Motivo
                   </label>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-3">
                   <%= f.text_field :motive, class: 'form-control' %>
                 </div>
 
@@ -44,20 +44,38 @@
                     Resultado
                   </label>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-3">
                   <%= f.text_field :result, class: 'form-control' %>
                 </div>
             <% end %>
           </div>
 
-          <div class="row form-group margin-left-50">
+          <div class="row is-flex form-group margin-left-15">
             <div class="col-lg-1">
               <label class="form-control-label">
-                Ejecutado?
+                Ejecutada
               </label>
             </div>
-            <div class="col-lg-1">
-              <%= f.check_box :executed, class: 'form-control' %>
+
+            <!--<div class="col-lg-1">
+            </div>-->
+            <div class="col-lg-3">
+              <div class="row is-flex margin-0" style="height: 100%">
+                <div class="col-sm-1" style="justify-content: center">
+                  <%= check_box :raw, :executed, class: 'form-control' %>
+                </div>
+                <div class="col-sm-11">
+                  <div class='input-group date date-picker'>
+                    <%= text_field :raw, :executed_at, class: 'form-control',
+                                   data: {format: dt_form_format(true)},
+                                   value: DateTime.now.to_i,
+                                   readonly: true %>
+                    <span class="input-group-addon">
+                      <i class="icmn-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -118,6 +136,15 @@
             $("#history-modal-body").html(bodyContent);
             $("#history-modal").modal();
         }
+
+        $('#raw_executed').click(function () {
+            var execAt = $('#raw_executed_at');
+            if ($(this).is(':checked')) {
+                execAt.removeAttr('readonly');
+            } else {
+                execAt.prop('readonly', 'readonly')
+            }
+        });
     </script>
 <% end %>
 

@@ -1,0 +1,29 @@
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th width="1%"></th>
+    <th>Nombre</th>
+    <th width="30%">Fecha</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% if attachments && (files = UploadedFile.all_from(attachments)) && files.size != 0 %>
+
+      <% files.each do |attachment| %>
+          <tr>
+            <td>
+              <%= icon_for attachment.upload_content_type %>
+            </td>
+
+            <td>
+              <%= link_to attachment.upload_file_name, attachment.upload.url, target: '_blank' %>
+            </td>
+
+            <td><%= attachment.created_at.strftime(dt_rb_format(true, false)) %></td>
+          </tr>
+      <% end %>
+  <% else %>
+      <td colspan="3">No se encontraron archivos adjuntos</td>
+  <% end %>
+  </tbody>
+</table>

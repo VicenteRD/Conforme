@@ -15,3 +15,14 @@
  */
 
 @import 'bootstrap';
+
+
+.row.is-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row.is-flex > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}

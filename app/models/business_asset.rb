@@ -19,4 +19,14 @@ class BusinessAsset
 
   field :t_id, as: :type_id, type: BSON::ObjectId # => BusinessAssetType
   field :r_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
+
+  def get_jobs(type)
+    if type == 'mantencion'
+      self.jobs.maintenance
+    elsif type == 'calibracion'
+      self.jobs.calibration
+    else
+      nil
+    end
+  end
 end

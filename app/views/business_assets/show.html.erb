@@ -1,7 +1,8 @@
 <%# Cheeky fix %>
 <% presentable_type = @type.capitalize.sub('o', 'ó') %>
 
-<% ordered_jobs = @business_asset.jobs.order_by(e_at: :desc, c_at: :desc) %>
+<% jobs = @business_asset.get_jobs(@type).order_by(due_at: :desc, c_at: :desc) %>
+<% latest_job = jobs.first %>
 
 <%= content_for :main_col_1 do %>
     <div class="row">
@@ -26,9 +27,9 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 show-label">Próx. Mantención:</div>
+      <div class="col-lg-4 show-label">Planificada:</div>
       <div class="col-lg-8">
-        <%= BusinessAssetJob.last_non_executed_datetime(ordered_jobs.maintenance, dt_rb_format(true, false)) %>
+        <%= latest_job ? show_formatted_datetime(latest_job.due_at) : '-' %>
       </div>
     </div>
 <% end %>
@@ -41,9 +42,9 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-4 show-label">Próx. Calibración:</div>
+      <div class="col-lg-4 show-label">Ejecutada:</div>
       <div class="col-lg-8">
-        <%= BusinessAssetJob.last_non_executed_datetime(ordered_jobs.calibration, dt_rb_format(true, false)) %>
+        <%= latest_job ? show_formatted_datetime(latest_job.executed_at) : '-'  %>
       </div>
     </div>
 <% end %>
@@ -73,15 +74,9 @@
         </div>
     <% end %>
 
-    <% filtered_ordered_jobs = if @type == 'mantencion'
-                                 ordered_jobs.maintenance
-                               elsif @type == 'calibracion'
-                                 ordered_jobs.calibration
-                               else
-                                 nil
-                               end %>
 
-    <% if filtered_ordered_jobs %>
+
+    <% if @business_asset.jobs? %>
         <div class="panel">
           <div class="panel-heading">
             <h5>Trabajos de <%= presentable_type %></h5>
@@ -103,12 +98,25 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <% filtered_ordered_jobs.each do |job| %>
+                  <% jobs.each do |job| %>
                       <tr class="job-row" data-id="<%= job.id %>">
-                        <td><%= job.e_at.strftime(dt_rb_format(false, false)) %></td>
+                        <td>
+                          <%= show_formatted_datetime(job.due_at) %>
+                        </td>
                         <% if @type == 'mantencion' %>
-                            <td><%= job.motive %></td>
-                            <td><%= job.result %></td>
+                            <td>
+                              <%= job.motive %>
+                            </td>
+                            <td>
+                              <%= show_formatted_datetime(job.executed_at) %>
+                            </td>
+                            <td>
+                              <%= job.result %>
+                            </td>
+                        <% else %>
+                            <td>
+                              <%= show_formatted_datetime(job.executed_at) %>
+                            </td>
                         <% end %>
                       </tr>
                   <% end %>

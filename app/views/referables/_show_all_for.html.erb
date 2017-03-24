@@ -1,32 +1,41 @@
 <% if element && element.class < Referable && element.references? %>
+    <div class="padding-left-20">
 
-    <% if (employees = element.get_all_referred(Person::User)) %>
-        Personas:
-        <% employees.each do |user| %>
-            <%= link_to user.full_name, user_path(user) %>  /
-        <% end %>
-        <br>
-    <% end %>
-    <% if (processes = element.get_all_referred(BusinessProcess)) %>
-        Procesos:
-        <% processes.each do |process| %>
-            <%= link_to process.name, business_process_path(process) %>  /
-        <% end %>
-        <br>
-    <% end %>
-    <% if (positions = element.get_all_referred(Position)) %>
-        Posiciones:
-        <% positions.each do |position| %>
-            <%= link_to position.name, position_path(position) %>  /
-        <% end %>
-        <br>
-    <% end %>
-    <% if (environmental_risks = element.get_all_referred(Risk::EnvironmentalRisk)) %>
-        Riesgos Ambientales:
-        <% environmental_risks.each do |risk| %>
-            <%= link_to risk.name, risk_path('ambiente', risk) %>  /
-        <% end %>
-        <br>
-    <% end %>
+      <% if (employees = element.get_all_referred(Person::User)) %>
+          <strong>
+            Personas:
+          </strong>
+          <%= raw employees.map { |user|
+            link_to(user.first_last_name, user_path(user)) }.join(' / ') %>
+          <br>
+      <% end %>
 
+      <% if (processes = element.get_all_referred(BusinessProcess)) %>
+          <strong>
+            Procesos:
+          </strong>
+          <%= raw processes.map { |process|
+            link_to(process.name, business_process_path(process)) }.join(' / ') %>
+          <br>
+      <% end %>
+
+      <% if (positions = element.get_all_referred(Position)) %>
+          <strong>
+            Posiciones:
+          </strong>
+          <%= raw positions.map { |position|
+            link_to(position.name, position_path(position)) }.join(' / ') %>
+          <br>
+      <% end %>
+
+      <% if (environmental_risks = element.get_all_referred(Risk::EnvironmentalRisk)) %>
+          <strong>
+            Riesgos Ambientales:
+          </strong>
+          <%= raw environmental_risks.map { |risk|
+            link_to(risk.name, risk_path('ambiente', risk)) }.join(' / ') %>
+          <br>
+      <% end %>
+
+    </div>
 <% end %>
