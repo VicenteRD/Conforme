@@ -7,8 +7,8 @@ class RisksController < ApplicationController
 
     es_type = params[:type].to_sym
 
-    if Risk.get_risk_types.key?(es_type)
-      render "risks/index/#{Risk.get_risk_types[es_type][:en]}", layout: 'table'
+    if Risk.risk_types.key?(es_type)
+      render "risks/index/#{Risk.risk_types[es_type][:en]}", layout: 'table'
     elsif Rule.find(params[:type])
       @risks = Risk::RuleRisk.where(rule_id: params[:type]).order_by(numeral: :asc)
       render 'risks/index/rule', layout: 'table'
@@ -30,7 +30,7 @@ class RisksController < ApplicationController
   def new
     @settings = Settings::RiskSettings.first
 
-    if (type = Risk.get_risk_types[params[:type].to_sym])
+    if (type = Risk.risk_types[params[:type].to_sym])
       render "risks/new/#{type[:en]}", layout: 'form'
     elsif (rule = Rule.find(params[:type]))
       @rule = rule
@@ -45,7 +45,7 @@ class RisksController < ApplicationController
     fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
 
     type = params[:type]
-    if (klass = Risk.get_risk_types.dig(type.to_sym, :klass))
+    if (klass = Risk.risk_types.dig(type.to_sym, :klass))
       if type == 'ley'
         fields[:rule_type] = 1
       elsif type == 'norma'

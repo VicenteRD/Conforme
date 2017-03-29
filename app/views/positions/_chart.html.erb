@@ -1,16 +1,19 @@
 <link rel="stylesheet" href="/assets/organization/jquery.orgchart.css"/>
 
-<script>
-    $('#org-chart-data').orgChart({container: $('#org-chart-container'), copyClasses: true, copyStyles: true});
-</script>
 
 <div id='org-chart-container'></div>
 
 <ul id="org-chart-data" style="display:none">
-  <% puts (defined?(parent) && parent != nil && parent != '')  %>
   <% parent_id = (defined?(parent) && parent != nil && parent != '') ? parent : nil %>
   <%= generate_organization_chart(parent_id).html_safe %>
 </ul>
+
+<script>
+    $('#org-chart-data').orgChart({
+        container: $('#org-chart-container'),
+        copyClasses: true, copyStyles: true
+    });
+</script>
 
 <style>
   .orgChart p {

@@ -12,6 +12,8 @@ class Swot
     self.log_book ||= Log::Book.new
   end
 
+  embeds_many :revisions, class_name: 'SwotRevision'
+
   field :swot_type, type: Integer
   field :name, type: String
 

@@ -1,3 +1,7 @@
+table.dataTable .expand-collapse {
+  display: none;
+}
+
 table.dataTable.collapsed .expand-collapse {
   background-color: #acb7bf;
   border: none;
@@ -18,10 +22,6 @@ table.dataTable.collapsed .expand-collapse {
   -webkit-box-shadow: none;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
-}
-
-table.dataTable .expand-collapse {
-  display: none;
 }
 
 table.dataTable tr {

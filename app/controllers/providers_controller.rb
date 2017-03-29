@@ -16,22 +16,33 @@ class ProvidersController < ApplicationController
   end
 
   def create
-    Person::Provider.create!
+    Person::Provider.create!(provider_fields)
   end
 
   def edit
-    if (@provider = Person::Provider.find(params[:id]))
-      render layout: 'form'
-    else
-      redirect_to '/'
-    end
+    @person = Person::Provider.find(params[:id])
+    redirect_to_dashboard unless @person
+
+    render layout: 'form'
   end
 
   def update
-    unless (provider = Person::Client.find(params[:id]))
-      redirect_to '/' and return
+    unless (provider = Person::Provider.find(params[:id]))
+      redirect_to_dashboard && return
     end
 
     provider.update!
+  end
+
+  private
+
+  def provider_fields
+    fields = params.require(:client)
+    fields[:dob] = parse_date(params.dig(:raw, :dob))
+    fields.permit(
+      :rut, :dob,
+      :name, :l_name1, :l_name2,
+      :email, :phone, :address
+    )
   end
 end

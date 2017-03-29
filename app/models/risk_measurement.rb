@@ -27,6 +27,12 @@ class RiskMeasurement
     [:measured_at, :comments]
   end
 
+  def update_and_log(user_id, fields, log_entry_body)
+    update!(fields)
+
+    log_book.new_entry(user_id, 'Editado', log_entry_body)
+  end
+
   def calculate_magnitude
     if !(defined?(self.magnitude)) || self.magnitude.nil?
       self.magnitude = 0

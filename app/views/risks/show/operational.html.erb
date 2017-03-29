@@ -75,7 +75,7 @@
                 <h5>Adjuntos</h5>
               </div>
               <%= render partial: 'uploaded_files/attachments_table',
-                         locals: {attachments: @risk.attachment_ids} %>
+                         locals: {element: @risk} %>
             </div>
         <% end %>
       </div>

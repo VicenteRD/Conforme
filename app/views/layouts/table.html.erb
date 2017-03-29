@@ -57,22 +57,26 @@
 
 <% content_for :scripts do %>
     <script>
-        $(document).ready(function () {
-            $("#items-table").DataTable({
+        var tableSelector = $('#items-table');
+
+        $(document).on('ready', function () {
+            tableSelector.DataTable({
                 responsive: {
-                  details: {
-                      type: "column",
-                      target: ".expand-collapse"
-                  }
+                    details: {
+                        type: "column",
+                        target: ".expand-collapse"
+                    }
                 },
                 lengthMenu: [[5, 25, 50, -1], [5, 25, 50, "Todos"]]
             });
         });
-        $(document).on("click", "#items-table tr", function () {
-            var link = $(this).data("href");
+
+        tableSelector.find('tr').click(function () {
+            var link = $(this).data('href');
             window.open(link, '_self')
         });
-        $(document).on("click", "#items-table .expand-collapse", function(e) {
+
+        tableSelector.find('.expand-collapse').on(function(e) {
           e.stopPropagation();
         });
     </script>

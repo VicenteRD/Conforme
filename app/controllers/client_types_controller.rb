@@ -4,11 +4,11 @@ class ClientTypesController < ApplicationController
   end
 
   def show
-    if (@type = ClientType.find(params[:id]))
-      render layout: 'show'
-    else
-      redirect_to '/'
-    end
+    @type = ClientType.find(params[:id])
+
+    redirect_to '/' unless @type
+
+    render layout: 'show'
   end
 
   def new
@@ -16,26 +16,36 @@ class ClientTypesController < ApplicationController
   end
 
   def create
-    fields = params.require(:type)
+    type = ClientType.create!(client_type_fields)
 
-    ClientType.create!(fields.permit(:name))
+    type.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
+
+    redirect_to client_type_path(type)
   end
 
   def edit
-    if (@type = ClientType.find(params[:id]))
-      render layout: 'form'
-    else
-      redirect_to '/'
-    end
+    @type = ClientType.find(params[:id])
+    redirect_to '/' unless @type
+
+    render layout: 'form'
   end
 
   def update
-    unless (type = ClientType.find(params[:id]))
-      redirect_to '/' and return
-    end
+    type = ClientType.find(params[:id])
+    redirect_to '/' && return unless type
 
+    type.update!(client_type_fields)
+
+    type.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :entry))
+
+    redirect_to client_type_path(type)
+  end
+
+  private
+
+  def client_type_fields
     fields = params.require(:type)
 
-    type.update!(fields.permit(:name))
+    fields.permit(:name, :description)
   end
 end

@@ -2,9 +2,9 @@
     <h6>Empleado</h6>
     <dl class="dl-horizontal user-profile-dl">
       <dt>Última conexión</dt>
-      <dd><%= @person.ll_at.strftime(dt_rb_format(true, false)) %></dd>
+      <dd><%= @person.last_login_datetime(dt_rb_format(true, false)) %></dd>
       <dt>Fecha Incorporación</dt>
-      <dd><%= @person.j_at.strftime(dt_rb_format(true, false)) %></dd>
+      <dd><%= @person.joined_at_datetime(dt_rb_format(true, false)) %></dd>
       <dt>Tipo de Contrato</dt>
       <dd><%= @person.contract_type %></dd>
     </dl>
@@ -25,6 +25,16 @@
 <%= content_for :profile_person_type do %>
     Empleado
 <% end %>
+
+<%= content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to edit_user_path(@person), class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
+    </div>
+<% end %>
+
 
 <%= content_for :breadcrumbs do %>
     <div class="left">

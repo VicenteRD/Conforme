@@ -2,12 +2,21 @@
   <h6>Proveedor</h6>
   <dl class="dl-horizontal user-profile-dl">
     <dt>Tipo</dt>
-    <dd><%= @person.provider_type %></dd>
+    <dd><%# @person.provider_type %></dd>
     <dt>Competencias</dt>
-    <dd><%= @person.competencies %></dd>
+    <dd><%# @person.competencies %></dd>
     <dt>Desempeño</dt>
-    <dd><%= @person.performance %></dd>
+    <dd><%# @person.performance %></dd>
   </dl>
+<% end %>
+
+<%= content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to edit_provider_path(@person), class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
+    </div>
 <% end %>
 
 <%= content_for :breadcrumbs do %>

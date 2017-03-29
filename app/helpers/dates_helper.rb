@@ -26,15 +26,14 @@ module DatesHelper
   def parse_datetime(date_string, time = true)
     if date_string
       DateTime.strptime(
-          "#{date_string} #{server_timezone}",
-          dt_rb_format(time)
-       )
-    else
-      nil
+        "#{date_string} #{server_timezone}",
+        dt_rb_format(time)
+      )
     end
   end
 
   private
+
   def show_dt(dt, format = nil)
     return dt if format.nil?
 

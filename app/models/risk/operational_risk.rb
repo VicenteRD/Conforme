@@ -15,11 +15,11 @@ class Risk::OperationalRisk < Risk
     super + [:area_id, :process_id, :activity, :name]
   end
 
-  def new_measurement(values)
+  def new_measurement(user_id, values, log_body)
     measurement = self.measurements.create!(values)
 
     super(measurement.significant)
 
-    measurement
+    measurement.log_book.new_entry(user_id, 'Creado', log_body)
   end
 end

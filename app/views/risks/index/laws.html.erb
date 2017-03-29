@@ -29,6 +29,9 @@
         <% risks.each do |risk| %>
 
             <% rule = Rule.find(risk[:_id]) %>
+            <% significance = (
+              Settings::RiskSettings.first.law_threshold <=> risk[:average_compliance]
+            ) + 1 %>
 
             <tr data-href="<%= risks_path(risk[:_id]) %>">
               <td>
@@ -36,7 +39,7 @@
                 <%= rule.institution %>
               </td>
               <td><%= rule.name %></td>
-              <td class="<%= 'sig-' + risk.significant.to_s %>">
+              <td class="<%= 'sig-' + significance.to_s %>">
                 <%= (risk[:average_compliance] * 100).round(2) %>
               </td>
             </tr>

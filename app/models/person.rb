@@ -4,6 +4,7 @@ class Person
 
   #include Activatable
   include Referable
+  include Describable
 
   ## Make sure we have the minimum fields.
 
@@ -54,19 +55,19 @@ class Person
     number_and_digit = rut.split('-')
 
     if number_and_digit.size == 2 && (true if Integer(number_and_digit[0]) rescue false) &&
-        number_and_digit[0].size.between?(7, 8) && number_and_digit[1].size == 1
+       number_and_digit[0].size.between?(7, 8) && number_and_digit[1].size == 1
 
       total = 0
       i = 2
-      number_and_digit[0].reverse { |d|
+      number_and_digit[0].reverse do |d|
         total += d.to_i * i
         i = i < 7 ? i + 1 : 2
-      }
+      end
 
       digit = 11 - (total % 11)
       return (digit < 10 && digit.to_s == number_and_digit[1]) ||
-          (digit == 10 && number_and_digit[1].downcase == 'k') ||
-          (digit == 11 && number_and_digit[1] == '0')
+             (digit == 10 && number_and_digit[1].downcase == 'k') ||
+             (digit == 11 && number_and_digit[1] == '0')
     else
       # Error, invalid format
     end

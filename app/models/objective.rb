@@ -18,4 +18,8 @@ class Objective
 
   field :name, type: String
   field :phrase, type: String
+
+  def log_created(user_id, body)
+    log_book.new_entry(user_id, 'Creado', body)
+  end
 end

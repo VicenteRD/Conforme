@@ -28,4 +28,8 @@ class ConcernedParty
   def presentable_type
     ConcernedParty.get_all_types[self.party_type]
   end
+
+  def log_created(user_id, body)
+    log_book.new_entry(user_id, 'Creado', body)
+  end
 end

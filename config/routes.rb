@@ -40,27 +40,27 @@ Rails.application.routes.draw do
 
   # Employees Files
   get '/personas/fichas'            => 'users#index', as: :users
-  get '/personas/fichas/nuevo'      => 'users#new'  , as: :new_user
-  get '/personas/fichas/:id'        => 'users#show' , as: :user
-  get '/personas/fichas/:id/editar' => 'users#edit' , as: :edit_user
+  get '/personas/fichas/nuevo'      => 'users#new',   as: :new_user
+  get '/personas/fichas/:id'        => 'users#show',  as: :user
+  get '/personas/fichas/:id/editar' => 'users#edit',  as: :edit_user
 
   post  '/personas/fichas/nuevo'      => 'users#create'
   patch '/personas/fichas/:id/editar' => 'users#update'
 
   # Organization Chart
   get '/personas/organigrama'                  => 'positions#index', as: :positions
-  get '/personas/organigrama/:parent_id/nueva' => 'positions#new'  , as: :new_position
-  get '/personas/organigrama/:id'              => 'positions#show' , as: :position
-  get '/personas/organigrama/:id/editar'       => 'positions#edit' , as: :edit_position
+  get '/personas/organigrama/:parent_id/nueva' => 'positions#new',   as: :new_position
+  get '/personas/organigrama/:id'              => 'positions#show',  as: :position
+  get '/personas/organigrama/:id/editar'       => 'positions#edit',  as: :edit_position
 
-  post  '/personas/organigrama/:parent_id/nuevo' => 'positions#create'
+  post  '/personas/organigrama/:parent_id/nueva' => 'positions#create'
   patch '/personas/organigrama/:id/editar'       => 'positions#update'
 
   # Competencies & Performance evaluations, Climate
-  get '/personas/evaluaciones/clima'       => 'users#work_environment'  # ??
+  get '/personas/evaluaciones/clima'       => 'users#work_environment' # ??
   get '/personas/evaluaciones/:type'       => 'employee_evaluations#index', as: :employee_evaluations
-  get '/personas/evaluaciones/:type/nuevo' => 'employee_evaluations#new'  , as: :new_employee_evaluation
-  get '/personas/evaluaciones/:type/:id'   => 'employee_evaluations#show' , as: :employee_evaluation
+  get '/personas/evaluaciones/:type/nuevo' => 'employee_evaluations#new',   as: :new_employee_evaluation
+  get '/personas/evaluaciones/:type/:id'   => 'employee_evaluations#show',  as: :employee_evaluation
 
   post '/personas/evaluaciones/:type/nuevo' => 'employee_evaluations#create'
 
@@ -90,19 +90,19 @@ Rails.application.routes.draw do
   # -------- Providers
 
   # Providers Files
-  get '/proveedores/fichas'        => 'providers#index', as: :providers
-  get '/proveedores/fichas/nuevo'  => 'providers#new'  , as: :new_provider
-  get '/proveedores/fichas/:id'    => 'providers#show' , as: :provider
-  get '/proveedores/fichas/editar' => 'providers#edit' , as: :edit_provider
+  get '/proveedores/fichas'            => 'providers#index', as: :providers
+  get '/proveedores/fichas/nuevo'      => 'providers#new',   as: :new_provider
+  get '/proveedores/fichas/:id'        => 'providers#show',  as: :provider
+  get '/proveedores/fichas/:id/editar' => 'providers#edit',  as: :edit_provider
 
   post  '/proveedores/fichas/nuevo'      => 'providers#create'
   patch '/proveedores/fichas/:id/editar' => 'providers#update'
 
   # Provider Types
   get '/proveedores/tipos'            => 'provider_types#index', as: :provider_types
-  get '/proveedores/tipos/nuevo'      => 'provider_types#new'  , as: :new_provider_type
-  get '/proveedores/tipos/:id'        => 'provider_types#show' , as: :provider_type
-  get '/proveedores/tipos/:id/editar' => 'provider_types#edit' , as: :edit_provider_type
+  get '/proveedores/tipos/nuevo'      => 'provider_types#new',   as: :new_provider_type
+  get '/proveedores/tipos/:id'        => 'provider_types#show',  as: :provider_type
+  get '/proveedores/tipos/:id/editar' => 'provider_types#edit',  as: :edit_provider_type
 
   post  '/proveedores/tipos/nuevo'      => 'provider_types#create'
   patch '/proveedores/tipos/:id/editar' => 'provider_types#update'
@@ -210,12 +210,22 @@ Rails.application.routes.draw do
   # -------- Strategies: BusinessProcesses
 
   get '/estrategias/procesos'            => 'business_processes#index', as: :business_processes
-  get '/estrategias/procesos/nuevo'      => 'business_processes#new'  , as: :new_business_process
-  get '/estrategias/procesos/:id'        => 'business_processes#show' , as: :business_process
-  get '/estrategias/procesos/:id/editar' => 'business_processes#edit' , as: :edit_business_process
+  get '/estrategias/procesos/nuevo'      => 'business_processes#new',   as: :new_business_process
+  get '/estrategias/procesos/:id'        => 'business_processes#show',  as: :business_process
+  get '/estrategias/procesos/:id/editar' => 'business_processes#edit',  as: :edit_business_process
 
   post  '/estrategias/procesos/nuevo'      => 'business_processes#create'
   patch '/estrategias/procesos/:id/editar' => 'business_processes#update'
+
+  # -------- Strategies: Communications
+
+  get '/estrategias/comunicacion'            => 'communications#index',  as: :communications
+  get '/estrategias/comunicacion/nuevo'      => 'communications#new',    as: :new_communication
+  get '/estrategias/comunicacion/:id'        => 'communications#show',   as: :communication
+  get '/estrategias/comunicacion/:id/editar' => 'communications#edit',   as: :edit_communication
+
+  post  '/estrategias/comunicacion/nuevo'      => 'communications#create'
+  patch '/estrategias/comunicacion/:id/editar' => 'communications#update'
 
   # -------- Risks
 

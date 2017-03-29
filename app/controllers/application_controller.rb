@@ -3,14 +3,12 @@ class ApplicationController < ActionController::Base
 
   before_action :ensure_login
 
-  def ensure_login
-    if session[:id]
-      @user = Person::User.find(session[:id])
-    end
+  include DatesHelper
 
-    unless @user
-      redirect_to '/login', status: 302
-    end
+  def ensure_login
+    @user = Person::User.find(session[:id]) if session[:id]
+
+    redirect_to('/login', status: 302) unless @user
   end
 
   def valid_login?
@@ -19,8 +17,24 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def redirect_to_dashboard
+    redirect_to '/'
+  end
+
+  def current_user_id
+    @user.id
+  end
+
+  def log_body
+    params.dig(:log, :body)
+  end
+
+  def references_unsafe_hash
+    params[:references].to_unsafe_h if params[:references]
+  end
+
   def create_references(object, reference_ids, base_id = '')
-    object.set_references_from_hash(reference_ids, base_id)
+    object.set_references_from_hash(reference_ids, base_id) if reference_ids
   end
 
   #
@@ -37,5 +51,13 @@ class ApplicationController < ActionController::Base
     }
 
     ul_ids
+  end
+
+  def parse_date(date_string)
+    parse_datetime(date_string)
+  end
+
+  def parse_percentage(hash, key, dec_percentage)
+    hash[key] = dec_percentage.to_f / 100.0 if dec_percentage
   end
 end

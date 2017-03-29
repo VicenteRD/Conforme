@@ -16,7 +16,6 @@
 //
 //= require tether
 //= require bootstrap
-//= require turbolinks
 //
 //= require moment
 //= require moment/es

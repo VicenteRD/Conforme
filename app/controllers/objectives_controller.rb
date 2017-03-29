@@ -1,14 +1,14 @@
 class ObjectivesController < ApplicationController
+
   def index
     render layout: 'table'
   end
 
   def show
-    if (@objective = Objective.find(params[:id]))
-      render layout: 'show'
-    else
-      redirect_to '/'
-    end
+    @objective = Objective.find(params[:id])
+    redirect_to_dashboard unless @objective
+
+    render layout: 'show'
   end
 
   def new
@@ -16,60 +16,54 @@ class ObjectivesController < ApplicationController
   end
 
   def create
-    fields = params.require(:objective)
+    objective = Objective.create!(objective_fields)
+    objective.log_created(current_user_id, log_body)
 
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
-
-    objective = Objective.create!(fields.permit(
-        :name,
-        :phrase,
-        :responsible_id,
-        :comments,
-        attachment_ids: []
-    ))
-
-    objective.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
-
-    create_references(objective, params[:references].to_unsafe_h) if params[:references]
+    create_references(objective, references_unsafe_hash)
 
     respond_to do |format|
       format.html { redirect_to objective_path(objective) }
-      format.json {
-        render json: { object_id: objective.id.to_s,
-                       object_name: objective.name }
-      }
+      format.json { render json: basic_objective_json(objective) }
     end
   end
 
   def edit
-    if (@objective = Objective.find(params[:id]))
-      render layout: 'form'
-    else
-      redirect_to '/'
-    end
+    @objective = Objective.find(params[:id])
+    redirect_to_dashboard unless @objective
+
+    render layout: 'form'
   end
 
   def update
-    unless (objective = Objective.find(params[:id]))
-      redirect_to '/' and return
-    end
+    objective = Objective.find(params[:id])
+    redirect_to_dashboard && return unless objective
 
-    fields = params.require(:objective)
-
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
-
-    objective.update!(fields.permit(
-        :name,
-        :phrase,
-        :responsible_id,
-        :comments,
-        attachment_ids: []
-    ))
+    objective.update!(objective_fields)
 
     objective.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
 
     #create_references(objective, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to objective_path(objective)
+  end
+
+  private
+
+  def basic_objective_json(objective)
+    { object_id: objective.id.to_s, object_name: objective.name }
+  end
+
+  def objective_fields
+    fields = params.require(:objective)
+
+    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+
+    fields.permit(
+      :name,
+      :phrase,
+      :responsible_id,
+      :comments,
+      attachment_ids: []
+    )
   end
 end

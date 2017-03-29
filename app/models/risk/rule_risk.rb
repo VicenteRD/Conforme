@@ -25,44 +25,24 @@ class Risk::RuleRisk < Risk
     super + [:rule_type, :rule_id, :numeral, :title, :requirement]
   end
 
-  def new_measurement(values)
-    measurement = self.measurements.create!(values)
+  def new_measurement(user_id, values, log_body)
+    measurement = measurements.create!(values)
+
+    measurement.log_book.new_entry(user_id, 'Creado', log_body)
+
+    calculate_compliance
   end
 
-  #def get_rule_type
-  #  case type
-  #    when 1
-  #      {en: 'law', es: 'ley'}
-  #    when 2
-  #      {en: 'standard', es: 'norma'}
-  #    else
-  #      {en: 'nil', es: 'nulo'}
-  #  end
-  #end
 
   def full_rule_name
-    if (rule = Rule.find(self.rule_id))
+    rule = Rule.find(rule_id)
+    if rule
       rule.rule_type == 1 ? rule.name : rule.full_name
-    else
-      nil
     end
   end
-  #def get_full_name
-  #  rule = Rule.find(self.rule_id)
 
-  #   rule.full_name + ', art. ' + rule.articles.find(self.article_id).name
-  #end
-
-  #def get_article_name
-  #  Rule.find(self.rule_id).articles.find(self.article_id).name
-  #end
-
-  def get_compliance
-    if self.measurements&.last
-      self.measurements.last.compliance
-    else
-      nil
-    end
+  def get_compliance # TODO find and replace
+    compliance
   end
 
   def calculate_compliance
@@ -74,6 +54,6 @@ class Risk::RuleRisk < Risk
       self.real_compliance = 0
     end
 
-    self.save!
+    save!
   end
 end

@@ -7,13 +7,13 @@ class Person::User < Person
 
   validates :email, confirmation: true, uniqueness: true, format: {with: /@/}
 
-  #validates :password, length: {minimum: 8, maximum: 20, too_short: 'La contraseña debe tener entre 8 y 20 caracteres'}
+  # validates :password, length: {minimum: 8, maximum: 20, too_short: 'La contraseña debe tener entre 8 y 20 caracteres'}
 
   has_and_belongs_to_many :positions
   has_many :read_status
 
   field :ll_at, as: :last_login, type: DateTime
-  field :j_at, as: :joined_at, type: DateTime
+  field :j_at, as: :joined_at, type: DateTime, default: DateTime.now
 
   field :contract_type, type: String
 
@@ -22,8 +22,20 @@ class Person::User < Person
   field :password_digest, type: String
   has_secure_password
 
+  def last_login_datetime(format)
+    return ll_at.strftime(format) if ll_at
+
+    '-'
+  end
+
+  def joined_at_datetime(format)
+    return j_at.strftime(format) if j_at
+
+    '-'
+  end
+
   def name_and_position
-    "(#{self.all_positions}) #{self.full_name}"
+    "(#{all_positions}) #{full_name}"
   end
 
   def all_positions

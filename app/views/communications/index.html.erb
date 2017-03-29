@@ -1,0 +1,67 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Tipo</th>
+      <th>Medio</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Responsable</th>
+    </tr>
+<% end %>
+<% content_for :table_body do %>
+    <% communications = Communication.all %>
+    <% if communications.size != 0 %>
+        <% communications.each do |communication| %>
+
+            <tr data-href="<%= communication_path(communication) %>">
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= communication.presentable_type %>
+              </td>
+              <td>
+                <%= communication.medium %>
+              </td>
+              <td>
+                <%= communication.name %>
+              </td>
+              <td>
+                <%= communication.description %>
+              </td>
+              <td>
+                <%= print_responsible communication.responsible_id %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron comunicaciones.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_communication_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Estrategias: Comunicación
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

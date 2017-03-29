@@ -2,9 +2,19 @@
   <h6>Cliente</h6>
   <dl class="dl-horizontal user-profile-dl">
     <dt>Tipo</dt>
-    <dd><%= @person.client_type %></dd>
+    <dd><%# @person.client_type %></dd>
   </dl>
 <% end %>
+
+<%= content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to edit_client_path(@person), class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
+    </div>
+<% end %>
+
 
 <%= content_for :breadcrumbs do %>
     <div class="left">

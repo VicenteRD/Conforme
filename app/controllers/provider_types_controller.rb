@@ -4,11 +4,11 @@ class ProviderTypesController < ApplicationController
   end
 
   def show
-    if (@type = ProviderType.find(params[:id]))
-      render layout: 'show'
-    else
-      redirect_to '/'
-    end
+    @type = ProviderType.find(params[:id])
+
+    redirect_to '/' unless @type
+
+    render layout: 'show'
   end
 
   def new
@@ -16,26 +16,37 @@ class ProviderTypesController < ApplicationController
   end
 
   def create
-    fields = params.require(:type)
+    type = ProviderType.create!(provider_type_fields)
 
-    ProviderType.create!(fields.permit(:name))
+    type.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
+
+    redirect_to provider_type_path(type)
   end
 
   def edit
-    if (@type = ProviderType.find(params[:id]))
-      render layout: 'form'
-    else
-      redirect_to '/'
-    end
+    @type = ProviderType.find(params[:id])
+
+    redirect_to '/' unless @type
+
+    render layout: 'form'
   end
 
   def update
-    unless (type = ProviderType.find(params[:id]))
-      redirect_to '/' and return
-    end
+    type = ProviderType.find(params[:id])
+    redirect_to '/' && return unless type
 
+    type.update!(provider_type_fields)
+
+    type.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :entry))
+
+    redirect_to provider_type_path(type)
+  end
+
+  private
+
+  def provider_type_fields
     fields = params.require(:type)
 
-    type.update!(fields.permit(:name))
+    fields.permit(:name, :description)
   end
 end

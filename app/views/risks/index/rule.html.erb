@@ -22,6 +22,10 @@
 
             <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
+            <% significance = (
+            Settings::RiskSettings.first.law_threshold <=> risk.compliance
+            ) + 1 %>
+
             <tr data-href="<%= risk_path((risk.rule_type == 1 ? 'ley' : 'norma'), risk) %>">
 
               <td>
@@ -42,7 +46,7 @@
                 <%= msrmnt&.measured_at&.strftime(dt_rb_format(false, false)) || '-' %>
               </td>
 
-              <td class="<%= 'sig-' + risk.significant.to_s %>">
+              <td class="<%= 'sig-' + significance.to_s %>">
                 <%= msrmnt&.show_compliance || '-' %>
               </td>
             </tr>

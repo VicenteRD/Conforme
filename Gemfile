@@ -63,8 +63,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.3.3'
 end
 
-gem 'momentjs-rails', '>= 2.9.0'
 gem 'bootstrap3-datetimepicker-rails', '~> 4.17.43'
+gem 'momentjs-rails', '>= 2.9.0'
 
 gem 'summernote-rails', '0.8.2.0'
 

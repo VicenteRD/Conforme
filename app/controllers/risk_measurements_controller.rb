@@ -8,108 +8,114 @@ class RiskMeasurementsController < ApplicationController
   def new
     @settings = Settings::RiskSettings.first
 
-    if (@risk = Risk.find(params[:risk_id])) && (type = minimize_type(@risk._type))
-      render "risks/new/measurement/#{type}", layout: 'form'
-    else
-      redirect_to '/'
-    end
+    @risk = Risk.find(params[:risk_id])
+    redirect_to_dashboard && return unless @risk.present?
+
+    render_view('new', @risk._type)
   end
 
   def create
-    unless (risk = Risk.find(params[:risk_id]))
-      redirect_to '/' and return
-    end
+    risk = Risk.find(params[:risk_id])
+    redirect_to_dashboard && return unless risk.present?
 
-    fields = params.require(:measurement)
+    klass = measurement_class(:type)
 
-    fields[:measured_at] = parse_datetime(params.dig(:raw, :measured_at))
-
-    probability = params.dig(:raw, :probability)
-    fields[:probability] = probability.to_f / 100.0 if probability
-
-    compliance = params.dig(:raw, :compliance)
-    fields[:compliance] = compliance.to_f / 100.0 if compliance
-
-    if (klass = Risk.get_risk_types.dig(params.dig(:raw, :type).to_sym, :measurement_klass))
-      measurement = risk.new_measurement(fields.permit(klass.permitted_fields))
-      measurement.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
-
-      if risk._type == 'Risk::RuleRisk'
-        risk.calculate_compliance
-      end
-
-      redirect_to risk_path(params[:type], risk)
+    if klass
+      create_measurement(risk, klass)
+      redirect_to_risk(risk)
     else
-      redirect_to '/'
+      redirect_to_dashboard
     end
   end
 
   def edit
-    @settings = Settings::RiskSettings.first
+    @settings = Risk.settings
 
-    if (@risk = Risk.find(params[:risk_id])).nil? ||
-        (@measurement = @risk.measurements.find(params[:id])).nil?
-      redirect_to '/' and return
-    end
+    @risk = Risk.find(params[:risk_id])
+    redirect_to_dashboard && return unless @risk.present?
+    @measurement = @risk.get_measurement(params[:id])
+    redirect_to_dashboard && return unless @measurement.present?
 
-    if (type = minimize_type @risk._type)
-      render "risks/edit/measurement/#{type}", layout: 'form'
-    else
-      redirect_to '/'
-    end
+    render_view('edit', @risk._type)
   end
 
   def update
-    unless (risk = Risk.find(params[:risk_id]))
-      redirect_to '/' and return
-    end
-    unless (measurement = risk.measurements.find(params[:id]))
-      redirect_to '/' and return
-    end
+    risk = Risk.find(params[:risk_id])
+    redirect_to_dashboard && return unless risk
 
-    fields = params.require(:measurement)
+    measurement = risk.get_measurement(params[:id])
+    klass = measurement_class(:type)
 
-    fields[:measured_at] = parse_datetime(params.dig(:raw, :measured_at))
-
-    probability = params.dig(:raw, :probability)
-    fields[:probability] = probability.to_f / 100.0 if probability
-
-    compliance = params.dig(:raw, :compliance)
-    fields[:compliance] = compliance.to_f / 100.0 if compliance
-
-
-    if (klass = Risk.get_risk_types.dig(params.dig(:raw, :type).to_sym, :measurement_klass))
-      puts klass.permitted_fields
-      measurement.update!(fields.permit(klass.permitted_fields))
-      measurement.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :entry))
-
-      risk.update_significant(measurement.significant)
-
-      redirect_to risk_path(params[:type], risk)
+    if measurement && klass
+      update_measurement(measurement, risk, klass)
+      redirect_to_risk(risk)
     else
-      redirect_to '/'
+      redirect_to_dashboard
     end
   end
 
   private
 
   def check_permissions
-    if defined? @user
-      user = @user
-    elsif session[:id]
-      user = Person::User.find(session[:id])
+    if params[:risk_id] && (risk = Risk.find(params[:risk_id])) &&
+       @user.id == risk.responsible_id
+      true
     else
-      return false
+      redirect_to '/' && false
     end
+  end
 
-    if params[:risk_id] && (risk = Risk.find(params[:risk_id]))
-      if (user && risk) && user.id == risk.responsible_id
-        return true
-      else
-        redirect_to '/' and return false
-      end
+  def render_view(view_type, risk_type)
+    type = minimize_type(risk_type)
+
+    if type
+      render("risks/#{view_type}/measurement/#{type}", layout: 'form')
     else
-      redirect_to '/'
+      redirect_to_dashboard
     end
+  end
+
+  def create_measurement(risk, klass)
+    risk.new_measurement(
+      current_user_id,
+      measurement_fields.permit(klass.permitted_fields),
+      log_entry
+    )
+  end
+
+  def update_measurement(measurement, risk, klass)
+    measurement.update_and_log(
+      current_user_id,
+      measurement_fields.permit(klass.permitted_fields),
+      log_entry
+    )
+
+    risk.update_significant(measurement.significant)
+  end
+
+  def measurement_fields
+    fields = params.require(:measurement)
+
+    fields[:measured_at] = parse_date(params.dig(:raw, :measured_at))
+    fields[:probability] = parse_percentage(
+        fields, :probability, params.dig(:raw, :probability)
+    )
+    fields[:compliance] = parse_percentage(
+        fields, :compliance, params.dig(:raw, :compliance)
+    )
+
+    fields
+  end
+
+  def log_entry
+    params.dig(:log, :entry)
+  end
+
+  def measurement_class(type)
+    Risk.measurement_class_for(params.dig(:raw, type))
+  end
+
+  def redirect_to_risk(risk)
+    redirect_to risk_path(params[:type], risk)
   end
 end

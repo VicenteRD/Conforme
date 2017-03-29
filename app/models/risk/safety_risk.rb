@@ -31,10 +31,10 @@ class Risk::SafetyRisk < Risk
     ]
   end
 
-  def new_measurement(values)
+  def new_measurement(user_id, values, log_body)
     measurement = self.measurements.create!(values)
     super(measurement.significant)
 
-    measurement
+    measurement.log_book.new_entry(user_id, 'Creado', log_body)
   end
 end
