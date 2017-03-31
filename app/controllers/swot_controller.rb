@@ -4,11 +4,10 @@ class SwotController < ApplicationController
   end
 
   def show
-    if (@swot = Swot.find(params[:id]))
-      render layout: 'show'
-    else
-      redirect_to '/'
-    end
+    @swot = Swot.find(params[:id])
+    redirect_to_dashboard && return unless @swot
+
+    render layout: 'show'
   end
 
   def new
@@ -16,61 +15,53 @@ class SwotController < ApplicationController
   end
 
   def create
-    fields = params.require(:swot)
+    swot = Swot.create!(swot_fields)
+    swot.log_created(current_user_id, log_body)
 
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
-
-    swot = Swot.create!(fields.permit(
-        :swot_type,
-        :name,
-        :strategy,
-        :due_at,
-        :responsible_id,
-        :comments,
-        attachment_ids: []
-    ))
-
-    swot.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
-
-    create_references(swot, params[:references].to_unsafe_h) if params[:references]
+    create_references(swot, references_unsafe_hash)
 
     respond_to do |format|
       format.html { redirect_to(swot_path(swot)) }
-      format.json { render json: { object_id: swot.id.to_s, object_name: swot.name } }
+      format.json { render json: basic_swot_json(swot) }
     end
   end
 
   def edit
-    if (@swot = Swot.find(params[:id]))
-      render layout: 'form'
-    else
-      redirect_to '/'
-    end
+    @swot = Swot.find(params[:id])
+    redirect_to_dashboard && return unless @swot
+
+    render layout: 'form'
   end
 
   def update
-    unless (swot = Swot.find(params[:id]))
-      redirect_to '/' and return
-    end
+    swot = Swot.find(params[:id])
+    redirect_to '/' && return unless swot
 
-    fields = params.require(:swot)
+    swot.update!(swot_fields)
+    swot.log_book.new_entry(current_user_id, 'Editado', log_body)
 
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
-
-    swot.update!(fields.permit(
-        :swot_type,
-        :name,
-        :strategy,
-        :due_at,
-        :responsible_id,
-        :comments,
-        attachment_ids: []
-    ))
-
-    swot.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
-
-    #create_references(swot, params[:references].to_unsafe_h) if params[:references]
+    # create_references(swot, references_unsafe_hash)
 
     redirect_to(swot_path(swot))
+  end
+
+  private
+
+  def swot_fields
+    fields = params.require(:swot)
+
+    attachments = fields[:attachments]
+    fields[:attachment_ids] = upload_files(attachments) if attachments
+
+    fields.permit(
+      :swot_type, :name,
+      :strategy, :due_at,
+      :responsible_id,
+      :comments, attachment_ids: []
+    )
+  end
+
+  def basic_swot_json(swot)
+    { object_id: swot.id.to_s, object_name: swot.name }
   end
 end

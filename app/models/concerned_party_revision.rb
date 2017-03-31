@@ -1,10 +1,10 @@
-class SwotRevision
+class ConcernedPartyRevision
   include Mongoid::Document
   include Mongoid::Timestamps::Created::Short
 
   include Describable
 
-  embedded_in :swot
+  embedded_in :concerned_party
 
   embeds_one :log_book, class_name: 'Log::Book'
   before_create do

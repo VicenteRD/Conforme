@@ -27,6 +27,20 @@ class Swot
   end
 
   def presentable_type
-    Swot.get_all_types[self.swot_type]
+    Swot.get_all_types[swot_type]
+  end
+
+  def log_created(user_id, body)
+    log_book.new_entry(user_id, 'Creado', body)
+  end
+
+  def new_revision(user_id, fields, log_body)
+    revision = revisions.create!(fields)
+
+    revision.log_created(user_id, log_body)
+  end
+
+  def find_revision(id)
+    revisions.find(id)
   end
 end

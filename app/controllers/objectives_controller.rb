@@ -42,7 +42,7 @@ class ObjectivesController < ApplicationController
 
     objective.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
 
-    #create_references(objective, params[:references].to_unsafe_h) if params[:references]
+    # create_references(objective, references_unsafe_hash)
 
     redirect_to objective_path(objective)
   end

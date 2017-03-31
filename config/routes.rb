@@ -180,32 +180,56 @@ Rails.application.routes.draw do
   # -------- Strategies: SWOT
 
   get '/estrategias/FODA'            => 'swot#index', as: :swot_index
-  get '/estrategias/FODA/nuevo'      => 'swot#new'  , as: :new_swot
-  get '/estrategias/FODA/:id'        => 'swot#show' , as: :swot
-  get '/estrategias/FODA/:id/editar' => 'swot#edit' , as: :edit_swot
+  get '/estrategias/FODA/nuevo'      => 'swot#new',   as: :new_swot
+  get '/estrategias/FODA/:id'        => 'swot#show',  as: :swot
+  get '/estrategias/FODA/:id/editar' => 'swot#edit',  as: :edit_swot
 
   post  '/estrategias/FODA/nuevo'      => 'swot#create'
   patch '/estrategias/FODA/:id/editar' => 'swot#update'
 
+  get '/estrategias/FODA/:swot_id/revisiones/nueva' => 'swot_revisions#new',
+      as: :new_swot_revision
+  get '/estrategias/FODA/:swot_id/revisiones/:id'   => 'swot_revisions#edit',
+      as: :edit_swot_revision
+
+  post  '/estrategias/FODA/:swot_id/revisiones/nueva' => 'swot_revisions#create'
+  patch '/estrategias/FODA/:swot_id/revisiones/:id'   => 'swot_revisions#update'
+
   # -------- Strategies: ConcernedParties
 
   get '/estrategias/partes-interesadas'            => 'concerned_parties#index', as: :concerned_parties
-  get '/estrategias/partes-interesadas/nuevo'      => 'concerned_parties#new'  , as: :new_concerned_party
-  get '/estrategias/partes-interesadas/:id'        => 'concerned_parties#show' , as: :concerned_party
-  get '/estrategias/partes-interesadas/:id/editar' => 'concerned_parties#edit' , as: :edit_concerned_party
+  get '/estrategias/partes-interesadas/nuevo'      => 'concerned_parties#new',   as: :new_concerned_party
+  get '/estrategias/partes-interesadas/:id'        => 'concerned_parties#show',  as: :concerned_party
+  get '/estrategias/partes-interesadas/:id/editar' => 'concerned_parties#edit',  as: :edit_concerned_party
 
   post  '/estrategias/partes-interesadas/nuevo'      => 'concerned_parties#create'
   patch '/estrategias/partes-interesadas/:id/editar' => 'concerned_parties#update'
 
+  get '/estrategias/partes-interesadas/:party_id/revisiones/nueva' => 'concerned_party_revisions#new',
+      as: :new_concerned_party_revision
+  get '/estrategias/partes-interesadas/:party_id/revisiones/:id'   => 'concerned_party_revisions#edit',
+      as: :edit_concerned_party_revision
+
+  post  '/estrategias/partes-interesadas/:party_id/revisiones/nueva' => 'concerned_party_revisions#create'
+  patch '/estrategias/partes-interesadas/:party_id/revisiones/:id'   => 'concerned_party_revisions#update'
+
   # -------- Strategies: Objectives
 
   get '/estrategias/objetivos'            => 'objectives#index', as: :objectives
-  get '/estrategias/objetivos/nuevo'      => 'objectives#new'  , as: :new_objective
-  get '/estrategias/objetivos/:id'        => 'objectives#show' , as: :objective
-  get '/estrategias/objetivos/:id/editar' => 'objectives#edit' , as: :edit_objective
+  get '/estrategias/objetivos/nuevo'      => 'objectives#new',   as: :new_objective
+  get '/estrategias/objetivos/:id'        => 'objectives#show',  as: :objective
+  get '/estrategias/objetivos/:id/editar' => 'objectives#edit',  as: :edit_objective
 
   post  '/estrategias/objetivos/nuevo'      => 'objectives#create'
   patch '/estrategias/objetivos/:id/editar' => 'objectives#update'
+
+  get '/estrategias/objetivos/:objective_id/revisiones/nueva' => 'objective_revisions#new',
+      as: :new_objective_revision
+  get '/estrategias/objetivos/:objective_id/revisiones/:id'   => 'objective_revisions#edit',
+      as: :edit_objective_revision
+
+  post  '/estrategias/objetivos/:objective_id/revisiones/nueva' => 'objective_revisions#create'
+  patch '/estrategias/objetivos/:objective_id/revisiones/:id'   => 'objective_revisions#update'
 
   # -------- Strategies: BusinessProcesses
 
@@ -217,6 +241,14 @@ Rails.application.routes.draw do
   post  '/estrategias/procesos/nuevo'      => 'business_processes#create'
   patch '/estrategias/procesos/:id/editar' => 'business_processes#update'
 
+  get '/estrategias/procesos/:process_id/revisiones/nueva' => 'business_process_revisions#new',
+      as: :new_business_process_revision
+  get '/estrategias/procesos/:process_id/revisiones/:id'   => 'business_process_revisions#edit',
+      as: :edit_business_process_revision
+
+  post  '/estrategias/procesos/:process_id/revisiones/nueva' => 'business_process_revisions#create'
+  patch '/estrategias/procesos/:process_id/revisiones/:id'   => 'business_process_revisions#update'
+
   # -------- Strategies: Communications
 
   get '/estrategias/comunicacion'            => 'communications#index',  as: :communications
@@ -226,6 +258,14 @@ Rails.application.routes.draw do
 
   post  '/estrategias/comunicacion/nuevo'      => 'communications#create'
   patch '/estrategias/comunicacion/:id/editar' => 'communications#update'
+
+  get '/estrategias/comunicacion/:communication_id/revisiones/nueva' => 'communication_revisions#new',
+      as: :new_communication_revision
+  get '/estrategias/comunicacion/:communication_id/revisiones/:id'   => 'communication_revisions#edit',
+      as: :edit_communication_revision
+
+  post  '/estrategias/comunicacion/:communication_id/revisiones/nueva' => 'communication_revisions#create'
+  patch '/estrategias/comunicacion/:communication_id/revisiones/:id'   => 'communication_revisions#update'
 
   # -------- Risks
 

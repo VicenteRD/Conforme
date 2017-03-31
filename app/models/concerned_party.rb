@@ -12,6 +12,8 @@ class ConcernedParty
     self.log_book ||= Log::Book.new
   end
 
+  embeds_many :revisions, class_name: 'ConcernedPartyRevision'
+
   field :p_type, as: :party_type, type: Integer
   field :name, type: String
 
@@ -31,5 +33,15 @@ class ConcernedParty
 
   def log_created(user_id, body)
     log_book.new_entry(user_id, 'Creado', body)
+  end
+
+  def new_revision(user_id, fields, log_body)
+    revision = revisions.create!(fields)
+
+    revision.log_created(user_id, log_body)
+  end
+
+  def find_revision(id)
+    revisions.find(id)
   end
 end

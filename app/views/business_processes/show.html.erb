@@ -14,7 +14,7 @@
     <div class="row">
       <div class="col-lg-4 show-label">Responsable:</div>
       <div class="col-lg-8">
-        <%= Person::User.find(@process.responsible_id).first_last_name %>
+        <%=  Person::User.find(@process.responsible_id).first_last_name %>
       </div>
     </div>
 <% end %>
@@ -59,6 +59,36 @@
           </div>
         </div>
     <% end %>
+
+    <% if @process.revisions? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Revisiones</h5>
+          </div>
+          <div class="panel-body">
+            <div class="row margin-left-20 margin-right-20">
+              <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Fecha</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @process.revisions.order(revised_at: :desc, created_at: :desc).each do |revision| %>
+                      <tr class="revision-row" data-id="<%= revision.id %>" style="cursor: pointer">
+                        <td>
+                          <%= show_formatted_datetime(revision.revised_at) %>
+                        </td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    <% end %>
 <% end %>
 
 <%= content_for :menu do %>
@@ -79,7 +109,8 @@
     </div>
 
     <div class="dropdown">
-      <%= link_to '#', method: 'get', class: 'dropdown-inline-button' do %>
+      <%= link_to new_business_process_revision_path(@process), method: 'get',
+                  class: 'dropdown-inline-button' do %>
           <i class="dropdown-inline-button-icon icmn-rulers"></i>
           Revisar
       <% end %>
@@ -109,4 +140,15 @@
         </li>
       </ul>
     </div>
+<% end %>
+
+<% content_for :scripts do %>
+    <!-- Business Processes' Show Page Scripts -->
+    <script type="text/javascript">
+        $('.revision-row').click(function () {
+            var link = '/estrategias/procesos/<%= @process.id %>/revisiones/' + $(this).attr('data-id');
+
+            window.open(link, '_self');
+        });
+    </script>
 <% end %>

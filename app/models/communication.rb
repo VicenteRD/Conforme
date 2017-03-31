@@ -10,7 +10,7 @@ class Communication
     self.log_book ||= Log::Book.new
   end
 
-  embeds_many :strategy_revisions
+  embeds_many :revisions, class_name: 'CommunicationRevision'
 
   field :comm_type, as: :communication_type, type: Integer
 
@@ -20,6 +20,10 @@ class Communication
 
   field :r_id, as: :responsible_id, type: BSON::ObjectId
 
+  def self.all_types
+    { 0 => 'Interna', 1 => 'Externa' }
+  end
+
   def presentable_type
     Communication.all_types[communication_type]
   end
@@ -28,7 +32,13 @@ class Communication
     log_book.new_entry(user_id, 'Creado', body)
   end
 
-  def self.all_types
-    { 0 => 'Interna', 1 => 'Externa' }
+  def new_revision(user_id, fields, log_body)
+    revision = revisions.create!(fields)
+
+    revision.log_created(user_id, log_body)
+  end
+
+  def find_revision(id)
+    revisions.find(id)
   end
 end

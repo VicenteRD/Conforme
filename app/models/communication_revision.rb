@@ -1,10 +1,10 @@
-class SwotRevision
+class CommunicationRevision
   include Mongoid::Document
   include Mongoid::Timestamps::Created::Short
 
   include Describable
 
-  embedded_in :swot
+  embedded_in :communication
 
   embeds_one :log_book, class_name: 'Log::Book'
   before_create do

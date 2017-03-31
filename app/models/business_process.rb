@@ -10,6 +10,8 @@ class BusinessProcess
     self.log_book ||= Log::Book.new
   end
 
+  embeds_many :revisions, class_name: 'BusinessProcessRevision'
+
   field :name, type: String
 
   field :p_type, as: :process_type, type: String
@@ -20,5 +22,15 @@ class BusinessProcess
 
   def self.get_all_types
     ['Cadena de Valor', 'Gestión', 'Apoyo', 'Estrategia']
+  end
+
+  def new_revision(user_id, fields, log_body)
+    revision = revisions.create!(fields)
+
+    revision.log_created(user_id, log_body)
+  end
+
+  def find_revision(id)
+    revisions.find(id)
   end
 end
