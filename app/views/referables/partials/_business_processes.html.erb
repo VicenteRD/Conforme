@@ -97,7 +97,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('BusinessProcess', row.attr('data-id')));
+            styleSelection(row, isSelected('BusinessProcess', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

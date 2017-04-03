@@ -105,7 +105,7 @@
 <%= content_for :scripts do %>
     <script>
         $('#responsible-in').click(function () {
-            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            setOptions('Person::User', 'Responsable', false, 'communication_responsible', $(this));
             renderAndShowReferencesModal();
         });
     </script>

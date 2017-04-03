@@ -155,7 +155,7 @@
 <% content_for :scripts do %>
   <script>
       $('#regulation-in').click(function () {
-          setCurrentModalOptions('Risk::RuleRisk', 'Marco Regulatorio', false, $(this));
+          setOptions('Risk::RuleRisk', 'Marco Regulatorio', false, 'measurement_law', $(this));
           renderAndShowReferencesModal('law');
       });
 

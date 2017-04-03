@@ -151,15 +151,6 @@
     </div>
 <% end %>
 
-<%= content_for :scripts do %>
-    <script type="text/javascript">
-        function showHistory(bodyContent) {
-            $("#history-modal-body").html(bodyContent);
-            $("#history-modal").modal();
-        }
-    </script>
-<% end %>
-
 <% content_for :breadcrumbs do %>
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
@@ -184,8 +175,13 @@
 
 <% content_for :scripts do %>
     <script>
+        function showHistory(bodyContent) {
+            $("#history-modal-body").html(bodyContent);
+            $("#history-modal").modal();
+        }
+
         $('#regulation-in').click(function () {
-            setCurrentModalOptions('Risk::RuleRisk', 'Marco Regulatorio', false, $(this));
+            setOptions('Risk::RuleRisk', 'Marco Regulatorio', false, 'measurement_law', $(this));
             renderAndShowReferencesModal('law');
         });
 

@@ -80,7 +80,7 @@
         $('.filterable').filterable();
 
         rowSelector.each(function () {
-            styleSelection($(this), isSelectedReference('BusinessAssetType', row.attr('data-id')));
+            styleSelection($(this), isSelected('BusinessAssetType', row.attr('data-id')));
         });
 
         //styleSelectedRows(rowSelector); // Add checkForMultipleSelection ?

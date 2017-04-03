@@ -325,7 +325,7 @@
             var item = $(this);
             var extra = item.attr('data-extra');
             var prefix = item.attr('data-prefix');
-            setCurrentModalOptions(
+            setOptions(
                 item.attr('data-linked_class'),
                 (prefix === undefined ? '' : prefix + ' ')  + item.html().trim(),
                 true);
@@ -349,14 +349,14 @@
             // Reset the modal's content
             $('#table-modal-body').html('');
             // Update the library's information.
-            setCurrentModalOptions();
+            setOptions();
         });
 
         $('#positions-modal').on('hidden.bs.modal', function() {
             // Clean the modal.
             $('#positions-modal-body').html('');
             // Just update the library.
-            setCurrentModalOptions();
+            setOptions();
         });
     </script>
 <% end %>

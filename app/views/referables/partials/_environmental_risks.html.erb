@@ -43,7 +43,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference(
+            styleSelection(row, isSelected(
                 'Risk::EnvironmentalRisk',
                 row.attr('data-id')));
         });

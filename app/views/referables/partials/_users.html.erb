@@ -44,7 +44,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('Person::User', row.attr('data-id')));
+            styleSelection(row, isSelected('Person::User', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

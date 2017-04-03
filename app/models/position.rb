@@ -12,6 +12,9 @@ class Position
 
   has_and_belongs_to_many :users, class_name: 'Person::User'
 
+  field :comp, as: :competencies, type: Array # BSON::ObjectId => Competency
+  field :perf, as: :expected_performance, type: Array # BSON::ObjectId => Performance
+
   field :p_id, as: :parent_id, type: BSON::ObjectId # => Position
   field :c_ids, as: :children_ids, type: Array, default: [] # BSON::ObjectId => Position
 
@@ -22,8 +25,6 @@ class Position
   # The functions this role performs.
   field :functions, type: String
 
-  field :comp, as: :competencies, type: Array
-  field :perf, as: :expected_performance, type: Array
 
   def get_area
     return self if area

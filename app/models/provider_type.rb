@@ -10,13 +10,15 @@ class ProviderType
     self.log_book ||= Log::Book.new
   end
 
-
   has_and_belongs_to_many :providers, class_name: 'Person::Provider'
+
+  has_and_belongs_to_many :competencies #, autosave: true
+  has_and_belongs_to_many :performances #, autosave: true
+
+  accepts_nested_attributes_for :competencies, :performances
+
   has_many :evaluations, class_name: 'ProviderEvaluation'
 
   field :name, type: String
   field :desc, as: :description, type: String
-
-  field :comp, as: :competencies, type: Array
-  field :perf, as: :expected_performance, type: Array
 end

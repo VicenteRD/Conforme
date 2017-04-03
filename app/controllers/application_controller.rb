@@ -44,8 +44,9 @@ class ApplicationController < ActionController::Base
     ul_ids = []
     uploads.each { |upload|
       if upload
-        uploaded = UploadedFile.where(upload_file_name: upload.original_filename)
-                       .first_or_create!(upload: upload)
+        uploaded = UploadedFile
+                   .where(upload_file_name: upload.original_filename)
+                   .first_or_create!(upload: upload)
         ul_ids.append(uploaded.id.to_s)
       end
     }

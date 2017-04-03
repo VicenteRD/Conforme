@@ -165,17 +165,17 @@
 
 <%= content_for :scripts do %>
     <script>
-        $(function (){
-            setSelectedReferences(<%= raw @indicator.references.to_json %>, $('#references-container'));
-        });
+        //$(function() {
+        //    setSelectedReferences(<%= raw @indicator.references.to_json %>, $('#references-container'));
+        //});
 
         $('#responsible-in').click(function () {
-            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            setOptions('Person::User', 'Responsable', false, 'indicator_responsible', $(this));
             renderAndShowReferencesModal();
         });
 
         $('#objective-in').click(function () {
-            setCurrentModalOptions('Objective', 'Objetivo', false, $(this));
+            setOptions('Objective', 'Objetivo', false, 'indicator_objective', $(this));
             renderAndShowReferencesModal();
         });
     </script>

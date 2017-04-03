@@ -173,21 +173,21 @@
 <%= content_for :scripts do %>
     <script>
         $(function (){
-           setSelectedReferences(<%= raw @risk.references.to_json %>, $('#references-container'));
+           setSelectedReferences(<%= raw @risk.references.to_json %>, null);
         });
 
         $('#process-in').click(function () {
-            setCurrentModalOptions('BusinessProcess', 'Proceso', false, $(this));
+            setOptions('BusinessProcess', 'Proceso', false, 'risk_process', $(this));
             renderAndShowReferencesModal();
         });
 
         $('#responsible-in').click(function () {
-            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            setOptions('Person::User', 'Responsable', false, 'risk_responsible', $(this));
             renderAndShowReferencesModal();
         });
 
         $('#area-in').click(function () {
-            setCurrentModalOptions('Position', 'Área', false, $(this));
+            setOptions('Position', 'Área', false, 'risk_area', $(this));
             renderAndShowReferencesModal('area');
         });
     </script>

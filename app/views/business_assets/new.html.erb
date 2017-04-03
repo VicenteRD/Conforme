@@ -125,12 +125,12 @@
 <%= content_for :scripts do %>
     <script>
         $('#responsible-in').click(function () {
-            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            setOptions('Person::User', 'Responsable', false, 'asset_responsible', $(this));
             renderAndShowReferencesModal();
         });
 
         $('#type-in').click(function () {
-            setCurrentModalOptions('BusinessAssetType', 'Tipo', false, $(this));
+            setOptions('BusinessAssetType', 'Tipo', false, 'asset_type', $(this));
             renderAndShowReferencesModal();
         });
     </script>

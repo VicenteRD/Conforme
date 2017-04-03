@@ -107,7 +107,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('Objective', row.attr('data-id')));
+            styleSelection(row, isSelected('Objective', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

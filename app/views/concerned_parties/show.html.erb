@@ -62,46 +62,65 @@
         </div>
     <% end %>
 
-    <% if @concerned_party.references? %>
-        <div class="panel">
-          <div class="panel-heading">
-            <h5>Referencias</h5>
-          </div>
-          <div class="margin-left-30 margin-bottom-30">
-            <%= render partial: 'referables/show_all_for', locals: {element: @concerned_party} %>
-          </div>
-        </div>
-    <% end %>
+    <div class="row is-flex">
+      <div class="col-lg-5">
+        <% unless @concerned_party.attachment_ids.empty? %>
+            <div class="panel">
+              <div class="panel-heading">
+                <h5>Adjuntos</h5>
+              </div>
+              <%= render partial: 'uploaded_files/attachments_table',
+                         locals: {element: @concerned_party} %>
+            </div>
+        <% end %>
+      </div>
+      <div class="col-lg-1"></div>
+      <div class="col-lg-6">
+        <% if @concerned_party.references? %>
+            <div class="panel padding-bottom-25" style="height: 100%">
+              <div class="panel-heading">
+                <h5>Referencias</h5>
+              </div>
+              <%= render partial: 'referables/show_all_for',
+                         locals: {element: @concerned_party} %>
+            </div>
+        <% end %>
+      </div>
+    </div>
 
-    <% if @concerned_party.revisions? %>
-        <div class="panel">
-          <div class="panel-heading">
-            <h5>Revisiones</h5>
-          </div>
-          <div class="panel-body">
-            <div class="row margin-left-20 margin-right-20">
-              <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
-                <table class="table">
-                  <thead>
-                  <tr>
-                    <th>Fecha</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <% @concerned_party.revisions.order(revised_at: :desc, created_at: :desc).each do |revision| %>
-                      <tr class="revision-row" data-id="<%= revision.id %>" style="cursor: pointer">
-                        <td>
-                          <%= show_formatted_datetime(revision.revised_at) %>
-                        </td>
+    <div class="row is-flex">
+      <div class="col-lg-6">
+        <% if @concerned_party.revisions? %>
+            <div class="panel">
+              <div class="panel-heading">
+                <h5>Revisiones</h5>
+              </div>
+              <div class="panel-body">
+                <div class="row margin-left-20 margin-right-20">
+                  <div class="table-responsive margin-bottom-10" style="overflow: auto">
+                    <table class="table">
+                      <thead>
+                      <tr>
+                        <th>Fecha</th>
                       </tr>
-                  <% end %>
-                  </tbody>
-                </table>
+                      </thead>
+                      <tbody>
+                      <% @concerned_party.revisions.order(revised_at: :desc, created_at: :desc).each do |revision| %>
+                          <tr class="revision-row" data-id="<%= revision.id %>" style="cursor: pointer">
+                            <td>
+                              <%= show_formatted_datetime(revision.revised_at) %>
+                            </td>
+                          </tr>
+                      <% end %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-    <% end %>
+        <% end %>
+      </div>
+    </div>
 <% end %>
 
 <%= content_for :menu do %>

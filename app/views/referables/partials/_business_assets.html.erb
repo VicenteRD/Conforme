@@ -42,7 +42,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('BusinessAsset', row.attr('data-id')));
+            styleSelection(row, isSelected('BusinessAsset', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

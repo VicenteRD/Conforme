@@ -1,4 +1,6 @@
 //
+//= require jquery_nested_form
+//
 //= require summernote
 //= require summernote/locales/es-ES
 //

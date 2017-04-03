@@ -88,7 +88,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('Planning', row.attr('data-id')));
+            styleSelection(row, isSelected('Planning', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

@@ -51,7 +51,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('Risk::RuleRisk', row.attr('data-id')));
+            styleSelection(row, isSelected('Risk::RuleRisk', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

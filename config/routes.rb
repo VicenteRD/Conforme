@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'competencies/create'
+
+  get 'performances/create'
+
   get 'employee_evaluations/index'
 
   get 'employee_evaluations/show'
@@ -295,4 +299,7 @@ Rails.application.routes.draw do
   # -------- Other
 
   get '/referables/:class_name/:extra' => 'referables#render_list'
+
+  post '/performance/new'  => 'performances#create', as: :new_performance
+  post '/competencies/new' => 'competencies#create', as: :new_competency
 end

@@ -69,3 +69,5 @@ gem 'momentjs-rails', '>= 2.9.0'
 gem 'summernote-rails', '0.8.2.0'
 
 gem 'mongoid-paperclip'
+
+gem 'nested_form'

@@ -4,12 +4,12 @@
 <%= content_for :scripts do %>
     <script>
         $('#rule-in').click(function() {
-            setCurrentModalOptions('Rule', 'Ley', false, $(this));
+            setOptions('Rule', 'Ley', false, 'risk_law', $(this));
             renderAndShowReferencesModal('law');
         });
 
         $('#responsible-in').click(function () {
-            setCurrentModalOptions('Person::User', 'Responsable', false, $(this));
+            setOptions('Person::User', 'Responsable', false, 'risk_responsible', $(this));
             renderAndShowReferencesModal();
         });
     </script>

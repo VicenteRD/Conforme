@@ -102,7 +102,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelectedReference('ConcernedParty', row.attr('data-id')));
+            styleSelection(row, isSelected('ConcernedParty', row.attr('data-id')));
         });
 
         $('.filterable').filterable();
