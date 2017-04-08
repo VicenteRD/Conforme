@@ -43,4 +43,12 @@ class Swot
   def find_revision(id)
     revisions.find(id)
   end
+
+  def display_name
+    name
+  end
+
+  def self.display_name
+    'FODA'
+  end
 end

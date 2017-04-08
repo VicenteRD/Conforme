@@ -317,6 +317,34 @@
 <% content_for :scripts do %>
     <!-- References Menu Scripts -->
     <script type="text/javascript">
+        function showReferencesMenu() {
+            var menu = $('#referables');
+            menu.is(':visible') ? menu.hide() : menu.fadeIn();
+        }
+
+        function generateReferenceElement(target, klass, id, name) {
+            var klass_id = klass.replace('::', '_');
+            var class_group = target.find('#' + klass_id);
+
+            if (class_group.length === 0) {
+                target.append('<div id="' + klass_id + '"></div>');
+                target = target.find('#' + klass_id);
+
+                target.append('<strong>' + getCurrentModalTitle() + ': </strong>')
+            } else {
+                target = class_group;
+            }
+
+            var element = '<div id="reference-' + id + '" style="display: inline">\n' +
+                name + ' //' +
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="references[' + klass + '][]" id="references_' + klass + '" ' +
+                'value="' + id + '">\n' +
+                '</div>';
+
+            target.append(element)
+        }
+
         $(document).ready(function () {
             $('#referables').hide();
         });
@@ -329,13 +357,12 @@
                 item.attr('data-linked_class'),
                 (prefix === undefined ? '' : prefix + ' ')  + item.html().trim(),
                 true);
+
+            setElementGenerator(generateReferenceElement);
             renderAndShowReferencesModal(extra === undefined ? '' : extra);
         });
 
-        function showReferencesMenu() {
-            var menu = $('#referables');
-            menu.is(':visible') ? menu.hide() : menu.fadeIn();
-        }
+
     </script>
 <% end %>
 

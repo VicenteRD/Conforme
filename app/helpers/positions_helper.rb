@@ -18,16 +18,11 @@ module PositionsHelper
   end
 
   def generate_branches(branches_ids)
-    if branches_ids.nil? or branches_ids.empty?
-      return ''
-    end
-
-    puts branches_ids
+    return '' if branches_ids.nil? || branches_ids.empty?
 
     branches_text = ''
 
-    branches_ids.each { |branch_id|
-      puts branch_id
+    branches_ids.each do |branch_id|
 
       child = Position.find(branch_id)
 
@@ -39,13 +34,13 @@ module PositionsHelper
    <ul>#{ generate_branches(child.children_ids) }</ul>
   </li>
                 EOS
-    }
+    end
 
     branches_text
   end
 
   def area_selector_style
-    return <<-EOS
+    <<-EOS
 <style>
   .position {
     color: #827ca1;
@@ -67,7 +62,7 @@ module PositionsHelper
   end
 
   def position_selector_style
-    return <<-EOS
+    <<-EOS
 <style>
   .node {
     color: #827ca1;

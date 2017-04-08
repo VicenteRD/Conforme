@@ -1,0 +1,79 @@
+<% extra ||= '' %>
+<% qualification_type = extra.to_i%>
+<% qualifications = if qualification_type== 1
+                      Qualification.competency
+                    elsif qualification_type == 2
+                      Qualification.performance
+                    else
+                      Qualification.all
+                    end
+%>
+
+<%= content_for :references_table_content do %>
+    <thead>
+    <tr>
+      <th>Frase</th>
+    </tr>
+    </thead>
+    <tbody style="cursor:pointer">
+    <% Qualification.each do |qualification| %>
+        <tr class="qualification-row" data-id="<%= qualification.id %>">
+          <td id="name-cell"><%= qualification.phrase %></td>
+        </tr>
+    <% end %>
+    </tbody>
+<% end %>
+
+<%= content_for :references_form do %>
+    <%= form_for(:qualification,
+                 url: new_qualification_path(format: :json),
+                 remote: true,
+                 html: {id: 'new_qualification'}) do |f| %>
+
+        <%= f.hidden_field :qualification_type, value: qualification_type %>
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Frase</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :phrase, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+
+        <div class="form-actions text-center" style="position:absolute; bottom: 0; width: 100%">
+          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50', style: 'text-align: center' %>
+        </div>
+    <% end %>
+<% end %>
+
+<%= content_for :references_scripts do %>
+    <script>
+        var rowSelector = $('.qualification-row');
+
+        rowSelector.click(function () {
+            var row = $(this);
+            var result = processReferenceRowClick(
+                row,
+                row.attr('data-id'),
+                row.find('#name-cell').html()
+            );
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        var process_form = $('#new_qualification');
+        process_form.on('ajax:success', function(e, data, status, xhr) {
+            var result = processNewReferenceCreated(data);
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        $('.filterable').filterable();
+
+        styleSelectedRows(rowSelector);
+    </script>
+<% end %>

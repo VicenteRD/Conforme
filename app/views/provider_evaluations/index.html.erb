@@ -1,0 +1,68 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Tipo</th>
+      <th>Proveedor</th>
+      <th>Evaluador</th>
+      <th>Fecha</th>
+    </tr>
+<% end %>
+
+<% type_name = ProviderEvaluation.all_types[@type] %>
+
+<% content_for :table_body do %>
+    <% provider_evaluations = ProviderEvaluation.where(evaluation_type: @type) %>
+
+    <% if provider_evaluations.size != 0 %>
+        <% provider_evaluations.each do |evaluation| %>
+            <tr data-href="<%= provider_evaluation_path(type_name, evaluation) %>">
+              <td>
+                <%= evaluation.provider_type.name %>
+              </td>
+              <td>
+                <%= evaluation.evaluated_provider.full_name %>
+              </td>
+              <td>
+                <%= print_responsible(evaluation.evaluator_id) %>
+              </td>
+              <td>
+                <%= show_formatted_datetime(evaluation.evaluated_at) %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron evaluaciones de proveedores.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_provider_evaluation_path(type_name), class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% type_name = 'Desempeño' if type_name == 'performance' %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Proveedores: <%= type_name.capitalize %>
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

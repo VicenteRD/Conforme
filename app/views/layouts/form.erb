@@ -30,10 +30,9 @@
             });
 
             var datePicker = $('.date-picker');
-            if (datePicker.length != 0) {
+            if (datePicker.length !== 0) {
                 datePicker.each(function () {
-                    var field = $(this);
-                    newDateTimePicker(field, '<% server_timezone %>');
+                    newDateTimePicker($(this), '<% server_timezone %>');
                 });
             }
 

@@ -22,4 +22,12 @@ class Risk::OperationalRisk < Risk
 
     measurement.log_book.new_entry(user_id, 'Creado', log_body)
   end
+
+  def display_name
+    name
+  end
+
+  def self.display_name
+    'Riesgos Operacionales'
+  end
 end

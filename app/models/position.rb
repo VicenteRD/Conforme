@@ -12,8 +12,8 @@ class Position
 
   has_and_belongs_to_many :users, class_name: 'Person::User'
 
-  field :comp, as: :competencies, type: Array # BSON::ObjectId => Competency
-  field :perf, as: :expected_performance, type: Array # BSON::ObjectId => Performance
+  field :comp, as: :competency_ids, type: Array # BSON::ObjectId => Competency
+  field :perf, as: :performance_ids, type: Array # BSON::ObjectId => Performance
 
   field :p_id, as: :parent_id, type: BSON::ObjectId # => Position
   field :c_ids, as: :children_ids, type: Array, default: [] # BSON::ObjectId => Position
@@ -42,5 +42,13 @@ class Position
   def add_child(id)
     children_ids << id if id
     save!
+  end
+
+  def qualifications(qualifications_type)
+    if qualifications_type == 1
+      competency_ids
+    elsif qualifications_type == 2
+      performance_ids
+    end
   end
 end

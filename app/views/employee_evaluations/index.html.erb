@@ -1,0 +1,68 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Posición</th>
+      <th>Persona</th>
+      <th>Evaluador</th>
+      <th>Fecha</th>
+    </tr>
+<% end %>
+
+<% type_name = Qualification.all_types[@type] %>
+
+<% content_for :table_body do %>
+    <% provider_evaluations = EmployeeEvaluation.where(evaluation_type: @type) %>
+
+    <% if provider_evaluations.size != 0 %>
+        <% provider_evaluations.each do |evaluation| %>
+            <tr data-href="<%= employee_evaluation_path(type_name, evaluation) %>">
+              <td>
+                <%= evaluation.person_group.name %>
+              </td>
+              <td>
+                <%= evaluation.evaluated_person.full_name %>
+              </td>
+              <td>
+                <%= print_responsible(evaluation.evaluator.id) %>
+              </td>
+              <td>
+                <%= show_formatted_datetime(evaluation.evaluated_at) %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron evaluaciones de personas.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_employee_evaluation_path(type_name), class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% type_name = 'desempeño' if type_name == 'performance' %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Personas: <%= type_name.capitalize %>
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

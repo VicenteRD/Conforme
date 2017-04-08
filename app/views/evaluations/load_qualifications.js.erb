@@ -1,0 +1,11 @@
+var gradesArea = $('#evaluations');
+
+gradesArea.append(
+    '<div id=<%= @loader.evaluated_person.id %> class="panel" style="padding: 30px 20px 10px 20px">' +
+      '<%= escape_javascript(render(partial: 'evaluations/qualifications_grades')) %>' +
+    '</div>')
+
+
+$('#<%= @loader.evaluated_person.id %>').find('.date-picker').each(function () {
+    newDateTimePicker($(this), '<% server_timezone %>');
+});

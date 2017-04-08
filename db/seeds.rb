@@ -1,28 +1,28 @@
 Mongoid.default_client.database.drop
 
 vr = Person::User.new(
-  email: 'vicente.drd@gmail.com',
-  password: 'vicente8',
+    email: 'vicente.drd@gmail.com',
+    password: 'vicente8',
 
-  avatar: File.new('vendor/assets/images/avatars/1.jpg'),
-  background_image: File.new('vendor/assets/images/photos/4.jpeg'),
+    avatar: File.new('vendor/assets/images/avatars/1.jpg'),
+    background_image: File.new('vendor/assets/images/photos/4.jpeg'),
 
-  rut: '18635551-2',
-  name: 'Vicente',
-  l_name1: 'Rivera',
-  l_name2: 'Dussaillant',
+    rut: '18635551-2',
+    name: 'Vicente',
+    l_name1: 'Rivera',
+    l_name2: 'Dussaillant',
 
-  phone: '(+56) 9 5637XXXX',
-  address: 'Padre Hurtado Sur XXXX, depto X-XX',
+    phone: '(+56) 9 5637XXXX',
+    address: 'Padre Hurtado Sur XXXX, depto X-XX',
 
-  dob: Date.new(1993, 10, 2),
+    dob: Date.new(1993, 10, 2),
 
-  role: 'SuperAdmin',
-  contract_type: 'Lol nope',
+    role: 'SuperAdmin',
+    contract_type: 'Lol nope',
 
-  #active: true,
-  ll_at: Time.now,
-  j_at: Time.now
+    #active: true,
+    ll_at: Time.now,
+    j_at: Time.now
 )
 
 tst = Person::User.new(
@@ -76,13 +76,40 @@ cv = Person::User.new(
     j_at: Time.now
 )
 
-pos_gg = Position.new(name: 'Gerencia General', functions: 'Administrar toda la empresa', competencies: [], area: true)
+cmp = Qualification.create!(phrase: 'Test competency 1', qualification_type: 1)
+cmp1 = Qualification.create!(phrase: 'Test competency 2', qualification_type: 1)
+cmp2 = Qualification.create!(phrase: 'Test competency 3', qualification_type: 1)
+perf = Qualification.create!(phrase: 'Test performance', qualification_type: 2)
 
-pos_dp = Position.new(name: 'Director de Producto', functions: 'Administrar productos', competencies: [], area: true)
+pos_gg = Position.new(
+    name: 'Gerencia General',
+    functions: 'Administrar toda la empresa',
+    competency_ids: [cmp.id],
+    performance_ids: [perf.id],
+    area: true)
 
-pos_go = Position.new(name: 'Goma', functions: 'Ser administrado', competencies: [])
+pos_dp = Position.new(
+    name: 'Director de Producto',
+    functions: 'Administrar productos',
+    competency_ids: [cmp.id, cmp1.id, cmp2.id],
+    performance_ids: [perf.id],
+    area: true
+)
 
-pos_dv = Position.new(name: 'Director de Ventas', functions: 'Administrar ventas', competencies: [], area: true)
+pos_go = Position.new(
+    name: 'Goma',
+    functions: 'Ser administrado',
+    competency_ids: [cmp.id],
+    performance_ids: [perf.id]
+)
+
+pos_dv = Position.new(
+    name: 'Director de Ventas',
+    functions: 'Administrar ventas',
+    competency_ids: [cmp.id],
+    performance_ids: [perf.id],
+    area: true
+)
 
 pos_go.parent_id = pos_dp.id
 pos_go.save!
@@ -104,10 +131,10 @@ cv.add_to_set(positions: pos_gg)
 cv.save!
 
 Task::DocumentTask.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'Hacer pag web', rejected: false,
-  p_at: Time.now, r_at: Time.now)
+                          p_at: Time.now, r_at: Time.now)
 
 Task.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'No matar el servidor', rejected: false,
-                 p_at: Time.now, r_at: Time.now)
+            p_at: Time.now, r_at: Time.now)
 
 # Business Processes
 

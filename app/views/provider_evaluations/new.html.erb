@@ -1,0 +1,137 @@
+<% type_name = ProviderEvaluation.all_types[@type] %>
+
+<section class="page-content">
+  <div class="page-content-inner">
+
+    <div class="panel padding-bottom-20">
+      <div class="row">
+        <div class="col-lg-5" style="padding: 30px 0 0 20px">
+          <h5>
+            Tipo de Proveedor
+          </h5>
+          <div id="group-in" class="input-group" style="width: 75%">
+            <%= text_field :extra, :group_name, readonly: true, class: 'form-control' %>
+            <span class="input-group-addon" style="cursor: pointer">
+                  <i class="icmn-pencil5"></i>
+                </span>
+            <%= hidden_field :extra, :group_id, class: 'form-control-hidden' %>
+          </div>
+        </div>
+
+        <div class="col-lg-2"></div>
+
+        <div id="evaluated-row" class="col-lg-5" style="padding: 30px 20px 0 0">
+          <h5>
+            Evaluados
+          </h5>
+          <div id="evaluated-in" class="input-group" style="width: 75%">
+            <%= text_field :extra, :evaluated_name, readonly: true, class: 'form-control' %>
+            <span class="input-group-addon" style="cursor: pointer">
+                  <i class="icmn-pencil5"></i>
+                </span>
+            <%= hidden_field :extra, :evaluated_id, class: 'form-control-hidden' %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="evaluations">
+
+    </div>
+
+    <%= render partial: 'referables/references_nav' %>
+
+  </div>
+</section>
+
+<!-- Confirmation modal -->
+<div id="confirmation-modal" class="modal fade modal-size-large" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content" id="confirmation-modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id="confirmation-modal-title">Está Seguro?</h4>
+      </div>
+
+      <div class="modal-body" id="confirmation-modal-body">
+        <%= text_area :log, :body, class: 'form-control height-150' %>
+      </div>
+
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col-md-6 text-left">
+            <button class="btn btn-danger width-150 height-50" data-dismiss="modal">Cancelar</button>
+          </div>
+          <div class="text-right col-md-6">
+            <%# f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<%= content_for :scripts do %>
+    <script>
+        var group_id = null;
+
+        function processGroupInput(target, klass, id, name) {
+            target.find('.form-control').val(name);
+            target.find('.form-control-hidden').val(id);
+
+            group_id = id;
+
+            $('#evaluations').html('');
+
+            enableEvaluatedSelection();
+        }
+
+        function processEvaluatedInput(target, klass, id, name) {
+            target.append('<div id="eval-user-' + id + '">' + name + '</div>');
+
+            $.ajax({url: '/providers/evaluations/' + id + '/' + group_id + '/<%= type_name %>'});
+
+        }
+        function removeEvaluationForm(target, id) {
+            target.find('#eval-user-' + id).remove();
+
+            $('#evaluations').find('#' + id).remove()
+        }
+
+        $('#group-in').click(function () { // NEED TO CHANGE MODAL TITLE
+            setOptions('ProviderType', 'Grupo', false, 'type_competencies', $(this));
+            setElementGenerator(processGroupInput);
+
+            renderAndShowReferencesModal();
+        });
+
+        function enableEvaluatedSelection() {
+            $('#evaluated-in').click(function () {
+                setOptions('Person::Provider', 'Evaluados', true, 'eval_users', $('#evaluated-row'));
+                setElementGenerator(processEvaluatedInput);
+                setElementRemover(removeEvaluationForm);
+
+                renderAndShowReferencesModal(group_id);
+            });
+        }
+    </script>
+<% end %>
+
+<% es_type_name = type_name == 'performance' ? 'Desempeño' : type_name %>
+
+<%= content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to "Proveedores: #{es_type_name.capitalize}", provider_types_path %>
+        </li>
+        <li>
+          <span>
+            Nuevo
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>
+

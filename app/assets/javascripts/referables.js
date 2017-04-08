@@ -16,6 +16,9 @@ var otherObjectLists = {};
  *   elementGenerator -> The function that generates the HTML elements where the selected items
  *                        are shown.
  *    ~ default : defaultElementGenerator
+ *   elementRemover -> The function that removes the HTML elements from where the selected items
+ *                        are shown.
+ *    ~ default : defaultElementRemover
  */
 var currentOptions = {};
 
@@ -50,7 +53,8 @@ function setOptions(klass, modalTitle, isMultiple, listKey, targetSelector) {
         klass: klass.trim(),
         modalTitle: modalTitle.trim(),
         multiple: multiple,
-        elementGenerator: defaultElementGenerator
+        elementGenerator: multiple ? defaultReferenceElementGenerator : defaultSingleElementGenerator,
+        elementRemover: defaultElementRemover
     };
 
     if (targetSelector === undefined || listKey === undefined) {
@@ -81,7 +85,23 @@ function setOptions(klass, modalTitle, isMultiple, listKey, targetSelector) {
  * @see defaultElementGenerator
  */
 function setElementGenerator(generator) {
-    currentOptions['elementGenerator'] = generator
+    currentOptions['elementGenerator'] = generator;
+}
+
+/**
+ * Sets a remover function to be used when visually removing the references
+ * from the given target.
+ * This remover is reset every time the options are reset or reloaded.
+ *
+ * Removers should have the parameters ``
+ *
+ * @param remover The function that removes the HTML element that visually represents
+ * an object.
+ *
+ * @see defaultElementRemover
+ */
+function setElementRemover(remover) {
+    currentOptions['elementRemover'] = remover;
 }
 
 /**
@@ -127,6 +147,13 @@ function setSelectedReferences(referencesHash, target) {
  */
 function getModalId(klass) {
     return klass === 'Position' ? '#positions-modal' : '#table-modal';
+}
+
+/**
+ * Gets the currently shown modal's title.
+ */
+function getCurrentModalTitle() {
+    return currentOptions['modalTitle'];
 }
 
 /**
@@ -187,9 +214,7 @@ function processReferenceRowClick(selector, objectId, name) {
     }
 
     if (!currentOptions['multiple']) {
-        var target = currentOptions['target'];
-        target.find('.form-control').val(name);
-        target.find('.form-control-hidden').val(objectId);
+        addReferenceToTarget(null, objectId, name);
         return true;
     }
 
@@ -227,17 +252,13 @@ function processNewReferenceCreated(formResponse) {
     var objectId = formResponse['object_id'];
     var objectName = formResponse['object_name'];
 
-    if (!currentOptions['multiple']) {
-        var target = currentOptions['target'];
-        target.find('.form-control').val(objectName);
-        target.find('.form-control-hidden').val(objectId);
-        return true;
+    if (currentOptions['multiple']) {
+        addReference(isReference, key, objectId);
+        renderReferencesModal(true);
     }
 
-    addReference(isReference, key, objectId);
-    renderReferencesModal(true);
-
     addReferenceToTarget(key, objectId, objectName);
+    return true;
 }
 
 /**
@@ -298,20 +319,20 @@ function addReferenceToTarget(klass, id, name, target) {
     if (target === undefined) {
         target = currentOptions['target'];
     }
-    target.append(currentOptions['elementGenerator'](klass, id, name));
+    currentOptions['elementGenerator'](target, klass, id, name);
 }
 
 /**
  * Removes the visual representation of an added object.
  *
+ * @param target The parent HTML element from where the object is being removed.
  * @param id The ID of the object being removed
  */
-function removeReferenceFromTarget(id) {
-    // TODO this should work with an 'elementRemover' or something
-    var reference = currentOptions['target'].find('#reference-' + id);
-    if (reference.length > 0) {
-        reference.remove();
+function removeReferenceFromTarget(id, target) {
+    if (target === undefined) {
+        target = currentOptions['target'];
     }
+    currentOptions['elementRemover'](target, id);
 }
 
 /**
@@ -347,10 +368,11 @@ function styleSelectedRows(rows) {
 }
 
 /**
- * Generates an HTML element to visually represent a selected object.
+ * Appends an HTML element to visually represent a selected object within the given target.
  *
- * This can be overrode by setting a custom element generator.
+ * This can be overriden by setting a custom element generator.
  *
+ * @param target The jQuery selector where the element should be placed
  * @param klass The class's (model's) name the object belongs to
  * @param id The object's ID
  * @param name The displayable name of the object
@@ -358,8 +380,9 @@ function styleSelectedRows(rows) {
  *
  * @see setElementGenerator
  */
-function defaultElementGenerator(klass, id, name) {
-    return '<div id="reference-' + id + '" style="margin: 0 50px">\n' +
+function defaultReferenceElementGenerator(target, klass, id, name) {
+    target.append(
+        '<div id="reference-' + id + '" style="margin: 0 50px">\n' +
 
         '<input class="form-control-hidden" type="hidden" ' +
         'name="references[' + klass + '][]" id="references_' + klass + '" ' +
@@ -370,6 +393,37 @@ function defaultElementGenerator(klass, id, name) {
         'value="' + currentOptions['modalTitle'] + ': ' + name + '">\n' +
 
         '</div>'
+    );
+}
+
+/**
+ * Removes an HTML element to visually represent the removal of an object
+ *
+ * This can be overridden by setting a custom element remover.
+ *
+ * @param target The parent element from which the object is visually being removed.
+ * @param id The ID of the object being removed.
+ *
+ * @see setElementRemover
+ */
+function defaultElementRemover(target, id) {
+    var reference = target.find('#reference-' + id);
+    if (reference.length > 0) {
+        reference.remove();
+    }
+}
+
+/**
+ * Registers a selection visually when the multiple selection is off.
+ *
+ * @param target The target selector, where the selection should be shown.
+ * @param klass The selected object's class
+ * @param id The object's ID
+ * @param name The object's name
+ */
+function defaultSingleElementGenerator(target, klass, id, name) {
+    target.find('.form-control').val(name);
+    target.find('.form-control-hidden').val(id);
 }
 
 /**

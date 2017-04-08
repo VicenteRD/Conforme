@@ -46,4 +46,9 @@ class Person::User < Person
 
     pos_names.join('/')
   end
+
+  def self.display_name
+    'Empleados'
+  end
+
 end

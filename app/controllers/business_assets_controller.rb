@@ -4,7 +4,7 @@ class BusinessAssetsController < ApplicationController
 
   def index
     if (@type = parse_job_type(params[:job_type]))
-     render layout: 'table'
+      render layout: 'table'
     else
       redirect_to '/'
     end

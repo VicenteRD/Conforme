@@ -1,41 +1,36 @@
 <% if element && element.class < Referable && element.references? %>
-    <div class="padding-left-20">
+    <%# change this to form_format and add hidden ID inputs if true %>
+    <% form_format ||= false %>
 
-      <% if (employees = element.get_all_referred(Person::User)) %>
-          <strong>
-            Personas:
-          </strong>
-          <%= raw employees.map { |user|
-            link_to(user.first_last_name, user_path(user)) }.join(' / ') %>
-          <br>
+    <div id="references-container" class="padding-left-20">
+      <div class="panel-heading">
+        <h5>Referencias</h5>
+      </div>
+
+      <% element.references.keys.each do |class_name| %>
+          <%# !! CHANGE THIS BEFORE PRODUCTION !! %>
+          <% klass = class_name.constantize %>
+
+          <div id="<%= class_name %>">
+            <strong>
+              <%= klass.display_name %>:
+            </strong>
+
+            <% element.get_all_referred(klass).each do |reference| %>
+                <div id="reference-<%= reference.id %>" style="display: inline">
+                  <% if form_format %>
+                      <%= reference.display_name %>
+                      <input class="form-control-hidden" type="hidden"
+                             name="references[<%= class_name %>][]" id="references_<%= class_name%>"
+                             value="<%= reference.id %>">
+                  <% else %>
+                      <%= link_to(reference.display_name, reference) %>
+                  <% end %>
+
+                  //
+                </div>
+            <% end %>
+          </div>
       <% end %>
-
-      <% if (processes = element.get_all_referred(BusinessProcess)) %>
-          <strong>
-            Procesos:
-          </strong>
-          <%= raw processes.map { |process|
-            link_to(process.name, business_process_path(process)) }.join(' / ') %>
-          <br>
-      <% end %>
-
-      <% if (positions = element.get_all_referred(Position)) %>
-          <strong>
-            Posiciones:
-          </strong>
-          <%= raw positions.map { |position|
-            link_to(position.name, position_path(position)) }.join(' / ') %>
-          <br>
-      <% end %>
-
-      <% if (environmental_risks = element.get_all_referred(Risk::EnvironmentalRisk)) %>
-          <strong>
-            Riesgos Ambientales:
-          </strong>
-          <%= raw environmental_risks.map { |risk|
-            link_to(risk.name, risk_path('ambiente', risk)) }.join(' / ') %>
-          <br>
-      <% end %>
-
     </div>
 <% end %>

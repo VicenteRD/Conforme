@@ -40,15 +40,19 @@ class Person
   field :role, :type => String
 
   def first_last_name
-    self.name + ' ' + self.l_name1
+    name + ' ' + l_name1
   end
 
   def last_names
-    self.l_name1 + ' ' + self.l_name2
+    l_name1 + ' ' + l_name2
   end
 
   def full_name
-    self.name + ' ' + self.last_names
+    name + ' ' + last_names
+  end
+
+  def display_name
+    full_name
   end
 
   def valid_rut?

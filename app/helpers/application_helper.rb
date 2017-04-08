@@ -7,4 +7,8 @@ module ApplicationHelper
       'ERR'
     end
   end
+
+  def person_user_path(user)
+    user_path(user)
+  end
 end

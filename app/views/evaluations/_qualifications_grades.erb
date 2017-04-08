@@ -1,0 +1,87 @@
+<% if true %>
+    <% qualification_ids = @loader.evaluated_group.qualifications(@loader.qualification_type) %>
+    <% qualification_type_name =
+           Qualification.presentable_type(@loader.qualification_type, :es).capitalize %>
+
+    <div class="panel-heading">
+      <h5><%= @loader.evaluated_person.full_name %></h5>
+    </div>
+    <div class="panel-body">
+      <% form_url = if @loader.evaluated_group.class == Position
+                      new_employee_evaluation_path(Qualification.presentable_type(@loader.qualification_type))
+                    elsif @loader.evaluated_group.class == ProviderType
+                      new_provider_evaluation_path(Qualification.presentable_type(@loader.qualification_type))
+                    end
+      %>
+      <%= form_for :person_evaluation, url: form_url do |f| %>
+
+          <%= f.hidden_field :eval_person_id, value: @loader.evaluated_person.id.to_s,
+                             class: 'form-control' %>
+          <%= f.hidden_field :eval_group_id, value: @loader.evaluated_group.id.to_s,
+                             class: 'form-control' %>
+          <%= f.hidden_field :evaluator_id, value: @user.id.to_s,
+                             class: 'form-control' %>
+
+          <div class="input-group date date-picker padding-bottom-10" style="width: 25%">
+            <%= text_field :raw, :evaluated_at, class: 'form-control',
+                           data: {format: dt_form_format(true)},
+                           value: DateTime.now.to_i %>
+            <span class="input-group-addon">
+              <i class="icmn-calendar"></i>
+            </span>
+          </div>
+
+          <table style="width: 100%">
+            <thead>
+            <tr>
+              <th width="50%"><%= qualification_type_name %></th>
+              <th width="100px">Evaluación (%)</th>
+              <th>Comentario</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% qualification_ids.each_with_index do |id, idx| %>
+                <%= f.fields_for "evaluation_for_#{idx}".to_sym do |q_eval_form| %>
+                    <tr>
+                      <%= q_eval_form.hidden_field :qualification_id, value: id.to_s,
+                                                   class: 'form-control-hidden' %>
+                      <td><%= Qualification.find(id).phrase %></td>
+                      <td style="padding: 5px 0">
+                        <%= q_eval_form.number_field(:grade,
+                                                     step: :any, min: 0, max: 100,
+                                                     onchange: 'checkEvalPercent($(this))',
+                                                     class: 'form-control',
+                                                     style: 'width: 85%',
+                                                     data: {id: id.to_s}
+                            ) %>
+                      </td>
+                      <td style="padding: 5px 0">
+                        <%= q_eval_form.text_field(:comments,
+                                                   class: "form-control comments-#{id}",
+                            ) %>
+                    </tr>
+                <% end %>
+            <% end %>
+            </tbody>
+          </table>
+
+
+          <div class="text-right margin-top-15">
+            <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+          </div>
+      <% end %>
+    </div>
+
+
+    <script>
+        function checkEvalPercent(gradeField) {
+            var commentsField = $('.commentsgradeField-' + gradeField.attr('data-id'));
+            if (parseInt(gradeField.val()) < 50) {
+                commentsField.removeAttr('readonly');
+            } else {
+                commentsField.prop('readonly', 'readonly')
+            }
+        }
+    </script>
+
+<% end %>

@@ -1,24 +1,16 @@
-<% extra ||= '' %>
-<% employees = extra.empty? ? Person::User.all : Person::User.where(position_ids: extra) %>
-
-
 <%= content_for :references_table_content do %>
     <thead>
     <tr>
       <th>Nombre</th>
-      <th>Cargos</th>
-      <th>Rol</th>
+      <th>Descripción</th>
     </tr>
     </thead>
     <tbody style="cursor: pointer">
-    <% employees.each do |employee| %>
+    <% ProviderType.each do |type| %>
 
-        <% positions = []; employee.positions.each { |pos| positions.push(pos.name) } %>
-
-        <tr class="user-row" data-id="<%= employee.id %>">
-          <td id="name-cell"><%= employee.full_name %></td>
-          <td><%= positions.join(', ') %></td>
-          <td><%= employee.role %></td>
+        <tr class="type-row" data-id="<%= type.id %>">
+          <td id="name-cell"><%= type.name %></td>
+          <td><%= type.description %></td>
         </tr>
 
     <% end %>
@@ -31,7 +23,7 @@
             $('#new-tab').hide()
         });
 
-        var rowSelector = $('.user-row');
+        var rowSelector = $('.type-row');
 
         rowSelector.click(function () {
             var row = $(this);
@@ -48,7 +40,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelected('Person::User', row.attr('data-id')));
+            styleSelection(row, isSelected('ProviderType', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

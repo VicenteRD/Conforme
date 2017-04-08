@@ -1,4 +1,4 @@
-<%= nested_form_for(:provider_type, url: new_provider_type_path) do |f| %>
+<%= form_for(:provider_type, url: new_provider_type_path) do |f| %>
 
     <section class="page-content">
       <div class="page-content-inner">
@@ -24,18 +24,6 @@
               <%= f.text_field :description, class: 'form-control' %>
             </div>
           </div>
-
-          <!--<table id="competencies">
-            <%= f.fields_for :competencies, :wrapper => false do |task_form| %>
-                <tr class="fields">
-                  <td><%= task_form.text_field :phrase %></td>
-                  <td><%= task_form.link_to_remove 'x' %></td>
-                </tr>
-            <% end %>
-          </table>
-          <p>
-            <%# f.link_to_add '+', :competencies, :data => { :target => '#competencies' } %>
-          </p>-->
 
           <div class="row margin-left-30 margin-right-30">
             <div class="col-lg-6" id="competencies-in">
@@ -96,8 +84,9 @@
 
 <%= content_for :scripts do %>
     <script>
-        function competencyElementGenerator(klass, id, name) {
-            return '<div id="reference-' + id + '">\n' +
+        function competencyElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '">\n' +
 
                 '<input class="form-control-hidden" type="hidden" ' +
                 'name="provider_type[competency_ids][]" id="provider_type_competency_ids" ' +
@@ -108,9 +97,11 @@
                 'value="' + name + '">\n' +
 
                 '</div>'
+            );
         }
-        function performanceElementGenerator(klass, id, name) {
-            return '<div id="reference-' + id + '">\n' +
+        function performanceElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '">\n' +
 
                 '<input class="form-control-hidden" type="hidden" ' +
                 'name="provider_type[performance_ids][]" id="provider_type_performance_ids" ' +
@@ -121,19 +112,20 @@
                 'value="' + name + '">\n' +
 
                 '</div>'
+            );
         }
 
         function openCompetenciesModal() {
-            setOptions('Competency', 'Competencias', true, 'type_competencies', $('#competencies-in'));
+            setOptions('Qualification', 'Competencias', true, 'type_competencies', $('#competencies-in'));
             setElementGenerator(competencyElementGenerator);
 
-            renderAndShowReferencesModal();
+            renderAndShowReferencesModal('1');
         }
         function openPerformancesModal() {
-            setOptions('Performance', 'Desempeños', true, 'type_performances', $('#performances-in'));
+            setOptions('Qualification', 'Desempeños', true, 'type_performances', $('#performances-in'));
             setElementGenerator(performanceElementGenerator);
 
-            renderAndShowReferencesModal();
+            renderAndShowReferencesModal('2');
         }
     </script>
 <% end %>

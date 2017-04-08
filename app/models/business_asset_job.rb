@@ -11,7 +11,7 @@ class BusinessAssetJob
 
   field :job_type, type: Integer
 
-  index({rule_type: 1}, {name: 'type_index'})
+  index({ job_type: 1 }, { name: 'type_index' })
 
   scope :maintenance, -> { where(job_type: 1) }
   scope :calibration, -> { where(job_type: 2) }

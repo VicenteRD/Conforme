@@ -113,8 +113,8 @@ Rails.application.routes.draw do
 
   # Competencies & Performance evaluations
   get '/proveedores/evaluaciones/:type'       => 'provider_evaluations#index', as: :provider_evaluations
-  get '/proveedores/evaluaciones/:type/nuevo' => 'provider_evaluations#new'  , as: :new_provider_evaluation
-  get '/proveedores/evaluaciones/:type/:id'   => 'provider_evaluations#show' , as: :provider_evaluation
+  get '/proveedores/evaluaciones/:type/nuevo' => 'provider_evaluations#new',   as: :new_provider_evaluation
+  get '/proveedores/evaluaciones/:type/:id'   => 'provider_evaluations#show',  as: :provider_evaluation
 
   post '/proveedores/evaluaciones/:type/nuevo' => 'provider_evaluations#create'
 
@@ -139,9 +139,9 @@ Rails.application.routes.draw do
   # -------- Assets
 
   get '/activos/:job_type'            => 'business_assets#index', as: :business_assets
-  get '/activos/:job_type/nuevo'      => 'business_assets#new'  , as: :new_business_asset
-  get '/activos/:job_type/:id'        => 'business_assets#show' , as: :business_asset
-  get '/activos/:job_type/:id/editar' => 'business_assets#edit' , as: :edit_business_asset
+  get '/activos/:job_type/nuevo'      => 'business_assets#new',   as: :new_business_asset
+  get '/activos/:job_type/:id'        => 'business_assets#show',  as: :business_asset
+  get '/activos/:job_type/:id/editar' => 'business_assets#edit',  as: :edit_business_asset
 
   get '/activos/:job_type/:asset_id/nuevo'       => 'business_asset_jobs#new' , as: :new_asset_job
   get '/activos/:job_type/:asset_id/:id/editar'  => 'business_asset_jobs#edit', as: :edit_asset_job
@@ -274,9 +274,9 @@ Rails.application.routes.draw do
   # -------- Risks
 
   get '/riesgos/:type'            => 'risks#index', as: :risks
-  get '/riesgos/:type/nuevo'      => 'risks#new'  , as: :new_risk
-  get '/riesgos/:type/:id'        => 'risks#show' , as: :risk
-  get '/riesgos/:type/:id/editar' => 'risks#edit' , as: :edit_risk
+  get '/riesgos/:type/nuevo'      => 'risks#new',   as: :new_risk
+  get '/riesgos/:type/:id'        => 'risks#show',  as: :risk
+  get '/riesgos/:type/:id/editar' => 'risks#edit',  as: :edit_risk
 
   get '/riesgos/:type/:risk_id/nueva'      => 'risk_measurements#new' , as: :new_risk_measurement
   get '/riesgos/:type/:risk_id/:id/editar' => 'risk_measurements#edit', as: :edit_risk_measurement
@@ -300,6 +300,14 @@ Rails.application.routes.draw do
 
   get '/referables/:class_name/:extra' => 'referables#render_list'
 
+  get '/providers/evaluations/:person_id/:group_id/:qualification_type' =>
+          'provider_evaluations#load_qualifications'
+  get '/employees/evaluations/:person_id/:group_id/:qualification_type' =>
+          'employee_evaluations#load_qualifications'
+
+  # DEPRECATED
   post '/performance/new'  => 'performances#create', as: :new_performance
   post '/competencies/new' => 'competencies#create', as: :new_competency
+
+  post '/qualifications/new' => 'qualifications#create', as: :new_qualification
 end

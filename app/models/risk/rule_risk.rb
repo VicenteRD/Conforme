@@ -56,4 +56,12 @@ class Risk::RuleRisk < Risk
 
     save!
   end
+
+  def display_name
+    "#{full_rule_name} - #{numeral}"
+  end
+
+  def self.display_name
+    'Riesgos Normativos y Legales'
+  end
 end

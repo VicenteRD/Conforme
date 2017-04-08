@@ -12,13 +12,19 @@ class ProviderType
 
   has_and_belongs_to_many :providers, class_name: 'Person::Provider'
 
-  has_and_belongs_to_many :competencies #, autosave: true
-  has_and_belongs_to_many :performances #, autosave: true
-
-  accepts_nested_attributes_for :competencies, :performances
-
   has_many :evaluations, class_name: 'ProviderEvaluation'
+
+  field :comp_ids, as: :competency_ids, type: Array
+  field :perf_ids, as: :performance_ids, type: Array
 
   field :name, type: String
   field :desc, as: :description, type: String
+
+  def qualifications(qualifications_type)
+    if qualifications_type == 1
+      competency_ids
+    elsif qualifications_type == 2
+      performance_ids
+    end
+  end
 end
