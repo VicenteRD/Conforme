@@ -1,5 +1,5 @@
 <% extra ||= 'noextra' %>
-<% providers = extra == 'noextra' ? Person::Provider.all : Person::Provider.where(type_ids: extra) %>
+<% clients = extra == 'noextra' ? Person::Client.all : Person::Client.where(type_ids: extra) %>
 
 <%= content_for :references_table_content do %>
     <thead>
@@ -10,12 +10,12 @@
     </tr>
     </thead>
     <tbody style="cursor: pointer">
-    <% providers.each do |provider| %>
+    <% clients.each do |client| %>
 
-        <% types = []; provider.types.each { |type| types.push(type.name) } %>
+        <% types = client.types.map { |type| type.name } %>
 
-        <tr class="provider-row" data-id="<%= provider.id %>">
-          <td id="name-cell"><%= provider.full_name %></td>
+        <tr class="client-row" data-id="<%= client.id %>">
+          <td id="name-cell"><%= client.full_name %></td>
           <td><%= types.join(', ') %></td>
         </tr>
 
@@ -29,7 +29,7 @@
             $('#new-tab').hide()
         });
 
-        var rowSelector = $('.provider-row');
+        var rowSelector = $('.client-row');
 
         rowSelector.click(function () {
             var row = $(this);
@@ -46,7 +46,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelected('Person::Provider', row.attr('data-id')));
+            styleSelection(row, isSelected('Person::Client', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

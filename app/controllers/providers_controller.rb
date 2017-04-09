@@ -1,14 +1,14 @@
 class ProvidersController < ApplicationController
+
   def index
     render layout: 'table'
   end
 
   def show
-    if (@person = Person::Provider.find(params[:id]))
-      render layout: 'profile'
-    else
-      redirect_to '/'
-    end
+    @person = Person::Provider.find(params[:id])
+    redirect_to_dashboard && return unless @person
+
+    render layout: 'profile'
   end
 
   def new
@@ -23,24 +23,25 @@ class ProvidersController < ApplicationController
 
   def edit
     @person = Person::Provider.find(params[:id])
-    redirect_to_dashboard unless @person
+    redirect_to_dashboard && return unless @person
 
     render layout: 'form'
   end
 
   def update
-    unless (provider = Person::Provider.find(params[:id]))
-      redirect_to_dashboard && return
-    end
+    provider = Person::Provider.find(params[:id])
+    redirect_to_dashboard && return unless provider
 
-    provider.update!
+    provider.update!(provider_fields)
+
+    redirect_to provider_path(provider)
   end
 
   private
 
   def provider_fields
     fields = params.require(:provider)
-    fields[:dob] = parse_date(params.dig(:raw, :dob))
+    fields[:dob] = parse_date(params.dig(:raw, :dob), false)
     fields.permit(
       :rut, :dob,
       :name, :l_name1, :l_name2,

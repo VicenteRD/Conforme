@@ -163,26 +163,34 @@
             renderAndShowReferencesModal('2');
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Load lists
             setList('providers', <%= raw(@type.provider_ids.map { |id| id.to_s }.to_s) %>, null);
-            setList('type_competencies', <%= raw @type.competency_ids %>, null);
-            setList('type_performances', <%= raw @type.performance_ids %>, null);
 
             // Show all
             <% @type.providers.each do |provider| %>
-            providersElementGenerator($('#providers-in'), 'providers',
-                '<%= provider.id.to_s %>', '<%= provider.full_name %>');
+                providersElementGenerator($('#providers-in'), 'providers',
+                    '<%= provider.id.to_s %>', '<%= provider.full_name %>');
             <% end %>
-            <% @type.competency_ids.each do |id| %>
-            <% competency = Qualification.find(id) %>
-            competencyElementGenerator($('#competencies-in'), 'type_competencies',
-                '<%= id.to_s %>', '<%= competency.phrase %>');
+
+            <% if @type.competency_ids? %>
+                setList('type_competencies', <%= raw @type.competency_ids %>, null);
+
+                <% @type.competency_ids.each do |id| %>
+                    <% competency = Qualification.find(id) %>
+                    competencyElementGenerator($('#competencies-in'), 'type_competencies',
+                        '<%= id.to_s %>', '<%= competency.phrase %>');
+                <% end %>
             <% end %>
-            <% @type.performance_ids.each do |id| %>
-            <% performance = Qualification.find(id) %>
-            performanceElementGenerator($('#performances-in'), 'type_performances',
-                '<%= id.to_s %>', '<%= performance.phrase %>');
+
+            <% if @type.performance_ids? %>
+                setList('type_performances', <%= raw @type.performance_ids %>, null);
+
+                <% @type.performance_ids.each do |id| %>
+                    <% performance = Qualification.find(id) %>
+                    performanceElementGenerator($('#performances-in'), 'type_performances',
+                        '<%= id.to_s %>', '<%= performance.phrase %>');
+                <% end %>
             <% end %>
         });
     </script>

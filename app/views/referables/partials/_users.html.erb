@@ -1,4 +1,4 @@
-<% extra ||= '' %>
+<% extra ||= 'noextra' %>
 <% employees = extra == 'noextra' ? Person::User.all : Person::User.where(position_ids: extra) %>
 
 

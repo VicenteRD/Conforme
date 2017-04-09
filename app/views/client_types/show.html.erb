@@ -26,41 +26,62 @@
 <% end %>
 
 <%= content_for :extra do %>
-    <% if @type.comments? %>
-        <div class="panel">
-          <div class="panel-heading">
-            <h5>Descripción</h5>
-          </div>
-          <div class="margin-left-30 margin-bottom-30">
-            <%= raw @type.comments %>
-          </div>
-        </div>
-    <% end %>
-    <div class="row is-flex">
-      <div class="col-lg-5">
-        <% if @type.attachment_ids? %>
+    <div class="row margin-top-10">
+      <% if @type.clients? %>
+          <div class="col-lg-2">
             <div class="panel">
               <div class="panel-heading">
-                <h5>Adjuntos</h5>
+                <h5>
+                  Clientes
+                </h5>
               </div>
-              <%= render partial: 'uploaded_files/attachments_table',
-                         locals: {element: @type} %>
-            </div>
-        <% end %>
-      </div>
-      <div class="col-lg-1"></div>
-      <div class="col-lg-6">
-        <% if @type.references? %>
-            <div class="panel padding-bottom-25" style="height: 100%">
-              <div class="panel-heading">
-                <h5>Referencias</h5>
+              <div class="panel-body" style="height: 100px; overflow: auto">
+                <% @type.clients.each do |client| %>
+                    <%= link_to client.full_name, client %>
+                    <br>
+                <% end %>
               </div>
-              <%= render partial: 'referables/show_all_for',
-                         locals: {element: @type} %>
             </div>
-        <% end %>
-      </div>
+          </div>
+      <% end %>
     </div>
+
+
+      <% if @type.comments? %>
+          <div class="panel">
+            <div class="panel-heading">
+              <h5>Descripción</h5>
+            </div>
+            <div class="margin-left-30 margin-bottom-30">
+              <%= raw @type.comments %>
+            </div>
+          </div>
+      <% end %>
+      <div class="row is-flex">
+        <div class="col-lg-5">
+          <% if @type.attachment_ids? %>
+              <div class="panel">
+                <div class="panel-heading">
+                  <h5>Adjuntos</h5>
+                </div>
+                <%= render partial: 'uploaded_files/attachments_table',
+                           locals: {element: @type} %>
+              </div>
+          <% end %>
+        </div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-6">
+          <% if @type.references? %>
+              <div class="panel padding-bottom-25" style="height: 100%">
+                <div class="panel-heading">
+                  <h5>Referencias</h5>
+                </div>
+                <%= render partial: 'referables/show_all_for',
+                           locals: {element: @type} %>
+              </div>
+          <% end %>
+        </div>
+      </div>
 <% end %>
 
 <%= content_for :menu do %>

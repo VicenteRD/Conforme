@@ -177,23 +177,31 @@
         $(document).ready(function() {
             // Load lists
             setList('employees', <%= raw(@position.user_ids.map { |id| id.to_s }.to_s) %>, null);
-            setList('type_competencies', <%= raw @position.competency_ids %>, null);
-            setList('type_performances', <%= raw @position.performance_ids %>, null);
 
             // Show all
             <% @position.users.each do |employee| %>
             employeeElementGenerator($('#employees-in'), 'employees',
                 '<%= employee.id.to_s %>', '<%= employee.full_name %>');
             <% end %>
-            <% @position.competency_ids.each do |id| %>
-            <% competency = Qualification.find(id) %>
-            competencyElementGenerator($('#competencies-in'), 'type_competencies',
-                '<%= id.to_s %>', '<%= competency.phrase %>');
+
+            <% if @position.competency_ids? %>
+                setList('type_competencies', <%= raw @position.competency_ids %>, null);
+
+                <% @position.competency_ids.each do |id| %>
+                    <% competency = Qualification.find(id) %>
+                    competencyElementGenerator($('#competencies-in'), 'type_competencies',
+                        '<%= id.to_s %>', '<%= competency.phrase %>');
+                    <% end %>
             <% end %>
-            <% @position.performance_ids.each do |id| %>
-            <% performance = Qualification.find(id) %>
-            performanceElementGenerator($('#performances-in'), 'type_performances',
-                '<%= id.to_s %>', '<%= performance.phrase %>');
+
+            <% if @position.performance_ids? %>
+                setList('type_performances', <%= raw @position.performance_ids %>, null);
+
+                <% @position.performance_ids.each do |id| %>
+                    <% performance = Qualification.find(id) %>
+                    performanceElementGenerator($('#performances-in'), 'type_performances',
+                        '<%= id.to_s %>', '<%= performance.phrase %>');
+                <% end %>
             <% end %>
         });
     </script>

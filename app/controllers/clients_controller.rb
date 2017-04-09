@@ -1,14 +1,14 @@
 class ClientsController < ApplicationController
+
   def index
     render layout: 'table'
   end
 
   def show
-    if (@person = Person::Client.find(params[:id]))
-      render layout: 'profile'
-    else
-      redirect_to '/'
-    end
+    @person = Person::Client.find(params[:id])
+    redirect_to_dashboard && return unless @person
+
+    render layout: 'profile'
   end
 
   def new
@@ -16,35 +16,37 @@ class ClientsController < ApplicationController
   end
 
   def create
-    Person::Client.create!(client_fields)
+    client = Person::Client.create!(client_fields)
+
+    redirect_to client_path(client)
   end
 
   def edit
     @person = Person::Client.find(params[:id])
-    redirect_to_dashboard unless @person
+    redirect_to_dashboard && return unless @person
 
     render layout: 'form'
   end
 
   def update
-    unless (client = Person::Client.find(params[:id]))
-      redirect_to_dashboard and return
-    end
+    client = Person::Client.find(params[:id])
+    redirect_to_dashboard && return unless client
 
-    client.update!
+    client.update!(client_fields)
+
+    redirect_to client_path(client)
   end
-
-  def satisfaction; end
 
   private
 
   def client_fields
     fields = params.require(:client)
-    fields[:dob] = parse_date(params.dig(:raw, :dob))
+    fields[:dob] = parse_date(params.dig(:raw, :dob), false)
     fields.permit(
       :rut, :dob,
       :name, :l_name1, :l_name2,
-      :email, :phone, :address
+      :email, :phone, :address,
+      type_ids: []
     )
   end
 end

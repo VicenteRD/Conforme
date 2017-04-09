@@ -46,6 +46,6 @@ class ClientTypesController < ApplicationController
   def client_type_fields
     fields = params.require(:type)
 
-    fields.permit(:name, :description)
+    fields.permit(:name, :description, client_ids: [])
   end
 end

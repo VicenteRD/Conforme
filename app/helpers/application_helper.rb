@@ -15,4 +15,8 @@ module ApplicationHelper
   def person_provider_path(provider)
     provider_path(provider)
   end
+
+  def person_client_path(client)
+    client_path(client)
+  end
 end

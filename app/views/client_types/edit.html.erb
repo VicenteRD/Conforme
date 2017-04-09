@@ -26,6 +26,17 @@
             </div>
           </div>
 
+          <div class="row margin-30">
+            <div class="col-lg-2" style="text-align: center; vertical-align: middle">
+              <h5 class="margin-0">
+                <a href="javascript:openClientsModal()">
+                  Clientes:
+                </a>
+              </h5>
+            </div>
+            <div class="col-lg-6" id="clients-in"></div>
+          </div>
+
           <div style="margin:50px 50px 0 50px">
             <%= f.file_field :attachments, class: 'dropify', multiple: true,
                              data: {height: '90px', width: '100%'} %>
@@ -72,6 +83,33 @@
 
 <%= content_for :scripts do %>
     <script>
+        function clientsElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '" style="display:inline">\n' +
+
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="client_type[client_ids][]" id="client_type_client_ids" ' +
+                'value="' + id + '">\n' + (target.is(':empty') ? '' : ', ') + name +
+                '</div>'
+            );
+        }
+        function openClientsModal() {
+            setOptions('Person::Client', 'Clientes', true, 'clients', $('#clients-in'));
+            setElementGenerator(clientsElementGenerator);
+
+            renderAndShowReferencesModal();
+        }
+
+        $(document).ready(function() {
+            // Load lists
+            setList('clients', <%= raw(@type.client_ids.map { |id| id.to_s }.to_s) %>, null);
+
+            // Show all
+            <% @type.clients.each do |client| %>
+            clientsElementGenerator($('#clients-in'), 'providers',
+                '<%= client.id.to_s %>', '<%= client.full_name %>');
+            <% end %>
+        });
     </script>
 <% end %>
 
@@ -86,7 +124,7 @@
         </li>
         <li>
           <span>
-            Nuevo
+            Editar
           </span>
         </li>
       </ul>

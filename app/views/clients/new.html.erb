@@ -40,7 +40,7 @@
               </label>
             </div>
             <div class="col-lg-3">
-              <%= f.text_field :rut, class: 'form-control' %>
+              <%= f.text_field :rut, class: 'form-control rut-input' %>
             </div>
 
             <div class="col-lg-1">
@@ -49,7 +49,7 @@
               </label>
             </div>
             <div class="col-lg-3">
-              <%= f.text_field :rut, class: 'form-control' %>
+              <%= f.text_field :rut, class: 'form-control phone-input' %>
             </div>
 
             <div class="col-lg-1">
@@ -70,7 +70,7 @@
             </div>
             <div class="col-lg-3 input-group date-picker">
               <%= text_field :raw, :dob, class: 'form-control',
-                             data: {format: dt_form_format(true)},
+                             data: {format: dt_form_format(false)},
                              value: DateTime.now.to_i %>
               <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
@@ -85,6 +85,17 @@
             <div class="col-lg-7">
               <%= f.text_field :address, class: 'form-control' %>
             </div>
+          </div>
+
+          <div class="row margin-left-30 margin-right-30">
+            <div class="col-lg-2" style="text-align: center; vertical-align: middle">
+              <h5 class="margin-0">
+                <a href="javascript:openTypesModal()">
+                  Tipos:
+                </a>
+              </h5>
+            </div>
+            <div class="col-lg-6" id="types-in"></div>
           </div>
 
           <div style="margin:50px 50px 0 50px">
@@ -133,6 +144,23 @@
 
 <%= content_for :scripts do %>
     <script>
+        function typeElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '" style="display:inline">\n' +
+
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="client[type_ids][]" id="client_type_ids" ' +
+                'value="' + id + '">\n' + (target.is(':empty') ? '' : ', ') + name +
+                '</div>'
+            );
+        }
+
+        function openTypesModal() {
+            setOptions('ClientType', 'Tipos de Cliente', true, 'types', $('#types-in'));
+            setElementGenerator(typeElementGenerator);
+
+            renderAndShowReferencesModal();
+        }
     </script>
 <% end %>
 

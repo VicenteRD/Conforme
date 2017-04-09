@@ -1,5 +1,5 @@
 class Person::Client < Person
   include Mongoid::Document
 
-  field :client_type, type: String
+  has_and_belongs_to_many :types, class_name: 'ClientType'
 end

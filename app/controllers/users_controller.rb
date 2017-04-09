@@ -5,11 +5,10 @@ class UsersController < ApplicationController
   end
 
   def show
-    if (@person = Person::User.find(params[:id]))
-      render layout: 'profile'
-    else
-      redirect_to '/'
-    end
+    @person = Person::User.find(params[:id])
+    redirect_to_dashboard && return unless @person
+
+    render layout: 'profile'
   end
 
   def new
@@ -17,9 +16,10 @@ class UsersController < ApplicationController
   end
 
   def create
-    redirect_to '/' && return unless confirm_password
+    redirect_to_dashboard && return unless confirm_password
 
     user = Person::User.create!(user_fields)
+    redirect_to_dashboard && return unless user
 
     redirect_to user_path(user)
   end
@@ -33,10 +33,10 @@ class UsersController < ApplicationController
   end
 
   def update
-    redirect_to '/' && return unless confirm_password
+    redirect_to_dashboard && return unless confirm_password
 
     user = Person::User.find(params[:id])
-    redirect_to '/' unless user
+    redirect_to_dashboard && return unless user
 
     user.update!(user_fields)
 
