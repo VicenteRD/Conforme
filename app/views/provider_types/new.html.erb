@@ -25,16 +25,31 @@
             </div>
           </div>
 
+          <div class="row margin-30">
+            <div class="col-lg-2" style="text-align: center; vertical-align: middle">
+              <h5 class="margin-0">
+                <a href="javascript:openProvidersModal()">
+                  Proveedores:
+                </a>
+              </h5>
+            </div>
+            <div class="col-lg-6" id="providers-in"></div>
+          </div>
+
           <div class="row margin-left-30 margin-right-30">
             <div class="col-lg-6" id="competencies-in">
-              <a href="javascript:openCompetenciesModal()">
-                <h6>Competencias</h6>
-              </a>
+              <h6>
+                <a href="javascript:openCompetenciesModal()">
+                  Competencias
+                </a>
+              </h6>
             </div>
             <div class="col-lg-6" id="performances-in">
-              <a href="javascript:openPerformancesModal()">
-                <h6>Desempeño Esperado</h6>
-              </a>
+              <h6>
+                <a href="javascript:openPerformancesModal()">
+                  Desempeño Esperado
+                </a>
+              </h6>
             </div>
           </div>
 
@@ -84,6 +99,17 @@
 
 <%= content_for :scripts do %>
     <script>
+        function providersElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '" style="display:inline">\n' +
+
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="provider_type[provider_ids][]" id="provider_type_provider_ids" ' +
+                'value="' + id + '">\n' + (target.is(':empty') ? '' : ', ') + name +
+                '</div>'
+            );
+        }
+
         function competencyElementGenerator(target, klass, id, name) {
             target.append(
                 '<div id="reference-' + id + '">\n' +
@@ -115,12 +141,20 @@
             );
         }
 
+        function openProvidersModal() {
+            setOptions('Person::Provider', 'Proveedores', true, 'providers', $('#providers-in'));
+            setElementGenerator(providersElementGenerator);
+
+            renderAndShowReferencesModal();
+        }
+
         function openCompetenciesModal() {
             setOptions('Qualification', 'Competencias', true, 'type_competencies', $('#competencies-in'));
             setElementGenerator(competencyElementGenerator);
 
             renderAndShowReferencesModal('1');
         }
+
         function openPerformancesModal() {
             setOptions('Qualification', 'Desempeños', true, 'type_performances', $('#performances-in'));
             setElementGenerator(performanceElementGenerator);

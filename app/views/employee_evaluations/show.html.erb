@@ -1,2 +1,111 @@
-<h1>EmployeeEvaluations#show</h1>
-<p>Find me in app/views/employee_evaluations/show.html.erb</p>
+<% type_name = Qualification.all_types[@evaluation.qualification_type] %>
+<% es_type_name = type_name == 'performance' ? 'Desempeño' : type_name %>
+
+<%= content_for :heading_main do %>
+<% end %>
+
+<%# Populate all 3 columns of the view with keys & their values %>
+
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Evaluador:</div>
+      <div class="col-lg-8">
+        <%= link_to(@evaluation.evaluator.full_name, @evaluation.evaluator) %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 show-label">Fecha:</div>
+      <div class="col-lg-8">
+        <%= show_formatted_datetime(@evaluation.evaluated_at) %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Tipo:</div>
+      <div class="col-lg-8">
+        <%= link_to(@evaluation.evaluated_position.name, @evaluation.evaluated_position) %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Evaluado:</div>
+      <div class="col-lg-8">
+        <%= link_to(@evaluation.evaluated_employee.full_name, @evaluation.evaluated_employee) %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :extra do %>
+    <div class="panel">
+      <div class="panel-heading">
+        <h5><%= es_type_name.capitalize %></h5>
+      </div>
+      <div class="panel-body">
+        <div class="margin-left-20 margin-right-20">
+          <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+            <table class="table">
+              <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Nota (%)</th>
+                <th>Comentarios</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @evaluation.qualification_evaluations.each do |qualification_evaluation| %>
+                  <tr>
+                    <td>
+                      <%= qualification_evaluation.qualification.phrase %>
+                    </td>
+                    <td>
+                      <%= qualification_evaluation.grade %>
+                    </td>
+                    <td>
+                      <%= qualification_evaluation.comments %>
+                    </td>
+                  </tr>
+              <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :menu do %>
+    <!--<div class="dropdown">
+      <%# history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @type.log_book})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%# history_content %>')">
+        <i class="dropdown-inline-button-icon icmn-history"></i>
+        Bitácora
+      </a>
+    </div>-->
+
+    <!--<div class="dropdown">
+      <%# link_to edit_provider_type_path(@type.id), class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <%# end %>
+    </div>-->
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to "Personas: #{es_type_name.capitalize}",
+                      employee_evaluations_path(type_name) %>
+        </li>
+        <li>
+          <span>
+            <%= @evaluation.number %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

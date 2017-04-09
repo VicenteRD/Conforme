@@ -1,4 +1,4 @@
-<% type_name = ProviderEvaluation.all_types[@type] %>
+<% type_name = Qualification.all_types[@type] %>
 
 <section class="page-content">
   <div class="page-content-inner">
@@ -124,7 +124,7 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to "Proveedores: #{es_type_name.capitalize}", provider_types_path %>
+          <%= link_to "Proveedores: #{es_type_name.capitalize}", provider_evaluations_path(type_name) %>
         </li>
         <li>
           <span>

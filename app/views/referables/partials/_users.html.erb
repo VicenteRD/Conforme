@@ -1,5 +1,5 @@
 <% extra ||= '' %>
-<% employees = extra.empty? ? Person::User.all : Person::User.where(position_ids: extra) %>
+<% employees = extra == 'noextra' ? Person::User.all : Person::User.where(position_ids: extra) %>
 
 
 <%= content_for :references_table_content do %>

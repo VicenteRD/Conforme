@@ -1,5 +1,5 @@
 <% extra ||= '' %>
-<% providers = extra.empty? ? Person::Provider.all : Person::Provider.where(types: extra) %>
+<% providers = extra == 'noextra' ? Person::Provider.all : Person::Provider.where(type_ids: extra) %>
 
 <%= content_for :references_table_content do %>
     <thead>

@@ -7,7 +7,7 @@ class EmployeeEvaluationsController < ApplicationController
   end
 
   def show
-    @evaluation = PersonEvaluation.find(params[:id])
+    @evaluation = EmployeeEvaluation.find(params[:id])
     redirect_to_dashboard && return unless @evaluation
 
     render layout: 'show'
@@ -42,10 +42,11 @@ class EmployeeEvaluationsController < ApplicationController
   def evaluation_fields(type)
     fields = params.require(:person_evaluation)
 
-    fields[:qualification_type] = parse_evaluation_type(type)
+    fields[:qualification_type] = type
     fields[:evaluated_at] = parse_date(params.dig(:raw, :evaluated_at))
 
-    fields.permit(:evaluated_at, :eval_person_id, :evaluator_id, :eval_group_id)
+    fields.permit(:qualification_type,
+                  :evaluated_at, :eval_person_id, :evaluator_id, :eval_group_id)
   end
 
   def load_evaluated_qualifications(evaluation)

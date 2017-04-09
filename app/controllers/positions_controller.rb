@@ -50,7 +50,8 @@ class PositionsController < ApplicationController
     fields.permit(
       :parent_id, :name, :area,
       :functions,
-      :competencies, :expected_performance
+      competency_ids: [], performance_ids: [],
+      user_ids: []
     )
   end
 end

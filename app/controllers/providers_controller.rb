@@ -16,7 +16,9 @@ class ProvidersController < ApplicationController
   end
 
   def create
-    Person::Provider.create!(provider_fields)
+    provider = Person::Provider.create!(provider_fields)
+
+    redirect_to provider_path(provider)
   end
 
   def edit
@@ -37,12 +39,13 @@ class ProvidersController < ApplicationController
   private
 
   def provider_fields
-    fields = params.require(:client)
+    fields = params.require(:provider)
     fields[:dob] = parse_date(params.dig(:raw, :dob))
     fields.permit(
       :rut, :dob,
       :name, :l_name1, :l_name2,
-      :email, :phone, :address
+      :email, :phone, :address,
+      type_ids: []
     )
   end
 end

@@ -54,8 +54,8 @@ class ApplicationController < ActionController::Base
     ul_ids
   end
 
-  def parse_date(date_string)
-    parse_datetime(date_string)
+  def parse_date(date_string, time = true)
+    parse_datetime(date_string, time)
   end
 
   def parse_percentage(hash, key, dec_percentage)

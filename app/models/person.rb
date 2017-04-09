@@ -30,7 +30,7 @@ class Person
   field :l_name1, type: String
   field :l_name2, type: String
 
-  field :dob, type: Date
+  field :dob, as: :date_of_birth, type: Date
 
   field :email, type: String
   field :phone, type: String
@@ -73,7 +73,7 @@ class Person
              (digit == 10 && number_and_digit[1].downcase == 'k') ||
              (digit == 11 && number_and_digit[1] == '0')
     else
-      # Error, invalid format
+      false
     end
 
     false

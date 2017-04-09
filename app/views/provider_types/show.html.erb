@@ -19,7 +19,6 @@
         <%= @type.description %>
       </div>
     </div>
-    </div>
 <% end %>
 
 <%= content_for :main_col_3 do %>
@@ -27,8 +26,26 @@
 
 <%= content_for :extra do %>
     <div class="row margin-top-10">
+      <%if @type.providers? %>
+          <div class="col-lg-2">
+            <div class="panel">
+              <div class="panel-heading">
+                <h5>
+                  Proveedores
+                </h5>
+              </div>
+              <div class="panel-body" style="height: 100px; overflow: auto">
+                <% @type.providers.each do |provider| %>
+                    <%= link_to provider.full_name, provider %>
+                    <br>
+                <% end %>
+              </div>
+            </div>
+          </div>
+      <% end %>
+
       <% if @type.competency_ids? %>
-          <div class="col-lg-6">
+          <div class="col-lg-5">
             <div class="panel">
               <div class="panel-heading">
                 <h5>
@@ -37,7 +54,7 @@
               </div>
               <div class="panel-body" style="height: 100px; overflow: auto">
                 <% @type.competency_ids.each do |competency_id| %>
-                    <%= Competency.find(competency_id).phrase %>
+                    <%= Qualification.find(competency_id).phrase %>
                     <br>
                 <% end %>
               </div>
@@ -45,7 +62,7 @@
           </div>
       <% end %>
       <% if @type.performance_ids? %>
-          <div class="col-lg-6">
+          <div class="col-lg-5">
             <div class="panel">
               <div class="panel-heading">
                 <h5>
@@ -54,7 +71,7 @@
               </div>
               <div class="panel-body" style="height: 100px; overflow: auto">
                 <% @type.performance_ids.each do |performance_id| %>
-                    <%= Performance.find(performance_id).phrase %>
+                    <%= Qualification.find(performance_id).phrase %>
                     <br>
                 <% end %>
               </div>

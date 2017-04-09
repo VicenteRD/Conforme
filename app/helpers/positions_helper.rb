@@ -64,16 +64,15 @@ module PositionsHelper
   def position_selector_style
     <<-EOS
 <style>
-  .node {
-    color: #827ca1;
+  div.node {
     cursor: pointer !important;
   }
 
-  .node p {
-    color: #827ca1;
+  div.node p {
+        color: #827ca1;
   }
 
-  .node:hover p {
+  div.node:hover p {
     color: #24222f;
   }
 </style>

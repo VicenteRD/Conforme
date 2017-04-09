@@ -26,6 +26,63 @@
 
 <% end %>
 
+<% content_for :extra do %>
+    <div class="row margin-top-10">
+      <% if @position.users? %>
+          <div class="col-lg-2">
+            <div class="panel">
+              <div class="panel-heading">
+                <h5>
+                  Proveedores
+                </h5>
+              </div>
+              <div class="panel-body" style="height: 100px; overflow: auto">
+                <% @position.users.each do |user| %>
+                    <%= link_to user.full_name, user %>
+                    <br>
+                <% end %>
+              </div>
+            </div>
+          </div>
+      <% end %>
+
+      <% if @position.competency_ids? %>
+          <div class="col-lg-5">
+            <div class="panel">
+              <div class="panel-heading">
+                <h5>
+                  Competencias
+                </h5>
+              </div>
+              <div class="panel-body" style="height: 100px; overflow: auto">
+                <% @position.competency_ids.each do |competency_id| %>
+                    <%= Qualification.find(competency_id).phrase %>
+                    <br>
+                <% end %>
+              </div>
+            </div>
+          </div>
+      <% end %>
+      <% if @position.performance_ids? %>
+          <div class="col-lg-5">
+            <div class="panel">
+              <div class="panel-heading">
+                <h5>
+                  Desempeños
+                </h5>
+              </div>
+              <div class="panel-body" style="height: 100px; overflow: auto">
+                <% @position.performance_ids.each do |performance_id| %>
+                    <%= Qualification.find(performance_id).phrase %>
+                    <br>
+                <% end %>
+              </div>
+            </div>
+          </div>
+      <% end %>
+    </div>
+<% end %>
+
 <%= content_for :menu do %>
     <div class="dropdown">
       <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @position.log_book})}" %>

@@ -35,6 +35,17 @@
                     newDateTimePicker($(this), '<% server_timezone %>');
                 });
             }
+            $('.date-picker > .form-control')
+                .mask('<%= dt_mask_format(true) %>', {placeholder: '__/__/___ - __:__'});
+
+            $('.phone-input').mask('+(00) 0 0000 0000', {placeholder: '+(__) _ ____ ____'});
+
+            $('.rut-input').mask('00000000-K', {
+                translation: {
+                    K: {pattern: /[kK0-9]/}
+                    },
+                placeholder: '12345678-9'
+            });
 
             $('.dropify').dropify({
                 messages: {
@@ -60,7 +71,6 @@
             if (lastIndex >= 0) {
                 filename = filename.substring(lastIndex + 1);
             }
-            console.log(filename);
 
             var uploadArea = $('#uploads-in');
             uploadArea.find('.form-control')

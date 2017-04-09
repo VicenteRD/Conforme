@@ -26,6 +26,34 @@
             </div>
           </div>
 
+          <div class="row margin-30">
+            <div class="col-lg-2" style="text-align: center; vertical-align: middle">
+              <h5 class="margin-0">
+                <a href="javascript:openProvidersModal()">
+                  Proveedores:
+                </a>
+              </h5>
+            </div>
+            <div class="col-lg-6" id="providers-in"></div>
+          </div>
+
+          <div class="row margin-left-30 margin-right-30">
+            <div class="col-lg-6" id="competencies-in">
+              <h6>
+                <a href="javascript:openCompetenciesModal()">
+                  Competencias
+                </a>
+              </h6>
+            </div>
+            <div class="col-lg-6" id="performances-in">
+              <h6>
+                <a href="javascript:openPerformancesModal()">
+                  Desempeño Esperado
+                </a>
+              </h6>
+            </div>
+          </div>
+
           <div style="margin:50px 50px 0 50px">
             <%= f.file_field :attachments, class: 'dropify', multiple: true,
                              data: {height: '90px', width: '100%'} %>
@@ -72,6 +100,91 @@
 
 <%= content_for :scripts do %>
     <script>
+        function providersElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '" style="display:inline">\n' +
+
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="provider_type[provider_ids][]" id="provider_type_provider_ids" ' +
+                'value="' + id + '">\n' + (target.is(':empty') ? '' : ', ') + name +
+                '</div>'
+            );
+        }
+
+        function competencyElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '">\n' +
+
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="provider_type[competency_ids][]" id="provider_type_competency_ids" ' +
+                'value="' + id + '">\n' +
+
+                '<input class="form-control" readonly="readonly" type="text" ' +
+                'name="extra[competency_names][]" id="extra_competency_names" ' +
+                'value="' + name + '">\n' +
+
+                '</div>'
+            );
+        }
+        function performanceElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '">\n' +
+
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="provider_type[performance_ids][]" id="provider_type_performance_ids" ' +
+                'value="' + id + '">\n' +
+
+                '<input class="form-control" readonly="readonly" type="text" ' +
+                'name="extra[performance_names][]" id="extra_performance_names" ' +
+                'value="' + name + '">\n' +
+
+                '</div>'
+            );
+        }
+
+        function openProvidersModal() {
+            setOptions('Person::Provider', 'Proveedores', true, 'providers', $('#providers-in'));
+            setElementGenerator(providersElementGenerator);
+
+            renderAndShowReferencesModal();
+        }
+
+        function openCompetenciesModal() {
+            setOptions('Qualification', 'Competencias', true, 'type_competencies', $('#competencies-in'));
+            setElementGenerator(competencyElementGenerator);
+
+            renderAndShowReferencesModal('1');
+        }
+
+        function openPerformancesModal() {
+            setOptions('Qualification', 'Desempeños', true, 'type_performances', $('#performances-in'));
+            setElementGenerator(performanceElementGenerator);
+
+            renderAndShowReferencesModal('2');
+        }
+
+        $(document).ready(function() {
+            // Load lists
+            setList('providers', <%= raw(@type.provider_ids.map { |id| id.to_s }.to_s) %>, null);
+            setList('type_competencies', <%= raw @type.competency_ids %>, null);
+            setList('type_performances', <%= raw @type.performance_ids %>, null);
+
+            // Show all
+            <% @type.providers.each do |provider| %>
+            providersElementGenerator($('#providers-in'), 'providers',
+                '<%= provider.id.to_s %>', '<%= provider.full_name %>');
+            <% end %>
+            <% @type.competency_ids.each do |id| %>
+            <% competency = Qualification.find(id) %>
+            competencyElementGenerator($('#competencies-in'), 'type_competencies',
+                '<%= id.to_s %>', '<%= competency.phrase %>');
+            <% end %>
+            <% @type.performance_ids.each do |id| %>
+            <% performance = Qualification.find(id) %>
+            performanceElementGenerator($('#performances-in'), 'type_performances',
+                '<%= id.to_s %>', '<%= performance.phrase %>');
+            <% end %>
+        });
     </script>
 <% end %>
 

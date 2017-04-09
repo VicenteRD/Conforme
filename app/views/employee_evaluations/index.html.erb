@@ -17,16 +17,16 @@
 <% type_name = Qualification.all_types[@type] %>
 
 <% content_for :table_body do %>
-    <% provider_evaluations = EmployeeEvaluation.where(evaluation_type: @type) %>
+    <% employee_evaluations = EmployeeEvaluation.where(qualification_type: @type) %>
 
-    <% if provider_evaluations.size != 0 %>
-        <% provider_evaluations.each do |evaluation| %>
+    <% if employee_evaluations.size != 0 %>
+        <% employee_evaluations.each do |evaluation| %>
             <tr data-href="<%= employee_evaluation_path(type_name, evaluation) %>">
               <td>
-                <%= evaluation.person_group.name %>
+                <%= evaluation.evaluated_position.name %>
               </td>
               <td>
-                <%= evaluation.evaluated_person.full_name %>
+                <%= evaluation.evaluated_employee.full_name %>
               </td>
               <td>
                 <%= print_responsible(evaluation.evaluator.id) %>

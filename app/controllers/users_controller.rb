@@ -51,12 +51,13 @@ class UsersController < ApplicationController
 
   def user_fields
     fields = params.require(:employee)
-    fields[:dob] = parse_date(params.dig(:raw, :dob))
+    fields[:dob] = parse_date(params.dig(:raw, :dob), false)
     fields.permit(
       :rut, :dob,
       :name, :l_name1, :l_name2,
       :email, :phone, :address,
-      :contract_type, :password
+      :contract_type, :password,
+      position_ids: []
     )
   end
 end

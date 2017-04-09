@@ -10,7 +10,7 @@
 <%= raw (area ? area_selector_style : position_selector_style) %>
 
 <script>
-    var classSelector = (true && <%= area %>) ? $('.area-position') : $('.node');
+    var classSelector = (true && <%= area %>) ? $('.area-position') : $('div.node');
 
     classSelector.click(function () {
 

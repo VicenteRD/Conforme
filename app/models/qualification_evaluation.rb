@@ -8,4 +8,8 @@ class QualificationEvaluation
 
   field :grade, type: Float
   field :cmts, as: :comments, type: String
+
+  def qualification
+    Qualification.find(qualification_id)
+  end
 end

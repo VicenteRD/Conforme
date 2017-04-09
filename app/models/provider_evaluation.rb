@@ -12,14 +12,14 @@ class ProviderEvaluation
   belongs_to :evaluator, class_name: 'Person::User'
 
   embeds_many :qualification_evaluations
-  accepts_nested_attributes_for :qualification_evaluations
+  accepts_nested_attributes_for :qualification_evaluations # TODO needed?
 
   field :q_type, as: :qualification_type, type: Integer
 
   index({ qualification_type: 1 }, name: 'qualification_type_index')
 
-  scope :competency,  -> { where(qualification_type: 0) }
-  scope :performance, -> { where(qualification_type: 1) }
+  scope :competency,  -> { where(qualification_type: 1) }
+  scope :performance, -> { where(qualification_type: 2) }
 
   field :eval_at, as: :evaluated_at, type: DateTime
 

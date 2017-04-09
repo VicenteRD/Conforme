@@ -70,4 +70,4 @@ gem 'summernote-rails', '0.8.2.0'
 
 gem 'mongoid-paperclip'
 
-gem 'nested_form'
+gem 'jquery_mask_rails'

@@ -1,6 +1,8 @@
 <%= content_for :profile_specifics do %>
     <h6>Empleado</h6>
     <dl class="dl-horizontal user-profile-dl">
+      <dt>Posiciones</dt>
+      <dd><%= raw @person.positions.map{ |pos| link_to(pos.name, pos) }.join(', ') %></dd>
       <dt>Última conexión</dt>
       <dd><%= @person.last_login_datetime(dt_rb_format(true, false)) %></dd>
       <dt>Fecha Incorporación</dt>

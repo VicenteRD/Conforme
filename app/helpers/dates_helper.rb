@@ -11,6 +11,10 @@ module DatesHelper
     'DD/MM/YYYY' + (time ? ' - HH:mm' : '')
   end
 
+  def dt_mask_format(time = false)
+    '00/00/0000' + (time ? ' - 00:00' : '')
+  end
+
   def show_formatted_date(date)
     show_dt(date, dt_rb_format(false, false))
   end
@@ -24,12 +28,12 @@ module DatesHelper
   end
 
   def parse_datetime(date_string, time = true)
-    if date_string
-      DateTime.strptime(
-        "#{date_string} #{server_timezone}",
-        dt_rb_format(time)
-      )
-    end
+    return unless date_string
+    dt_klass = time ? DateTime : Date
+    dt_klass.strptime(
+      "#{date_string} #{server_timezone}",
+      dt_rb_format(time)
+    )
   end
 
   private

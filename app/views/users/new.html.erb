@@ -40,7 +40,7 @@
               </label>
             </div>
             <div class="col-lg-3">
-              <%= f.text_field :rut, class: 'form-control' %>
+              <%= f.text_field :rut, class: 'form-control rut-input' %>
             </div>
 
             <div class="col-lg-1">
@@ -49,7 +49,7 @@
               </label>
             </div>
             <div class="col-lg-3">
-              <%= f.text_field :rut, class: 'form-control' %>
+              <%= f.text_field :phone, class: 'form-control phone-input' %>
             </div>
 
             <div class="col-lg-1">
@@ -70,7 +70,7 @@
             </div>
             <div class="col-lg-3 input-group date-picker">
               <%= text_field :raw, :dob, class: 'form-control',
-                             data: {format: dt_form_format(true)},
+                             data: {format: dt_form_format(false)},
                              value: DateTime.now.to_i %>
               <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
@@ -114,6 +114,17 @@
             <div class="col-lg-3">
               <%= password_field :raw, :password_confirm, class: 'form-control' %>
             </div>
+          </div>
+
+          <div class="row margin-30">
+            <div class="col-lg-2" style="text-align: center; vertical-align: middle">
+              <h5 class="margin-0">
+                <a href="javascript:openPositionsModal()">
+                  Posiciones:
+                </a>
+              </h5>
+            </div>
+            <div class="col-lg-6" id="positions-in"></div>
           </div>
 
           <div style="margin:50px 50px 0 50px">
@@ -162,6 +173,23 @@
 
 <%= content_for :scripts do %>
     <script>
+        function positionElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '" style="display:inline">\n' +
+
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="employee[position_ids][]" id="employee_position_ids" ' +
+                'value="' + id + '">\n' + (target.is(':empty') ? '' : ', ') + name +
+                '</div>'
+            );
+        }
+
+        function openPositionsModal() {
+            setOptions('Position', 'Posiciones', true, 'positions', $('#positions-in'));
+            setElementGenerator(positionElementGenerator);
+
+            renderAndShowReferencesModal();
+        }
     </script>
 <% end %>
 

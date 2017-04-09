@@ -21,13 +21,16 @@
     <!-- End Profile Header -->
 
     <!-- Profile -->
+    <% bg_url = @person.background_image? ? @person.background_image.url : image_url("photos/#{1 + rand(9)}.jpg") %>
+    <% avatar_url = @person.avatar? ? @person.avatar.url : image_url("avatars/#{1 + rand(4)}.jpg") %>
+
     <div class="row">
       <div class="col-xl-4">
-        <section class="panel profile-user" style="background-image: url(<%= @person.background_image.url %>)">
+        <section class="panel profile-user" style="background-image: url(<%= bg_url %>)">
           <div class="panel-body">
             <div class="profile-user-title text-center">
               <a class="avatar" href="javascript:void(0);">
-                <%= image_tag @person.avatar.url, alt: 'Avatar' %>
+                <%= image_tag avatar_url, alt: 'Avatar' %>
               </a>
               <br>
               <%= yield :avatar_extra %>

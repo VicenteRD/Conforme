@@ -118,8 +118,9 @@ function checkOptions() {
  * @param referencesHash The list of objects. If null, the set will be set to `{}`.
  * @param target The jQuery selector for where the objects should be displayed, or `null` if
  *   the rendering will be done separately.
+ * @param generator The generator to be used.
  */
-function setSelectedReferences(referencesHash, target) {
+function setSelectedReferences(referencesHash, target, generator) {
     // Filter out undefined or null hashes.
     if (referencesHash === undefined || referencesHash === null) {
         selectedReferences = {};
@@ -133,8 +134,34 @@ function setSelectedReferences(referencesHash, target) {
 
     for (var key in selectedReferences) {
         for (var i = 0; i < selectedReferences[key].length; i++) {
-            addReferenceToTarget(key, selectedReferences[key][i], null, target);
+            addReferenceToTarget(key, selectedReferences[key][i], null, target, generator);
         }
+    }
+}
+
+/**
+ * Loads a list under the provided key. If the key holds a list, it will be overridden.
+ * Also renders the objects within the list under the given target using the provided generator.
+ *
+ * @param key The key under which the list should be stored
+ * @param list The list (or array) of objects to store
+ * @param target The jQuery selector where the elements of this list should be shown
+ * @param generator The HTML elements generator to be used when rendering the elements
+ */
+function setList(key, list, target, generator) {
+    if (list === undefined || list === null) {
+        otherObjectLists[key] = [];
+        return;
+    }
+
+    otherObjectLists[key] = list;
+
+    if (target === undefined || target === null) {
+        return;
+    }
+
+    for (var i = 0; i < otherObjectLists[key].length; i++) {
+            addReferenceToTarget(key, otherObjectLists[key][i], null, target, generator);
     }
 }
 
@@ -314,12 +341,17 @@ function removeReference(reference, key, objectId) {
  * @param id The ID of the object that has been added
  * @param name The displayable name of the object
  * @param target The HTML selector to which the generated element will be added to
+ * @parma generator The function to use when adding elements. If not defined,
+ *   will default to the one stored in currentOptions
  */
-function addReferenceToTarget(klass, id, name, target) {
+function addReferenceToTarget(klass, id, name, target, generator) {
     if (target === undefined) {
         target = currentOptions['target'];
     }
-    currentOptions['elementGenerator'](target, klass, id, name);
+    if (generator === undefined) {
+        generator = currentOptions['elementGenerator'];
+    }
+    generator(target, klass, id, name);
 }
 
 /**

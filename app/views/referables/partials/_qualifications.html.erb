@@ -16,7 +16,7 @@
     </tr>
     </thead>
     <tbody style="cursor:pointer">
-    <% Qualification.each do |qualification| %>
+    <% qualifications.each do |qualification| %>
         <tr class="qualification-row" data-id="<%= qualification.id %>">
           <td id="name-cell"><%= qualification.phrase %></td>
         </tr>

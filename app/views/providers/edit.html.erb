@@ -71,7 +71,7 @@
             </div>
             <div class="col-lg-3 input-group date-picker">
               <%= text_field :raw, :dob, class: 'form-control',
-                             data: {format: dt_form_format(true)},
+                             data: {format: dt_form_format(false)},
                              value: @person.dob.to_time.to_i %>
               <span class="input-group-addon">
                 <i class="icmn-calendar"></i>
@@ -86,6 +86,17 @@
             <div class="col-lg-7">
               <%= f.text_field :address, class: 'form-control' %>
             </div>
+          </div>
+
+          <div class="row margin-left-30 margin-right-30">
+            <div class="col-lg-2" style="text-align: center; vertical-align: middle">
+              <h5 class="margin-0">
+                <a href="javascript:openTypesModal()">
+                  Tipos:
+                </a>
+              </h5>
+            </div>
+            <div class="col-lg-6" id="types-in"></div>
           </div>
 
           <div style="margin:50px 50px 0 50px">
@@ -134,6 +145,34 @@
 
 <%= content_for :scripts do %>
     <script>
+        function typeElementGenerator(target, klass, id, name) {
+            target.append(
+                '<div id="reference-' + id + '" style="display:inline">\n' +
+
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="provider[type_ids][]" id="provider_type_ids" ' +
+                'value="' + id + '">\n' + (target.is(':empty') ? '' : ', ') + name +
+                '</div>'
+            );
+        }
+
+        function openTypesModal() {
+            setOptions('ProviderType', 'Tipos de Proveedor', true, 'types', $('#types-in'));
+            setElementGenerator(typeElementGenerator);
+
+            renderAndShowReferencesModal();
+        }
+
+        $(document).ready(function () {
+            // Load list
+            setList('types', <%= raw(@person.type_ids.map { |id| id.to_s }.to_s) %>, null);
+
+            // Show all
+            <% @person.types.each do |type| %>
+            typeElementGenerator($('#types-in'), 'types',
+                '<%= type.id.to_s %>', '<%= type.name %>');
+            <% end %>
+        });
     </script>
 <% end %>
 

@@ -1,12 +1,12 @@
 <%= content_for :profile_specifics do %>
   <h6>Proveedor</h6>
   <dl class="dl-horizontal user-profile-dl">
-    <dt>Tipo</dt>
-    <dd><%# @person.provider_type %></dd>
-    <dt>Competencias</dt>
+    <dt>Tipos</dt>
+    <dd><%= raw @person.types.map{ |type| link_to(type.name, type) }.join(', ') %></dd>
+    <!--<dt>Competencias</dt>
     <dd><%# @person.competencies %></dd>
     <dt>Desempeño</dt>
-    <dd><%# @person.performance %></dd>
+    <dd><%# @person.performance %></dd>-->
   </dl>
 <% end %>
 

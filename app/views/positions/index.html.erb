@@ -1,37 +1,28 @@
 <section class="page-content">
   <div class="page-content-inner">
-    <div class="panel">
+    <div class="panel" id="overscroll-panel">
       <%= render partial: 'chart' %>
     </div>
   </div>
 </section>
 
+<% content_for :script_tags do %>
+    <%= javascript_include_tag '/assets/vendors/overscroll/dist/jquery.overscroll.min.js' %>
+<% end %>
+
 <% content_for :scripts do %>
     <script>
-        $('.node').click(function() {
+        $('div.node').click(function() {
             var positionId = $(this).find('p').attr('data-id');
 
             window.open('/personas/organigrama/' + positionId, '_self')
-        })
+        });
+
+        $('#overscroll-panel').overscroll({persistThumbs: true});
     </script>
 <% end %>
 
-<% content_for :styles do %>
-    <style>
-      .node {
-        color: #827ca1;
-        cursor: pointer !important;
-      }
-
-      .node p {
-        color: #827ca1;
-      }
-
-      .node:hover p {
-        color: #24222f;
-      }
-    </style>
-<% end %>
+<% content_for :styles, raw(position_selector_style) %>
 
 <% content_for :breadcrumbs do %>
     <div class="left">

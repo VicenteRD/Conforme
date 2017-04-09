@@ -1,5 +1,5 @@
 //
-//= require jquery_nested_form
+//= require jquery.mask
 //
 //= require summernote
 //= require summernote/locales/es-ES
