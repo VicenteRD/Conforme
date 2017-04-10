@@ -5,4 +5,8 @@ class Person::Provider < Person
 
   has_and_belongs_to_many :types, class_name: 'ProviderType'
   has_many :evaluations, class_name: 'ProviderEvaluation'
+
+  def self.display_name
+    'Proveedores'
+  end
 end

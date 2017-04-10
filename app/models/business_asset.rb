@@ -29,4 +29,12 @@ class BusinessAsset
       nil
     end
   end
+
+  def self.display_name
+    'Activos'
+  end
+
+  def display_name
+    name
+  end
 end

@@ -73,9 +73,6 @@
         <div class="col-lg-6">
           <% if @type.references? %>
               <div class="panel padding-bottom-25" style="height: 100%">
-                <div class="panel-heading">
-                  <h5>Referencias</h5>
-                </div>
                 <%= render partial: 'referables/show_all_for',
                            locals: {element: @type} %>
               </div>

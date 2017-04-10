@@ -19,4 +19,5 @@ module ApplicationHelper
   def person_client_path(client)
     client_path(client)
   end
+
 end

@@ -33,4 +33,12 @@ class BusinessProcess
   def find_revision(id)
     revisions.find(id)
   end
+
+  def self.display_name
+    'Procesos'
+  end
+
+  def display_name
+    name
+  end
 end

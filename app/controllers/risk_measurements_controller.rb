@@ -21,7 +21,9 @@ class RiskMeasurementsController < ApplicationController
     klass = measurement_class(:type)
 
     if klass
-      create_measurement(risk, klass)
+      msrmnt = create_measurement(risk, klass)
+      create_references(msrmnt, params[:references].to_unsafe_h, risk.id.to_s) if params[:references]
+
       redirect_to_risk(risk)
     else
       redirect_to_dashboard

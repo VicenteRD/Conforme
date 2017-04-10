@@ -22,9 +22,9 @@
 
             <% msrmnt = risk.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
-            <% significance = (
+            <% significance = risk.compliance ? (
             Settings::RiskSettings.first.law_threshold <=> risk.compliance
-            ) + 1 %>
+            ) + 1 : 0 %>
 
             <tr data-href="<%= risk_path((risk.rule_type == 1 ? 'ley' : 'norma'), risk) %>">
 
@@ -36,7 +36,7 @@
                 <%= risk.title %>
               </td>
               <td>
-                <%= risk.requirement %>
+                <%= raw risk.requirement %>
               </td>
               <td>
                 <%= Person::User.find(risk.responsible_id).first_last_name %>

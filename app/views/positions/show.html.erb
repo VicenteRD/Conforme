@@ -81,6 +81,17 @@
           </div>
       <% end %>
     </div>
+    <div class="row is-flex">
+      <div class="col-lg-6"></div>
+      <div class="col-lg-6">
+        <% if @position.references? %>
+            <div class="panel padding-bottom-25" style="height: 100%">
+              <%= render partial: 'referables/show_all_for',
+                         locals: {element: @position} %>
+            </div>
+        <% end %>
+      </div>
+    </div>
 <% end %>
 
 <%= content_for :menu do %>

@@ -1,0 +1,110 @@
+<%= content_for :references_table_content do %>
+    <thead>
+    <tr>
+      <th>Tipo</th>
+      <th>Medio</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+    </tr>
+    </thead>
+    <tbody style="cursor: pointer">
+    <% Communication.each do |communication| %>
+        <tr class="communication-row" data-id="<%= communication.id %>">
+          <td><%= communication.presentable_type %></td>
+          <td><%= communication.medium %></td>
+          <td id="name-cell"><%= communication.name %></td>
+          <td><%= communication.description %></td>
+        </tr>
+
+    <% end %>
+    </tbody>
+<% end %>
+
+<%= content_for :references_form do %>
+    <%= form_for(:communication,
+                 url: new_communication_path(format: :json),
+                 remote: true,
+                 html: {id: 'new_communication'}) do |f| %>
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Tipo</label>
+          </div>
+          <div class="col-md-3">
+            <%= f.collection_select :communication_type,
+                                    Communication.all_types,
+                                    :first, :last,
+                                    {}, {class: 'form-control', style: 'width: 100%'} %>
+          </div>
+          <div class="col-md-1">
+            <label class="form-control-label">Medio</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :medium, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Nombre</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :name, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Descripción</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :description, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+
+        <%= f.hidden_field :responsible_id, value: @user.id %>
+        <!--<div class="row" style="margin: 15px 10px 0 10px">
+          <p>
+            Usted será asignado como responsable de este elemento.
+            <br>
+            Puede editar esto accediendo a la página del elemento directamente y haciendo click en <i>Editar</i>.
+          </p>
+        </div>-->
+
+        <div class="form-actions text-center" style="position:absolute; bottom: 0; width: 100%">
+          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50', style: 'text-align: center' %>
+        </div>
+    <% end %>
+<% end %>
+
+<%= content_for :references_scripts do %>
+    <script>
+        var rowSelector = $('.communication-row');
+
+        rowSelector.click(function () {
+            var row = $(this);
+            var result = processReferenceRowClick(
+                row,
+                row.attr('data-id'),
+                row.find('#name-cell').html()
+            );
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        $('#new_communication').on("ajax:success", function (e, data, status, xhr) {
+            var result = processNewReferenceCreated(data);
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        rowSelector.each(function () {
+            var row = $(this);
+            styleSelection(row, isSelected('Communication', row.attr('data-id')));
+        });
+
+        $('.filterable').filterable();
+    </script>
+<% end %>

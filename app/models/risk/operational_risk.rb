@@ -21,6 +21,8 @@ class Risk::OperationalRisk < Risk
     super(measurement.significant)
 
     measurement.log_book.new_entry(user_id, 'Creado', log_body)
+
+    measurement
   end
 
   def display_name

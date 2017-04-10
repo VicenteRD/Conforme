@@ -45,9 +45,6 @@
 
     <% if @objective.references? %>
         <div class="panel">
-          <div class="panel-heading">
-            <h5>Referencias</h5>
-          </div>
           <div class="margin-left-30 margin-bottom-30">
             <%= render partial: 'referables/show_all_for', locals: {element: @objective} %>
           </div>

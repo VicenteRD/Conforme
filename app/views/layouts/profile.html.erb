@@ -45,7 +45,6 @@
         <% if @person.references? %>
             <section class="panel">
               <div class="panel-body">
-                <h6>Referencias</h6>
                 <%= render partial: 'referables/show_all_for', locals: {element: @person} %>
               </div>
             </section>

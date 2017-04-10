@@ -78,9 +78,6 @@
       <div class="col-lg-6">
         <% if @concerned_party.references? %>
             <div class="panel padding-bottom-25" style="height: 100%">
-              <div class="panel-heading">
-                <h5>Referencias</h5>
-              </div>
               <%= render partial: 'referables/show_all_for',
                          locals: {element: @concerned_party} %>
             </div>

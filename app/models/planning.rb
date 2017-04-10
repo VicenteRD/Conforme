@@ -19,7 +19,7 @@ class Planning
   field :name, type: String
   field :desc, as: :description, type: String
 
-  field :prog, as: :progress, type: Float
+  field :prog, as: :progress, type: Float, default: 0.0
 
   field :cmts, as: :comments, type: String
 
@@ -27,5 +27,13 @@ class Planning
     self.progress = self.activities.avg(:progress)
 
     self.save!
+  end
+
+  def self.display_name
+    'Planificación'
+  end
+
+  def display_name
+    name
   end
 end

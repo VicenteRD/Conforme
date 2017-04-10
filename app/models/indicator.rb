@@ -37,17 +37,17 @@ class Indicator
   field :freq, as: :measurement_frequency, type: Integer
 
   def new_measurement(data)
-    measurement = self.measurements.create!(data)
+    measurement = measurements.create!(data)
 
     significant = calculate_significance(
-        measurement.value,
-        measurement.threshold,
-        self.margin
+      measurement.value,
+      measurement.threshold,
+      margin
     )
 
     measurement.significant = significant
     self.significant = significant
-    self.save!
+    save!
 
     measurement
   end
@@ -57,11 +57,9 @@ class Indicator
   end
 
   def self.expand_criterion(criterion)
-    unless criterion.in? %w(≤ = ≥)
-      return criterion
-    end
+    return criterion unless criterion.in? %w(≤ = ≥)
 
-    return {'≤'=> '<=', '=' => '==', '≥' => '>='}[criterion]
+    { '≤' => '<=', '=' => '==', '≥' => '>=' }[criterion]
   end
 
   def calculate_significance(value, threshold, margin)
@@ -79,4 +77,13 @@ class Indicator
 
     delta > (threshold * margin).round(2) ? 2 : 1
   end
+
+  def self.display_name
+    'Indicadores'
+  end
+
+  def display_name
+    name
+  end
+
 end

@@ -3,7 +3,6 @@
     <tr>
       <th>Nombre</th>
       <th>Frase</th>
-      <th>Creador</th>
       <th>Encargado</th>
     </tr>
     </thead>
@@ -12,11 +11,6 @@
         <tr class="objective-row" data-id="<%= objective.id %>">
           <td id="name-cell"><%= objective.name %></td>
           <td ><%= objective.phrase %></td>
-          <td>
-            <%= if objective.creator_id
-                    Person::User.find(objective.creator_id)&.first_last_name ||  ''
-                  end %>
-          </td>
           <td>
             <%= if objective.responsible_id
                   Person::User.find(objective.responsible_id)&.first_last_name ||  ''

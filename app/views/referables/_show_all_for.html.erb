@@ -11,7 +11,7 @@
           <%# !! CHANGE THIS BEFORE PRODUCTION !! %>
           <% klass = class_name.constantize %>
 
-          <div id="<%= class_name %>">
+          <div id="<%= class_name.gsub('::', '_') %>">
             <strong>
               <%= klass.display_name %>:
             </strong>

@@ -19,4 +19,12 @@ class RiskMeasurement::OperationalMeasurement < RiskMeasurement
     super
   end
 
+  def self.display_name
+    'Mediciones Riesgos Operacionales'
+  end
+
+  def display_name
+    'placeholder'
+  end
+
 end

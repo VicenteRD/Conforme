@@ -1,23 +1,21 @@
 <% extra ||= 'noextra' %>
-<% employees = extra == 'noextra' ? Person::User.all : Person::User.where(position_ids: extra) %>
+<% evaluations = extra == 'noextra' ? ProviderEvaluation.all : ProviderEvaluation.where(qualification_type: extra.to_i) %>
 
 <%= content_for :references_table_content do %>
     <thead>
     <tr>
-      <th>Nombre</th>
-      <th>Cargos</th>
-      <th>Rol</th>
+      <th>Fecha</th>
+      <th>Tipo</th>
+      <th>Proveedor</th>
     </tr>
     </thead>
     <tbody style="cursor: pointer">
-    <% employees.each do |employee| %>
+    <% evaluations.each do |evaluation| %>
 
-        <% positions = []; employee.positions.each { |pos| positions.push(pos.name) } %>
-
-        <tr class="user-row" data-id="<%= employee.id %>">
-          <td id="name-cell"><%= employee.full_name %></td>
-          <td><%= positions.join(', ') %></td>
-          <td><%= employee.role %></td>
+        <tr class="evaluation-row" data-id="<%= evaluation.id %>">
+          <td><%= show_formatted_datetime(evaluation.evaluated_at) %></td>
+          <td id="type-cell"><%= evaluation.evaluated_type.name %></td>
+          <td id="person-cell"><%= evaluation.evaluated_provider.full_name %></td>
         </tr>
 
     <% end %>
@@ -30,14 +28,14 @@
             $('#new-tab').hide()
         });
 
-        var rowSelector = $('.user-row');
+        var rowSelector = $('.evaluation-row');
 
         rowSelector.click(function () {
             var row = $(this);
             var result = processReferenceRowClick(
                 row,
                 row.attr('data-id'),
-                row.find('#name-cell').html()
+                row.find('#type-cell').html().trim() + row.find('#person-cell').html().trim()
             );
 
             if (result) {
@@ -47,7 +45,7 @@
 
         rowSelector.each(function () {
             var row = $(this);
-            styleSelection(row, isSelected('Person::User', row.attr('data-id')));
+            styleSelection(row, isSelected('ProviderEvaluation', row.attr('data-id')));
         });
 
         $('.filterable').filterable();

@@ -38,4 +38,12 @@ class ProviderEvaluation
 
     type_name
   end
+
+  def self.display_name
+    'Evaluaciones Proveedores'
+  end
+
+  def display_name
+    "#{evaluated_type.name} -> #{evaluated_provider.first_last_name} (#{presentable_qualification_type(:es).capitalize})"
+  end
 end

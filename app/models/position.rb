@@ -51,4 +51,12 @@ class Position
       performance_ids
     end
   end
+
+  def self.display_name
+    'Posiciones'
+  end
+
+  def display_name
+    name
+  end
 end

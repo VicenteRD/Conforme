@@ -14,4 +14,12 @@ class ClientType
 
   field :name, type: String
   field :desc, as: :description, type: String
+
+  def self.display_name
+    'Tipos de Clientes'
+  end
+
+  def display_name
+    name
+  end
 end

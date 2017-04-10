@@ -99,6 +99,7 @@ class BusinessAssetsController < ApplicationController
   end
 
   private
+
   def parse_job_type(es_type)
     if es_type == 'mantencion' || es_type == 'calibracion'
       es_type

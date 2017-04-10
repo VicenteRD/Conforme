@@ -38,4 +38,12 @@ class EmployeeEvaluation
 
     type_name
   end
+
+  def self.display_name
+    'Evaluaciones Personas'
+  end
+
+  def display_name
+    "#{evaluated_position.name} -> #{evaluated_employee.first_last_name} (#{presentable_qualification_type(:es).capitalize})"
+  end
 end

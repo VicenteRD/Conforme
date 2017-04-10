@@ -27,4 +27,12 @@ class ProviderType
       performance_ids
     end
   end
+
+  def self.display_name
+    'Tipos de Proveedores'
+  end
+
+  def display_name
+    name
+  end
 end

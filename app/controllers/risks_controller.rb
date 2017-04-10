@@ -78,6 +78,7 @@ class RisksController < ApplicationController
     end
 
     risk.update!(fields.permit(risk.class.permitted_fields, attachment_ids: []))
+    create_references(risk, params[:references].to_unsafe_h) if params[:references]
 
     risk.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
 
