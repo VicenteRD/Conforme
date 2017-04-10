@@ -7,63 +7,47 @@ module Referable
 
     field :ref, as: :references, type: Hash # {class_name: [BSON::ObjectId]}
 
-    def get_all_referred(klass, base_klass = nil, embeds_list = '')
-      unless is_referable_document? klass
-        return nil
+    def get_all_referred(klass)
+      class_key = klass.name
+
+      return nil unless referable_document?(klass) && references[class_key]
+
+      if klass.embedded?
+        return nil unless defined? klass.base_info
       end
 
-      class_key = klass.name
       ret_array = []
 
-      if self.references[class_key]
-        self.references[class_key].each do |object_id|
-          if object_id.include? EMBED_CHAR
-            if base_klass.nil? || embeds_list.nil? || embeds_list.empty?
-              next
-            end
-
-            ids = object_id.sub(EMBED_CHAR)
-
-            if (base_object = base_klass.find(ids[0]))
-              element = base_object[embeds_list].find(ids[1])
-            else
-              next
-            end
-          else
-            element = klass.find(object_id)
-          end
-
-          ret_array.append(element)
-        end
+      references[class_key].each do |object_id|
+        puts object_id
+        element = element_from_id(klass, object_id)
+        puts element
+        ret_array.append(element) unless element.nil?
       end
 
-      ret_array == [] ? nil : ret_array
+      ret_array
     end
 
     def add_references(key, *values)
-      case key
-        when Class
-          hash_key = key.name
-        when Symbol
-          hash_key = key
-        else # Assuming the key is a string
-          hash_key = key.to_sym
-      end
+      hash_key = case key
+                 when Class
+                   key.name
+                 when Symbol
+                   key
+                 else # Assuming the key is a string
+                   key.to_sym
+                 end
 
-      if self.references.nil?
-        self.references = {}
-      end
+      self.references = {} if references.nil?
 
-      if self.references[hash_key].nil?
-        self.references[hash_key] = []
-      end
+      references[hash_key] = [] if self.references[hash_key].nil?
 
       values.each do |val|
         case val
-          when Array
-            self.references[hash_key].push(*val)
-          else
-            self.references[hash_key].push(val)
+        when Array
+          references[hash_key].push(*val)
+        else
+          references[hash_key].push(val)
         end
       end
     end
@@ -80,10 +64,10 @@ module Referable
           obj.save!
         end
 
-        self.add_references(k, v)
+        add_references(k, v)
       end
 
-      self.save!
+      save!
     end
 
     def set_references_from_hash(hashed_values, base_id = '')
@@ -93,9 +77,22 @@ module Referable
 
   end # included
 
-  ## Helper methods
   private
-  def is_referable_document?(klass)
+
+  def element_from_id(klass, object_id)
+    if klass.embedded?
+      ids = object_id.split(EMBED_CHAR)
+
+      base_object = klass.base_info[:klass].find(ids[0])
+      return nil unless base_object
+
+      base_object.send(klass.base_info[:embeds_list]).find(ids[1])
+    else
+      klass.find(object_id)
+    end
+  end
+
+  def referable_document?(klass)
     (klass < Mongoid::Document) && (klass < Referable)
   end
 

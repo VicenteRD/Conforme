@@ -34,12 +34,19 @@ module RisksHelper
   def risk_operational_risk_path(risk)
     risk_path('operacional', risk)
   end
+
+  def risk_measurement_operational_measurement_path(measurement)
+    risk_path('operacional', measurement.risk)
+  end
+
   def risk_environmental_risk_path(risk)
     risk_path('ambiental', risk)
   end
+
   def risk_safety_risk_path(risk)
     risk_path('seguridad', risk)
   end
+
   def risk_rule_risk_path(risk)
     risk_path(risk.rule_type == 1 ? 'ley' : 'norma', risk)
   end

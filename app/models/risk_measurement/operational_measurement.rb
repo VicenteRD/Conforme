@@ -24,7 +24,10 @@ class RiskMeasurement::OperationalMeasurement < RiskMeasurement
   end
 
   def display_name
-    'placeholder'
+    "Medición para \"#{risk.display_name}\""
   end
 
+  def self.base_info
+    { klass: Risk::OperationalRisk, embeds_list: 'measurements' }
+  end
 end
