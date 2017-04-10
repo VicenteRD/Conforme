@@ -45,7 +45,7 @@ class ProviderTypesController < ApplicationController
   private
 
   def provider_type_fields
-    fields = params.require(:provider_type)
+    fields = params.require(:type)
 
     fields.permit(:name, :description,
                   competency_ids: [], performance_ids: [],
