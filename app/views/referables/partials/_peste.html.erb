@@ -1,0 +1,100 @@
+<%= content_for :references_table_content do %>
+    <thead>
+    <tr>
+      <th>Tipo</th>
+      <th>Nombre</th>
+      <th>Estrategia</th>
+    </tr>
+    </thead>
+    <tbody style="cursor: pointer">
+    <% Peste.each do |peste| %>
+        <tr class="peste-row" data-id="<%= peste.id %>">
+          <td><%= peste.presentable_type %></td>
+          <td id="name-cell"><%= peste.name %></td>
+          <td><%= peste.strategy %></td>
+        </tr>
+
+    <% end %>
+    </tbody>
+<% end %>
+
+<%= content_for :references_form do %>
+    <%= form_for(:peste,
+                 url: new_peste_path(format: :json),
+                 remote: true,
+                 html: {id: 'new_peste'}) do |f| %>
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Tipo</label>
+          </div>
+          <div class="col-md-3">
+            <%= f.collection_select :peste_type,
+                                    Peste.get_all_types,
+                                    :first, :last,
+                                    {}, {class: 'form-control', style: 'width: 100%'} %>
+          </div>
+          <div class="col-md-1">
+            <label class="form-control-label">Nombre</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :name, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Estrategia</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :strategy, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+
+        <%= f.hidden_field :responsible_id, value: @user.id %>
+        <!--<div class="row" style="margin: 15px 10px 0 10px">
+          <p>
+            Usted será asignado como responsable de este elemento.
+            <br>
+            Puede editar esto accediendo a la página del elemento directamente y haciendo click en <i>Editar</i>.
+          </p>
+        </div>-->
+
+        <div class="form-actions text-center" style="position:absolute; bottom: 0; width: 100%">
+          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50', style: 'text-align: center' %>
+        </div>
+    <% end %>
+<% end %>
+
+<%= content_for :references_scripts do %>
+    <script>
+        var rowSelector = $('.peste-row');
+
+        rowSelector.click(function () {
+            var row = $(this);
+            var result = processReferenceRowClick(
+                row,
+                row.attr('data-id'),
+                row.find('#name-cell').html()
+            );
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        $('#new_peste').on("ajax:success", function (e, data, status, xhr) {
+            var result = processNewReferenceCreated(data);
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        rowSelector.each(function () {
+            var row = $(this);
+            styleSelection(row, isSelected('Peste', row.attr('data-id')));
+        });
+
+        $('.filterable').filterable();
+    </script>
+<% end %>

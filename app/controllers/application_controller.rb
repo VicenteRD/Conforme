@@ -38,6 +38,7 @@ class ApplicationController < ActionController::Base
   end
 
   def add_attachments(object, uploads)
+    return unless uploads
     klass = object.class
     return unless klass < Describable && klass < Mongoid::Document
 
