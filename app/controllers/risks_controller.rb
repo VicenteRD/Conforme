@@ -78,11 +78,10 @@ class RisksController < ApplicationController
     end
 
     risk.update!(fields.permit(risk.class.permitted_fields, attachment_ids: []))
+
     create_references(risk, params[:references].to_unsafe_h) if params[:references]
 
     risk.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
-
-    #create_references(business_asset, params[:references].to_unsafe_h) if params[:references]
 
     redirect_to risk_path(params[:type], risk.id)
   end
@@ -94,6 +93,9 @@ class RisksController < ApplicationController
     risk = klass.create!(fields.permit(klass.permitted_fields, attachment_ids: []))
 
     create_references(risk, params[:references].to_unsafe_h) if params[:references]
+    puts 'ENTERING ADD ATTACHMENTS'
+    add_attachments(risk, fields[:attachments]) if [:attachments]
+    puts 'LEFT ADD ATTACHMENTS'
 
     risk.log_creation(session[:id], entry.present? ? entry : '')
   end

@@ -31,16 +31,6 @@ class UploadedFile
   #
   def add_as_attachment_to(elements)
     elements.each do |k, v|
-      klass = k.constantize
-      unless klass < Describable
-        return
-      end
-
-      v.each do |element_id|
-        obj = klass.find(element_id)
-        obj.add_attachments(self.id)
-        obj.save!
-      end
 
       if self.attached_to[k].nil? || !self.attached_to.key?(k)
         self.attached_to[k] = []
@@ -48,6 +38,7 @@ class UploadedFile
 
       self.attached_to[k].append(v).flatten!
     end
+    save!
   end
 
   def self.all_from(ids)

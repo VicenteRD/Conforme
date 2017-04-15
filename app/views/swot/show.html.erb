@@ -15,20 +15,13 @@
         <%= @swot.name %>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-4 show-label">Estrategia:</div>
-      <div class="col-lg-8">
-        <%= @swot.strategy %>
-      </div>
-    </div>
-
 <% end %>
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Plazo:</div>
+      <div class="col-lg-4 show-label">Estrategia:</div>
       <div class="col-lg-8">
-        <%= @swot.due_at&.strftime(dt_rb_format(false, false)) || '-' %>
+        <%= @swot.strategy %>
       </div>
     </div>
 <% end %>

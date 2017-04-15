@@ -37,6 +37,19 @@ class ApplicationController < ActionController::Base
     object.set_references_from_hash(reference_ids, base_id) if reference_ids
   end
 
+  def add_attachments(object, uploads)
+    klass = object.class
+    return unless klass < Describable && klass < Mongoid::Document
+
+    processed_uploads = ul_files(uploads)
+
+    object.add_to_set(attachment_ids: processed_uploads.map { |upload| upload.id.to_s })
+
+    processed_uploads.each do |upload|
+      upload.add_as_attachment_to({klass.name => [object.id]})
+    end
+  end
+
   #
   # Creates documents of the UploadedFile class given an array of documents
   #
@@ -60,5 +73,17 @@ class ApplicationController < ActionController::Base
 
   def parse_percentage(hash, key, dec_percentage)
     hash[key] = dec_percentage.to_f / 100.0 if dec_percentage
+  end
+
+  private
+
+  def ul_files(uploads)
+    uploads.map { |upload|
+      UploadedFile.where(
+          upload_file_name: upload.original_filename
+      ).first_or_create!(
+          upload: upload
+      )
+    }
   end
 end

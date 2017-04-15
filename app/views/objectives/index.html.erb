@@ -10,6 +10,7 @@
       <th>Nombre</th>
       <th>Frase</th>
       <th>Responsable</th>
+      <th>Revisado</th>
     </tr>
 <% end %>
 <% content_for :table_body do %>
@@ -26,7 +27,10 @@
                 <%= objective.phrase %>
               </td>
               <td>
-                <%= print_responsible objective.responsible_id %>
+                <%= print_responsible(objective.responsible_id) %>
+              </td>
+              <td>
+                <%= objective.last_revision_at(dt_rb_format(false, false)) || '-' %>
               </td>
             </tr>
         <% end %>

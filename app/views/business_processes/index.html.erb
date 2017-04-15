@@ -11,6 +11,7 @@
       <th>Nombre</th>
       <th>Descripción</th>
       <th>Responsable</th>
+      <th>Revisado</th>
     </tr>
 <% end %>
 <% content_for :table_body do %>
@@ -31,6 +32,9 @@
               </td>
               <td>
                 <%= print_responsible process.responsible_id %>
+              </td>
+              <td>
+                <%= process.last_revision_at(dt_rb_format(false, false)) || '-' %>
               </td>
             </tr>
         <% end %>

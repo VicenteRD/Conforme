@@ -199,6 +199,24 @@ Rails.application.routes.draw do
   post  '/estrategias/FODA/:swot_id/revisiones/nueva' => 'swot_revisions#create'
   patch '/estrategias/FODA/:swot_id/revisiones/:id'   => 'swot_revisions#update'
 
+  # -------- Strategies: PESTE
+
+  get '/estrategias/PESTA'            => 'peste#index', as: :peste_index
+  get '/estrategias/PESTA/nuevo'      => 'peste#new',   as: :new_peste
+  get '/estrategias/PESTA/:id'        => 'peste#show',  as: :peste
+  get '/estrategias/PESTA/:id/editar' => 'peste#edit',  as: :edit_peste
+
+  post  '/estrategias/PESTA/nuevo'      => 'peste#create'
+  patch '/estrategias/PESTA/:id/editar' => 'peste#update'
+
+  get '/estrategias/PESTA/:peste_id/revisiones/nueva' => 'peste_revisions#new',
+      as: :new_peste_revision
+  get '/estrategias/PESTA/:peste_id/revisiones/:id'   => 'peste_revisions#edit',
+      as: :edit_peste_revision
+
+  post  '/estrategias/PESTA/:peste_id/revisiones/nueva' => 'peste_revisions#create'
+  patch '/estrategias/PESTA/:peste_id/revisiones/:id'   => 'peste_revisions#update'
+
   # -------- Strategies: ConcernedParties
 
   get '/estrategias/partes-interesadas'            => 'concerned_parties#index', as: :concerned_parties

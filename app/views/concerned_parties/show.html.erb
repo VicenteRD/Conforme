@@ -27,12 +27,6 @@
         <%= @concerned_party.name %>
       </div>
     </div>
-    <div class="row">
-      <div class="col-lg-4 show-label">Plazo:</div>
-      <div class="col-lg-8">
-        <%= @concerned_party.due_at&.strftime(dt_rb_format(false, false)) %>
-      </div>
-    </div>
 <% end %>
 
 <%= content_for :main_col_3 do %>

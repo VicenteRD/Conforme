@@ -21,7 +21,7 @@ class ConcernedParty
   field :exp, as: :expectation, type: String
 
   field :r_id, as: :responsible_id, type: BSON::ObjectId # => Person::User
-  field :due_at, type: DateTime
+  field :lr_at, as: :last_revised_at, type: DateTime
 
   def self.get_all_types
     {0 => 'Interna', 1 => 'Externa'}
@@ -38,7 +38,16 @@ class ConcernedParty
   def new_revision(user_id, fields, log_body)
     revision = revisions.create!(fields)
 
+    if last_revised_at.nil? || revision.revised_at > last_revised_at
+      self.last_revised_at = revision.revised_at
+      save!
+    end
+
     revision.log_created(user_id, log_body)
+  end
+
+  def last_revision_at(format)
+    last_revised_at.strftime(format) if last_revised_at
   end
 
   def find_revision(id)

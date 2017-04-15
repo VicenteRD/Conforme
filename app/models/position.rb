@@ -22,10 +22,6 @@ class Position
 
   field :area, type: Boolean
 
-  # The functions this role performs.
-  field :functions, type: String
-
-
   def get_area
     return self if area
 

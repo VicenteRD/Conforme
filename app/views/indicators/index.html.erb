@@ -15,7 +15,6 @@
       <th>Método</th>
       <th>Meta</th>
       <th>Valor Obtenido</th>
-      <th>Significancia</th>
     </tr>
 <% end %>
 
@@ -37,9 +36,8 @@
               <td><%= measurement&.measured_at&.strftime(dt_rb_format(false, false)) || '-' %></td>
               <td><%= indicator.method %></td>
               <td><%= raw "#{indicator.criterion} #{threshold} #{indicator.unit}" %></td>
-              <td><%= measurement&.value || '-' %></td>
               <td class="<%= 'sig-' + indicator.significant.to_s %>">
-                <%= humanize_significant(indicator.significant) %>
+                <%= measurement&.value || '-' %>
               </td>
 
             </tr>

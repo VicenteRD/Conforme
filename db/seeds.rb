@@ -83,14 +83,12 @@ perf = Qualification.create!(phrase: 'Test performance', qualification_type: 2)
 
 pos_gg = Position.new(
     name: 'Gerencia General',
-    functions: 'Administrar toda la empresa',
     competency_ids: [cmp.id],
     performance_ids: [perf.id],
     area: true)
 
 pos_dp = Position.new(
     name: 'Director de Producto',
-    functions: 'Administrar productos',
     competency_ids: [cmp.id, cmp1.id, cmp2.id],
     performance_ids: [perf.id],
     area: true
@@ -98,14 +96,12 @@ pos_dp = Position.new(
 
 pos_go = Position.new(
     name: 'Goma',
-    functions: 'Ser administrado',
     competency_ids: [cmp.id],
     performance_ids: [perf.id]
 )
 
 pos_dv = Position.new(
     name: 'Director de Ventas',
-    functions: 'Administrar ventas',
     competency_ids: [cmp.id],
     performance_ids: [perf.id],
     area: true
@@ -312,8 +308,7 @@ swot = Swot.new(
     name: 'A',
     strategy: 'fgbndyuif',
 
-    responsible_id: vr.id,
-    due_at: DateTime.now
+    responsible_id: vr.id
 )
 swot.save!
 swot.log_book.new_entry(nil, 'Creado', 'Created by system')

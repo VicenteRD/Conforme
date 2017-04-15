@@ -19,6 +19,7 @@ class BusinessProcess
   field :desc, as: :description, type: String
 
   field :r_id, as: :responsible_id, type: BSON::ObjectId
+  field :lr_at, as: :last_revised_at, type: DateTime
 
   def self.get_all_types
     ['Cadena de Valor', 'Gestión', 'Apoyo', 'Estrategia']
@@ -27,11 +28,20 @@ class BusinessProcess
   def new_revision(user_id, fields, log_body)
     revision = revisions.create!(fields)
 
+    if last_revised_at.nil? || revision.revised_at > last_revised_at
+      self.last_revised_at = revision.revised_at
+      save!
+    end
+
     revision.log_created(user_id, log_body)
   end
 
   def find_revision(id)
     revisions.find(id)
+  end
+
+  def last_revision_at(format)
+    last_revised_at.strftime(format) if last_revised_at
   end
 
   def self.display_name

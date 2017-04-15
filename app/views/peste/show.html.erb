@@ -1,69 +1,63 @@
 <%= content_for :heading_main do %>
-
+    <div class="margin-left-50">
+      <h4 class="text-capitalize">
+        <%= Peste.get_all_types[@peste.peste_type] %>
+      </h4>
+    </div>
 <% end %>
 
 <%# Populate all 3 columns of the view with keys & their values %>
 
 <%= content_for :main_col_1 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Tipo:</div>
+      <div class="col-lg-4 show-label">Nombre:</div>
       <div class="col-lg-8">
-        <%= @communication.presentable_type %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-4 show-label">Descripción:</div>
-      <div class="col-lg-8">
-        <%= @communication.description %>
+        <%= @peste.name %>
       </div>
     </div>
 <% end %>
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Medio:</div>
+      <div class="col-lg-4 show-label">Estrategia:</div>
       <div class="col-lg-8">
-        <%= @communication.medium %>
+        <%= @peste.strategy %>
       </div>
     </div>
 <% end %>
 
 <%= content_for :main_col_3 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Medio:</div>
-      <div class="col-lg-8">
-        <%= @communication.medium %>
-      </div>
-    </div>
-    <div class="row">
       <div class="col-lg-4 show-label">Responsable:</div>
       <div class="col-lg-8">
-        <%= print_responsible(@communication.responsible_id) %>
+        <%= print_responsible(@peste.responsible_id) %>
       </div>
     </div>
 <% end %>
 
+
+
 <%= content_for :extra do %>
-    <% if @communication.comments? %>
+    <% if @peste.comments? %>
         <div class="panel">
           <div class="panel-heading">
             <h5>Descripción</h5>
           </div>
           <div class="margin-left-30 margin-bottom-30">
-            <%= raw @communication.comments %>
+            <%= raw @peste.comments %>
           </div>
         </div>
     <% end %>
 
-    <% if @communication.references? %>
+    <% if @peste.references? %>
         <div class="panel">
           <div class="margin-left-30 margin-bottom-30">
-            <%= render partial: 'referables/show_all_for', locals: {element: @communication} %>
+            <%= render partial: 'referables/show_all_for', locals: {element: @peste} %>
           </div>
         </div>
     <% end %>
 
-    <% if @communication.revisions? %>
+    <% if @peste.revisions? %>
         <div class="panel">
           <div class="panel-heading">
             <h5>Revisiones</h5>
@@ -78,7 +72,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <% @communication.revisions.order(revised_at: :desc, created_at: :desc).each do |revision| %>
+                  <% @peste.revisions.order(revised_at: :desc, created_at: :desc).each do |revision| %>
                       <tr class="revision-row" data-id="<%= revision.id %>" style="cursor: pointer">
                         <td>
                           <%= show_formatted_datetime(revision.revised_at) %>
@@ -96,7 +90,7 @@
 
 <%= content_for :menu do %>
     <div class="dropdown">
-      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @communication.log_book})}" %>
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @peste.log_book})}" %>
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
         <i class="dropdown-inline-button-icon icmn-history"></i>
         Bitácora
@@ -104,7 +98,7 @@
     </div>
 
     <div class="dropdown">
-      <% files_table = "#{escape_javascript(render partial: 'uploaded_files/modal', locals: {attachments: @communication.attachment_ids})}" %>
+      <% files_table = "#{escape_javascript(render partial: 'uploaded_files/modal', locals: {attachments: @peste.attachment_ids})}" %>
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showAttachments('<%= files_table %>')">
         <i class="dropdown-inline-button-icon icmn-folder-open"></i>
         Adjuntos
@@ -112,15 +106,15 @@
     </div>
 
     <div class="dropdown">
-      <%= link_to new_communication_revision_path(@communication), method: 'get',
-                  class: 'dropdown-inline-button' do %>
+      <%= link_to new_peste_revision_path(@peste), method: 'get', class: 'dropdown-inline-button' do %>
           <i class="dropdown-inline-button-icon icmn-rulers"></i>
           Revisar
       <% end %>
     </div>
 
+
     <div class="dropdown">
-      <%= link_to edit_communication_path(@communication), method: 'get', class: 'dropdown-inline-button' do %>
+      <%= link_to edit_peste_path(@peste), method: 'get', class: 'dropdown-inline-button' do %>
           <i class="dropdown-inline-button-icon icmn-pencil"></i>
           Editar
       <% end %>
@@ -131,11 +125,13 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to 'Estrategias: Comunicación', communications_path %>
+          <%= link_to peste_index_path do %>
+              Estrategias: PESTA
+          <% end %>
         </li>
         <li>
           <span>
-            <%= @communication.number %>
+            <%= @peste.number %>
           </span>
         </li>
       </ul>
@@ -143,10 +139,10 @@
 <% end %>
 
 <% content_for :scripts do %>
-    <!-- Communications' Show Page Scripts -->
+    <!-- SWOT's Show Page Scripts -->
     <script type="text/javascript">
         $('.revision-row').click(function () {
-            var link = '/estrategias/comunicacion/<%= @communication.id %>/revisiones/' + $(this).attr('data-id');
+            var link = '/estrategias/PESTA/<%= @peste.id %>/revisiones/' + $(this).attr('data-id');
 
             window.open(link, '_self');
         });

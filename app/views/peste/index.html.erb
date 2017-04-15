@@ -9,50 +9,46 @@
     <tr>
       <th>Tipo</th>
       <th>Nombre</th>
-      <th>Descripción</th>
-      <th>Expectativa</th>
+      <th>Estrategia</th>
       <th>Responsable</th>
       <th>Revisado</th>
     </tr>
 <% end %>
 <% content_for :table_body do %>
-    <% parties = ConcernedParty.all %>
-    <% if parties.size != 0 %>
-        <% parties.each do |party| %>
+    <% all_peste= Peste.order_by(peste_type: :asc) %>
+    <% if all_peste.size != 0 %>
+        <% all_peste.each do |peste| %>
 
-            <tr data-href="<%= concerned_party_path(party) %>">
+            <tr data-href="<%= peste_path(peste) %>">
 
-              <td>
+              <td data-sort="<%= peste.peste_type %>">
                 <div class="expand-collapse">+</div>
-                <%= party.presentable_type %>
+                <%= peste.presentable_type %>
               </td>
               <td>
-                <%= party.name %>
+                <%= peste.name %>
               </td>
               <td>
-                <%= party.description %>
+                <%= peste.strategy %>
               </td>
               <td>
-                <%= party.expectation %>
+                <%= print_responsible(peste.responsible_id) %>
               </td>
               <td>
-                <%= print_responsible(party.responsible_id) %>
-              </td>
-              <td>
-                <%= party.last_revision_at(dt_rb_format(false, false)) || '-' %>
+                <%= peste.last_revision_at(dt_rb_format(false, false)) || '-' %>
               </td>
             </tr>
         <% end %>
     <% else %>
         <tr>
-          <td colspan="4"> No se encontraron partes interesadas.</td>
+          <td colspan="4"> No se encontraron elementos PESTA.</td>
         </tr>
     <% end %>
 <% end %>
 
 <% content_for :menu do %>
     <div class="dropdown">
-      <%= link_to new_concerned_party_path, method: 'get', class: 'dropdown-inline-button' do %>
+      <%= link_to new_peste_path, method: 'get', class: 'dropdown-inline-button' do %>
           <i class="dropdown-inline-button-icon icmn-file-plus"></i>
           Nuevo
       <% end %>
@@ -64,7 +60,7 @@
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
         <span>
-          Estrategias: Partes Interesadas
+          Estrategias: PESTA
         </span>
         </li>
       </ul>

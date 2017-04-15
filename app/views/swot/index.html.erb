@@ -11,7 +11,7 @@
       <th>Nombre</th>
       <th>Estrategia</th>
       <th>Responsable</th>
-      <th>Plazo</th>
+      <th>Revisado</th>
     </tr>
 <% end %>
 <% content_for :table_body do %>
@@ -32,10 +32,10 @@
                 <%= swot.strategy %>
               </td>
               <td>
-                <%= Person::User.find(swot.responsible_id).first_last_name %>
+                <%= print_responsible(swot.responsible_id) %>
               </td>
               <td>
-                <%= swot.due_at&.strftime(dt_rb_format(false, false)) || '-' %>
+                <%= swot.last_revision_at(dt_rb_format(false, false)) || '-' %>
               </td>
             </tr>
         <% end %>
