@@ -3,6 +3,8 @@ module SignificanceHelper
   def significant_bgcolor(sig, hover = false)
     tag = 'background-color: '
     case sig
+      when 0
+        tag + (hover ? '#069225' : '#0eb132')
       when 1
         tag + (hover ? '#abab2c' : '#cccc37')
       when 2
@@ -15,6 +17,8 @@ module SignificanceHelper
   def significant_txtcolor(sig, hover = false)
     tag = 'color: '
     case sig
+      when 0
+        tag + (hover ? '#ffffff' : '#ffffff')
       when 1
         tag + (hover ? '#ffffff' : '#ffffff')
       when 2
@@ -31,13 +35,17 @@ module SignificanceHelper
   def significant_style_css
     <<-EOS
 .sig-0 {
-  /* Intentionally left blank. */
+  #{significant_style(0).sub('; ', ";\n  ")}
 }
 .sig-1 {
   #{significant_style(1).sub('; ', ";\n  ")}
 }
 .sig-2 {
   #{significant_style(2).sub('; ', ";\n  ")}
+}
+
+tr:hover .sig-0 {
+  #{significant_style(0, true).sub('; ', ";\n  ")}
 }
 
 tr:hover .sig-1 {

@@ -46,7 +46,7 @@
                 <%= msrmnt&.measured_at&.strftime(dt_rb_format(false, false)) || '-' %>
               </td>
 
-              <td class="<%= 'sig-' + significance.to_s %>">
+              <td class="<%= 'sig-' + significance.to_s %>" data-sort="<%= significance %>">
                 <%= msrmnt&.show_compliance || '-' %>
               </td>
             </tr>

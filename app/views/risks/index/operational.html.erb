@@ -49,7 +49,7 @@
               <td><%= msrmnt != nil ? Settings::RiskSettings.first.operational_options[:impact][msrmnt.impact.to_s] : '-' %></td>
               <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
 
-              <td class="<%= 'sig-' + risk.significant.to_s %>">
+              <td class="<%= 'sig-' + risk.significant.to_s %>" data-sort="<%= risk.significant %>">
                 <%= humanize_significant(risk.significant) %>
               </td>
             </tr>

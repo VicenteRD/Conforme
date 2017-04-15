@@ -46,7 +46,9 @@
               <td><%= msrmnt != nil ? msrmnt.consequence.round(2) : '-' %></td>
               <td><%= msrmnt != nil ? msrmnt.magnitude.round(2) : '-' %></td>
 
-              <td class="<%= 'risk-sig-' + risk.significant.to_s %>"><%= sig %></td>
+              <td class="<%= 'risk-sig-' + risk.significant.to_s %>" data-sort="<%= risk.significant %>">
+                <%= sig %>
+              </td>
             </tr>
         <% end %>
     <% else %>
