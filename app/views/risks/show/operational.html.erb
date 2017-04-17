@@ -74,8 +74,10 @@
               <div class="panel-heading">
                 <h5>Adjuntos</h5>
               </div>
-              <%= render partial: 'uploaded_files/attachments_table',
-                         locals: {element: @risk} %>
+              <div class="panel-body" id="attachments-table">
+                <%= render partial: 'uploaded_files/attachments_table',
+                           locals: {element: @risk} %>
+              </div>
             </div>
         <% end %>
       </div>

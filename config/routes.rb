@@ -301,6 +301,7 @@ Rails.application.routes.draw do
 
   post  '/riesgos/:type/nuevo'         => 'risks#create'
   patch '/riesgos/:type/:id/editar/'   => 'risks#update'
+  patch '/riesgos/:type/edit-attachments' => 'risks#edit_attachments'
 
   post  '/riesgos/:type/:risk_id/nueva'      => 'risk_measurements#create'
   patch '/riesgos/:type/:risk_id/:id/editar' => 'risk_measurements#update'
