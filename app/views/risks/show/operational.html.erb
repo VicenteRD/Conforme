@@ -70,12 +70,10 @@
 
     <div class="row is-flex">
       <div class="col-lg-5">
-        <% unless @risk.attachment_ids.empty? %>
-            <div class="panel padding-bottom-25">
-                <%= render partial: 'uploaded_files/attachments_table',
-                           locals: {element: @risk} %>
-            </div>
-        <% end %>
+        <div class="panel padding-bottom-25">
+          <%= render partial: 'uploaded_files/attachments_table',
+                     locals: {element: @risk} %>
+        </div>
       </div>
       <div class="col-lg-1"></div>
       <div class="col-lg-6">

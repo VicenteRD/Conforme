@@ -479,9 +479,9 @@ function styleSelection(selector, selected) {
 /**
  * Sorts row by selected / not selected.
  */
-function sortRows() {
+function sortRows(rowClass) {
     $('#references-table').append(
-        $('.user-row').get().sort(function(a, b) {
+        $(rowClass).get().sort(function(a, b) {
             var aClass = $(a).hasClass('selected-row') ? 1 : 0;
             var bClass = $(b).hasClass('selected-row') ? 1 : 0;
             return bClass - aClass;

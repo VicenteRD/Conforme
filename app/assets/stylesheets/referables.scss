@@ -93,3 +93,10 @@
 .referables-data-row {
     cursor: pointer
 }
+
+.selected-row {
+  background-color: #88a37f;
+}
+.selected-row:hover {
+  background-color: #88a37f !important;
+}
