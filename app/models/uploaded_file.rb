@@ -50,4 +50,34 @@ class UploadedFile
 
     files
   end
+
+  def get_all_attached_to(klass, key)
+    return nil unless klass < Describable && attached_to[key]
+
+    if klass.embedded?
+      return nil unless defined? klass.base_info
+    end
+
+    ret_array = []
+
+    attached_to[key].each do |object_id|
+      element = element_from_id(klass, object_id)
+      ret_array.append(element) if element
+    end
+
+    ret_array
+  end
+
+  def element_from_id(klass, object_id)
+    if klass.embedded?
+      ids = object_id.split(EMBED_CHAR)
+
+      base_object = klass.base_info[:klass].find(ids[0])
+      return nil unless base_object
+
+      base_object.send(klass.base_info[:embeds_list]).find(ids[1])
+    else
+      klass.find(object_id)
+    end
+  end
 end

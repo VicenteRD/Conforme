@@ -91,18 +91,11 @@ class RisksController < ApplicationController
 
     removal_ids = params.dig(:attachments, :removal_ids)
 
-    if removal_ids
-      risk.attachment_ids -= removal_ids
-      risk.save!
+    remove_attachments(risk.class.name, risk, removal_ids) if risk && removal_ids
+    add_attachments(risk, params.dig(:attachments, :additions)) if
+        params.dig(:attachments, :additions)
 
-      UploadedFile.find(removal_ids).each do |attachment|
-        attachment.attached_to[risk.class.name] -= [risk.id]
-
-        attachment.attached_to.delete(risk.class.name) if attachment.attached_to[risk.class.name].empty?
-
-        attachment.save!
-      end
-    end
+    redirect_to risk
   end
 
   private
@@ -113,7 +106,7 @@ class RisksController < ApplicationController
     risk = klass.create!(fields.permit(klass.permitted_fields, attachment_ids: []))
 
     create_references(risk, params[:references].to_unsafe_h) if params[:references]
-    add_attachments(risk, fields[:attachments]) if [:attachments]
+    add_attachments(risk, fields[:attachments]) if fields[:attachments]
 
     risk.log_creation(session[:id], entry.present? ? entry : '')
   end

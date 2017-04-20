@@ -1,15 +1,120 @@
+<%= content_for :script_tags do %>
+    <%= javascript_include_tag '/assets/vendors/dropify/dist/js/dropify.min.js' %>
+<% end %>
+
+<%= content_for :style_tags do %>
+    <%= stylesheet_link_tag '/assets/vendors/dropify/dist/css/dropify.min.css' %>
+<% end %>
+
 <% attachments = element.attachment_ids %>
-<div id="attachments-table-body">
-  <%=
-    render partial: '/uploaded_files/attachments_table_body',
-           locals: {
-               attachments: element.attachment_ids,
-               e_id: element.id
-           }
-  %>
+<div class="panel-heading">
+  <h5 style="display: inline">
+    Adjuntos
+  </h5>
+  <small>
+    <a href="javascript:toggleUploader()">
+      Agregar...
+    </a>
+  </small>
+</div>
+<div class="panel-body" id="attachments-table">
+  <div id="attachments-table-body">
+    <%= form_for :attachments,
+                 url: 'edit-attachments.js',
+                 method: :patch, html: {id: 'attachments-form'} do |f| %>
+
+        <%= f.hidden_field :element_id, value: element.id %>
+
+        <div id="attachments-table">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th width="1%">Eliminar</th>
+              <th width="1%"></th>
+              <th>Nombre</th>
+              <th width="30%">Fecha</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% if attachments && (files = UploadedFile.all_from(attachments)) && files.size != 0 %>
+
+                <% files.each do |attachment| %>
+                    <tr>
+                      <td style="text-align: center">
+                        <%=
+                          f.check_box(
+                              :removal_ids,
+                              {
+                                  multiple: true,
+                                  style: 'height: 1.25em; width: 1.25em; vertical-align: middle'
+                              },
+                              attachment.id,
+                              nil
+                          )
+                        %>
+                      </td>
+                      <td>
+                        <%= icon_for attachment.upload_content_type %>
+                      </td>
+
+                      <td>
+                        <%= link_to attachment.upload_file_name, attachment %>
+                      </td>
+
+                      <td>
+                        <%= attachment.created_at.strftime(dt_rb_format(true, false)) %>
+                      </td>
+                    </tr>
+                <% end %>
+            <% else %>
+                <td colspan="4">No se encontraron archivos adjuntos</td>
+            <% end %>
+            </tbody>
+          </table>
+
+          <div id="uploader" style="margin:15px 0 15px 0">
+            <%= f.file_field :additions, class: 'dropify', multiple: true,
+                             data: {height: '90px', width: '100%'} %>
+          </div>
+        </div>
+
+        <div class="text-right margin-right-20 margin-bottom-15">
+          <%= f.submit 'Modificar', class: 'btn btn-primary width-25 height-15' %>
+        </div>
+    <% end %>
+  </div>
 </div>
 
 <script>
+
+    $('#uploader').hide();
+
+    $('.dropify').dropify({
+        messages: {
+            'default': 'Arrastre un archivo hasta aquí o haga click',
+            'replace': 'Arraste un archivo hasta aquí o haga click para reemplazar',
+            'remove':  'Quitar',
+            'error':   'Oops, algo salió mal.'
+        },
+        error: {
+            'fileSize': 'Archivo excede peso máximo ({{ value }}).',
+            'minWidth': 'La imagenes demasiado angosta (ancho mínimo: {{ value }}}px).',
+            'maxWidth': 'La imagen es demasiado ancha ({{ value }}}px máximo).',
+            'minHeight': 'La imagen es demasiado chata (largo mínimo: {{ value }}}px).',
+            'maxHeight': 'La imagen es demasiado larga ({{ value }}px máximo).',
+            'imageFormat': 'Formato de imagen no válido (Permitidos: {{ value }}).'
+        }
+    });
+
+    function toggleUploader() {
+        var uploader = $('#uploader');
+        if (uploader.is(':hidden')) {
+            uploader.show();
+        } else {
+            uploader.hide();
+        }
+    }
+
     $('#attachments-form').on('ajax:success', function (e, data, status, xhr) {
 
     });

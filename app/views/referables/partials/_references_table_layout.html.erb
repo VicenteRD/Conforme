@@ -3,7 +3,7 @@
     <%= text_field :search, :input, placeholder: 'Buscar', class: 'form-control filterer' %>
   </div>
   <div class="table-responsive margin-bottom-30" style="height:300px; overflow:auto; width: auto">
-    <table class="table table-hover filterable">
+    <table class="table table-hover filterable" id="references-table">
       <%= content_for :references_table_content %>
     </table>
   </div>

@@ -1,5 +1,4 @@
 class UploadedFilesController < ApplicationController
-
   def index
     render layout: 'table'
   end

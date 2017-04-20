@@ -469,8 +469,24 @@ function defaultSingleElementGenerator(target, klass, id, name) {
  * @see UNSELECTED_BACKGROUND_COLOR
  */
 function styleSelection(selector, selected) {
-    selector.css('background-color',
-        selected ? SELECTED_BACKGROUND_COLOR : UNSELECTED_BACKGROUND_COLOR);
+    if (selected) {
+        selector.addClass('selected-row');
+    } else {
+        selector.removeClass('selected-row');
+    }
+}
+
+/**
+ * Sorts row by selected / not selected.
+ */
+function sortRows() {
+    $('#references-table').append(
+        $('.user-row').get().sort(function(a, b) {
+            var aClass = $(a).hasClass('selected-row') ? 1 : 0;
+            var bClass = $(b).hasClass('selected-row') ? 1 : 0;
+            return bClass - aClass;
+        })
+    );
 }
 
 /** Adds an `element` to a list under `key` within the given `hash`. */

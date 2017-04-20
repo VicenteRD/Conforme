@@ -1,3 +1,11 @@
+<%= content_for :script_tags do %>
+    <%= javascript_include_tag '/assets/vendors/dropify/dist/js/dropify.min.js' %>
+<% end %>
+
+<%= content_for :style_tags do %>
+    <%= stylesheet_link_tag '/assets/vendors/dropify/dist/css/dropify.min.css' %>
+<% end %>
+
 <%= form_for(:risk, url: new_risk_path('operacional')) do |f| %>
 
     <section class="page-content">

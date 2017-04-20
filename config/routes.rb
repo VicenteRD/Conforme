@@ -1,25 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'competencies/create'
-
-  get 'performances/create'
-
-  get 'employee_evaluations/index'
-
-  get 'employee_evaluations/show'
-
-  get 'employee_evaluations/new'
-
-  get 'employee_evaluations/create'
-
-  get 'provider_evaluations/index'
-
-  get 'provider_evaluations/show'
-
-  get 'provider_evaluations/new'
-
-  get 'provider_evaluations/create'
-
   # -------- Root and Dashboard
 
   get '/'          => redirect('/dashboard')

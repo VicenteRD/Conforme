@@ -27,7 +27,8 @@
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="process-in">
-              <%= text_field :extra, :process_name, class: 'form-control', readonly: true %>
+              <%= text_field :extra, :process_name, class: 'form-control', readonly: true,
+                             value: BusinessProcess.find(@risk.process_id).name %>
               <span class="input-group-addon" style="cursor: pointer">
                 <i class="icmn-pencil5"></i>
               </span>

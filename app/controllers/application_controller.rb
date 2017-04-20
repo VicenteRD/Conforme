@@ -44,28 +44,45 @@ class ApplicationController < ActionController::Base
 
     processed_uploads = ul_files(uploads)
 
-    object.add_to_set(attachment_ids: processed_uploads.map { |upload| upload.id.to_s })
+    object.add_to_set(
+      attachment_ids: processed_uploads.map { |upload| upload.id.to_s }
+    )
 
     processed_uploads.each do |upload|
-      upload.add_as_attachment_to({klass.name => [object.id]})
+      upload.add_as_attachment_to(klass.name => [object.id])
     end
   end
 
   #
   # Creates documents of the UploadedFile class given an array of documents
   #
+  # DEPRECATED - Use add_attachments
   def upload_files(uploads)
     ul_ids = []
-    uploads.each { |upload|
-      if upload
-        uploaded = UploadedFile
-                   .where(upload_file_name: upload.original_filename)
-                   .first_or_create!(upload: upload)
-        ul_ids.append(uploaded.id.to_s)
-      end
-    }
+    uploads.each do |upload|
+      next unless upload
+      uploaded = UploadedFile
+                 .where(upload_file_name: upload.original_filename)
+                 .first_or_create!(upload: upload)
+      ul_ids.append(uploaded.id.to_s)
+    end
 
     ul_ids
+  end
+
+  def remove_attachments(class_name, element, removal_ids)
+    element.attachment_ids -= removal_ids
+    element.save!
+
+    UploadedFile.find(removal_ids).each do |attachment|
+      attachment.attached_to[class_name] -= [element.id]
+
+      attachment.attached_to.delete(class_name) if
+          attachment.attached_to[class_name].empty?
+
+      attachment.save!
+    end
+
   end
 
   def parse_date(date_string, time = true)
