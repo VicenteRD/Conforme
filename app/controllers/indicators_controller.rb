@@ -1,73 +1,76 @@
 class IndicatorsController < ApplicationController
   def index
-    @indicators = Indicator.all
     render layout: 'table'
   end
 
   def show
-    if (@indicator = Indicator.find(params[:id]))
-      render layout: 'show'
-    else
-      redirect_to '/'
-    end
+    @indicator = Indicator.find(params[:id])
+    redirect_to_dashboard unless @indicator
+
+    render layout: 'show'
   end
 
   def new
     render layout: 'form'
   end
 
-  def create
-    fields = params.require(:indicator)
+  def edit
+    @indicator = Indicator.find(params[:id])
+    redirect_to_dashboard unless @indicator
 
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
-
-    margin = params.dig(:raw, :margin)
-    fields[:margin] = margin.to_f / 100.0 if margin
-
-    indicator = Indicator.create!(fields.permit(
-        :objective_id,
-        :name, :description, :method,
-        :threshold, :criterion, :margin,
-        :unit, :responsible_id, :measurement_frequency,
-        :comments, attachment_ids: []
-    ))
-
-    indicator.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
-
-    create_references(indicator, params[:references].to_unsafe_h) if params[:references]
-
-    redirect_to indicator_path(indicator)
+    render layout: 'form'
   end
 
-  def edit
-    if (@indicator = Indicator.find(params[:id]))
-      render layout: 'form'
-    else
-      redirect_to '/'
-    end
+  def create
+    indicator = Indicator.create!(indicator_fields)
+    log_created(indicator)
+
+    create_references(indicator, references_unsafe_hash)
+    add_attachments(indicator, params.dig(:indicator, :attachments))
+
+    redirect_to indicator
   end
 
   def update
     indicator = Indicator.find(params[:id])
+    redirect_to_dashboard && return unless indicator
 
-    fields = params.require(:indicator)
+    indicator.update!(indicator_fields)
+    indicator.log_edited(indicator)
 
-    margin = params.dig(:raw, :margin)
-    fields[:margin] = margin.to_f / 100.0 if margin
+    create_references(indicator, references_unsafe_hash)
 
-    indicator.update!(fields.permit(
-        :objective_id,
-        :name, :description, :method,
-        :threshold, :criterion, :margin,
-        :unit, :responsible_id, :measurement_frequency,
-        :comments, attachment_ids: []
-    ))
-
-    indicator.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
-
-    #create_references(business_asset, params[:references].to_unsafe_h) if params[:references]
-
-    redirect_to indicator_path(indicator.id)
+    redirect_to indicator
   end
 
+  def edit_attachments
+    indicator = Indicator.find(params.dig(:attachments, :element_id))
+    return unless indicator
+
+    additions = params.dig(:attachments, :additions)
+    removal_ids = params.dig(:attachments, :removal_ids)
+
+    add_attachments(indicator, additions) if additions
+    remove_attachments(indicator.class.name, indicator, removal_ids) if
+        removal_ids
+
+    redirect_to indicator
+  end
+
+  private
+
+  def indicator_fields
+    fields = params.require(:indicator)
+
+    fields[:margin] = parse_percentage(
+      fields, :margin, params.dig(:raw, :margin)
+    )
+
+    fields.permit(
+      :objective_id, :name, :description, :method,
+      :threshold, :criterion, :margin,
+      :unit, :responsible_id, :measurement_frequency,
+      :comments
+    )
+  end
 end

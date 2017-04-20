@@ -4,11 +4,10 @@ class UploadedFilesController < ApplicationController
   end
 
   def show
-    if (@file = UploadedFile.find(params[:id]))
-      render layout: 'show'
-    else
-      redirect_to '/'
-    end
+    @file = UploadedFile.find(params[:id])
+    redirect_to_dashboard unless @file
+
+    render layout: 'show'
   end
 
   def new
@@ -16,7 +15,9 @@ class UploadedFilesController < ApplicationController
   end
 
   def create
-    uploaded_file = UploadedFile.create!(params.require(:uploaded_file).permit(:upload))
+    uploaded_file = UploadedFile.create!(
+      params.require(:uploaded_file).permit(:upload)
+    )
 
     uploaded_file.add_as_attachment_to(params[:references].to_unsafe_h)
   end

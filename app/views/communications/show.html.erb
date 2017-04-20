@@ -55,22 +55,34 @@
         </div>
     <% end %>
 
-    <% if @communication.references? %>
-        <div class="panel">
-          <div class="margin-left-30 margin-bottom-30">
-            <%= render partial: 'referables/show_all_for', locals: {element: @communication} %>
-          </div>
-        </div>
-    <% end %>
+    <div class="row is-flex">
+      <div class="col-lg-5">
+        <% unless @communication.attachment_ids.empty? %>
+            <div class="panel padding-bottom-25">
+              <%= render partial: 'uploaded_files/attachments_table',
+                         locals: {element: @communication} %>
+            </div>
+        <% end %>
+      </div>
+      <div class="col-lg-1"></div>
+      <div class="col-lg-6">
+        <% if @communication.references? %>
+            <div class="panel padding-bottom-25" style="height: 100%">
+              <%= render partial: 'referables/show_all_for',
+                         locals: {element: @communication} %>
+            </div>
+        <% end %>
+      </div>
+    </div>
 
     <% if @communication.revisions? %>
-        <div class="panel">
+        <div class="panel" style="width: 50%">
           <div class="panel-heading">
             <h5>Revisiones</h5>
           </div>
           <div class="panel-body">
             <div class="row margin-left-20 margin-right-20">
-              <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+              <div class="table-responsive margin-bottom-10" style="max-height:300px; overflow: auto">
                 <table class="table">
                   <thead>
                   <tr>
@@ -100,14 +112,6 @@
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
         <i class="dropdown-inline-button-icon icmn-history"></i>
         Bitácora
-      </a>
-    </div>
-
-    <div class="dropdown">
-      <% files_table = "#{escape_javascript(render partial: 'uploaded_files/modal', locals: {attachments: @communication.attachment_ids})}" %>
-      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showAttachments('<%= files_table %>')">
-        <i class="dropdown-inline-button-icon icmn-folder-open"></i>
-        Adjuntos
       </a>
     </div>
 

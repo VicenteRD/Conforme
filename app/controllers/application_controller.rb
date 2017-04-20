@@ -53,23 +53,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  #
-  # Creates documents of the UploadedFile class given an array of documents
-  #
-  # DEPRECATED - Use add_attachments
-  def upload_files(uploads)
-    ul_ids = []
-    uploads.each do |upload|
-      next unless upload
-      uploaded = UploadedFile
-                 .where(upload_file_name: upload.original_filename)
-                 .first_or_create!(upload: upload)
-      ul_ids.append(uploaded.id.to_s)
-    end
-
-    ul_ids
-  end
-
   def remove_attachments(class_name, element, removal_ids)
     element.attachment_ids -= removal_ids
     element.save!
@@ -82,7 +65,14 @@ class ApplicationController < ActionController::Base
 
       attachment.save!
     end
+  end
 
+  def log_created(object)
+    object.log_book.new_entry(current_user_id, 'Creado', log_body)
+  end
+
+  def log_edited(object)
+    object.log_book.new_entry(current_user_id, 'Editado', log_body)
   end
 
   def parse_date(date_string, time = true)

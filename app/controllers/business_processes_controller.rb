@@ -4,74 +4,75 @@ class BusinessProcessesController < ApplicationController
   end
 
   def show
-    if (@process = BusinessProcess.find(params[:id]))
-      render layout: 'show'
-    else
-      redirect_to '/'
-    end
+    @process = BusinessProcess.find(params[:id])
+    redirect_to_dashboard unless @process
+
+    render layout: 'show'
   end
 
   def new
     render layout: 'form'
   end
 
-  def create
-    fields = params.require(:process)
+  def edit
+    @process = BusinessProcess.find(params[:id])
+    redirect_to_dashboard unless @process
 
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
-
-    process = BusinessProcess.create!(fields.permit(
-        :name,
-        :description,
-        :process_type,
-        :responsible_id,
-        :comments,
-        attachment_ids: []
-    ))
-
-    process.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
-
-    create_references(process, params[:references].to_unsafe_h) if params[:references]
-
-    respond_to do |format|
-      format.html { redirect_to business_process_path(process) }
-      format.json {
-        render json: { object_id: process.id.to_s,
-                       object_name: process.name }
-      }
-    end
+    render layout: 'form'
   end
 
-  def edit
-    if (@process = BusinessProcess.find(params[:id]))
-      render layout: 'form'
-    else
-      redirect_to '/'
+  def create
+    process = BusinessProcess.create!(business_process_fields)
+    log_created(process)
+
+    create_references(process, references_unsafe_hash)
+    add_attachments(process, params.dig(:process, :attachments))
+
+    respond_to do |format|
+      format.html { redirect_to(process) }
+      format.json { process_as_json(process) }
     end
   end
 
   def update
-    unless (process = BusinessProcess.find(params[:id]))
-      redirect_to '/' and return
-    end
+    process = BusinessProcess.find(params[:id])
+    redirect_to_dashboard && return unless process
 
-    fields = params.require(:process)
+    process.update!(business_process_fields)
+    log_edited(process)
 
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
+    create_references(process, references_unsafe_hash)
 
-    process.update!(fields.permit(
-        :process_type,
-        :name,
-        :description,
-        :responsible_id,
-        :comments,
-        attachment_ids: []
-    ))
+    redirect_to process
+  end
 
-    process.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+  def edit_attachments
+    process = BusinessProcess.find(params.dig(:attachments, :element_id))
+    return unless process
 
-    #create_references(process, params[:references].to_unsafe_h) if params[:references]
+    additions = params.dig(:attachments, :additions)
+    removal_ids = params.dig(:attachments, :removal_ids)
 
-    redirect_to business_process_path(process)
+    add_attachments(process, additions) if additions
+    remove_attachments(process.class.name, process, removal_ids) if
+        removal_ids
+
+    redirect_to process
+  end
+
+  private
+
+  def business_process_fields
+    params.require(:process).permit(
+      :process_type,
+      :name,
+      :description,
+      :responsible_id,
+      :comments
+    )
+  end
+
+  def process_as_json(process)
+    render json: { object_id: process.id, object_name: process.name }
   end
 end

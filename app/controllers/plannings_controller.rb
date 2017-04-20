@@ -1,79 +1,89 @@
 class PlanningsController < ApplicationController
-
-  include DatesHelper
-
   def index
     render layout: 'table'
   end
 
   def show
-    if (@planning = Planning.find(params[:id]))
-      render layout: 'show'
-    else
-      redirect_to '/'
-    end
+    @planning = Planning.find(params[:id])
+    redirect_to_dashboard unless @planning
+
+    render layout: 'show'
   end
 
   def new
     render layout: 'form'
   end
 
-  def create
-    fields = params.require(:planning)
+  def edit
+    @planning = Planning.find(params[:id])
+    redirect_to_dashboard unless @planning
 
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
-
-    fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
-
-    planning = Planning.create!(fields.permit(
-        :due_at,
-        :name,
-        :description,
-        :comments,
-        attachment_ids: []
-    ))
-
-    planning.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :body))
-
-    create_references(planning, params[:references].to_unsafe_h) if params[:references]
-
-    respond_to do |format|
-      format.html { redirect_to planning_path(planning) }
-      format.json { render json: { object_id: planning.id.to_s, object_name: planning.name } }
-    end
-
-
+    render layout: 'form'
   end
 
-  def edit
-    if (@planning = Planning.find(params[:id]))
-      render layout: 'form'
-    else
-      redirect_to '/'
+  def create
+    planning = Planning.create!(planning_fields)
+    log_created(planning)
+
+    create_references(planning, references_unsafe_hash)
+    add_attachments(planning, params.dig(:planning, :attachments))
+
+    respond_to do |format|
+      format.html { redirect_to(planning) }
+      format.json { planning_as_json(planning) }
     end
   end
 
   def update
-    unless (planning = Planning.find(params[:id]))
-      redirect_to '/' and return
-    end
+    planning = Planning.find(params[:id])
+    redirect_to_dashboard && return unless planning
 
+    planning.update!(planning_fields)
+    log_edited(planning)
+
+    create_references(planning, references_unsafe_hash)
+
+    redirect_to planning
+  end
+
+  def edit_attachments
+    planning = Planning.find(params.dig(:attachments, :element_id))
+    return unless planning
+
+    additions = params.dig(:attachments, :additions)
+    removal_ids = params.dig(:attachments, :removal_ids)
+
+    add_attachments(planning, additions) if additions
+    remove_attachments(planning.class.name, planning, removal_ids) if
+        removal_ids
+
+    redirect_to planning
+  end
+
+  private
+
+  def planning_fields
     fields = params.require(:planning)
 
     fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
-    if params.dig(:raw, :executed)&.to_i != 0
-      fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
-    end
-    planning.update!(fields.permit(
-        :due_at,
-        :executed_at,
-        :name,
-        :description,
-        :comments,
-        attachment_ids: []
-    ))
-    planning.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
 
-    redirect_to planning_path(planning)
+    exec = params.dig(:raw, :executed)
+    fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at)) if
+        exec && exec.to_i != 0
+
+    fields.permit(
+      :due_at,
+      :executed_at,
+      :name,
+      :description,
+      :comments
+    )
+  end
+
+  def planning_as_json(planning)
+    render json: {
+      object_id: planning.id.to_s,
+      object_name: planning.name
+    }
   end
 end

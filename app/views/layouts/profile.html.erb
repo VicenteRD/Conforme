@@ -49,6 +49,12 @@
               </div>
             </section>
         <% end %>
+        <% unless @person.attachment_ids.empty? %>
+            <div class="panel padding-bottom-25">
+              <%= render partial: 'uploaded_files/attachments_table',
+                         locals: {element: @person} %>
+            </div>
+        <% end %>
       </div>
       <div class="col-xl-8">
         <section class="panel profile-user-content">

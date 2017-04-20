@@ -29,10 +29,6 @@ class Communication
     Communication.all_types[communication_type]
   end
 
-  def log_created(user_id, body)
-    log_book.new_entry(user_id, 'Creado', body)
-  end
-
   def new_revision(user_id, fields, log_body)
     revision = revisions.create!(fields)
 
@@ -50,5 +46,13 @@ class Communication
 
   def last_revision_at(format)
     last_revised_at.strftime(format) if last_revised_at
+  end
+
+  def self.display_name
+    'Comunicaciones'
+  end
+
+  def display_name
+    name
   end
 end

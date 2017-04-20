@@ -5,8 +5,7 @@ class ProviderTypesController < ApplicationController
 
   def show
     @type = ProviderType.find(params[:id])
-
-    redirect_to '/' unless @type
+    redirect_to_dashboard unless @type
 
     render layout: 'show'
   end
@@ -15,31 +14,47 @@ class ProviderTypesController < ApplicationController
     render layout: 'form'
   end
 
-  def create
-    type = ProviderType.create!(provider_type_fields)
-
-    type.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
-
-    redirect_to provider_type_path(type)
-  end
-
   def edit
     @type = ProviderType.find(params[:id])
-
-    redirect_to '/' unless @type
+    redirect_to_dashboard unless @type
 
     render layout: 'form'
   end
 
+  def create
+    type = ProviderType.create!(provider_type_fields)
+    log_created(type)
+
+    create_references(type, references_unsafe_hash)
+    add_attachments(type, params.dig(:type, :attachments))
+
+    redirect_to type
+  end
+
   def update
     type = ProviderType.find(params[:id])
-    redirect_to '/' && return unless type
+    redirect_to_dashboard && return unless type
 
     type.update!(provider_type_fields)
+    log_edited(type)
 
-    type.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :entry))
+    create_references(type, references_unsafe_hash)
 
-    redirect_to provider_type_path(type)
+    redirect_to type
+  end
+
+  def edit_attachments
+    type = ProviderType.find(params.dig(:attachments, :element_id))
+    return unless type
+
+    additions = params.dig(:attachments, :additions)
+    removal_ids = params.dig(:attachments, :removal_ids)
+
+    add_attachments(type, additions) if additions
+    remove_attachments(type.class.name, type, removal_ids) if
+        removal_ids
+
+    redirect_to type
   end
 
   private
@@ -47,8 +62,10 @@ class ProviderTypesController < ApplicationController
   def provider_type_fields
     fields = params.require(:type)
 
-    fields.permit(:name, :description,
-                  competency_ids: [], performance_ids: [],
-                  provider_ids: [])
+    fields.permit(
+      :name, :description,
+      competency_ids: [], performance_ids: [],
+      provider_ids: []
+    )
   end
 end

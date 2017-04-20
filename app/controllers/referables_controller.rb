@@ -9,6 +9,7 @@ class ReferablesController < ApplicationController
   end
 
   private
+
   def class_as_key(class_type)
     class_type.name.underscore.pluralize.to_sym
   end

@@ -4,56 +4,66 @@ class ConcernedPartiesController < ApplicationController
   end
 
   def show
-    if (@concerned_party = ConcernedParty.find(params[:id]))
-      render layout: 'show'
-    else
-      redirect_to '/'
-    end
+    @concerned_party = ConcernedParty.find(params[:id])
+    redirect_to_dashboard unless @concerned_party
+
+    render layout: 'show'
   end
 
   def new
     render layout: 'form'
   end
 
-  def create
-    concerned_party = ConcernedParty.create!(concerned_party_fields)
+  def edit
+    @concerned_party = ConcernedParty.find(params[:id])
+    redirect_to_dashboard unless @concerned_party
 
-    concerned_party.log_created(current_user_id, log_body)
-
-    create_references(concerned_party, references_unsafe_hash)
-
-    respond_to do |format|
-      format.html { redirect_to(concerned_party_path(concerned_party)) }
-      format.json { render json: basic_json(concerned_party) }
-    end
+    render layout: 'form'
   end
 
-  def edit
-    if (@concerned_party = ConcernedParty.find(params[:id]))
-      render layout: 'form'
-    else
-      redirect_to '/'
+  def create
+    concerned_party = ConcernedParty.create!(concerned_party_fields)
+    log_created(concerned_party)
+
+    create_references(concerned_party, references_unsafe_hash)
+    add_attachments(concerned_party, params.dig(:concerned_party, :attachments))
+
+    respond_to do |format|
+      format.html { redirect_to(concerned_party) }
+      format.json { concerned_party_as_json(concerned_party) }
     end
   end
 
   def update
     concerned_party = ConcernedParty.find(params[:id])
-    redirect_to '/' && return unless concerned_party
+    redirect_to_dashboard && return unless concerned_party
 
     concerned_party.update!(concerned_party_fields)
-    concerned_party.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+    log_edited(concerned_party)
 
-    # create_references(concerned_party, params[:references].to_unsafe_h) if params[:references]
+    create_references(concerned_party, references_unsafe_hash)
 
-    redirect_to concerned_party_path(concerned_party)
+    redirect_to concerned_party
+  end
+
+  def edit_attachments
+    party = ConcernedParty.find(params.dig(:attachments, :element_id))
+    return unless party
+
+    additions = params.dig(:attachments, :additions)
+    removal_ids = params.dig(:attachments, :removal_ids)
+
+    add_attachments(party, additions) if additions
+    remove_attachments(party.class.name, party, removal_ids) if
+        removal_ids
+
+    redirect_to party
   end
 
   private
 
   def concerned_party_fields
     fields = params.require(:concerned_party)
-
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
 
     fields.permit(
       :party_type,
@@ -62,12 +72,14 @@ class ConcernedPartiesController < ApplicationController
       :expectation,
       :responsible_id,
       :due_at,
-      :comments,
-      attachment_ids: []
+      :comments
     )
   end
 
-  def basic_json(concerned_party)
-    { object_id: concerned_party.id.to_s, object_name: concerned_party.name }
+  def concerned_party_as_json(concerned_party)
+    render json: {
+      object_id: concerned_party.id.to_s,
+      object_name: concerned_party.name
+    }
   end
 end

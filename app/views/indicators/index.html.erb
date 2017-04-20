@@ -19,8 +19,9 @@
 <% end %>
 
 <% content_for :table_body do %>
-    <% if @indicators.size != 0 %>
-        <% @indicators.each do |indicator| %>
+    <% indicators = Indicator.all %>
+    <% if indicators.size != 0 %>
+        <% indicators.each do |indicator| %>
             <% measurement = indicator.measurements.order_by(measured_at: :desc, created_at: :desc).first %>
 
             <% threshold = "#{measurement&.threshold || indicator.threshold}

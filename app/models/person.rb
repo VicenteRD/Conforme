@@ -22,6 +22,13 @@ class Person
   validates_attachment_content_type :avatar, content_type: %w(image/jpg image/jpeg image/png image/gif)
   validates_attachment_content_type :background_image, content_type: %w(image/jpg image/jpeg image/png image/gif)
 
+  embeds_one :log_book, class_name: 'Log::Book'
+  before_create do
+    self.log_book ||= Log::Book.new
+  end
+
+  field :att_ids, as: :attachment_ids, type: Array, default: [] # BSON::ObjectId => UploadedFile
+
   ## Other fields
   field :rut, type: String
 
@@ -37,7 +44,7 @@ class Person
 
   field :address, type: String
 
-  field :role, :type => String
+  field :role, type: String
 
   def first_last_name
     name + ' ' + l_name1
@@ -53,6 +60,10 @@ class Person
 
   def display_name
     full_name
+  end
+
+  def add_attachments(*attachment_ids)
+    self.attachment_ids.append(attachment_ids).flatten!
   end
 
   def valid_rut?

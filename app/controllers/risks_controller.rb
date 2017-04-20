@@ -19,63 +19,68 @@ class RisksController < ApplicationController
 
   def show
     @settings = Settings::RiskSettings.first
+    @risk = Risk.find(params[:id])
+    type = minimize_type (@risk._type)
 
-    if (@risk = Risk.find(params[:id])) && (type = minimize_type (@risk._type))
-      render "risks/show/#{type}", layout: 'show'
-    else
-      redirect_to '/'
-    end
+    redirect_to_dashboard unless @risk && type
+
+    render "risks/show/#{type}", layout: 'show'
   end
 
   def new
     @settings = Settings::RiskSettings.first
+    type = Risk.risk_types[params[:type].to_sym]
 
-    if (type = Risk.risk_types[params[:type].to_sym])
+    if type
       render "risks/new/#{type[:en]}", layout: 'form'
-    elsif (rule = Rule.find(params[:type]))
+    else
+      rule = Rule.find(params[:type])
+      redirect_to_dashboard && return unless rule
+
       @rule = rule
       render 'risks/new/rule', layout: 'form'
-    else
-      redirect_to '/'
     end
+  end
+
+  def edit
+    @settings = Settings::RiskSettings.first
+    @risk = Risk.find(params[:id])
+    type = minimize_type @risk._type
+
+    redirect_to_dashboard unless @risk && type
+
+    render "risks/edit/#{type}", layout: 'form'
   end
 
   def create
     fields = params.require(:risk)
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
 
     type = params[:type]
-    if (klass = Risk.risk_types.dig(type.to_sym, :klass))
+    klass = Risk.risk_types.dig(type.to_sym, :klass)
+
+    if klass
       if type == 'ley'
         fields[:rule_type] = 1
       elsif type == 'norma'
         fields[:rule_type] = 2
       end
 
-      redirect_to risk_path(params[:type], create_risk(klass, fields))
-    elsif (fields[:rule_type] = Rule.find(type)&.rule_type)
+      redirect_to create_risk(klass, fields)
+    else
+      rule = Rule.find(type)
+      redirect_to_dashboard unless rule
+
+      fields[:rule_type] = rule.rule_type if rule
+
       redirect_to risk_path(params[:type], create_risk(Risk::RuleRisk, fields))
-    else
-      redirect_to '/'
-    end
-  end
-
-  def edit
-    @settings = Settings::RiskSettings.first
-
-    if (@risk = Risk.find(params[:id])) && (type = minimize_type @risk._type)
-      render "risks/edit/#{type}", layout: 'form'
-    else
-      redirect_to '/'
     end
   end
 
   def update
-    fields = params.require(:risk)
+    risk = Risk.find(params[:id])
+    redirect_to '/' && return unless risk
 
-    unless (risk = Risk.find(params[:id]))
-      redirect_to '/' and return
-    end
+    fields = params.require(:risk)
 
     risk.update!(fields.permit(risk.class.permitted_fields, attachment_ids: []))
 
@@ -88,12 +93,13 @@ class RisksController < ApplicationController
 
   def edit_attachments
     risk = Risk.find(params.dig(:attachments, :element_id))
+    return unless risk
 
+    additions = params.dig(:attachments, :additions)
     removal_ids = params.dig(:attachments, :removal_ids)
 
-    remove_attachments(risk.class.name, risk, removal_ids) if risk && removal_ids
-    add_attachments(risk, params.dig(:attachments, :additions)) if
-        params.dig(:attachments, :additions)
+    remove_attachments(risk.class.name, risk, removal_ids) if removal_ids
+    add_attachments(risk, additions) if additions
 
     redirect_to risk
   end

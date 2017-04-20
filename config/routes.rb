@@ -50,20 +50,20 @@ Rails.application.routes.draw do
 
   # -------- Clients
 
-  # Clients Files,tipo,sat
+  # Clients Files
   get '/clientes/fichas'            => 'clients#index', as: :clients
-  get '/clientes/fichas/nuevo'      => 'clients#new'  , as: :new_client
-  get '/clientes/fichas/:id'        => 'clients#show' , as: :client
-  get '/clientes/fichas/:id/editar' => 'clients#edit' , as: :edit_client
+  get '/clientes/fichas/nuevo'      => 'clients#new',   as: :new_client
+  get '/clientes/fichas/:id'        => 'clients#show',  as: :client
+  get '/clientes/fichas/:id/editar' => 'clients#edit',  as: :edit_client
 
   post  '/clientes/fichas/nuevo'      => 'clients#create'
   patch '/clientes/fichas/:id/editar' => 'clients#update'
 
   # Client Types
   get '/clientes/tipos'            => 'client_types#index', as: :client_types
-  get '/clientes/tipos/nuevo'      => 'client_types#new'  , as: :new_client_type
-  get '/clientes/tipos/:id'        => 'client_types#show' , as: :client_type
-  get '/clientes/tipos/:id/editar' => 'client_types#edit' , as: :edit_client_type
+  get '/clientes/tipos/nuevo'      => 'client_types#new',   as: :new_client_type
+  get '/clientes/tipos/:id'        => 'client_types#show',  as: :client_type
+  get '/clientes/tipos/:id/editar' => 'client_types#edit',  as: :edit_client_type
 
   post  '/clientes/tipos/nuevo'      => 'client_types#create'
   patch '/clientes/tipos/:id/editar' => 'client_types#update'
@@ -101,9 +101,9 @@ Rails.application.routes.draw do
   # -------- Analysis: Indicators
 
   get '/analisis/indicadores'            => 'indicators#index', as: :indicators
-  get '/analisis/indicadores/nuevo'      => 'indicators#new'  , as: :new_indicator
-  get '/analisis/indicadores/:id'        => 'indicators#show' , as: :indicator
-  get '/analisis/indicadores/:id/editar' => 'indicators#edit' , as: :edit_indicator
+  get '/analisis/indicadores/nuevo'      => 'indicators#new',   as: :new_indicator
+  get '/analisis/indicadores/:id'        => 'indicators#show',  as: :indicator
+  get '/analisis/indicadores/:id/editar' => 'indicators#edit',  as: :edit_indicator
 
   get '/analisis/indicadores/:indicator_id/nueva'      => 'indicator_measurements#new' ,
       as: :new_indicator_measurement
@@ -123,10 +123,11 @@ Rails.application.routes.draw do
   get '/activos/:job_type/:id'        => 'business_assets#show',  as: :business_asset
   get '/activos/:job_type/:id/editar' => 'business_assets#edit',  as: :edit_business_asset
 
-  get '/activos/:job_type/:asset_id/nuevo'       => 'business_asset_jobs#new' , as: :new_asset_job
+  get '/activos/:job_type/:asset_id/nuevo'       => 'business_asset_jobs#new',  as: :new_asset_job
   get '/activos/:job_type/:asset_id/:id/editar'  => 'business_asset_jobs#edit', as: :edit_asset_job
 
-  post  '/activos/nuevo-tipo' => 'business_assets#create_type', as: :new_business_asset_type
+  post '/activos/nuevo-tipo' => 'business_assets#create_type',
+       as: :new_business_asset_type
 
   post  '/activos/:job_type/nuevo'                 => 'business_assets#create'
   patch '/activos/:job_type/:id/editar'            => 'business_assets#update'
@@ -141,7 +142,7 @@ Rails.application.routes.draw do
   get '/planificacion/:id'        => 'plannings#show' , as: :planning
   get '/planificacion/:id/editar' => 'plannings#edit' , as: :edit_planning
 
-  get '/planificacion/:plan_id/nueva'      => 'planning_activities#new' , as: :new_planning_activity
+  get '/planificacion/:plan_id/nueva'      => 'planning_activities#new',  as: :new_planning_activity
   get '/planificacion/:plan_id/:id/editar' => 'planning_activities#edit', as: :edit_planning_activity
 
   post  '/planificacion/nueva'               => 'plannings#create'
@@ -303,10 +304,6 @@ Rails.application.routes.draw do
           'provider_evaluations#load_qualifications'
   get '/employees/evaluations/:person_id/:group_id/:qualification_type' =>
           'employee_evaluations#load_qualifications'
-
-  # DEPRECATED
-  post '/performance/new'  => 'performances#create', as: :new_performance
-  post '/competencies/new' => 'competencies#create', as: :new_competency
 
   post '/qualifications/new' => 'qualifications#create', as: :new_qualification
 end

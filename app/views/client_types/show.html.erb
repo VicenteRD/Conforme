@@ -46,39 +46,39 @@
       <% end %>
     </div>
 
-
-      <% if @type.comments? %>
-          <div class="panel">
-            <div class="panel-heading">
-              <h5>Descripción</h5>
-            </div>
-            <div class="margin-left-30 margin-bottom-30">
-              <%= raw @type.comments %>
-            </div>
+    <% if @type.comments? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Descripción</h5>
           </div>
-      <% end %>
-      <div class="row is-flex">
-        <div class="col-lg-5">
-          <% if @type.attachment_ids? %>
-              <div class="panel">
-                <div class="panel-heading">
-                  <h5>Adjuntos</h5>
-                </div>
-                <%= render partial: 'uploaded_files/attachments_table',
-                           locals: {element: @type} %>
-              </div>
-          <% end %>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= raw @type.comments %>
+          </div>
         </div>
-        <div class="col-lg-1"></div>
-        <div class="col-lg-6">
-          <% if @type.references? %>
-              <div class="panel padding-bottom-25" style="height: 100%">
-                <%= render partial: 'referables/show_all_for',
-                           locals: {element: @type} %>
+    <% end %>
+
+    <div class="row is-flex">
+      <div class="col-lg-5">
+        <% if @type.attachment_ids? %>
+            <div class="panel">
+              <div class="panel-heading">
+                <h5>Adjuntos</h5>
               </div>
-          <% end %>
-        </div>
+              <%= render partial: 'uploaded_files/attachments_table',
+                         locals: {element: @type} %>
+            </div>
+        <% end %>
       </div>
+      <div class="col-lg-1"></div>
+      <div class="col-lg-6">
+        <% if @type.references? %>
+            <div class="panel padding-bottom-25" style="height: 100%">
+              <%= render partial: 'referables/show_all_for',
+                         locals: {element: @type} %>
+            </div>
+        <% end %>
+      </div>
+    </div>
 <% end %>
 
 <%= content_for :menu do %>

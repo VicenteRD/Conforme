@@ -1,5 +1,4 @@
 class PositionsController < ApplicationController
-
   def index; end
 
   def show
@@ -12,34 +11,50 @@ class PositionsController < ApplicationController
     render layout: 'form'
   end
 
-  def create
-    position = Position.create!(position_fields)
-
-    parent_position = Position.find(params[:parent_id])
-    parent_position.add_child(position.id) if parent_position
-
-    position.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
-
-    redirect_to position_path(position)
-  end
-
   def edit
     @position = Position.find(params[:id])
-
-    redirect_to '/' unless @position
+    redirect_to_dashboard unless @position
 
     render layout: 'form'
   end
 
+  def create
+    position = Position.create!(position_fields)
+    log_created(position)
+
+    parent_position = Position.find(params[:parent_id])
+    parent_position.add_child(position.id) if parent_position
+
+    create_references(position, references_unsafe_hash)
+    add_attachments(position, params.dig(:position, :attachments))
+
+    redirect_to position
+  end
+
   def update
     position = Position.find(params[:id])
-    redirect_to '/' && return unless position
+    redirect_to_dashboard && return unless position
 
     position.update!(position_fields)
+    log_edited(position)
 
-    position.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :entry))
+    create_references(position, references_unsafe_hash)
 
-    redirect_to position_path(position)
+    redirect_to position
+  end
+
+  def edit_attachments
+    position = Position.find(params.dig(:attachments, :element_id))
+    return unless position
+
+    additions = params.dig(:attachments, :additions)
+    removal_ids = params.dig(:attachments, :removal_ids)
+
+    add_attachments(position, additions) if additions
+    remove_attachments(position.class.name, position, removal_ids) if
+        removal_ids
+
+    redirect_to position
   end
 
   private

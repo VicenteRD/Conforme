@@ -43,7 +43,7 @@ class BusinessProcess
   def last_revision_at(format)
     last_revised_at.strftime(format) if last_revised_at
   end
-
+  
   def self.display_name
     'Procesos'
   end

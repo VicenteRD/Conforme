@@ -15,18 +15,6 @@ class ObjectivesController < ApplicationController
     render layout: 'form'
   end
 
-  def create
-    objective = Objective.create!(objective_fields)
-    objective.log_created(current_user_id, log_body)
-
-    create_references(objective, references_unsafe_hash)
-
-    respond_to do |format|
-      format.html { redirect_to objective_path(objective) }
-      format.json { render json: basic_objective_json(objective) }
-    end
-  end
-
   def edit
     @objective = Objective.find(params[:id])
     redirect_to_dashboard unless @objective
@@ -34,36 +22,62 @@ class ObjectivesController < ApplicationController
     render layout: 'form'
   end
 
+  def create
+    objective = Objective.create!(objective_fields)
+    log_created(objective)
+
+    create_references(objective, references_unsafe_hash)
+    add_attachments(objective, params.dig(:objective, :attachments))
+
+    respond_to do |format|
+      format.html { redirect_to(objective) }
+      format.json { objective_as_json(objective) }
+    end
+  end
+
   def update
     objective = Objective.find(params[:id])
     redirect_to_dashboard && return unless objective
 
     objective.update!(objective_fields)
+    log_edited(objective)
 
-    objective.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+    create_references(objective, references_unsafe_hash)
 
-    # create_references(objective, references_unsafe_hash)
+    redirect_to objective
+  end
 
-    redirect_to objective_path(objective)
+  def edit_attachments
+    objective = Objective.find(params.dig(:attachments, :element_id))
+    return unless objective
+
+    additions = params.dig(:attachments, :additions)
+    removal_ids = params.dig(:attachments, :removal_ids)
+
+    add_attachments(objective, additions) if additions
+    remove_attachments(objective.class.name, objective, removal_ids) if
+        removal_ids
+
+    redirect_to objective
   end
 
   private
 
-  def basic_objective_json(objective)
-    { object_id: objective.id.to_s, object_name: objective.name }
+  def objective_as_json(objective)
+    render json: {
+      object_id: objective.id.to_s,
+      object_name: objective.name
+    }
   end
 
   def objective_fields
     fields = params.require(:objective)
 
-    fields[:attachment_ids] = upload_files(fields[:attachments]) if fields[:attachments]
-
     fields.permit(
       :name,
       :phrase,
       :responsible_id,
-      :comments,
-      attachment_ids: []
+      :comments
     )
   end
 end

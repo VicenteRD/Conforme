@@ -100,10 +100,7 @@
     <div class="row is-flex">
       <div class="col-lg-5">
         <% unless @risk.attachment_ids.empty? %>
-            <div class="panel">
-              <div class="panel-heading">
-                <h5>Adjuntos</h5>
-              </div>
+            <div class="panel padding-bottom-25">
               <%= render partial: 'uploaded_files/attachments_table',
                          locals: {element: @risk} %>
             </div>
@@ -127,7 +124,7 @@
           </div>
           <div class="panel-body">
             <div class="row margin-left-20 margin-right-20">
-              <div class="table-responsive margin-bottom-10" style="height:300px; overflow: auto">
+              <div class="table-responsive margin-bottom-10" style="max-height: 300px; overflow: auto">
                 <table class="table">
                   <thead>
                   <tr>

@@ -14,18 +14,6 @@ class PesteController < ApplicationController
     render layout: 'form'
   end
 
-  def create
-    peste = Peste.create!(peste_fields)
-    peste.log_created(current_user_id, log_body)
-
-    create_references(peste, references_unsafe_hash)
-
-    respond_to do |format|
-      format.html { redirect_to(peste_path(peste)) }
-      format.json { render json: basic_peste_json(peste) }
-    end
-  end
-
   def edit
     @peste = Peste.find(params[:id])
     redirect_to_dashboard && return unless @peste
@@ -33,16 +21,43 @@ class PesteController < ApplicationController
     render layout: 'form'
   end
 
+  def create
+    peste = Peste.create!(peste_fields)
+    log_created(peste)
+
+    create_references(peste, references_unsafe_hash)
+    add_attachments(peste, params.dig(:peste, :attachments))
+
+    respond_to do |format|
+      format.html { redirect_to(peste) }
+      format.json { render json: peste_as_json(peste) }
+    end
+  end
+
   def update
     peste = Peste.find(params[:id])
     redirect_to_dashboard && return unless peste
 
     peste.update!(peste_fields)
-    peste.log_book.new_entry(current_user_id, 'Editado', log_body)
+    log_edited(peste)
 
-    # create_references(swot, references_unsafe_hash)
+    create_references(peste, references_unsafe_hash)
 
-    redirect_to(peste_path(peste))
+    redirect_to peste
+  end
+
+  def edit_attachments
+    peste = Peste.find(params.dig(:attachments, :element_id))
+    return unless peste
+
+    additions = params.dig(:attachments, :additions)
+    removal_ids = params.dig(:attachments, :removal_ids)
+
+    add_attachments(peste, additions) if additions
+    remove_attachments(peste.class.name, peste, removal_ids) if
+        removal_ids
+
+    redirect_to peste
   end
 
   private
@@ -50,18 +65,18 @@ class PesteController < ApplicationController
   def peste_fields
     fields = params.require(:peste)
 
-    attachments = fields[:attachments]
-    fields[:attachment_ids] = upload_files(attachments) if attachments
-
     fields.permit(
-        :peste_type, :name,
-        :strategy, :due_at,
-        :responsible_id,
-        :comments, attachment_ids: []
+      :peste_type, :name,
+      :strategy, :due_at,
+      :responsible_id,
+      :comments
     )
   end
 
-  def basic_peste_json(peste)
-    { object_id: peste.id.to_s, object_name: peste.name }
+  def peste_as_json(peste)
+    render json: {
+      object_id: peste.id.to_s,
+      object_name: peste.name
+    }
   end
 end
