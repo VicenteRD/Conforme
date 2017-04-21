@@ -31,6 +31,8 @@ class Objective
       self.last_revised_at = revision.revised_at
       save!
     end
+
+    revision
   end
 
   def find_revision(id)

@@ -28,8 +28,10 @@ Rails.application.routes.draw do
   get '/personas/fichas/:id'        => 'users#show',  as: :user
   get '/personas/fichas/:id/editar' => 'users#edit',  as: :edit_user
 
-  post  '/personas/fichas/nuevo'      => 'users#create'
-  patch '/personas/fichas/:id/editar' => 'users#update'
+  post  '/personas/fichas/nuevo'            => 'users#create'
+  patch '/personas/fichas/:id/editar'       => 'users#update'
+  patch '/personas/fichas/edit-attachments' => 'users#edit_attachments'
+
 
   # Organization Chart
   get '/personas/organigrama'                  => 'positions#index', as: :positions
@@ -37,8 +39,9 @@ Rails.application.routes.draw do
   get '/personas/organigrama/:id'              => 'positions#show',  as: :position
   get '/personas/organigrama/:id/editar'       => 'positions#edit',  as: :edit_position
 
-  post  '/personas/organigrama/:parent_id/nueva' => 'positions#create'
-  patch '/personas/organigrama/:id/editar'       => 'positions#update'
+  post  '/personas/organigrama/:parent_id/nueva'  => 'positions#create'
+  patch '/personas/organigrama/:id/editar'        => 'positions#update'
+  patch '/personas/:organigrama/edit-attachments' => 'positions#edit_attachments'
 
   # Competencies & Performance evaluations, Climate
   get '/personas/evaluaciones/clima'       => 'users#work_environment' # ??
@@ -56,8 +59,10 @@ Rails.application.routes.draw do
   get '/clientes/fichas/:id'        => 'clients#show',  as: :client
   get '/clientes/fichas/:id/editar' => 'clients#edit',  as: :edit_client
 
-  post  '/clientes/fichas/nuevo'      => 'clients#create'
-  patch '/clientes/fichas/:id/editar' => 'clients#update'
+  post  '/clientes/fichas/nuevo'            => 'clients#create'
+  patch '/clientes/fichas/:id/editar'       => 'clients#update'
+  patch '/clientes/fichas/edit-attachments' => 'clients#edit_attachments'
+
 
   # Client Types
   get '/clientes/tipos'            => 'client_types#index', as: :client_types
@@ -65,8 +70,10 @@ Rails.application.routes.draw do
   get '/clientes/tipos/:id'        => 'client_types#show',  as: :client_type
   get '/clientes/tipos/:id/editar' => 'client_types#edit',  as: :edit_client_type
 
-  post  '/clientes/tipos/nuevo'      => 'client_types#create'
-  patch '/clientes/tipos/:id/editar' => 'client_types#update'
+  post  '/clientes/tipos/nuevo'            => 'client_types#create'
+  patch '/clientes/tipos/:id/editar'       => 'client_types#update'
+  patch '/clientes/tipos/edit-attachments' => 'client_types#edit_attachments'
+
 
   # Client Satisfaction (??)
   get '/clientes/satisfaccion' => 'clients#satisfaction' # ??
@@ -79,8 +86,10 @@ Rails.application.routes.draw do
   get '/proveedores/fichas/:id'        => 'providers#show',  as: :provider
   get '/proveedores/fichas/:id/editar' => 'providers#edit',  as: :edit_provider
 
-  post  '/proveedores/fichas/nuevo'      => 'providers#create'
-  patch '/proveedores/fichas/:id/editar' => 'providers#update'
+  post  '/proveedores/fichas/nuevo'            => 'providers#create'
+  patch '/proveedores/fichas/:id/editar'       => 'providers#update'
+  patch '/proveedores/fichas/edit-attachments' => 'providers#edit_attachments'
+
 
   # Provider Types
   get '/proveedores/tipos'            => 'provider_types#index', as: :provider_types
@@ -88,8 +97,10 @@ Rails.application.routes.draw do
   get '/proveedores/tipos/:id'        => 'provider_types#show',  as: :provider_type
   get '/proveedores/tipos/:id/editar' => 'provider_types#edit',  as: :edit_provider_type
 
-  post  '/proveedores/tipos/nuevo'      => 'provider_types#create'
-  patch '/proveedores/tipos/:id/editar' => 'provider_types#update'
+  post  '/proveedores/tipos/nuevo'            => 'provider_types#create'
+  patch '/proveedores/tipos/:id/editar'       => 'provider_types#update'
+  patch '/proveedores/tipos/edit-attachments' => 'provider_types#edit_attachments'
+
 
   # Competencies & Performance evaluations
   get '/proveedores/evaluaciones/:type'       => 'provider_evaluations#index', as: :provider_evaluations
@@ -110,8 +121,9 @@ Rails.application.routes.draw do
   get '/analisis/indicadores/:indicator_id/:id/editar' => 'indicator_measurements#edit',
       as: :edit_indicator_measurement
 
-  post  '/analisis/indicadores/nuevo'      => 'indicators#create'
-  patch '/analisis/indicadores/:id/editar' => 'indicators#update'
+  post  '/analisis/indicadores/nuevo'            => 'indicators#create'
+  patch '/analisis/indicadores/:id/editar'       => 'indicators#update'
+  patch '/analisis/indicadores/edit-attachments' => 'indicators#edit_attachments'
 
   post  '/analisis/indicadores/:indicator_id/nueva'      => 'indicator_measurements#create'
   patch '/analisis/indicadores/:indicator_id/:id/editar' => 'indicator_measurements#update'
@@ -129,8 +141,10 @@ Rails.application.routes.draw do
   post '/activos/nuevo-tipo' => 'business_assets#create_type',
        as: :new_business_asset_type
 
-  post  '/activos/:job_type/nuevo'                 => 'business_assets#create'
-  patch '/activos/:job_type/:id/editar'            => 'business_assets#update'
+  post  '/activos/:job_type/nuevo'            => 'business_assets#create'
+  patch '/activos/:job_type/:id/editar'       => 'business_assets#update'
+  patch '/activos/:job_type/edit-attachments' =>  'business_assets#edit_attachments'
+
 
   post  '/activos/:job_type/:asset_id/nuevo'       => 'business_asset_jobs#create'
   patch '/activos/:job_type/:asset_id/:id/editar'  => 'business_asset_jobs#update'
@@ -145,8 +159,10 @@ Rails.application.routes.draw do
   get '/planificacion/:plan_id/nueva'      => 'planning_activities#new',  as: :new_planning_activity
   get '/planificacion/:plan_id/:id/editar' => 'planning_activities#edit', as: :edit_planning_activity
 
-  post  '/planificacion/nueva'               => 'plannings#create'
-  patch '/planificacion/:id/editar'          => 'plannings#update'
+  post  '/planificacion/nueva'            => 'plannings#create'
+  patch '/planificacion/:id/editar'       => 'plannings#update'
+  patch '/planificacion/edit-attachments' => 'plannings#edit_attachments'
+
 
   post  '/planificacion/:plan_id/nueva'      => 'planning_activities#create'
   patch '/planificacion/:plan_id/:id/editar' => 'planning_activities#update'
@@ -171,6 +187,7 @@ Rails.application.routes.draw do
 
   post  '/estrategias/FODA/nuevo'      => 'swot#create'
   patch '/estrategias/FODA/:id/editar' => 'swot#update'
+  patch '/estrategias/FODA/edit-attachments' => 'swot#edit_attachments'
 
   get '/estrategias/FODA/:swot_id/revisiones/nueva' => 'swot_revisions#new',
       as: :new_swot_revision
@@ -187,8 +204,9 @@ Rails.application.routes.draw do
   get '/estrategias/PESTA/:id'        => 'peste#show',  as: :peste
   get '/estrategias/PESTA/:id/editar' => 'peste#edit',  as: :edit_peste
 
-  post  '/estrategias/PESTA/nuevo'      => 'peste#create'
-  patch '/estrategias/PESTA/:id/editar' => 'peste#update'
+  post  '/estrategias/PESTA/nuevo'            => 'peste#create'
+  patch '/estrategias/PESTA/:id/editar'       => 'peste#update'
+  patch '/estrategias/PESTA/edit-attachments' => 'peste#edit_attachments'
 
   get '/estrategias/PESTA/:peste_id/revisiones/nueva' => 'peste_revisions#new',
       as: :new_peste_revision
@@ -205,8 +223,9 @@ Rails.application.routes.draw do
   get '/estrategias/partes-interesadas/:id'        => 'concerned_parties#show',  as: :concerned_party
   get '/estrategias/partes-interesadas/:id/editar' => 'concerned_parties#edit',  as: :edit_concerned_party
 
-  post  '/estrategias/partes-interesadas/nuevo'      => 'concerned_parties#create'
-  patch '/estrategias/partes-interesadas/:id/editar' => 'concerned_parties#update'
+  post  '/estrategias/partes-interesadas/nuevo'            => 'concerned_parties#create'
+  patch '/estrategias/partes-interesadas/:id/editar'       => 'concerned_parties#update'
+  patch '/estrategias/partes-interesadas/edit-attachments' => 'concerned_parties#edit_attachments'
 
   get '/estrategias/partes-interesadas/:party_id/revisiones/nueva' => 'concerned_party_revisions#new',
       as: :new_concerned_party_revision
@@ -223,8 +242,10 @@ Rails.application.routes.draw do
   get '/estrategias/objetivos/:id'        => 'objectives#show',  as: :objective
   get '/estrategias/objetivos/:id/editar' => 'objectives#edit',  as: :edit_objective
 
-  post  '/estrategias/objetivos/nuevo'      => 'objectives#create'
-  patch '/estrategias/objetivos/:id/editar' => 'objectives#update'
+  post  '/estrategias/objetivos/nuevo'             => 'objectives#create'
+  patch '/estrategias/objetivos/:id/editar'        => 'objectives#update'
+  patch '/estrategias/objetivos/edit-attachments' => 'objectives#edit_attachments'
+
 
   get '/estrategias/objetivos/:objective_id/revisiones/nueva' => 'objective_revisions#new',
       as: :new_objective_revision
@@ -241,8 +262,9 @@ Rails.application.routes.draw do
   get '/estrategias/procesos/:id'        => 'business_processes#show',  as: :business_process
   get '/estrategias/procesos/:id/editar' => 'business_processes#edit',  as: :edit_business_process
 
-  post  '/estrategias/procesos/nuevo'      => 'business_processes#create'
-  patch '/estrategias/procesos/:id/editar' => 'business_processes#update'
+  post  '/estrategias/procesos/nuevo'            => 'business_processes#create'
+  patch '/estrategias/procesos/:id/editar'       => 'business_processes#update'
+  patch '/estrategias/procesos/edit-attachments' => 'business_processes#edit_attachments'
 
   get '/estrategias/procesos/:process_id/revisiones/nueva' => 'business_process_revisions#new',
       as: :new_business_process_revision
@@ -259,8 +281,10 @@ Rails.application.routes.draw do
   get '/estrategias/comunicacion/:id'        => 'communications#show',   as: :communication
   get '/estrategias/comunicacion/:id/editar' => 'communications#edit',   as: :edit_communication
 
-  post  '/estrategias/comunicacion/nuevo'      => 'communications#create'
-  patch '/estrategias/comunicacion/:id/editar' => 'communications#update'
+  post  '/estrategias/comunicacion/nuevo'            => 'communications#create'
+  patch '/estrategias/comunicacion/:id/editar'       => 'communications#update'
+  patch '/estrategias/comunicacion/edit-attachments' => 'communications#edit_attachments'
+
 
   get '/estrategias/comunicacion/:communication_id/revisiones/nueva' => 'communication_revisions#new',
       as: :new_communication_revision

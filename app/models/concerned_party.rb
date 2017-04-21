@@ -42,6 +42,8 @@ class ConcernedParty
       self.last_revised_at = revision.revised_at
       save!
     end
+
+    revision
   end
 
   def last_revision_at(format)
