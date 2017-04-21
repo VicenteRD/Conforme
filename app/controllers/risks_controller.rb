@@ -82,13 +82,13 @@ class RisksController < ApplicationController
 
     fields = params.require(:risk)
 
-    risk.update!(fields.permit(risk.class.permitted_fields, attachment_ids: []))
+    risk.update!(fields.permit(risk.class.permitted_fields))
+    log_edited(risk)
 
-    create_references(risk, params[:references].to_unsafe_h) if params[:references]
+    create_references(risk, references_unsafe_hash)
+    add_attachments(risk, additions) if additions
 
-    risk.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
-
-    redirect_to risk_path(params[:type], risk.id)
+    redirect_to risk
   end
 
   def edit_attachments

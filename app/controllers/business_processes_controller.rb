@@ -73,6 +73,6 @@ class BusinessProcessesController < ApplicationController
   end
 
   def process_as_json(process)
-    render json: { object_id: process.id, object_name: process.name }
+    render json: { object_id: process.id.to_s, object_name: process.name }
   end
 end

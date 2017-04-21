@@ -85,7 +85,7 @@ class BusinessAssetsController < ApplicationController
     respond_to do |format|
       format.json do
         render json: {
-          object_id: asset_type.id, object_name: asset_type.name
+          object_id: asset_type.id.to_s, object_name: asset_type.name
         }
       end
     end

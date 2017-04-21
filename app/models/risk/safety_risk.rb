@@ -35,6 +35,8 @@ class Risk::SafetyRisk < Risk
     measurement = measurements.create!(values)
 
     super(measurement.significant)
+
+    measurement
   end
 
   def display_name

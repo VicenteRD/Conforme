@@ -26,9 +26,11 @@ class Risk::RuleRisk < Risk
   end
 
   def new_measurement(values)
-    measurements.create!(values)
+    measurement = measurements.create!(values)
 
     calculate_compliance
+
+    measurement
   end
 
 
