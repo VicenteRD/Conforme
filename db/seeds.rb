@@ -164,7 +164,7 @@ Settings::RiskSettings.create(
     environmental_threshold: 0.5,
     environmental_options: {
         name: ['Altera la condición del aire', 'Altera la condición del suelo'],
-        occ_time: {-1 => 'Pasado', 0 => 'Presente', 1 => 'Futuro'},
+        occ_time: {0 => 'Presente', -1 => 'Pasado', 1 => 'Futuro'},
         op_situation: {1 => 'Normal', 2 => 'Anormal', 3 => 'Emergencia'},
         geo_amplitude: {1 => 'Local', 2 => 'Puntual', 3 => 'Externa'},
         pub_perception: {1 => 'Baja', 2 => 'Media', 3 => 'Alta'},

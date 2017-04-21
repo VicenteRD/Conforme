@@ -86,7 +86,7 @@ class RisksController < ApplicationController
     log_edited(risk)
 
     create_references(risk, references_unsafe_hash)
-    add_attachments(risk, additions) if additions
+    add_attachments(risk, fields[:attachments]) if fields[:attachments]
 
     redirect_to risk
   end

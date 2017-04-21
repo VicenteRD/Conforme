@@ -79,11 +79,11 @@
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
-                Signo
+                Impacto
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20">
-              <%= f.collection_select :positive, {true => 'Positivo', false => 'Negativo'},
+              <%= f.collection_select :positive, {false => 'Negativo', true => 'Positivo'},
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
 
@@ -110,11 +110,11 @@
           <div class="row form-group margin-left-50">
             <div class="col-lg-1">
               <label class="form-control-label">
-                Directo
+                Causante
               </label>
             </div>
             <div class="col-lg-2 input-group margin-right-20" id="responsible-in">
-              <%= f.collection_select :direct, boolean_hash,
+              <%= f.collection_select :direct, {true => 'Directo', false => 'Indirecto'},
                                       :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
 

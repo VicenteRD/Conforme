@@ -73,6 +73,14 @@
           Nuevo
       <% end %>
     </div>
+
+    <div class="dropdown">
+      <%# edit_rule_path('operacional', @risk.id) %>
+      <%= link_to '#', method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
+    </div>
 <% end %>
 
 <% content_for :breadcrumbs do %>
