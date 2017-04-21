@@ -31,7 +31,10 @@
             <%= f.text_area :comments, class: 'form-control', style: 'width:100%;height:300px', data: {provider: 'summernote'} %>
           </div>
 
-          <div id="references-container"></div>
+          <div style="margin: 0 30px 10px 30px">
+            <%= render partial: 'referables/show_all_for',
+                       locals: {element: @revision, form_format: true} %>
+          </div>
 
         </div>
 
