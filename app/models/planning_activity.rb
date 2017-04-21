@@ -20,4 +20,16 @@ class PlanningActivity
   field :desc, as: :description, type: String
 
   field :cmts, as: :comments, type: String
+
+  def self.display_name
+    'Actividades de Planificación'
+  end
+
+  def display_name
+    "Actividad de \"#{planning.display_name}\""
+  end
+
+  def self.base_info
+    { klass: Planning, embeds_list: 'activities' }
+  end
 end

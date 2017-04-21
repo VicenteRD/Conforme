@@ -23,4 +23,16 @@ class BusinessAssetJob
   field :rst, as: :result, type: String
 
   field :cmts, as: :comments, type: String
+
+  def self.display_name
+    'Trabajos de Activos'
+  end
+
+  def display_name
+    "#{job_type == 1 ? 'Mantención' : 'Calibración'} para \"#{business_asset.display_name}\""
+  end
+
+  def self.base_info
+    { klass: BusinessAsset, embeds_list: 'jobs' }
+  end
 end

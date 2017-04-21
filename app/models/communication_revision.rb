@@ -12,4 +12,16 @@ class CommunicationRevision
   end
 
   field :rev_at, as: :revised_at, type: DateTime
+
+  def self.display_name
+    'Revisiones de Comunicación'
+  end
+
+  def display_name
+    "Revisión para \"#{communication.display_name}\""
+  end
+
+  def self.base_info
+    { klass: Communication, embeds_list: 'revisions' }
+  end
 end

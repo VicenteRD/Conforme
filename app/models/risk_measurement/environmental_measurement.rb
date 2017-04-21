@@ -24,37 +24,48 @@ class RiskMeasurement::EnvironmentalMeasurement < RiskMeasurement
 
   def self.permitted_fields
     super + [
-        :probability,
-        :geographical_amplitude,
-        :public_perception,
-        :reversibility,
-        :regulation_id,
-        :criticity
+      :probability,
+      :geographical_amplitude,
+      :public_perception,
+      :reversibility,
+      :regulation_id,
+      :criticity
     ]
   end
 
   def calculate_magnitude
-    self.set_regulation_breach
+    set_regulation_breach
 
-    self.consequence = self.criticity +
-        self.geographical_amplitude +
-        self.public_perception +
-        self.reversibility +
-        [self.regulation_breach, 0].max
+    self.consequence = criticity +
+        geographical_amplitude +
+        public_perception +
+        reversibility +
+        [regulation_breach, 0].max
 
-    self.magnitude = self.consequence * self.probability
+    self.magnitude = consequence * probability
 
     super
   end
 
   def set_regulation_breach
-    if self.regulation_id.nil?
-      self.regulation_breach = -1 and return
-    end
+    self.regulation_breach = -1 && return if regulation_id.nil?
 
     regulation = Risk::RuleRisk.find(self.regulation_id)
 
+    compliance = regulation.get_compliance
 
-    self.regulation_breach = regulation&.get_compliance ? (1 - regulation.get_compliance) : -1
+    self.regulation_breach = compliance ? (1 - compliance) : -1
+  end
+
+  def self.display_name
+    'Mediciones Riesgos Ambientales'
+  end
+
+  def display_name
+    "Medición para \"#{risk.display_name}\""
+  end
+
+  def self.base_info
+    { klass: Risk::EnvironmentalRisk, embeds_list: 'measurements' }
   end
 end

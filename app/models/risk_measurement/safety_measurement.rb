@@ -18,4 +18,16 @@ class RiskMeasurement::SafetyMeasurement < RiskMeasurement
 
     super
   end
+
+  def self.display_name
+    'Mediciones Riesgos de Seguridad'
+  end
+
+  def display_name
+    "Medición para \"#{risk.display_name}\""
+  end
+
+  def self.base_info
+    { klass: Risk::SafetyRisk, embeds_list: 'measurements' }
+  end
 end

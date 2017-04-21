@@ -12,4 +12,16 @@ class SwotRevision
   end
 
   field :rev_at, as: :revised_at, type: DateTime
+
+  def self.display_name
+    'Revisiones de Análisis SWOT'
+  end
+
+  def display_name
+    "Revisión para \"#{swot.display_name}\""
+  end
+
+  def self.base_info
+    { klass: Swot, embeds_list: 'revisions' }
+  end
 end

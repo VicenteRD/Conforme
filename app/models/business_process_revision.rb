@@ -12,4 +12,16 @@ class BusinessProcessRevision
   end
 
   field :rev_at, as: :revised_at, type: DateTime
+
+  def self.display_name
+    'Revisiones de Procesos'
+  end
+
+  def display_name
+    "Revisión para \"#{business_process.display_name}\""
+  end
+
+  def self.base_info
+    { klass: BusinessProcess, embeds_list: 'revisions' }
+  end
 end

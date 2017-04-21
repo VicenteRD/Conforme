@@ -12,4 +12,16 @@ class ObjectiveRevision
   end
 
   field :rev_at, as: :revised_at, type: DateTime
+
+  def self.display_name
+    'Revisiones de Objetivos'
+  end
+
+  def display_name
+    "Revisión para \"#{objective.display_name}\""
+  end
+
+  def self.base_info
+    { klass: Objective, embeds_list: 'revisions' }
+  end
 end

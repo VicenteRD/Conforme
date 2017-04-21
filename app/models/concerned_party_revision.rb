@@ -12,4 +12,16 @@ class ConcernedPartyRevision
   end
 
   field :rev_at, as: :revised_at, type: DateTime
+
+  def self.display_name
+    'Revisiones de Partes Interesadas'
+  end
+
+  def display_name
+    "Revisión para \"#{concerned_party.display_name}\""
+  end
+
+  def self.base_info
+    { klass: ConcernedParty, embeds_list: 'revisions' }
+  end
 end

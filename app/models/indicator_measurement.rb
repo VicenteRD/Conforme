@@ -19,4 +19,16 @@ class IndicatorMeasurement
 
   field :val, as: :value, type: Float
   field :thr, as: :threshold, type: Float
+
+  def self.display_name
+    'Mediciones de Indicadores'
+  end
+
+  def display_name
+    "Medición para \"#{indicator.display_name}\""
+  end
+
+  def self.base_info
+    { klass: Indicator, embeds_list: 'measurements' }
+  end
 end
