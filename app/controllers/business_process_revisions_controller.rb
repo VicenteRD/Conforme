@@ -16,35 +16,33 @@ class BusinessProcessRevisionsController < ApplicationController
   end
 
   def create
-    business_process = BusinessProcess.find(params[:process_id])
-    redirect_to_dashboard && return unless business_process
+    process = BusinessProcess.find(params[:process_id])
+    redirect_to_dashboard && return unless process
 
-    revision = business_process.new_revision(
-      current_user_id,
-      revision_fields,
-      log_body
+    revision = process.new_revision(revision_fields)
+    log_created(revision)
+
+    process_id = process.id
+    create_references(revision, references_unsafe_hash, process_id)
+    add_attachments(
+      revision, params.dig(:revision, :attachments), process_id
     )
 
-    create_references(revision, references_unsafe_hash, business_process.id)
-
-    redirect_to business_process_path(business_process)
+    redirect_to process
   end
 
   def update
-    business_process = BusinessProcess.find(params[:process_id])
-    redirect_to_dashboard && return unless business_process
-    revision = business_process.find_revision(params[:id])
+    process = BusinessProcess.find(params[:process_id])
+    revision = process ? process.find_revision(params[:id]) : nil
+
     redirect_to_dashboard && return unless revision
 
-    revision.update_and_log(
-      current_user_id,
-      revision_fields,
-      log_body
-    )
+    revision.update!(revision_fields)
+    log_edited(revision)
 
-    # create_references(objective, references_unsafe_hash, swot.id)
+    create_references(revision, references_unsafe_hash, process.id)
 
-    redirect_to business_process_path(business_process)
+    redirect_to process
   end
 
   private
@@ -54,10 +52,6 @@ class BusinessProcessRevisionsController < ApplicationController
 
     fields[:revised_at] = parse_date(params.dig(:raw, :revised_at))
 
-    attachments = fields[:attachments]
-    fields[:attachment_ids] = upload_files(attachments) if attachments
-
-
-    fields.permit(:revised_at, :comments, attachment_ids: [])
+    fields.permit(:revised_at, :comments)
   end
 end

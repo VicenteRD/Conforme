@@ -1,91 +1,77 @@
 class IndicatorMeasurementsController < ApplicationController
 
-  include DatesHelper
-
   before_action :check_permissions
 
   def new
-    if (@indicator = Indicator.find(params[:indicator_id]))
-      render 'indicators/measurements/new', layout: 'form'
-    else
-      redirect_to '/'
-    end
-  end
+    @indicator = Indicator.find(params[:indicator_id])
+    redirect_to_dashboard && return unless @indicator
 
-  def create
-    unless (indicator = Indicator.find(params[:indicator_id]))
-      redirect_to '/' and return
-    end
-
-    fields = params.require(:measurement)
-
-    fields[:measured_at] = parse_datetime(params.dig(:raw, :measured_at))
-    fields[:threshold] = indicator.threshold
-
-    measurement = indicator.new_measurement(fields.permit(
-        :measured_at,
-        :value,
-        :threshold,
-        :comments
-    ))
-    measurement.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
-
-    redirect_to indicator_path(indicator)
+    render 'indicators/measurements/new', layout: 'form'
   end
 
   def edit
-    if (@indicator = Indicator.find(params[:indicator_id])).nil? ||
-        (@measurement = @indicator.measurements.find(params[:id])).nil?
-      redirect_to '/' and return
-    end
+    @indicator = Indicator.find(params[:indicator_id])
+    redirect_to_dashboard && return unless @indicator
+    @measurement = @indicator.measurements.find(params[:id])
+    redirect_to_dashboard && return unless @measurement
 
     render 'indicators/measurements/edit', layout: 'form'
   end
 
+  def create
+    indicator = Indicator.find(params[:indicator_id])
+    redirect_to_dashboard && return unless indicator
+
+    measurement = indicator.new_measurement(measurement_fields(indicator))
+    log_created(measurement)
+
+    indicator_id = indicator.id
+    create_references(measurement, references_unsafe_hash, indicator_id)
+    add_attachments(
+      measurement, params.dig(:measurement, :attachments), indicator_id
+    )
+
+    redirect_to indicator
+  end
+
   def update
-    unless (indicator = Indicator.find(params[:indicator_id]))
-      puts 'heyoo'
-      redirect_to '/' and return
-    end
-    unless (measurement = indicator.measurements.find(params[:id]))
-      puts 'heyoo2'
-      redirect_to '/' and return
-    end
+    indicator = Indicator.find(params[:indicator_id])
+    measurement = indicator ? indicator.get_measurement(params[:id]) : nil
 
-    fields = params.require(:measurement)
+    redirect_to_dashboard && return unless measurement
 
-    fields[:measured_at] = parse_datetime(params.dig(:raw, :measured_at))
+    measurement.update!(measurement_fields(indicator))
+    log_edited(measurement)
 
-    measurement.update!(fields.permit(
-        :measured_at,
-        :value,
-        :threshold,
-        :comments
-    ))
-    measurement.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
+    create_references(measurement, references_unsafe_hash, indicator.id)
 
-    redirect_to indicator_path(indicator)
+    redirect_to indicator
   end
 
   private
 
   def check_permissions
-    if defined? @user
-      user = @user
-    elsif session[:id]
-      user = Person::User.find(session[:id])
-    else
-      return false
-    end
+    indicator = Indicator.find(params[:risk_id])
 
-    if params[:indicator_id] && (indicator = Indicator.find(params[:indicator_id]))
-      if (user && indicator) && user.id == indicator.responsible_id
-        return true
-      else
-        redirect_to indicator_path(params[:indicator_id]) and return false
-      end
-    else
-      redirect_to '/'
-    end
+    permitted = indicator && current_user_id == indicator.responsible_id
+
+    redirect_to_dashboard && false unless permitted
+
+    true
+  end
+
+  def measurement_fields(indicator)
+    fields = params.require(:measurement)
+
+    fields[:measured_at] = parse_date(params.dig(:raw, :measured_at))
+
+    fields[:threshold] = indicator.threshold
+
+    fields.permit(
+      :measured_at,
+      :value,
+      :threshold,
+      :comments
+    )
   end
 end

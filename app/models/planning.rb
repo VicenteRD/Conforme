@@ -23,10 +23,20 @@ class Planning
 
   field :cmts, as: :comments, type: String
 
-  def update_progress
-    self.progress = self.activities.avg(:progress)
+  def new_activity(fields)
+    activities.create!(fields)
 
-    self.save!
+    update_progress
+  end
+
+  def find_activity(id)
+    activities.find(id)
+  end
+
+  def update_progress
+    self.progress = activities.avg(:progress)
+
+    save!
   end
 
   def self.display_name

@@ -37,7 +37,7 @@ class ApplicationController < ActionController::Base
     object.set_references_from_hash(reference_ids, base_id) if reference_ids
   end
 
-  def add_attachments(object, uploads)
+  def add_attachments(object, uploads, base_id = '')
     return unless uploads
     klass = object.class
     return unless klass < Describable && klass < Mongoid::Document
@@ -49,8 +49,14 @@ class ApplicationController < ActionController::Base
     )
 
     processed_uploads.each do |upload|
-      upload.add_as_attachment_to(klass.name => [object.id])
+      upload.add_as_attachment_to(
+        klass.name => [compound_id(base_id.to_s, object.id)]
+      )
     end
+  end
+
+  def compound_id(base_id, object_id)
+    base_id + (base_id.empty? ? '' : '#') + object_id
   end
 
   def remove_attachments(class_name, element, removal_ids)

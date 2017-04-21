@@ -1,80 +1,65 @@
 class PlanningActivitiesController < ApplicationController
-
-  include DatesHelper
-
   def new
-    if (@planning = Planning.find(params[:plan_id]))
-      render 'plannings/activities/new', layout: 'form'
-    else
-      redirect_to '/'
-    end
-  end
-
-  def create
-    unless (planning = Planning.find(params[:plan_id]))
-      redirect_to '/' and return
-    end
-
-    fields = params.require(:planning_activity)
-
-    fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
-
-    progress = params.dig(:raw, :progress)
-    fields[:progress] = progress.to_f / 100.0 if progress
-
-    planning_activity = planning.activities.create!(fields.permit(
-        :due_at,
-        :name,
-        :description,
-        :progress,
-        :comments
-    ))
-    planning_activity.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :book))
-
-    planning.update_progress
-
-    redirect_to planning_path(planning)
+    @planning = Planning.find(params[:plan_id])
+    redirect_to_dashboard && return unless @planning
+    render 'plannings/activities/new', layout: 'form'
   end
 
   def edit
-    if (@planning = Planning.find(params[:plan_id])) &&
-        (@planning_activity = @planning.activities.find(params[:id]))
-      render 'plannings/activities/edit', layout: 'form'
-    else
-      redirect_to '/'
-    end
+    @planning = Planning.find(params[:plan_id])
+    redirect_to_dashboard && return unless @planning
+    @planning_activity = @planning.find_activity(params[:id])
+    redirect_to_dashboard && return unless @planning_activity
+
+    render 'plannings/activities/edit', layout: 'form'
+  end
+
+  def create
+    planning = Planning.find(params[:plan_id])
+    redirect_to_dashboard && return unless planning
+
+    activity = planning.new_activity(activity_fields)
+    log_created(activity)
+
+    redirect_to planning
   end
 
   def update
-    unless (planning = Planning.find(params[:plan_id]))
-      redirect_to '/' and return
-    end
-    unless (planning_activity = planning.activities.find(params[:id]))
-      redirect_to '/' and return
-    end
+    planning = Planning.find(params[:plan_id])
+    activity = planning ? planning.find_activity(params[:id]) : nil
 
-    fields = params.require(:planning_activity)
+    redirect_to_dashboard && return unless activity
 
-    fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
-    if params.dig(:raw, :executed)&.to_i != 0
-      fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
-    end
-
-    progress = params.dig(:raw, :progress)
-    fields[:progress] = progress.to_f / 100.0 if progress
-
-    planning_activity.update!(fields.permit(
-        :due_at,
-        :executed_at,
-        :name,
-        :description,
-        :progress,
-        :comments
-    ))
-    planning_activity.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :book))
+    activity.update!(activity_fields)
+    log_edited(activity)
 
     planning.update_progress
 
-    redirect_to planning_path(planning)
+    redirect_to planning
+  end
+
+  private
+
+  def activity_fields
+    fields = params.require(:planning_activity)
+
+    fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
+    fields[:progress] = parse_percentage(
+      fields, :progress, params.dig(:raw, :progress)
+    )
+
+    fields[:executed_at] = parse_execution_date
+
+    fields.permit(
+      :due_at, :name, :description,
+      :progress, :comments
+    )
+  end
+
+  def parse_execution_date
+    exec = params.dig(:raw, :executed)
+
+    parse_date(params.dig(:raw, :executed_at)) if
+        exec && exec.to_i != 0
   end
 end

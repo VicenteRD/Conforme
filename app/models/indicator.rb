@@ -52,6 +52,10 @@ class Indicator
     measurement
   end
 
+  def get_measurement(id)
+    measurements.find(id)
+  end
+
   def self.get_all_criteria
     %w(≤ < = > ≥)
   end

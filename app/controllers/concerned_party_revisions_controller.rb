@@ -16,35 +16,33 @@ class ConcernedPartyRevisionsController < ApplicationController
   end
 
   def create
-    concerned_party = ConcernedParty.find(params[:party_id])
-    redirect_to_dashboard && return unless concerned_party
+    party = ConcernedParty.find(params[:party_id])
+    redirect_to_dashboard && return unless party
 
-    revision = concerned_party.new_revision(
-      current_user_id,
-      revision_fields,
-      log_body
+    revision = party.new_revision(revision_fields)
+    log_created(revision)
+
+    party_id = party.id
+    create_references(revision, references_unsafe_hash, party_id)
+    add_attachments(
+      revision, params.dig(:revision, :attachments), party_id
     )
 
-    create_references(revision, references_unsafe_hash, concerned_party.id)
-
-    redirect_to concerned_party_path(concerned_party)
+    redirect_to party
   end
 
   def update
-    concerned_party = ConcernedParty.find(params[:party_id])
-    redirect_to_dashboard && return unless concerned_party
-    revision = concerned_party.find_revision(params[:id])
+    party = ConcernedParty.find(params[:party_id])
+    revision = party ? party.find_revision(params[:id]) : nil
+
     redirect_to_dashboard && return unless revision
 
-    revision.update_and_log(
-      current_user_id,
-      revision_fields,
-      log_body
-    )
+    revision.update!(revision_fields)
+    log_edited(revision)
 
-    # create_references(objective, references_unsafe_hash, swot.id)
+    create_references(revision, references_unsafe_hash, party.id)
 
-    redirect_to concerned_party_path(concerned_party)
+    redirect_to party
   end
 
   private
@@ -54,10 +52,6 @@ class ConcernedPartyRevisionsController < ApplicationController
 
     fields[:revised_at] = parse_date(params.dig(:raw, :revised_at))
 
-    attachments = fields[:attachments]
-    fields[:attachment_ids] = upload_files(attachments) if attachments
-
-
-    fields.permit(:revised_at, :comments, attachment_ids: [])
+    fields.permit(:revised_at, :comments)
   end
 end

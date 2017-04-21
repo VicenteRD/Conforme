@@ -12,14 +12,4 @@ class PesteRevision
   end
 
   field :rev_at, as: :revised_at, type: DateTime
-
-  def log_created(user_id, body)
-    log_book.new_entry(user_id, 'Creado', body)
-  end
-
-  def update_and_log(user_id, fields, log_entry)
-    update!(fields)
-
-    log_book.new_entry(user_id, 'Editado', log_entry)
-  end
 end

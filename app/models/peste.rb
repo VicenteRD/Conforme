@@ -34,15 +34,13 @@ class Peste
     log_book.new_entry(user_id, 'Creado', body)
   end
 
-  def new_revision(user_id, fields, log_body)
+  def new_revision(fields)
     revision = revisions.create!(fields)
 
     if last_revised_at.nil? || revision.revised_at > last_revised_at
       self.last_revised_at = revision.revised_at
       save!
     end
-
-    revision.log_created(user_id, log_body)
   end
 
   def find_revision(id)

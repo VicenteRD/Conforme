@@ -30,6 +30,14 @@ class BusinessAsset
     end
   end
 
+  def create_job(fields)
+    jobs.create!(fields)
+  end
+
+  def find_job(id)
+    jobs.find(id)
+  end
+
   def self.display_name
     'Activos'
   end

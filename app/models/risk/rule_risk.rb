@@ -25,10 +25,8 @@ class Risk::RuleRisk < Risk
     super + [:rule_type, :rule_id, :numeral, :title, :requirement]
   end
 
-  def new_measurement(user_id, values, log_body)
-    measurement = measurements.create!(values)
-
-    measurement.log_book.new_entry(user_id, 'Creado', log_body)
+  def new_measurement(values)
+    measurements.create!(values)
 
     calculate_compliance
   end

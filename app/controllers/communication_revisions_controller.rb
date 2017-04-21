@@ -19,32 +19,30 @@ class CommunicationRevisionsController < ApplicationController
     communication = Communication.find(params[:communication_id])
     redirect_to_dashboard && return unless communication
 
-    revision = communication.new_revision(
-      current_user_id,
-      communication_revision_fields,
-      log_body
+    revision = communication.new_revision(communication_revision_fields)
+    log_created(revision)
+
+    communication_id = communication.id
+    create_references(revision, references_unsafe_hash, communication_id)
+    add_attachments(
+      revision, params.dig(:revision, :attachments), communication_id
     )
 
-    create_references(revision, references_unsafe_hash, communication.id)
-
-    redirect_to communication_path(communication)
+    redirect_to communication
   end
 
   def update
     communication = Communication.find(params[:communication_id])
-    redirect_to_dashboard && return unless communication
-    revision = communication.find_revision(params[:id])
+    revision = communication ? communication.find_revision(params[:id]) : nil
+
     redirect_to_dashboard && return unless revision
 
-    revision.update_and_log(
-      current_user_id,
-      communication_revision_fields,
-      log_body
-    )
+    revision.update!(communication_revision_fields)
+    log_edited(revision)
 
-    # create_references(objective, references_unsafe_hash, swot.id)
+    create_references(revision, references_unsafe_hash, communication.id)
 
-    redirect_to communication_path(communication)
+    redirect_to communication
   end
 
   private
@@ -54,10 +52,6 @@ class CommunicationRevisionsController < ApplicationController
 
     fields[:revised_at] = parse_date(params.dig(:raw, :revised_at))
 
-    attachments = fields[:attachments]
-    fields[:attachment_ids] = upload_files(attachments) if attachments
-
-
-    fields.permit(:revised_at, :comments, attachment_ids: [])
+    fields.permit(:revised_at, :comments)
   end
 end

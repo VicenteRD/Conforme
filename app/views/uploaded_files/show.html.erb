@@ -44,25 +44,19 @@
             <h5>Adjunto en</h5>
           </div>
           <div class="margin-left-30 margin-bottom-30">
-            <div id="references-container" class="padding-left-20">
-              <div class="panel-heading">
-                <h5>Referencias</h5>
-              </div>
+            <% @file.attached_to.keys.each do |class_name| %>
+                <%# !! CHANGE THIS BEFORE PRODUCTION !! %>
+                <% klass = class_name.constantize %>
 
-              <% @file.attached_to.keys.each do |class_name| %>
-                  <%# !! CHANGE THIS BEFORE PRODUCTION !! %>
-                  <% klass = class_name.constantize %>
-
-                  <div id="<%= class_name.gsub('::', '_') %>">
-                    <strong>
-                      <%= klass.display_name %>:
-                    </strong>
-                    <% @file.get_all_attached_to(klass, class_name).each do |element| %>
-                        <%= link_to(element.display_name, element) %> //
-                    <% end %>
-                  </div>
-              <% end %>
-            </div>
+                <div id="<%= class_name.gsub('::', '_') %>">
+                  <strong>
+                    <%= klass.display_name %>:
+                  </strong>
+                  <% @file.get_all_attached_to(klass, class_name).each do |element| %>
+                      <%= link_to(element.display_name, element) %> //
+                  <% end %>
+                </div>
+            <% end %>
           </div>
         </div>
     <% end %>

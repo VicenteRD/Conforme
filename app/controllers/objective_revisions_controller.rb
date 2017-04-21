@@ -19,32 +19,30 @@ class ObjectiveRevisionsController < ApplicationController
     objective = Objective.find(params[:objective_id])
     redirect_to_dashboard && return unless objective
 
-    revision = objective.new_revision(
-      current_user_id,
-      objective_revision_fields,
-      log_body
+    revision = objective.new_revision(objective_revision_fields)
+    log_created(revision)
+
+    objective_id = objective.id
+    create_references(revision, references_unsafe_hash, objective_id)
+    add_attachments(
+      revision, params.dig(:revision, :attachments), objective_id
     )
 
-    create_references(revision, references_unsafe_hash, objective.id)
-
-    redirect_to objective_path(objective)
+    redirect_to objective
   end
 
   def update
     objective = Objective.find(params[:objective_id])
-    redirect_to_dashboard && return unless objective
-    revision = objective.find_revision(params[:id])
+    revision = objective ? objective.find_revision(params[:id]) : nil
+
     redirect_to_dashboard && return unless revision
 
-    revision.update_and_log(
-      current_user_id,
-      objective_revision_fields,
-      log_body
-    )
+    revision.update!(objective_revision_fields)
+    log_edited(revision)
 
-    # create_references(objective, references_unsafe_hash, swot.id)
+    create_references(revision, references_unsafe_hash, objective.id)
 
-    redirect_to objective_path(objective)
+    redirect_to objective
   end
 
   private
@@ -54,10 +52,6 @@ class ObjectiveRevisionsController < ApplicationController
 
     fields[:revised_at] = parse_date(params.dig(:raw, :revised_at))
 
-    attachments = fields[:attachments]
-    fields[:attachment_ids] = upload_files(attachments) if attachments
-
-
-    fields.permit(:revised_at, :comments, attachment_ids: [])
+    fields.permit(:revised_at, :comments)
   end
 end

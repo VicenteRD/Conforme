@@ -19,32 +19,30 @@ class SwotRevisionsController < ApplicationController
     swot = Swot.find(params[:swot_id])
     redirect_to_dashboard && return unless swot
 
-    revision = swot.new_revision(
-      current_user_id,
-      swot_revision_fields,
-      log_body
+    revision = swot.new_revision(swot_revision_fields)
+    log_created(revision)
+
+    swot_id = swot.id
+    create_references(revision, references_unsafe_hash, swot_id)
+    add_attachments(
+      revision, params.dig(:revision, :attachments)
     )
 
-    create_references(revision, references_unsafe_hash, swot.id)
-
-    redirect_to swot_path(swot)
+    redirect_to swot
   end
 
   def update
     swot = Swot.find(params[:swot_id])
-    redirect_to_dashboard && return unless swot
-    revision = swot.find_revision(params[:id])
+    revision = swot ? swot.find_revision(params[:id]) : nil
+
     redirect_to_dashboard && return unless revision
 
-    revision.update_and_log(
-      current_user_id,
-      swot_revision_fields,
-      log_body
-    )
+    revision.update!(swot_revision_fields)
+    log_edited(revision)
 
-    # create_references(objective, references_unsafe_hash, swot.id)
+    create_references(revision, references_unsafe_hash, swot.id)
 
-    redirect_to swot_path(swot)
+    redirect_to swot
   end
 
   private
@@ -54,10 +52,6 @@ class SwotRevisionsController < ApplicationController
 
     fields[:revised_at] = parse_date(params.dig(:raw, :revised_at))
 
-    attachments = fields[:attachments]
-    fields[:attachment_ids] = upload_files(attachments) if attachments
-
-
-    fields.permit(:revised_at, :comments, attachment_ids: [])
+    fields.permit(:revised_at, :comments)
   end
 end

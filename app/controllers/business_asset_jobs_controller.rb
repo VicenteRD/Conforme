@@ -1,88 +1,88 @@
 class BusinessAssetJobsController < ApplicationController
-
-  include DatesHelper
-
   def new
-    if (@type = parse_job_type(params[:job_type])) &&
-        (@business_asset = BusinessAsset.find(params[:asset_id]))
-      render 'business_assets/jobs/new', layout: 'form'
-    else
-      redirect_to '/'
-    end
-  end
+    @type = parse_job_type(params[:job_type])
+    @business_asset = BusinessAsset.find(params[:asset_id])
 
-  def create
-    unless (business_asset = BusinessAsset.find(params[:asset_id]))
-      redirect_to '/' and return
-    end
+    redirect_to_dashboard && return unless @type && @business_asset
 
-    fields = params.require(:asset_job)
-
-    # Parse the parameter job_type into an integer that can be stored
-    fields[:job_type] = if params[:job_type] == 'mantencion'
-                          1
-                        elsif params[:job_type] == 'calibracion'
-                          2
-                        end
-
-    fields[:due_at] = parse_datetime(params.dig(:raw, :due_at))
-    fields[:executed_at] = parse_datetime(params.dig(:raw, :executed_at))
-
-    job = business_asset.jobs.create!(fields.permit(
-        :job_type,
-        :due_at,
-        :motive,
-        :result,
-        :comments
-    ))
-
-    job.log_book.new_entry(@user.id, 'Creado', params.dig(:log, :entry))
-
-    redirect_to business_asset_path(params[:job_type], business_asset)
+    render 'business_assets/jobs/new', layout: 'form'
   end
 
   def edit
-    if (@type = parse_job_type(params[:job_type])) &&
-        (@business_asset = BusinessAsset.find(params[:asset_id])) &&
-        (@job = @business_asset.jobs.find(params[:id]))
-      render 'business_assets/jobs/edit', layout: 'form'
-    else
-      redirect_to '/'
-    end
+    @business_asset = BusinessAsset.find(params[:asset_id])
+    redirect_to_dashboard && return unless @business_asset
+    @type = parse_job_type(params[:job_type])
+    @job = @business_asset.jobs.find(params[:id])
+
+    redirect_to_dashboard && return unless @type && @job
+
+    render 'business_assets/jobs/edit', layout: 'form'
+  end
+
+  def create
+    asset = BusinessAsset.find(params[:asset_id])
+    redirect_to_dashboard && return unless asset
+
+    job = asset.create_job(job_fields)
+    log_created(job)
+
+    asset_id = asset.id
+    create_references(job, references_unsafe_hash, asset_id)
+    add_attachments(
+      job, params.dig(:asset_job, :attachments), asset_id
+    )
+
+    redirect_to_asset(params[:job_type], asset)
   end
 
   def update
-    unless (business_asset = BusinessAsset.find(params[:asset_id]))
-      redirect_to '/' and return
-    end
+    asset = BusinessAsset.find(params[:asset_id])
+    job = asset ? asset.find_job(params[:id]) : nil
 
-    unless (job = business_asset.jobs.find(params[:id]))
-      redirect_to '/' and return
-    end
+    redirect_to_dashboard && return unless job
 
-    fields = params.require(:asset_job)
+    job.update!(job_fields)
+    log_edited(job)
 
-    fields[:executed_at] = params.dig(:raw, :executed) == '1' ? parse_datetime(params.dig(:raw, :executed_at)) : nil
+    create_references(job, references_unsafe_hash, asset.id)
 
-
-    job.update!(fields.permit(
-            :executed_at,
-            :motive,
-            :result,
-            :comments
-    ))
-
-    job.log_book.new_entry(@user.id, 'Editado', params.dig(:log, :body))
-
-    redirect_to business_asset_path(params[:job_type], business_asset)
+    redirect_to_asset(params[:job_type], asset)
   end
 
   private
-  def parse_job_type(es_type)
-    if es_type == 'mantencion' || es_type == 'calibracion'
-      es_type
-    else
-      nil
+
+  def job_fields
+    fields = params.require(:asset_job)
+
+    # Parse the parameter job_type into an integer that can be stored
+    fields[:job_type] = job_type_to_i(params[:job_type])
+
+    fields[:due_at] = parse_date(params.dig(:raw, :due_at))
+    fields[:executed_at] = parse_executed_at
+
+    fields.permit(
+      :job_type, :due_at, :executed_at, :motive, :result, :comments
+    )
+  end
+
+  def redirect_to_asset(job_type, asset)
+    redirect_to business_asset_path(job_type, asset)
+  end
+
+  def parse_executed_at
+    parse_date(params.dig(:raw, :executed_at)) if
+        params.dig(:raw, :executed) == '1'
+  end
+
+  def parse_job_type(type)
+    type if type == 'mantencion' || type == 'calibracion'
+  end
+
+  def job_type_to_i(type)
+    if type == 'mantencion'
+      1
+    elsif type == 'calibracion'
+      2
     end
   end
 end
