@@ -14,12 +14,7 @@
 <% end %>
 
 <% content_for :main_col_2 do %>
-    <div class="row">
-      <div class="col-lg-4 show-label">Funciones:</div>
-      <div class="col-lg-8">
-        <%= @position.functions %>
-      </div>
-    </div>
+
 <% end %>
 
 <% content_for :main_col_3 do %>
@@ -84,19 +79,19 @@
 
     <div class="row is-flex">
       <div class="col-lg-5">
-        <% unless @planning.attachment_ids.empty? %>
+        <% unless @position.attachment_ids.empty? %>
             <div class="panel padding-bottom-25">
               <%= render partial: 'uploaded_files/attachments_table',
-                         locals: {element: @planning} %>
+                         locals: {element: @position} %>
             </div>
         <% end %>
       </div>
       <div class="col-lg-1"></div>
       <div class="col-lg-6">
-        <% if @planning.references? %>
+        <% if @position.references? %>
             <div class="panel padding-bottom-25" style="height: 100%">
               <%= render partial: 'referables/show_all_for',
-                         locals: {element: @planning} %>
+                         locals: {element: @position} %>
             </div>
         <% end %>
       </div>

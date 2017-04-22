@@ -1,0 +1,102 @@
+<%= content_for :script_tags do %>
+    <%= javascript_include_tag '/assets/vendors/dropify/dist/js/dropify.min.js' %>
+<% end %>
+
+<%= content_for :style_tags do %>
+    <%= stylesheet_link_tag '/assets/vendors/dropify/dist/css/dropify.min.css' %>
+<% end %>
+
+<div class="panel-heading">
+  <h5>
+    Adjuntos
+  </h5>
+</div>
+<div class="panel-body" id="attachments-table">
+
+  <% if element %>
+      <%= form.hidden_field :element_id, value: element.id %>
+  <% end %>
+
+  <div id="attachments-table">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th width="1%">Eliminar?</th>
+            <th width="1%"></th>
+            <th>Nombre</th>
+            <th width="30%">Fecha</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% if element && element.attachment_ids? && !element.attachment_ids.empty? %>
+              <% UploadedFile.all_from(element.attachment_ids).each do |attachment| %>
+                  <tr>
+                    <td style="text-align: center">
+                      <%=
+                        form.check_box(
+                            :removal_ids,
+                            {
+                                multiple: true,
+                                style: 'height: 1.25em; width: 1.25em; vertical-align: middle'
+                            },
+                            attachment.id,
+                            nil
+                        )
+                      %>
+                    </td>
+                    <td>
+                      <%= icon_for attachment.upload_content_type %>
+                    </td>
+
+                    <td>
+                      <%= link_to attachment.upload_file_name, attachment %>
+                    </td>
+
+                    <td>
+                      <%= attachment.created_at.strftime(dt_rb_format(true, false)) %>
+                    </td>
+                  </tr>
+              <% end %>
+          <% else %>
+              <td colspan="4">No se encontraron archivos adjuntos</td>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+
+  <div style="margin:50px 50px 0 50px">
+    <%= form.file_field :attachments, class: 'dropify', multiple: true,
+                        data: {height: '90px', width: '100%'} %>
+  </div>
+
+</div>
+
+<script>
+    $('#uploader').hide();
+
+    $('.dropify').dropify({
+        messages: {
+            'default': 'Arrastre un archivo hasta aquí o haga click',
+            'replace': 'Arraste un archivo hasta aquí o haga click para reemplazar',
+            'remove': 'Quitar',
+            'error': 'Oops, algo salió mal.'
+        },
+        error: {
+            'fileSize': 'Archivo excede peso máximo ({{ value }}).',
+            'minWidth': 'La imagenes demasiado angosta (ancho mínimo: {{ value }}}px).',
+            'maxWidth': 'La imagen es demasiado ancha ({{ value }}}px máximo).',
+            'minHeight': 'La imagen es demasiado chata (largo mínimo: {{ value }}}px).',
+            'maxHeight': 'La imagen es demasiado larga ({{ value }}px máximo).',
+            'imageFormat': 'Formato de imagen no válido (Permitidos: {{ value }}).'
+        }
+    });
+
+    function toggleUploader() {
+        var uploader = $('#uploader');
+        if (uploader.is(':hidden')) {
+            uploader.show();
+        } else {
+            uploader.hide();
+        }
+    }
+</script>

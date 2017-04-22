@@ -78,19 +78,27 @@
               <%= f.collection_select :measurement_frequency, frequency_hash, :first, :last, {}, {class: 'form-control', style: 'width:100%'} %>
             </div>
           </div>
+        </div>
 
-          <div style="margin:50px 50px 0 50px">
-            <%= f.file_field :attachments, class: 'dropify', multiple: true,
-                             data: {height: '90px', width: '100%'} %>
+        <div class="row is-flex">
+          <div class="col-lg-5 panel">
+            <%= render partial: 'uploaded_files/edit_attachments_table',
+                       locals: {element: nil, form: f} %>
           </div>
 
-          <div class="row form-group" style="margin: 30px 10px;height:400px">
-            <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
-          </div>
+          <div class="col-lg-1"></div>
 
-          <div style="margin: 0 30px 10px 30px">
-          <%= render partial: 'referables/show_all_for',
-                     locals: {element: @risk, form_format: true} %>
+          <div class="col-lg-6 panel">
+            <%= render partial: 'referables/show_all_for',
+                       locals: {element: @risk, form_format: true} %>
+          </div>
+        </div>
+
+        <div class="panel" style="width: 100%">
+          <div class="panel-body">
+            <div class="row form-group" style="margin: 30px 10px;height:400px">
+              <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
+            </div>
           </div>
         </div>
       </div>
@@ -127,7 +135,7 @@
 
 <%= content_for :scripts do %>
     <script>
-        $(function (){
+        $(function () {
             setSelectedReferences(<%= raw @risk.references.to_json %>, null);
         });
 
