@@ -1,11 +1,3 @@
-<%= content_for :script_tags do %>
-    <%= javascript_include_tag '/assets/vendors/dropify/dist/js/dropify.min.js' %>
-<% end %>
-
-<%= content_for :style_tags do %>
-    <%= stylesheet_link_tag '/assets/vendors/dropify/dist/css/dropify.min.css' %>
-<% end %>
-
 <div class="panel-heading">
   <h5>
     Adjuntos
@@ -33,7 +25,8 @@
                   <tr>
                     <td style="text-align: center">
                       <%=
-                        form.check_box(
+                        check_box(
+                            :attachments,
                             :removal_ids,
                             {
                                 multiple: true,
@@ -65,38 +58,8 @@
       </div>
 
   <div style="margin:50px 50px 0 50px">
-    <%= form.file_field :attachments, class: 'dropify', multiple: true,
+    <%= form.file_field :new_attachments, class: 'dropify', multiple: true,
                         data: {height: '90px', width: '100%'} %>
   </div>
 
 </div>
-
-<script>
-    $('#uploader').hide();
-
-    $('.dropify').dropify({
-        messages: {
-            'default': 'Arrastre un archivo hasta aquí o haga click',
-            'replace': 'Arraste un archivo hasta aquí o haga click para reemplazar',
-            'remove': 'Quitar',
-            'error': 'Oops, algo salió mal.'
-        },
-        error: {
-            'fileSize': 'Archivo excede peso máximo ({{ value }}).',
-            'minWidth': 'La imagenes demasiado angosta (ancho mínimo: {{ value }}}px).',
-            'maxWidth': 'La imagen es demasiado ancha ({{ value }}}px máximo).',
-            'minHeight': 'La imagen es demasiado chata (largo mínimo: {{ value }}}px).',
-            'maxHeight': 'La imagen es demasiado larga ({{ value }}px máximo).',
-            'imageFormat': 'Formato de imagen no válido (Permitidos: {{ value }}).'
-        }
-    });
-
-    function toggleUploader() {
-        var uploader = $('#uploader');
-        if (uploader.is(':hidden')) {
-            uploader.show();
-        } else {
-            uploader.hide();
-        }
-    }
-</script>

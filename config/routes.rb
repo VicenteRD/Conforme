@@ -178,6 +178,17 @@ Rails.application.routes.draw do
 
   post '/documentos/archivos/nuevo' => 'uploaded_files#create'
 
+  # -- Definitions
+
+  get '/documentos/definiciones'            => 'definitions#index', as: :definitions
+  get '/documentos/definiciones/nuevo'      => 'definitions#new',   as: :new_definition
+  get '/documentos/definiciones/:id'        => 'definitions#show',  as: :definition
+  get '/documentos/definiciones/:id/editar' => 'definitions#edit',  as: :edit_definition
+
+  post  '/documentos/definiciones/nuevo'      => 'definitions#create'
+  patch '/documentos/definiciones/:id/editar' => 'definitions#update'
+  patch '/documentos/definiciones/edit-attachments' => 'definitions#edit_attachments'
+
   # -------- Strategies: SWOT
 
   get '/estrategias/FODA'            => 'swot#index', as: :swot_index

@@ -29,7 +29,7 @@ class ProvidersController < ApplicationController
     create_references(provider, references_unsafe_hash)
     add_attachments(provider, params.dig(:provider, :attachments))
 
-    redirect_to provider
+    redirect_to provider_path(provider)
   end
 
   def update
@@ -55,7 +55,7 @@ class ProvidersController < ApplicationController
     remove_attachments(provider.class.name, provider, removal_ids) if
         removal_ids
 
-    redirect_to provider
+    redirect_to provider_path(provider)
   end
 
   private

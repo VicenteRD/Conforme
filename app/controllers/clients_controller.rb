@@ -29,7 +29,7 @@ class ClientsController < ApplicationController
     client_references(client)
     client_attachments(client, params.dig(:client, :attachments))
 
-    redirect_to client
+    redirect_to client_path(client)
   end
 
   def update
@@ -40,7 +40,7 @@ class ClientsController < ApplicationController
     log_edited(client)
     client_references(client)
 
-    redirect_to client
+    redirect_to client_path(client)
   end
 
   def edit_attachments
@@ -54,7 +54,7 @@ class ClientsController < ApplicationController
     remove_attachments(client.class.name, client, removal_ids) if
         removal_ids
 
-    redirect_to client
+    redirect_to client_path(client)
   end
 
   private

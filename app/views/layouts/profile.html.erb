@@ -51,7 +51,7 @@
         <% end %>
         <% unless @person.attachment_ids.empty? %>
             <div class="panel padding-bottom-25">
-              <%= render partial: 'uploaded_files/attachments_table',
+              <%= render partial: 'uploaded_files/show_attachments',
                          locals: {element: @person} %>
             </div>
         <% end %>

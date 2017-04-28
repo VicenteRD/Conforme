@@ -1,0 +1,54 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Tipo</th>
+      <th>Definición</th>
+    </tr>
+<% end %>
+<% content_for :table_body do %>
+    <% definitions = Definition.all %>
+    <% if definitions.size != 0 %>
+        <% definitions.each do |definition| %>
+            <tr data-href="<%= definition_path(definition) %>">
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= definition.name %>
+              </td>
+              <td>
+                <%= definition.definition %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="2"> No se encontraron definiciones.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_definition_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Documentos: Definiciones
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

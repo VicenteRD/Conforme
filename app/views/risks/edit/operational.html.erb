@@ -82,8 +82,8 @@
 
         <div class="row is-flex">
           <div class="col-lg-5 panel">
-            <%= render partial: 'uploaded_files/edit_attachments_table',
-                       locals: {element: nil, form: f} %>
+            <%= render partial: 'uploaded_files/edit_attachments',
+                       locals: {element: @risk, form: f} %>
           </div>
 
           <div class="col-lg-1"></div>

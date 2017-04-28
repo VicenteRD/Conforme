@@ -64,21 +64,6 @@
                 }
             });
         });
-
-        $('#upload-button').click(function () {
-            var filename = $('#uploaded_file_upload').val();
-            var lastIndex = filename.lastIndexOf("\\");
-            if (lastIndex >= 0) {
-                filename = filename.substring(lastIndex + 1);
-            }
-
-            var uploadArea = $('#uploads-in');
-            uploadArea.find('.form-control')
-                .val(filename);
-
-
-            $('#uploads-modal').modal('hide');
-        });
     </script>
 <% end %>
 

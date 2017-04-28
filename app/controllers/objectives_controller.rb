@@ -1,5 +1,4 @@
 class ObjectivesController < ApplicationController
-
   def index
     render layout: 'table'
   end

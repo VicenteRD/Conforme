@@ -78,15 +78,9 @@ class RisksController < ApplicationController
 
   def update
     risk = Risk.find(params[:id])
-    redirect_to '/' && return unless risk
+    redirect_to_dashboard && return unless risk
 
-    fields = params.require(:risk)
-
-    risk.update!(fields.permit(risk.class.permitted_fields))
-    log_edited(risk)
-
-    create_references(risk, references_unsafe_hash)
-    add_attachments(risk, fields[:attachments]) if fields[:attachments]
+    edit_risk(risk, params.require(:risk))
 
     redirect_to risk
   end
@@ -107,13 +101,33 @@ class RisksController < ApplicationController
   private
 
   def create_risk(klass, fields)
-    entry = params.dig(:log, :body)
+    risk = klass.create!(
+      fields.permit(
+        klass.permitted_fields,
+        attachment_ids: []
+      )
+    )
 
-    risk = klass.create!(fields.permit(klass.permitted_fields, attachment_ids: []))
+    create_references(risk, params[:references].to_unsafe_h) if
+        params[:references]
+    process_attachments(risk)
 
-    create_references(risk, params[:references].to_unsafe_h) if params[:references]
-    add_attachments(risk, fields[:attachments]) if fields[:attachments]
+    log_created(risk)
+  end
 
-    risk.log_creation(session[:id], entry.present? ? entry : '')
+  def edit_risk(risk, fields)
+    risk.update!(fields.permit(risk.class.permitted_fields))
+    log_edited(risk)
+
+    create_references(risk, references_unsafe_hash)
+    process_attachments(risk)
+  end
+
+  def process_attachments(risk)
+    additions = params.dig(:risk, :new_attachments)
+    removals = params.dig(:attachments, :removal_ids)
+
+    add_attachments(risk, additions) if additions
+    remove_attachments(risk.class.name, risk, removals) if removals
   end
 end
