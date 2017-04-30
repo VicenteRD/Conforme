@@ -43,6 +43,14 @@ class UploadedFile
     save!
   end
 
+  def remove_attached_to(class_name, element_ids)
+    attached_to[class_name] -= element_ids
+
+    attached_to.delete(class_name) if attached_to[class_name].empty?
+
+    save!
+  end
+
   def self.all_from(ids)
     files = []
     ids.each do |id|

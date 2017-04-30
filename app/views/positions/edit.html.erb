@@ -10,6 +10,19 @@
           <div class="row form-group margin-left-30 margin-right-20">
             <div class="col-lg-1">
               <label class="form-control-label">
+                Padre
+              </label>
+            </div>
+            <div class="col-lg-3 input-group margin-right-20" id="parent-in">
+              <%= text_field :extra, :parent_name, class: 'form-control', readonly: true,
+                             value: Position.find(@position.parent_id).name %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :parent_id, class: 'form-control-hidden' %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
                 Nombre
               </label>
             </div>
@@ -161,6 +174,11 @@
             renderAndShowReferencesModal('2');
         }
 
+        $('#parent-in').click(function () {
+            setOptions('Position', 'Padre', false, 'parent_position', $(this));
+            renderAndShowReferencesModal('except-<%= @position.id.to_s %>');
+        });
+
         $(document).ready(function() {
             // Load lists
             setList('employees', <%= raw(@position.user_ids.map { |id| id.to_s }.to_s) %>, null);
@@ -172,7 +190,7 @@
             <% end %>
 
             <% if @position.competency_ids? %>
-                setList('type_competencies', <%= raw @position.competency_ids %>, null);
+                setList('type_competencies', <%= raw @position.competency_ids.map{|i| i.to_s} %>, null);
 
                 <% @position.competency_ids.each do |id| %>
                     <% competency = Qualification.find(id) %>
@@ -182,7 +200,7 @@
             <% end %>
 
             <% if @position.performance_ids? %>
-                setList('type_performances', <%= raw @position.performance_ids %>, null);
+                setList('type_performances', <%= raw @position.performance_ids.map{|i| i.to_s} %>, null);
 
                 <% @position.performance_ids.each do |id| %>
                     <% performance = Qualification.find(id) %>

@@ -22,7 +22,7 @@ class PositionsController < ApplicationController
     position = Position.create!(position_fields)
     log_created(position)
 
-    parent_position = Position.find(params[:parent_id])
+    parent_position = Position.find(position.parent_id)
     parent_position.add_child(position.id) if parent_position
 
     create_references(position, references_unsafe_hash)
@@ -35,8 +35,13 @@ class PositionsController < ApplicationController
     position = Position.find(params[:id])
     redirect_to_dashboard && return unless position
 
+    old_parent_id = position.parent_id
+
     position.update!(position_fields)
     log_edited(position)
+
+    update_parent_position(position, old_parent_id) if
+        position.parent_id != old_parent_id
 
     create_references(position, references_unsafe_hash)
 
@@ -68,5 +73,13 @@ class PositionsController < ApplicationController
       competency_ids: [], performance_ids: [],
       user_ids: []
     )
+  end
+
+  def update_parent_position(position, old_parent_id)
+    old_parent = Position.find(old_parent_id)
+    new_parent = Position.find(position.parent_id)
+
+    old_parent.remove_child(position.id)
+    new_parent.add_child(position.id)
   end
 end

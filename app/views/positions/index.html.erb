@@ -12,7 +12,7 @@
 
 <% content_for :scripts do %>
     <script>
-        $('div.node').click(function() {
+        $('div.node').click(function () {
             var positionId = $(this).find('p').attr('data-id');
 
             window.open('/personas/organigrama/' + positionId, '_self')
@@ -23,6 +23,15 @@
 <% end %>
 
 <% content_for :styles, raw(position_selector_style) %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_position_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nueva
+      <% end %>
+    </div>
+<% end %>
 
 <% content_for :breadcrumbs do %>
     <div class="left">

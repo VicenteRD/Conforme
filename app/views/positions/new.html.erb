@@ -9,6 +9,18 @@
           <div class="row form-group margin-left-30 margin-right-20">
             <div class="col-lg-1">
               <label class="form-control-label">
+                Padre
+              </label>
+            </div>
+            <div class="col-lg-3 input-group margin-right-20" id="parent-in">
+              <%= text_field :extra, :parent_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :parent_id, class: 'form-control-hidden' %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
                 Nombre
               </label>
             </div>
@@ -163,6 +175,11 @@
 
             renderAndShowReferencesModal('2');
         }
+
+        $('#parent-in').click(function () {
+            setOptions('Position', 'Padre', false, 'parent_position', $(this));
+            renderAndShowReferencesModal();
+        });
     </script>
 <% end %>
 

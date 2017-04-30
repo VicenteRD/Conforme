@@ -1,0 +1,60 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Nombre</th>
+      <th>Localidad</th>
+      <th>N. Actas</th>
+    </tr>
+<% end %>
+<% content_for :table_body do %>
+    <% folders = MinutesFolder.all %>
+    <% if folders.size != 0 %>
+        <% folders.each do |folder| %>
+
+            <tr data-href="<%= minutes_folder_path(folder) %>">
+
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= folder.name %>
+              </td>
+              <td>
+                <%= folder.location %>
+              </td>
+              <td>
+                <%= folder.minutes.size || 0 %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron carpetas de actas.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_minutes_folder_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Documentos: Actas
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

@@ -34,13 +34,17 @@ class ApplicationController < ActionController::Base
   end
 
   def create_references(object, reference_ids, base_id = '')
-    object.set_references_from_hash(reference_ids, base_id) if reference_ids
+    if object.class < Referable
+      reference_ids ||= {}
+      object.set_references_from_hash(reference_ids, base_id.to_s)
+    else
+      puts 'Tried to create references for a non-referable object'
+    end
   end
 
   def add_attachments(object, uploads, base_id = '')
-    return unless uploads
     klass = object.class
-    return unless klass < Describable && klass < Mongoid::Document
+    return unless uploads && klass < Describable && klass < Mongoid::Document
 
     processed_uploads = ul_files(uploads)
 
@@ -55,21 +59,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def compound_id(base_id, object_id)
-    base_id + (base_id.empty? ? '' : '#') + object_id
-  end
-
-  def remove_attachments(class_name, element, removal_ids)
+  def remove_attachments(class_name, element, removal_ids, base_id = '')
     element.attachment_ids -= removal_ids
     element.save!
 
+    element_id = compound_id(base_id.to_s, object.id)
     UploadedFile.find(removal_ids).each do |attachment|
-      attachment.attached_to[class_name] -= [element.id]
-
-      attachment.attached_to.delete(class_name) if
-          attachment.attached_to[class_name].empty?
-
-      attachment.save!
+      attachment.remove_attached_to(class_name, [element_id])
     end
   end
 
@@ -92,12 +88,16 @@ class ApplicationController < ActionController::Base
   private
 
   def ul_files(uploads)
-    uploads.map { |upload|
+    uploads.map do |upload|
       UploadedFile.where(
-          upload_file_name: upload.original_filename
+        upload_file_name: upload.original_filename
       ).first_or_create!(
-          upload: upload
+        upload: upload
       )
-    }
+    end
+  end
+
+  def compound_id(base_id, object_id)
+    base_id + (base_id.empty? ? '' : '#') + object_id
   end
 end

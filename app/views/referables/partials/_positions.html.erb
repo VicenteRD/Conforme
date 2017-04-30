@@ -1,10 +1,14 @@
 <% extra_parameters = (extra || '').split('-') %>
 <% area = extra_parameters[0] == 'area' %>
-<% position = extra_parameters.length >= 2 ? extra_parameters[1] : '' %>
+
+<% exclude = extra_parameters[0] == 'except' ? extra_parameters[1] : ''%>
+
+<% position = (extra_parameters.length >= 2 && exclude == '') ? extra_parameters[1] : '' %>
+
 
 
 <div class="row">
-  <%= render partial: 'positions/chart', locals: {parent: position}, layout: false %>
+  <%= render partial: 'positions/chart', locals: {parent: position, exclude: exclude}, layout: false %>
 </div>
 
 <%= raw (area ? area_selector_style : position_selector_style) %>

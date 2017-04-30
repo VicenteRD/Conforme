@@ -85,34 +85,17 @@ class RisksController < ApplicationController
     redirect_to risk
   end
 
-  def edit_attachments
-    risk = Risk.find(params.dig(:attachments, :element_id))
-    return unless risk
-
-    additions = params.dig(:attachments, :additions)
-    removal_ids = params.dig(:attachments, :removal_ids)
-
-    remove_attachments(risk.class.name, risk, removal_ids) if removal_ids
-    add_attachments(risk, additions) if additions
-
-    redirect_to risk
-  end
-
   private
 
   def create_risk(klass, fields)
-    risk = klass.create!(
-      fields.permit(
-        klass.permitted_fields,
-        attachment_ids: []
-      )
-    )
+    risk = klass.create!(fields.permit(klass.permitted_fields))
 
-    create_references(risk, params[:references].to_unsafe_h) if
-        params[:references]
+    create_references(risk, references_unsafe_hash)
     process_attachments(risk)
 
     log_created(risk)
+
+    risk
   end
 
   def edit_risk(risk, fields)

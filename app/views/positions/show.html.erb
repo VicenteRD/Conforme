@@ -5,20 +5,25 @@
         <%= @position.name %>
       </div>
     </div>
+
+<% end %>
+
+<% content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Area:</div>
+      <div class="col-lg-4 show-label">Posición Padre:</div>
       <div class="col-lg-8">
-        <%= @position.area ? 'Si' : 'No' %>
+        <%= Position.find(@position.parent_id).name %>
       </div>
     </div>
 <% end %>
 
-<% content_for :main_col_2 do %>
-
-<% end %>
-
 <% content_for :main_col_3 do %>
-
+    <div class="row">
+      <div class="col-lg-4 show-label">Área:</div>
+      <div class="col-lg-8">
+        <%= @position.area ? 'Si' : 'No' %>
+      </div>
+    </div>
 <% end %>
 
 <% content_for :extra do %>
@@ -111,12 +116,6 @@
       <%= link_to edit_position_path(@position), method: 'get', class: 'dropdown-inline-button' do %>
           <i class="dropdown-inline-button-icon icmn-pencil"></i>
           Editar
-      <% end %>
-    </div>
-    <div class="dropdown">
-      <%= link_to new_position_path(@position), method: 'get', class: 'dropdown-inline-button' do %>
-          <i class="dropdown-inline-button-icon icmn-plus2"></i>
-          Nueva sub-posición
       <% end %>
     </div>
 <% end %>

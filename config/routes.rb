@@ -34,12 +34,12 @@ Rails.application.routes.draw do
 
 
   # Organization Chart
-  get '/personas/organigrama'                  => 'positions#index', as: :positions
-  get '/personas/organigrama/:parent_id/nueva' => 'positions#new',   as: :new_position
-  get '/personas/organigrama/:id'              => 'positions#show',  as: :position
-  get '/personas/organigrama/:id/editar'       => 'positions#edit',  as: :edit_position
+  get '/personas/organigrama'            => 'positions#index', as: :positions
+  get '/personas/organigrama/nueva'      => 'positions#new',   as: :new_position
+  get '/personas/organigrama/:id'        => 'positions#show',  as: :position
+  get '/personas/organigrama/:id/editar' => 'positions#edit',  as: :edit_position
 
-  post  '/personas/organigrama/:parent_id/nueva'  => 'positions#create'
+  post  '/personas/organigrama/nueva'             => 'positions#create'
   patch '/personas/organigrama/:id/editar'        => 'positions#update'
   patch '/personas/:organigrama/edit-attachments' => 'positions#edit_attachments'
 
@@ -173,10 +173,26 @@ Rails.application.routes.draw do
 
   # -- Uploads
   get '/documentos/archivos'       => 'uploaded_files#index', as: :uploaded_files
-  get '/documentos/archivos/nuevo' => 'uploaded_files#new'  , as: :new_uploaded_file
-  get '/documentos/archivos/:id'   => 'uploaded_files#show' , as: :uploaded_file
+  get '/documentos/archivos/nuevo' => 'uploaded_files#new',   as: :new_uploaded_file
+  get '/documentos/archivos/:id'   => 'uploaded_files#show',  as: :uploaded_file
 
   post '/documentos/archivos/nuevo' => 'uploaded_files#create'
+
+  # -- Minutes
+
+  get '/documentos/actas'            => 'minutes_folders#index', as: :minutes_folders
+  get '/documentos/actas/nuevo'      => 'minutes_folders#new',   as: :new_minutes_folder
+  get '/documentos/actas/:id'        => 'minutes_folders#show',  as: :minutes_folder
+  get '/documentos/actas/:id/editar' => 'minutes_folders#edit',  as: :edit_minutes_folder
+
+  post  '/documentos/actas/nuevo'      => 'minutes_folders#create'
+  patch '/documentos/actas/:id/editar' => 'minutes_folders#update'
+
+  get '/documentos/actas/:folder_id/nueva' => 'minutes#new', as: :new_minute
+  get '/documentos/actas/:folder_id/:id'   => 'minutes#edit', as: :edit_minute
+
+  post  '/documentos/actas/:folder_id/nueva' => 'minutes#create'
+  patch '/documentos/actas/:folder_id/:id'   => 'minutes#update'
 
   # -- Definitions
 
@@ -317,7 +333,6 @@ Rails.application.routes.draw do
 
   post  '/riesgos/:type/nuevo'         => 'risks#create'
   patch '/riesgos/:type/:id/editar/'   => 'risks#update'
-  patch '/riesgos/:type/edit-attachments' => 'risks#edit_attachments'
 
   post  '/riesgos/:type/:risk_id/nueva'      => 'risk_measurements#create'
   patch '/riesgos/:type/:risk_id/:id/editar' => 'risk_measurements#update'

@@ -1,6 +1,8 @@
 module PositionsHelper
 
-  def generate_organization_chart(parent_id = nil)
+  def generate_organization_chart(parent_id = nil, exception = '')
+    return if parent_id == exception
+
     if parent_id.nil?
       parent = Position.or({:parent_id => nil}, {:parent_id.exists => false}).first
     else
@@ -12,17 +14,19 @@ module PositionsHelper
   <p data-id="#{parent.id}">
     #{parent.name}
   </p>
-  <ul>#{generate_branches(parent.children_ids)}</ul>
+  <ul>#{generate_branches(parent.children_ids, exception)}</ul>
 </li>
               EOS
   end
 
-  def generate_branches(branches_ids)
+  def generate_branches(branches_ids, exception)
     return '' if branches_ids.nil? || branches_ids.empty?
 
     branches_text = ''
 
     branches_ids.each do |branch_id|
+      puts branch_id.class, exception.class
+      next if branch_id.to_s == exception
 
       child = Position.find(branch_id)
 
@@ -31,7 +35,7 @@ module PositionsHelper
     <p data-id="#{branch_id}">
       #{child.name}
     </p>
-   <ul>#{ generate_branches(child.children_ids) }</ul>
+   <ul>#{generate_branches(child.children_ids, exception)}</ul>
   </li>
                 EOS
     end

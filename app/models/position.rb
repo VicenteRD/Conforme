@@ -40,6 +40,11 @@ class Position
     save!
   end
 
+  def remove_child(id)
+    self.children_ids -= [id] if id
+    save!
+  end
+
   def qualifications(qualifications_type)
     if qualifications_type == 1
       competency_ids

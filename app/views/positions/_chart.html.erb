@@ -5,7 +5,8 @@
 
 <ul id="org-chart-data" style="display:none">
   <% parent_id = (defined?(parent) && parent != nil && parent != '') ? parent : nil %>
-  <%= generate_organization_chart(parent_id).html_safe %>
+  <% exception = (defined?(exclude) && exclude != nil) ? exclude : ''%>
+  <%= generate_organization_chart(parent_id, exception).html_safe %>
 </ul>
 
 <script>

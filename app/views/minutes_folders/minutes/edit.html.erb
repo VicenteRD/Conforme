@@ -1,0 +1,458 @@
+<%= form_for(@minute, as: :minute,
+             url: edit_minute_path(@folder, @minute), method: :patch) do |f| %>
+
+    <section class="page-content">
+      <div class="page-content-inner">
+
+        <div class="panel">
+
+          <%= render partial: 'referables/references_nav' %>
+
+          <div class="row form-group margin-left-30 margin-right-20">
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Nombre
+              </label>
+            </div>
+            <div class="col-lg-3">
+              <%= f.text_field :name, class: 'form-control' %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Inicio
+              </label>
+            </div>
+            <div class="col-lg-3">
+              <div class='input-group date date-picker' id='date-picker'>
+                <%= text_field :raw, :start_at, class: 'form-control',
+                               data: {format: dt_form_format(true)},
+                               value: @minute.start_at.to_i %>
+                <span class="input-group-addon">
+                  <i class="icmn-calendar"></i>
+                </span>
+              </div>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Fin
+              </label>
+            </div>
+            <div class="col-lg-3">
+              <div class='input-group date date-picker' id='date-picker'>
+                <%= text_field :raw, :finish_at, class: 'form-control',
+                               data: {format: dt_form_format(true)},
+                               value: @minute.finish_at.to_i %>
+                <span class="input-group-addon">
+                  <i class="icmn-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row form-group margin-left-30 margin-right-20">
+            <div class="col-lg-4"></div>
+
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Inicio Sgte.
+              </label>
+            </div>
+            <div class="col-lg-3">
+              <div class='input-group date date-picker' id='date-picker'>
+                <%= text_field :raw, :nxt_start_at, class: 'form-control',
+                               data: {format: dt_form_format(true)},
+                               value: @minute.nxt_start_at.to_i %>
+                <span class="input-group-addon">
+                  <i class="icmn-calendar"></i>
+                </span>
+              </div>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Fin Sgte.
+              </label>
+            </div>
+            <div class="col-lg-3">
+              <div class='input-group date date-picker' id='date-picker'>
+                <%= text_field :raw, :nxt_finish_at, class: 'form-control',
+                               data: {format: dt_form_format(true)},
+                               value: @minute.nxt_finish_at.to_i %>
+                <span class="input-group-addon">
+                  <i class="icmn-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row is-flex">
+          <div class="col-lg-4">
+            <div class="panel padding-0">
+              <div class="nav-tabs-horizontal" style="width: 100%">
+                <ul class="nav nav-tabs" id="references-tabs" role="tablist" style="margin: 0">
+
+                  <li class="nav-item" style="width: 25%; margin: 0" id="employees-tab">
+                    <a class="nav-link nav-tab active" href="javascript: void(0);"
+                       data-toggle="tab" data-target="#employees" role="tab"
+                       style="text-align: center; font-weight: 600; color: #827ca1">
+                      Internos
+                    </a>
+                  </li>
+
+                  <li class="nav-item" style="width: 25%; margin:0" id="clients-tab">
+                    <a class="nav-link nav-tab" href="javascript: void(0);"
+                       data-toggle="tab" data-target="#clients" role="tab"
+                       style="text-align: center; font-weight: 600; color: #827ca1">
+                      Clientes
+                    </a>
+                  </li>
+
+                  <li class="nav-item" style="width: 25%; margin:0" id="providers-tab">
+                    <a class="nav-link nav-tab" href="javascript: void(0);" data-toggle="tab" data-target="#providers" role="tab" style="text-align: center; font-weight: 600; color: #827ca1">
+                      Proveedores
+                    </a>
+                  </li>
+
+                  <li class="nav-item" style="width: 25%; margin:0" id="others-tab">
+                    <a class="nav-link nav-tab" href="javascript: void(0);" data-toggle="tab" data-target="#others" role="tab" style="text-align: center; font-weight: 600; color: #827ca1">
+                      Otros
+                    </a>
+                  </li>
+
+                </ul>
+                <div class="tab-content">
+
+                  <div class="tab-pane active padding-15 height-300" id="employees"
+                       role="tabpanel" aria-expanded="false"
+                       style="overflow: auto">
+                    <div id="employee-participants"></div>
+                    <a id="employee-participants-in" href="javascript:void(0)">
+                      &plus; Agregar
+                    </a>
+                  </div>
+                  <div class="tab-pane padding-15 height-300" id="clients"
+                       role="tabpanel" aria-expanded="false"
+                       style="overflow: auto">
+                    <div id="client-participants"></div>
+                    <a id="client-participants-in" href="javascript:void(0)">
+                      &plus; Agregar
+                    </a>
+                  </div>
+                  <div class="tab-pane padding-15 height-300" id="providers"
+                       role="tabpanel" aria-expanded="false"
+                       style="overflow: auto">
+                    <div id="provider-participants"></div>
+                    <a id="provider-participants-in" href="javascript:void(0)">
+                      &plus; Agregar
+                    </a>
+                  </div>
+                  <div class="tab-pane padding-15 height-300" id="others"
+                       role="tabpanel" aria-expanded="false"
+                       style="overflow: auto">
+                    <div id="other-participants"></div>
+                    <a id="other-participants-in" href="javascript:void(0)">
+                      &plus; Agregar
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-lg-offset-2 col-lg-6">
+            <div class="panel" style="overflow: auto; height: 341px">
+
+              <div class="panel-heading">
+                <h5>Temas Tratados</h5>
+              </div>
+
+              <div class="panel-body">
+                <table>
+                  <thead>
+                  <tr>
+                    <th>Tema</th>
+                    <th width="1%">Tratado</th>
+                  </tr>
+                  </thead>
+                  <tbody id="treated-topics"></tbody>
+                </table>
+                <a id="add-treated" href="javascript:void(0)">
+                  &plus; Agregar
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row is-flex">
+          <div class="col-lg-6">
+            <div class="panel">
+
+              <div class="panel-heading">
+                <h5>Temas Próxima Reunión</h5>
+              </div>
+
+              <div class="panel-body">
+                <table width="100%">
+                  <thead>
+                  <tr>
+                    <th>Tema</th>
+                  </tr>
+                  </thead>
+                  <tbody id="untreated-topics"></tbody>
+                </table>
+                <a id="add-untreated" href="javascript:void(0)">
+                  &plus; Agregar
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="col-lg-offset-1 col-lg-5 panel">
+
+            <div class="panel-heading">
+              <h5>Tareas</h5>
+            </div>
+
+            <div class="panel-body">
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row is-flex">
+          <div class="col-lg-5 panel">
+            <%= render partial: 'uploaded_files/edit_attachments',
+                       locals: {element: @minute, form: f} %>
+          </div>
+
+          <div class="col-lg-1"></div>
+
+          <div class="col-lg-6 panel">
+            <%= render partial: 'referables/show_all_for',
+                       locals: {element: @minute, form_format: true} %>
+          </div>
+        </div>
+
+        <div class="panel" style="width: 100%">
+          <div class="panel-body">
+            <div class="row form-group" style="margin: 30px 10px;height:400px">
+              <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Confirmation modal -->
+    <div id="confirmation-modal" class="modal fade modal-size-large" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content" id="confirmation-modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="confirmation-modal-title">Está Seguro?</h4>
+          </div>
+
+          <div class="modal-body" id="confirmation-modal-body">
+            <%= text_area :log, :body, class: 'form-control height-150' %>
+          </div>
+
+          <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-6 text-left">
+                <button class="btn btn-danger width-150 height-50" data-dismiss="modal">Cancelar</button>
+              </div>
+              <div class="text-right col-md-6">
+                <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<% content_for :scripts do %>
+    <script>
+        var treatedCounter = 0;
+        var untreatedCounter = 0;
+
+        function generateParticipantElement(target, klass, id, name, url) {
+            target.append('<div id="reference-' + id + '">\n' +
+                '<a href="' + url + '">' + name + '</a>' +
+                '<input class="form-control-hidden" type="hidden" ' +
+                'name="minute[' + klass + '][]" id="minute_' + klass + '" ' +
+                'value="' + id + '">\n' +
+                '</div>'
+            );
+        }
+
+        function generateEmployeeParticipantElement(target, klass, id, name) {
+            generateParticipantElement(target, klass, id, name, '/personas/fichas/' + id)
+        }
+        function generateClientParticipantElement(target, klass, id, name) {
+            generateParticipantElement(target, klass, id, name, '/clientes/fichas/' + id)
+        }
+        function generateProviderParticipantElement(target, klass, id, name) {
+            generateParticipantElement(target, klass, id, name, '/proveedores/fichas/' + id)
+        }
+
+        $('#employee-participants-in').click(function () {
+            setOptions(
+                'Person::User',
+                'Participantes Internos',
+                true,
+                'employee_participant_ids',
+                $('#employee-participants')
+            );
+            setElementGenerator(generateEmployeeParticipantElement);
+            renderAndShowReferencesModal();
+        });
+        $('#client-participants-in').click(function () {
+            setOptions(
+                'Person::Client',
+                'Clientes Participantes',
+                true,
+                'client_participant_ids',
+                $('#client-participants')
+            );
+            setElementGenerator(generateClientParticipantElement);
+            renderAndShowReferencesModal();
+        });
+        $('#provider-participants-in').click(function () {
+            setOptions(
+                'Person::Provider',
+                'Proveedores Participantes',
+                true,
+                'provider_participant_ids',
+                $('#provider-participants')
+            );
+            setElementGenerator(generateProviderParticipantElement);
+            renderAndShowReferencesModal();
+        });
+        $('#other-participants-in').click(function () {
+            setOptions(
+                'Person::User',
+                'Otros Participantes',
+                true,
+                'other_participant_ids',
+                $('#other-participants')
+            );
+            setElementGenerator(generateParticipantElement);
+            renderAndShowReferencesModal();
+        });
+
+        $('#add-treated').click(function () {
+            addTreatedTopic('', true)
+        });
+        $('#add-untreated').click(function () {
+            addUntreatedTopic('')
+        });
+
+        function addUntreatedTopic(value) {
+            $('#untreated-topics').append(
+                '<tr><td><input class="form-control" type="text"' +
+                ' name="raw[untreated_topic_' + untreatedCounter + ']"' +
+                ' id="raw_treated_topic_' + untreatedCounter + '"' +
+                ' value="' + value + '"></td></tr>'
+            );
+            untreatedCounter++;
+        }
+
+        function addTreatedTopic(value, checked) {
+            $('#treated-topics').append(
+                '<tr>' +
+                '<td><input class="form-control" type="text" ' +
+                'name="raw[treated_topic_' + treatedCounter + ']" ' +
+                'id="raw_treated_topic_' + treatedCounter + '" ' +
+                'value="' + value + '"></td>' +
+                '<td><input class="form-control" type="checkbox" ' +
+                'name="raw[treated_topic_' + treatedCounter + '_bool]" ' +
+                'id="raw_treated_topic_' + treatedCounter + '_bool" ' +
+                (checked ? 'checked="checked"' : '') + '></td>' +
+                '</tr>'
+            );
+            treatedCounter++;
+        }
+
+        $(function () {
+            setSelectedReferences(<%= raw @minute.references.to_json %>, null);
+          /* POPULATE PARTICIPANTS */
+            // Employees
+            <% if @minute.employee_participant_ids? %>
+            setList(
+                'employee_participant_ids', <%= raw @minute.employee_participant_ids.to_s || '[]' %>,
+                null
+            );
+            <% @minute.employee_participant_ids.each do |e_id| %>
+            generateEmployeeParticipantElement(
+                $('#employee-participants'), 'employee_participant_ids',
+                '<%= e_id.to_s %>', '<%= print_responsible(e_id)%>'
+            );
+            <% end %>
+            <% end %>
+
+            // Clients
+            <% if @minute.client_participant_ids? %>
+            setList(
+                'client_participant_ids', <%= raw @minute.client_participant_ids.to_s || '[]' %>,
+                null
+            );
+            <% @minute.client_participant_ids.each do |c_id| %>
+            generateClientParticipantElement(
+                $('#client-participants'), 'client_participant_ids',
+                '<%= c_id.to_s %>', '<%= Person::Client.find(c_id).full_name%>'
+            );
+            <% end %>
+            <% end %>
+
+            // Providers
+            <% if @minute.provider_participant_ids? %>
+            setList(
+                'provider_participant_ids', <%= raw @minute.provider_participant_ids.to_s || '[]' %>,
+                null
+            );
+            <% @minute.provider_participant_ids.each do |p_id| %>
+            generateProviderParticipantElement(
+                $('#provider-participants'), 'provider_participant_ids',
+                '<%= p_id.to_s %>', '<%= Person::Provider.find(p_id).full_name%>'
+            );
+            <% end %>
+            <% end %>
+
+          /* POPULATE TOPICS */
+            <% @minute.treated_topics.each do |topic, checked| %>
+            addTreatedTopic('<%= topic %>', <%= checked %>);
+            <% end %>
+            <% @minute.untreated_topics.each do |topic| %>
+            addUntreatedTopic('<%= topic %>');
+            <% end %>
+        });
+    </script>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to 'Documentos: Actas', minutes_folders_path %>
+        </li>
+        <li>
+          <%= link_to @folder.number, @folder %>
+        </li>
+        <li>
+          <span>
+            Editar Acta
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>
