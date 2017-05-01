@@ -11,12 +11,14 @@
 <% end %>
 
 <%= content_for :menu do %>
-    <div class="dropdown">
-      <a href="#confirmation-modal" class="dropdown-inline-button" data-toggle="modal">
-        <i class="dropdown-inline-button-icon icmn-file-check"></i>
-        Grabar
-      </a>
-    </div>
+    <% unless defined?(nosave) %>
+        <div class="dropdown">
+          <a href="#confirmation-modal" class="dropdown-inline-button" data-toggle="modal">
+            <i class="dropdown-inline-button-icon icmn-file-check"></i>
+            Grabar
+          </a>
+        </div>
+    <% end %>
 <% end %>
 
 <%= yield %>
@@ -43,7 +45,7 @@
             $('.rut-input').mask('00000000-K', {
                 translation: {
                     K: {pattern: /[kK0-9]/}
-                    },
+                },
                 placeholder: '12345678-9'
             });
 
@@ -51,8 +53,8 @@
                 messages: {
                     'default': 'Arrastre un archivo hasta aquí o haga click',
                     'replace': 'Arraste un archivo hasta aquí o haga click para reemplazar',
-                    'remove':  'Quitar',
-                    'error':   'Oops, algo salió mal.'
+                    'remove': 'Quitar',
+                    'error': 'Oops, algo salió mal.'
                 },
                 error: {
                     'fileSize': 'Archivo excede peso máximo ({{ value }}).',

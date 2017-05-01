@@ -17,7 +17,7 @@ class EmployeeEvaluationsController < ApplicationController
     @type = parse_evaluation_type(params[:type])
     redirect_to_dashboard && return unless @type
 
-    render layout: 'form'
+    render layout: 'form', locals: { nosave: true }
   end
 
   def create

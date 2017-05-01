@@ -285,7 +285,7 @@ function processNewReferenceCreated(formResponse) {
     }
 
     addReferenceToTarget(key, objectId, objectName);
-    return true;
+    return !currentOptions['multiple'];
 }
 
 /**
@@ -388,6 +388,7 @@ function styleSelectedRows(rows) {
 
     rows.each(function () {
         var row = $(this);
+
         styleSelection(
             row,
             isSelected(

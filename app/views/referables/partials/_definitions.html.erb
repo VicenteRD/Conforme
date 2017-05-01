@@ -1,0 +1,73 @@
+<%= content_for :references_table_content do %>
+    <thead>
+    <tr>
+      <th>Tipo</th>
+      <th>Nombre</th>
+    </tr>
+    </thead>
+    <tbody style="cursor: pointer">
+    <% Definition.each do |definition| %>
+        <tr class="definition-row" data-id="<%= definition.id %>">
+          <td id="name-cell"><%= definition.name %></td>
+          <td><%= definition.definition %></td>
+        </tr>
+
+    <% end %>
+    </tbody>
+<% end %>
+
+<%= content_for :references_form do %>
+    <%= form_for(:definition,
+                 url: new_definition_path(format: :json),
+                 remote: true,
+                 html: {id: 'new_definition'}) do |f| %>
+        <div class="row form-group" style="margin: 15px 10px 0 10px">
+          <div class="col-md-1">
+            <label class="form-control-label">Nombre</label>
+          </div>
+          <div class="col-md-3">
+            <%= f.text_field :name, class: 'form-control', style: 'width: 100%' %>
+          </div>
+          <div class="col-md-1">
+            <label class="form-control-label">Definición</label>
+          </div>
+          <div class="col-md-7">
+            <%= f.text_field :definition, class: 'form-control', style: 'width: 100%' %>
+          </div>
+        </div>
+
+        <div class="form-actions text-center" style="position:absolute; bottom: 0; width: 100%">
+          <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50', style: 'text-align: center' %>
+        </div>
+    <% end %>
+<% end %>
+
+<%= content_for :references_scripts do %>
+    <script>
+        var rowSelector = $('.definition-row');
+
+        rowSelector.click(function () {
+            var row = $(this);
+            var result = processReferenceRowClick(
+                row,
+                row.attr('data-id'),
+                row.find('#name-cell').html()
+            );
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        $('#new_definition').on("ajax:success", function (e, data, status, xhr) {
+            var result = processNewReferenceCreated(data);
+
+            if (result) {
+                $('#table-modal').modal('hide');
+            }
+        });
+
+        styleSelectedRows(rowSelector);
+        $('.filterable').filterable();
+    </script>
+<% end %>

@@ -1,36 +1,23 @@
-<% extra ||= 'noextra' %>
-<% employees = extra == 'noextra' ? Person::User.all : Person::User.where(position_ids: extra) %>
-
 <%= content_for :references_table_content do %>
     <thead>
     <tr>
-      <th>Nombre</th>
-      <th>Cargos</th>
-      <th>Rol</th>
+      <th>Tipo</th>
+      <th>Localidad</th>
     </tr>
     </thead>
     <tbody style="cursor: pointer">
-    <% employees.each do |employee| %>
-
-        <% positions = []; employee.positions.each { |pos| positions.push(pos.name) } %>
-
-        <tr class="user-row" data-id="<%= employee.id %>">
-          <td id="name-cell"><%= employee.full_name %></td>
-          <td><%= positions.join(', ') %></td>
-          <td><%= employee.role %></td>
+    <% MinutesFolder.each do |folder| %>
+        <tr class="minutes-folder-row" data-id="<%= folder.id %>">
+          <td id="name-cell"><%= folder.name %></td>
+          <td><%= folder.location %></td>
         </tr>
-
     <% end %>
     </tbody>
 <% end %>
 
 <%= content_for :references_scripts do %>
     <script>
-        $(function () {
-            $('#new-tab').hide()
-        });
-
-        var rowSelector = $('.user-row');
+        var rowSelector = $('.minutes-folder-row');
 
         rowSelector.click(function () {
             var row = $(this);
@@ -46,6 +33,7 @@
         });
 
         styleSelectedRows(rowSelector);
+        $('#new-tab').hide();
         $('.filterable').filterable();
     </script>
 <% end %>

@@ -67,7 +67,9 @@
 
 
           <div class="text-right margin-top-15">
-            <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+            <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50',
+                         data: {disable_with: 'Ingresado!'},
+                         id: "btn-#{@loader.evaluated_person.id.to_s}" %>
           </div>
       <% end %>
     </div>
@@ -82,6 +84,10 @@
                 commentsField.prop('readonly', 'readonly')
             }
         }
+
+        $('#btn-<%= @loader.evaluated_person.id.to_s %>').click(function() {
+           $(this).addClass('btn-success');
+        });
     </script>
 
 <% end %>
