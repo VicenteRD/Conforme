@@ -28,22 +28,26 @@
         </div>
 
         <div class="row is-flex">
-          <div class="col-lg-5 panel">
-            <%= render partial: 'uploaded_files/edit_attachments',
-                       locals: {element: nil, form: f} %>
+          <div class="col-lg-5">
+            <div class="panel">
+              <%= render partial: 'uploaded_files/edit_attachments',
+                         locals: {element: nil, form: f} %>
+            </div>
           </div>
 
           <div class="col-lg-1"></div>
 
-          <div class="col-lg-6 panel">
-            <div class="panel-heading">
-              <h5>
-                Referencias
-              </h5>
-            </div>
+          <div class="col-lg-6">
+            <div class="panel" style="height: 100%">
+              <div class="panel-heading">
+                <h5>
+                  Referencias
+                </h5>
+              </div>
 
-            <div class="panel-body">
-              <div id="references-container" style="margin: 0 30px 10px 30px">
+              <div class="panel-body">
+                <div id="references-container" style="margin: 0 30px 10px 30px">
+                </div>
               </div>
             </div>
           </div>

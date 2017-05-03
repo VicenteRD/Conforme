@@ -26,7 +26,7 @@ class DefinitionsController < ApplicationController
     log_created(definition)
 
     create_references(definition, references_unsafe_hash)
-    add_attachments(definition, params.dig(:objective, :attachments))
+    add_attachments(definition, params.dig(:definition, :attachments))
 
     respond_to do |format|
       format.html { redirect_to(definition) }

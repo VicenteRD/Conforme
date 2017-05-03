@@ -29,16 +29,20 @@
         </div>
 
         <div class="row is-flex">
-          <div class="col-lg-5 panel">
-            <%= render partial: 'uploaded_files/edit_attachments',
-                       locals: {element: @folder, form: f} %>
+          <div class="col-lg-5">
+            <div class="panel">
+              <%= render partial: 'uploaded_files/edit_attachments',
+                         locals: {element: @folder, form: f} %>
+            </div>
           </div>
 
           <div class="col-lg-1"></div>
 
-          <div class="col-lg-6 panel">
-            <%= render partial: 'referables/show_all_for',
-                       locals: {element: @folder, form_format: true} %>
+          <div class="col-lg-6">
+            <div class="panel" style="height: 100%">
+              <%= render partial: 'referables/show_all_for',
+                         locals: {element: @folder, form_format: true} %>
+            </div>
           </div>
         </div>
 

@@ -1,0 +1,262 @@
+<%= form_for @questionnaire, as: :questionnaire,
+             url: edit_questionnaire_path(@questionnaire), method: :patch do |f| %>
+
+    <section class="page-content">
+      <div class="page-content-inner">
+
+        <div class="panel padding-left-35 padding-right-20">
+          <%= render partial: 'referables/references_nav' %>
+
+          <div class="row form-group">
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Nombre
+              </label>
+            </div>
+            <div class="col-lg-3">
+              <%= f.text_field :name, class: 'form-control' %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Tipo
+              </label>
+            </div>
+            <div class="col-lg-3">
+              <%= f.collection_select :questionnaire_type,
+                                      Questionnaire.all_types,
+                                      :first, :last,
+                                      {}, {class: 'form-control'} %>
+            </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Plazo
+              </label>
+            </div>
+            <div class="col-lg-3">
+              <div class='input-group date date-picker' id='date-picker'>
+                <%= text_field :raw, :due_at, class: 'form-control',
+                               data: {format: dt_form_format(true), max: false},
+                               value: @questionnaire.due_at.to_i %>
+                <span class="input-group-addon">
+                  <i class="icmn-calendar"></i>
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!--<div class="row is-flex">
+          <div class="col-lg-5">
+            <div class="panel">
+              <%# render partial: 'uploaded_files/edit_attachments',
+                         locals: {element: nil, form: f} %>
+            </div>
+          </div>
+
+          <div class="col-lg-1"></div>
+
+          <div class="col-lg-6 panel">
+            <div class="panel-heading">
+              <h5>
+                Referencias
+              </h5>
+            </div>
+
+            <div class="panel-body">
+              <div id="references-container" style="margin: 0 30px 10px 30px">
+              </div>
+            </div>
+          </div>
+        </div>-->
+
+        <div class="panel" style="padding: 0 20px 15px 35px;min-height: 150px">
+          <div id="questions-container" style="margin: 30px 0"></div>
+          <a href="javascript:void(0)" id="questions-add">&plus; Agregar</a>
+        </div>
+
+        <div class="panel" style="width: 100%">
+          <div class="panel-body">
+            <div class="row form-group" style="margin: 30px 10px;height:400px">
+              <%= f.text_area :comments, class: 'form-control', data: {provider: 'summernote'} %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Confirmation modal -->
+    <div id="confirmation-modal" class="modal fade modal-size-large" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content" id="confirmation-modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title" id="confirmation-modal-title">Está Seguro?</h4>
+          </div>
+
+          <div class="modal-body" id="confirmation-modal-body">
+            <%= text_area :log, :body, class: 'form-control height-150' %>
+          </div>
+
+          <div class="modal-footer">
+            <div class="row">
+              <div class="col-md-6 text-left">
+                <button class="btn btn-danger width-150 height-50" data-dismiss="modal">Cancelar</button>
+              </div>
+              <div class="text-right col-md-6">
+                <%= f.submit 'Ingresar', class: 'btn btn-primary width-150 height-50' %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<% end %>
+
+<% content_for :scripts do %>
+    <script>
+        var questionCounter = 0;
+
+        $('#questions-add').click(function() {
+            generateQuestion();
+        });
+
+        function generateQuestion(questionName, questionType, requiredQuestion, answers) {
+            let pregenQuestion = (questionName !== undefined || questionName !== '') &&
+                (questionType !== undefined || questionType !== '') &&
+                (requiredQuestion !== undefined || requiredQuestion !== '');
+            requiredQuestion = requiredQuestion === 'true';
+
+            let container = $('#questions-container');
+
+            container.append(
+                `<div class="row">
+<div class="col-lg-1">
+  <label>Pregunta ${questionCounter + 1}</label>
+</div>
+  <div class="col-lg-6">
+  <input type="text" class="form-control" value="${pregenQuestion ? questionName : ''}"
+         name="question_${questionCounter}[name]"
+         id="question_${questionCounter}_name">
+</div>
+<div class="col-lg-2">
+  <select class="form-control"
+          name="question_${questionCounter}[question_type]"
+          id="question_${questionCounter}_question_type">
+    <option value="1"
+            ${pregenQuestion && questionType === '1' ? 'selected' : ''}>Alternativas</option>
+    <option value="2"
+            ${pregenQuestion && questionType === '2' ? 'selected' : ''}>Abierta</option>
+  </select>
+</div>
+<div class="col-lg-2">
+  <select class="form-control"
+          name="question_${questionCounter}[required]"
+          id="question_${questionCounter}_required">
+    <option value="true"
+            ${pregenQuestion && requiredQuestion ? 'selected' : ''}>Obligatoria</option>
+    <option value="false"
+            ${pregenQuestion && !requiredQuestion ? 'selected' : ''}>No requerida</option>
+  </select>
+</div>
+</div>
+<div id="question_${questionCounter}_answers" style="padding: 15px 0 30px 50px; width: 75%">
+</div>`
+            );
+
+            let answersContainer = $(`#question_${questionCounter}_answers`);
+            if (!pregenQuestion || (pregenQuestion && questionType === '1')) {
+                generateAnswers(questionCounter, answersContainer, '1', pregenQuestion ? answers : null);
+            }
+
+            $(`#question_${questionCounter}_question_type`).change(function() {
+                generateAnswers(questionCounter, answersContainer, $(this).find(':selected').val());
+            });
+
+            questionCounter++;
+        }
+
+        function generateAnswers(qIdx, container, type, alternatives) {
+            container.html('');
+            if (type === '2') return;
+            let answers = '';
+            answers += `<table style="width: 100%">
+            <thead><tr><th></th><th></th><th>Correcta?</th></tr></thead>
+            <tbody>`;
+
+            let idx = 0;
+            for(let key in alternatives) {
+                if (!alternatives.hasOwnProperty(key)) continue;
+                if (idx >= 5) break;
+                console.log(alternatives[key]);
+
+                answers += alternativeRow(qIdx, idx, key, alternatives[key]);
+
+                idx++;
+            }
+            for (let i = idx; i < 5; i++) {
+                answers += alternativeRow(qIdx, i, '', false);
+            }
+
+            answers +=
+                `<tr><td></td>
+<td>No hay correcta</td>
+<td style="padding: 0 0 0 25px">
+  <input type="radio" value="5"
+         name="question_${qIdx}[right_answer]"
+         id="question_${qIdx}_right_answer">
+</td>
+
+</tr>`;
+            answers += `</tbody></table>`;
+
+            container.html(answers)
+        }
+
+        function alternativeRow(qIdx, idx, alternativeName, checked) {
+            return `<tr>
+  <td> ${String.fromCharCode(65 + idx)})</td>
+  <td style="padding: 5px 0">
+    <input type="text" class="form-control" value="${alternativeName}"
+         name="question_${qIdx}[answer_${idx}]"
+         id="question_${qIdx}_answer_${idx}">
+  </td>
+  <td style="padding: 0 0 0 25px">
+    <input type="radio" value="${idx}" ${checked ? 'checked' : ''}
+         name="question_${qIdx}[right_answer]"
+         id="question_${qIdx}_right_answer">
+  </td>`
+        }
+
+        <% if @questionnaire.questions? %>
+            <% @questionnaire.questions.each do |question| %>
+                generateQuestion(
+                    '<%= question.name %>',
+                    '<%= question.question_type %>',
+                    '<%= question.required %>',
+                    <%= raw question.alternatives.to_json %>
+                );
+            <% end %>
+        <% end %>
+    </script>
+<% end %>
+
+<%= content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to 'Documentos: Cuestionarios', questionnaires_path %>
+        </li>
+        <li>
+          <%= link_to @questionnaire.number, @questionnaire %>
+        </li>
+        <li>
+          <span>
+            Editar
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

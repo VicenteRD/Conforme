@@ -1,11 +1,11 @@
-<% if element && element.class < Referable && element.references? %>
-    <%# change this to form_format and add hidden ID inputs if true %>
-    <% form_format ||= false %>
+<div class="panel-heading">
+  <h5>Referencias</h5>
+</div>
 
-    <div id="references-container" class="padding-left-20">
-      <div class="panel-heading">
-        <h5>Referencias</h5>
-      </div>
+<div id="references-container" class="padding-left-20">
+  <% if element && element.class < Referable && element.references? %>
+      <%# change this to form_format and add hidden ID inputs if true %>
+      <% form_format ||= false %>
 
       <% element.references.keys.each do |class_name| %>
           <%# !! CHANGE THIS BEFORE PRODUCTION !! %>
@@ -21,7 +21,7 @@
                   <% if form_format %>
                       <%= reference.display_name %>
                       <input class="form-control-hidden" type="hidden"
-                             name="references[<%= class_name %>][]" id="references_<%= class_name%>"
+                             name="references[<%= class_name %>][]" id="references_<%= class_name %>"
                              value="<%= reference.id %>">
                   <% else %>
                       <%= link_to(reference.display_name, reference) %>
@@ -32,5 +32,5 @@
             <% end %>
           </div>
       <% end %>
-    </div>
-<% end %>
+  <% end %>
+</div>

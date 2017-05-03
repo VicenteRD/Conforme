@@ -13,8 +13,8 @@ Rails.application.routes.draw do
 
   # -------- Unsorted
 
-  get '/tareas'           => 'tasks#index'       , as: :tasks
-  get '/tareas/:type'     => 'tasks#index'       , as: :tasks_type
+  get '/tareas'           => 'tasks#index'   , as: :tasks
+  get '/tareas/:type'     => 'tasks#index'   , as: :tasks_type
   get '/tareas/detalle/:id'   => 'tasks#show', as: :task
 
   get '/hallazgos'    => 'findings#index'
@@ -203,7 +203,17 @@ Rails.application.routes.draw do
 
   post  '/documentos/definiciones/nuevo'      => 'definitions#create'
   patch '/documentos/definiciones/:id/editar' => 'definitions#update'
-  patch '/documentos/definiciones/edit-attachments' => 'definitions#edit_attachments'
+
+  # -- Questionnaires
+
+  get '/documentos/cuestionarios'            => 'questionnaires#index', as: :questionnaires
+  get '/documentos/cuestionarios/nuevo'      => 'questionnaires#new',   as: :new_questionnaire
+  get '/documentos/cuestionarios/:id'        => 'questionnaires#show',  as: :questionnaire
+  get '/documentos/cuestionarios/:id/editar' => 'questionnaires#edit',  as: :edit_questionnaire
+
+  post  '/documentos/cuestionarios/nuevo'      => 'questionnaires#create'
+  patch '/documentos/cuestionarios/:id/editar' => 'questionnaires#update'
+
 
   # -------- Strategies: SWOT
 

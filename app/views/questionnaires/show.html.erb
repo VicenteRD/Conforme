@@ -1,0 +1,88 @@
+<%= content_for :heading_main do %>
+<% end %>
+
+<%# Populate all 3 columns of the view with keys & their values %>
+
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+        <%= @definition.name %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Definición:</div>
+      <div class="col-lg-8">
+        <%= @definition.definition %>
+      </div>
+    </div>
+<% end %>
+
+
+<%= content_for :extra do %>
+    <% if @definition.comments? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Descripción</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= raw @definition.comments %>
+          </div>
+        </div>
+    <% end %>
+
+    <div class="row is-flex">
+      <div class="col-lg-5">
+        <% unless @definition.attachment_ids.empty? %>
+            <div class="panel padding-bottom-25">
+              <%= render partial: 'uploaded_files/show_attachments',
+                         locals: {element: @definition} %>
+            </div>
+        <% end %>
+      </div>
+      <div class="col-lg-1"></div>
+      <div class="col-lg-6">
+        <% if @definition.references? %>
+            <div class="panel padding-bottom-25" style="height: 100%">
+              <%= render partial: 'referables/show_all_for',
+                         locals: {element: @definition} %>
+            </div>
+        <% end %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :menu do %>
+    <div class="dropdown">
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @definition.log_book})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+        <i class="dropdown-inline-button-icon icmn-history"></i>
+        Bitácora
+      </a>
+    </div>
+
+    <div class="dropdown">
+      <%= link_to edit_definition_path(@definition), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to 'Documentos: Definiciones', definitions_path %>
+        </li>
+        <li>
+          <span>
+            <%= @definition.number %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

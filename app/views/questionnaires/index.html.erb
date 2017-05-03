@@ -1,0 +1,62 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>Nombre</th>
+      <th>Tipo</th>
+      <th>Documento Asociado</th>
+      <th>Plazo</th>
+    </tr>
+<% end %>
+<% content_for :table_body do %>
+    <% questionnaires = Questionnaire.all %>
+    <% if questionnaires.size != 0 %>
+        <% questionnaires.each do |questionnaire| %>
+            <tr data-href="<%= questionnaire_path(questionnaire) %>">
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= questionnaire.name %>
+              </td>
+              <td>
+                <%= questionnaire.presentable_type %>
+              </td>
+              <td>
+                <%= questionnaire.document_name %>
+              </td>
+              <td>
+                <%= show_formatted_datetime(questionnaire.due_at) %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron cuestionarios.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_questionnaire_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Documentos: Cuestionarios
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

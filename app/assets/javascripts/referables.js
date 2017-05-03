@@ -341,7 +341,7 @@ function removeReference(reference, key, objectId) {
  * @param id The ID of the object that has been added
  * @param name The displayable name of the object
  * @param target The HTML selector to which the generated element will be added to
- * @parma generator The function to use when adding elements. If not defined,
+ * @param generator The function to use when adding elements. If not defined,
  *   will default to the one stored in currentOptions
  */
 function addReferenceToTarget(klass, id, name, target, generator) {
@@ -388,7 +388,6 @@ function styleSelectedRows(rows) {
 
     rows.each(function () {
         var row = $(this);
-
         styleSelection(
             row,
             isSelected(
