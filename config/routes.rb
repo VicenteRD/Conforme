@@ -211,9 +211,13 @@ Rails.application.routes.draw do
   get '/documentos/cuestionarios/:id'        => 'questionnaires#show',  as: :questionnaire
   get '/documentos/cuestionarios/:id/editar' => 'questionnaires#edit',  as: :edit_questionnaire
 
+  get '/documentos/cuestionarios/:id/responder' => 'questionnaires#respond',
+      as: :respond_questionnaire
+
   post  '/documentos/cuestionarios/nuevo'      => 'questionnaires#create'
   patch '/documentos/cuestionarios/:id/editar' => 'questionnaires#update'
 
+  post '/documentos/cuestionarios/:id/responder' => 'questionnaires#process_response'
 
   # -------- Strategies: SWOT
 

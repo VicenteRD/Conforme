@@ -7,57 +7,86 @@
     <div class="row">
       <div class="col-lg-4 show-label">Nombre:</div>
       <div class="col-lg-8">
-        <%= @definition.name %>
+        <%= @questionnaire.name %>
       </div>
     </div>
 <% end %>
 
 <%= content_for :main_col_2 do %>
     <div class="row">
-      <div class="col-lg-4 show-label">Definición:</div>
+      <div class="col-lg-4 show-label">Tipo:</div>
       <div class="col-lg-8">
-        <%= @definition.definition %>
+        <%= @questionnaire.presentable_type %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_3 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Plazo:</div>
+      <div class="col-lg-8">
+        <%= show_formatted_datetime(@questionnaire.due_at) %>
       </div>
     </div>
 <% end %>
 
 
 <%= content_for :extra do %>
-    <% if @definition.comments? %>
+    <% if @questionnaire.comments? %>
         <div class="panel">
           <div class="panel-heading">
             <h5>Descripción</h5>
           </div>
           <div class="margin-left-30 margin-bottom-30">
-            <%= raw @definition.comments %>
+            <%= raw @questionnaire.comments %>
           </div>
         </div>
     <% end %>
 
     <div class="row is-flex">
       <div class="col-lg-5">
-        <% unless @definition.attachment_ids.empty? %>
+        <% unless @questionnaire.attachment_ids.empty? %>
             <div class="panel padding-bottom-25">
               <%= render partial: 'uploaded_files/show_attachments',
-                         locals: {element: @definition} %>
+                         locals: {element: @questionnaire} %>
             </div>
         <% end %>
       </div>
       <div class="col-lg-1"></div>
       <div class="col-lg-6">
-        <% if @definition.references? %>
+        <% if @questionnaire.references? %>
             <div class="panel padding-bottom-25" style="height: 100%">
               <%= render partial: 'referables/show_all_for',
-                         locals: {element: @definition} %>
+                         locals: {element: @questionnaire} %>
             </div>
         <% end %>
       </div>
     </div>
+
+    <% if @questionnaire.questions? %>
+        <% @questionnaire.questions.each do |question| %>
+            <div class="panel" style="padding: 15px">
+              <h6><%= question.name %></h6>
+              <% if question.question_type == 1 && question.alternatives? %>
+                  <table>
+                    <tbody>
+                    <% question.alternatives.each do |alternative, correct| %>
+                        <tr>
+                          <td><%= raw correct ? '&#10004;' : ''%></td>
+                          <td><%= alternative %></td>
+                        </tr>
+                    <% end %>
+                    </tbody>
+                  </table>
+              <% end %>
+            </div>
+        <% end %>
+    <% end %>
 <% end %>
 
 <%= content_for :menu do %>
     <div class="dropdown">
-      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @definition.log_book})}" %>
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @questionnaire.log_book})}" %>
       <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
         <i class="dropdown-inline-button-icon icmn-history"></i>
         Bitácora
@@ -65,7 +94,14 @@
     </div>
 
     <div class="dropdown">
-      <%= link_to edit_definition_path(@definition), method: 'get', class: 'dropdown-inline-button' do %>
+      <%= link_to respond_questionnaire_path(@questionnaire), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-forward"></i>
+          Responder
+      <% end %>
+    </div>
+
+    <div class="dropdown">
+      <%= link_to edit_questionnaire_path(@questionnaire), method: 'get', class: 'dropdown-inline-button' do %>
           <i class="dropdown-inline-button-icon icmn-pencil"></i>
           Editar
       <% end %>
@@ -76,11 +112,11 @@
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to 'Documentos: Definiciones', definitions_path %>
+          <%= link_to 'Documentos: Cuestionarios', questionnaires_path %>
         </li>
         <li>
           <span>
-            <%= @definition.number %>
+            <%= @questionnaire.number %>
           </span>
         </li>
       </ul>

@@ -41,6 +41,11 @@ class Questionnaire
     questions.create!(fields)
   end
 
+  def delete_questions
+    questions.destroy_all
+    reload
+  end
+
   def document_name
     return unless document_id
 

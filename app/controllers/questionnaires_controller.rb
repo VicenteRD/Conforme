@@ -10,6 +10,13 @@ class QuestionnairesController < ApplicationController
     render layout: 'show'
   end
 
+  def respond
+    @questionnaire = Questionnaire.find(params[:id])
+    redirect_to_dashboard unless @questionnaire
+
+    render layout: 'form'
+  end
+
   def new
     render layout: 'form'
   end
@@ -37,8 +44,10 @@ class QuestionnairesController < ApplicationController
     questionnaire = Questionnaire.find(params[:id])
     redirect_to_dashboard && return unless questionnaire
 
-    questionnaire.update!(definition_fields)
+    questionnaire.update!(questionnaire_fields)
     log_edited(questionnaire)
+
+    generate_questions(questionnaire)
 
     create_references(questionnaire, references_unsafe_hash)
     process_attachments(questionnaire)
@@ -62,6 +71,8 @@ class QuestionnairesController < ApplicationController
   end
 
   def generate_questions(questionnaire)
+    questionnaire.delete_questions
+
     0.step do |idx|
       q_idx = "question_#{idx}".to_sym
       q_params = params.key?(q_idx) ? params.require(q_idx) : nil
@@ -71,8 +82,7 @@ class QuestionnairesController < ApplicationController
         q_params.permit(:name, :question_type, :required)
       )
 
-      alternatives = generate_alternatives(q_params)
-      question.generate_alternatives(alternatives)
+      question.generate_alternatives(generate_alternatives(q_params))
     end
   end
 
