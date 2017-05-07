@@ -67,17 +67,17 @@
 
         var process_form = $('#new_qualification');
         process_form.on('ajax:success', function(e, data, status, xhr) {
-            var result = processNewReferenceCreated(data);
+            var result = processNewReferenceCreated(data, '<%= extra %>');
 
             if (result) {
                 $('#table-modal').modal('hide');
             }
 
-            sortRows('.qualification-row');
         });
 
         $('.filterable').filterable();
 
         styleSelectedRows(rowSelector);
+        sortRows('.qualification-row');
     </script>
 <% end %>

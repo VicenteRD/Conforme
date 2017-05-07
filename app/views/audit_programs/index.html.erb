@@ -1,0 +1,74 @@
+<% content_for :before_table do %>
+<% end %>
+
+<% content_for :table_name_active do %>
+    Activos
+<% end %>
+
+<% content_for :table_headers do %>
+    <tr>
+      <th>N</th>
+      <th>Nombre</th>
+      <th>Desde</th>
+      <th>Hasta</th>
+      <th>Completado</th>
+    </tr>
+<% end %>
+<% content_for :table_body do %>
+    <% programs = AuditProgram.order_by(created_at: :asc) %>
+    <% if programs.size != 0 %>
+        <% programs.each do |program| %>
+
+            <tr data-href="<%= audits_path(program) %>">
+              <td width="1%">
+                <%= program.number %>
+              </td>
+              <td>
+                <div class="expand-collapse">+</div>
+                <%= program.name %>
+              </td>
+              <td>
+                <%= show_formatted_datetime(program.from) %>
+              </td>
+              <td>
+                <%= show_formatted_datetime(program.to) %>
+              </td>
+              <td class="sig-<%= program.completion_significance %>">
+                <%= program.completion_percentage + '%' %>
+              </td>
+            </tr>
+        <% end %>
+    <% else %>
+        <tr>
+          <td colspan="4"> No se encontraron programas de auditoría.</td>
+        </tr>
+    <% end %>
+<% end %>
+
+<% content_for :menu do %>
+    <div class="dropdown">
+      <%= link_to new_audit_program_path, method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nuevo
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :styles do %>
+    <!-- Audit Programs' Index Page Styles -->
+    <style>
+      <%= significant_style_css %>
+    </style>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+        <span>
+          Mejora: Auditorías
+        </span>
+        </li>
+      </ul>
+    </div>
+<% end %>

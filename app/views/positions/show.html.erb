@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-lg-4 show-label">Posición Padre:</div>
       <div class="col-lg-8">
-        <%= Position.find(@position.parent_id).name %>
+        <%= @position.parent_id? ? Position.find(@position.parent_id).name : '-' %>
       </div>
     </div>
 <% end %>

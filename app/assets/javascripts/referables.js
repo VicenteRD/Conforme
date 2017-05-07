@@ -269,7 +269,7 @@ function processReferenceRowClick(selector, objectId, name) {
  * @param formResponse The JSON response the form creates after creating the object.
  *   It must include an`object_id` and an `object_name`
  */
-function processNewReferenceCreated(formResponse) {
+function processNewReferenceCreated(formResponse, extra) {
     if (!checkOptions()) {
         return
     }
@@ -281,7 +281,7 @@ function processNewReferenceCreated(formResponse) {
 
     if (currentOptions['multiple']) {
         addReference(isReference, key, objectId);
-        renderReferencesModal(true);
+        renderReferencesModal(true, extra);
     }
 
     addReferenceToTarget(key, objectId, objectName);

@@ -20,6 +20,37 @@ Rails.application.routes.draw do
   get '/hallazgos'    => 'findings#index'
   get 'hallazgos/:id' => 'findings#show', as: :finding
 
+  # -------- Betterment
+
+  # -- Audit Programs
+
+  get '/mejora/auditoria'            => 'audit_programs#index', as: :audit_programs
+  get '/mejora/auditoria/nuevo'      => 'audit_programs#new',   as: :new_audit_program
+  get '/mejora/auditoria/:id'        => 'audit_programs#show',  as: :audit_program
+  get '/mejora/auditoria/:id/editar' => 'audit_programs#edit',  as: :edit_audit_program
+
+  post  '/mejora/auditoria/nuevo'            => 'audit_programs#create'
+
+  # --- Audits
+
+  get '/mejoras/auditoria/:program_id' => 'audits#index', as: :audits
+  get '/mejora/auditoria/:program_id/nuevo'      => 'audits#new', as: :new_audit
+  get '/mejoras/auditoria/:program_id/:id' => 'audits#show', as: :audit
+
+  post  '/mejora/auditoria/:program_id/nuevo'            => 'audits#create'
+
+
+  #get '/analisis/indicadores/:indicator_id/nueva'      => 'indicator_measurements#new' ,
+  #    as: :new_indicator_measurement
+  #get '/analisis/indicadores/:indicator_id/:id/editar' => 'indicator_measurements#edit',
+  #    as: :edit_indicator_measurement
+
+  #patch '/analisis/indicadores/:id/editar'       => 'indicators#update'
+  #patch '/analisis/indicadores/edit-attachments' => 'indicators#edit_attachments'
+
+  #post  '/analisis/indicadores/:indicator_id/nueva'      => 'indicator_measurements#create'
+  #patch '/analisis/indicadores/:indicator_id/:id/editar' => 'indicator_measurements#update'
+
   # -------- Employees
 
   # Employees Files

@@ -1,13 +1,17 @@
 class Audit
   include Mongoid::Document
 
-  field :program_number, type: Integer
+  include Describable
+  include EnumerableDocument
+  include Referable
 
-  field :responsible, type: BSON::ObjectId # => Person::User
-  field :a_at, as: :date, type: DateTime
+  embedded_in :program, class_name: 'AuditProgram'
 
-  field :positions_ids, type: Array # BSON::ObjectId => Position
+  embeds_one :log_book, class_name: 'Log::Book'
+  before_create do
+    self.log_book ||= Log::Book.new
+  end
 
-  field :status, type: String
-  field :objective, type: String
+  field :name, type: String
+  field :audited_at, type: DateTime
 end

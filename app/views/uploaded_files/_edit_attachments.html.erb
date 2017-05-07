@@ -7,9 +7,8 @@
 
   <% if element %>
       <%= form.hidden_field :element_id, value: element.id %>
-  <% end %>
 
-  <div id="attachments-table">
+      <div id="attachments-table">
         <table class="table table-hover">
           <thead>
           <tr>
@@ -20,7 +19,7 @@
           </tr>
           </thead>
           <tbody>
-          <% if element && element.attachment_ids? && !element.attachment_ids.empty? %>
+          <% if element.attachment_ids? && !element.attachment_ids.empty? %>
               <% UploadedFile.all_from(element.attachment_ids).each do |attachment| %>
                   <tr>
                     <td style="text-align: center">
@@ -56,6 +55,8 @@
           </tbody>
         </table>
       </div>
+  <% end %>
+
 
   <div style="margin:50px 50px 0 50px">
     <%= form.file_field :new_attachments, class: 'dropify', multiple: true,
