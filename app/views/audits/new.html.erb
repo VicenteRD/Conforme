@@ -94,12 +94,30 @@
                   <%= text_field :extra, :auditor_name, class: 'form-control', readonly: true %>
                 </div>
               </td>
-
+              <td>
+                <div id="rows-location-in">
+                  <%= text_field :extra, :location_name, class: 'form-control', readonly: true %>
+                </div>
+              </td>
+              <td>
+                <div id="rows-audited-in">
+                  <%= text_field :extra, :audited_name, class: 'form-control', readonly: true %>
+                </div>
+              </td>
+              <td>
+                <div id="rows-hour-in">
+                  <%= number_field :extra, :hour_name, min: 0, max: 23, class: 'form-control' %>
+                </div>
+              </td>
+              <td>
+                <div id="rows-element-type-in">
+                  <%= select :extra, :element_type_in, nav_select, {disabled: nav_select_disabled, selected: nil}, {class: 'form-control'} %>
+                </div>
+              </td>
             </tr>
 
             </tbody>
           </table>
-          <!--<a href="javascript:void(0)" id="add-audit-row">+ Agregar</a>-->
         </div>
 
       </div>
@@ -135,22 +153,75 @@
 
 <%= content_for :scripts do %>
     <script>
-        var areaId= '';
-        var auditorId;
-        var location;
-        var audited;
-        var hour;
-        var klass;
+        var elementType = {};
+        var auditor = {};
+        var audited = {};
+        var area = {};
+        var hour = 0;
+        var location = '';
+
+        var rowsIdx = 0;
 
         function areaElementGenerator(target, klass, id, name) {
             target.find('.form-control').val(name);
 
-            areaId = id;
+            area['name'] = name;
+            area['id'] = id;
         }
 
         function auditorElementGenerator(target, klass, id, name) {
-            target.find('form-control').val(name);
-            auditorId = id;
+            target.find('.form-control').val(name);
+            auditor['id'] = id;
+            auditor['name'] = name
+        }
+
+        function auditedElementGenerator(target, klass, id, name) {
+            target.find('.form-control').val(name);
+            audited['id'] = id;
+            audited['name'] = name;
+        }
+
+        function rowsElementGenerator(target, klass, id, name) {
+            target.append(
+                `<tr>
+  <td>
+    ${area['name']}
+    <input type="hidden" name="audit_item_${rowsIdx}[area_id]" id="audit_item_${rowsIdx}_area_id" value="${area['id']}">
+  </td>
+  <td>
+    ${auditor['name']}
+    <input type="hidden" name="audit_item_${rowsIdx}[auditor_id]" id="audit_item_${rowsIdx}_auditor_id" value="${auditor['id']}">
+  </td>
+  <td>
+    ${location}
+    <input type="hidden" name="audit_item_${rowsIdx}[location]" id="audit_item_${rowsIdx}_location" value="${location}">
+  </td>
+  <td>
+    ${audited['name']}
+    <input type="hidden" name="audit_item_${rowsIdx}[area]" id="audit_item_${rowsIdx}_area" value="${area['id']}">
+  </td>
+  <td>
+    ${audited['name']}
+    <input type="hidden" name="audit_item_${rowsIdx}[audited_id]" id="audit_item_${rowsIdx}_audited_id" value="${audited['id']}">
+  </td>
+  <td>
+    ${hour}
+    <input type="hidden" name="audit_item_${rowsIdx}[hour]" id="audit_item_${rowsIdx}_hour" value="${hour}">
+  </td>
+  <td>
+    ${elementType['name']}
+    <input type="hidden" name="audit_item_${rowsIdx}[klass]" id="audit_item_${rowsIdx}_klass" value="${elementType['klass']}">
+  </td>
+  <td>
+    ${element['name']}
+    <input type="hidden" name="audit_item_${rowsIdx}[element_id]" id="audit_item_${rowsIdx}_element_id" value="${element['id']}">
+  </td>
+  <td>
+    <input type="text" name="audit_item_${rowsIdx}[requirement]" id="audit_item_${rowsIdx}_requirement" class="form-control">
+  </td>
+</tr>`
+            );
+            rowsIdx++;
         }
 
         $('#rows-area-in').click(function () {
@@ -161,7 +232,7 @@
         });
 
         $('#rows-auditor-in').click(function () {
-            if (areaId === '') {
+            if (Object.keys(area).length === 0) {
                 return;
             }
             setOptions('Person::User', 'Auditor', false, 'rows_auditor', $(this));
@@ -170,9 +241,41 @@
             renderAndShowReferencesModal(
                 {
                     belongsTo: '<%= Settings::PeopleSetting.first.audit_position_id %>',
-                    notFromArea: areaId
+                    notFromArea: area['id']
                 }
             );
+        });
+
+        $('#rows-audited-in').click(function () {
+            if (Object.keys(auditor).length === 0) {
+                return;
+            }
+            setOptions('Person::User', 'Auditado', false, 'rows_auditor', $(this));
+            setElementGenerator(auditedElementGenerator);
+
+            renderAndShowReferencesModal({belongsToArea: area['id']});
+        });
+
+        $('#rows-element-type-in').find('.form-control').change(function() {
+            elementType['klass'] = $(this).val();
+            elementType['name'] = $(this).text();
+            console.log($(this).text())
+        });
+
+        $('#rows-element-in').click(function() {
+            if (Object.keys(area).length === 0 ||
+                Object.keys(auditor).length === 0 ||
+                Object.keys(audited).length === 0 ||
+                Object.keys(elementType).length === 0) {
+                return;
+            }
+
+            var klassOptions = elementType['klass'].split('#');
+
+            setOptions(klassOptions[0], elementType['name'], true, 'rows_' + klass, $('#audit-table'));
+            setElementGenerator(rowsElementGenerator);
+
+            renderAndShowReferencesModal(klassOptions.length === 2 ? klassOptions[1] : '');
         });
     </script>
 <% end %>

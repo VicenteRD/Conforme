@@ -131,7 +131,7 @@ pos_gg.save!
 vr.add_to_set(positions: pos_dp)
 vr.save!
 
-cv.add_to_set(positions: pos_gg)
+cv.add_to_set(positions: [pos_gg, pos_audit])
 cv.save!
 
 Settings::PeopleSetting.create!(audit_position_id: pos_audit.id)
