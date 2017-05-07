@@ -7,7 +7,12 @@ class AuditsController < ApplicationController
   end
 
   def show
+    @program = AuditProgram.find(params[:program_id])
+    redirect_to_dashboard && return unless @program
+    @audit = @program.audits.find(params[:id])
+    redirect_to_dashboard && return unless @audit
 
+    render layout: 'show'
   end
 
   def new
@@ -18,13 +23,19 @@ class AuditsController < ApplicationController
   end
 
   def create
-    program = AuditProgram.create!(program_fields)
-    log_created(program)
+    program = AuditProgram.find(params[:program_id])
+    redirect_to_dashboard && return unless program
 
-    create_references(program, references_unsafe_hash)
-    process_attachments(program)
+    audit = program.create_audit(audit_fields)
 
-    redirect_to audits_path(program)
+    log_created(audit)
+
+    create_items(audit)
+
+    create_references(audit, references_unsafe_hash)
+    process_attachments(audit)
+
+    redirect_to audit_path(program, audit)
   end
 
   private
@@ -43,5 +54,20 @@ class AuditsController < ApplicationController
 
     add_attachments(audit, additions) if additions
     remove_attachments('AuditProgram', audit, removals) if removals
+  end
+
+  def create_items(audit)
+    0.step do |idx|
+      item_idx = "audit_item_#{idx}".to_sym
+      break unless params[item_idx]
+
+      audit.create_item(params.require(item_idx).permit(
+        :area_id, :auditor_id, :audited_id,
+        :location, :hour,
+        :klass, :element_id,
+        :requirement
+    ))
+
+    end
   end
 end

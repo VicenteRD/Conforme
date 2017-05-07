@@ -18,7 +18,7 @@
     <% if audits.size != 0 %>
         <% audits.each do |audit| %>
 
-            <tr data-href="<%= audit_path(audit) %>">
+            <tr data-href="<%= audit_path(@program, audit) %>">
 
               <td>
                 <div class="expand-collapse">+</div>

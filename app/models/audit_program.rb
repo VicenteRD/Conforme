@@ -19,6 +19,10 @@ class AuditProgram
 
   field :comp, as: :completion, type: Float, default: 0.0
 
+  def create_audit(fields)
+    audits.create!(fields)
+  end
+
   def completion_percentage
     '0.0'
   end
