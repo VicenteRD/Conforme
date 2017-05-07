@@ -47,7 +47,7 @@ function setOptions(klass, modalTitle, isMultiple, listKey, targetSelector) {
         return;
     }
 
-    var multiple = isMultiple === undefined ? true : isMultiple;
+    let multiple = isMultiple === undefined ? true : isMultiple;
 
     currentOptions = {
         klass: klass.trim(),
@@ -132,8 +132,8 @@ function setSelectedReferences(referencesHash, target, generator) {
         return;
     }
 
-    for (var key in selectedReferences) {
-        for (var i = 0; i < selectedReferences[key].length; i++) {
+    for (let key in selectedReferences) {
+        for (let i = 0; i < selectedReferences[key].length; i++) {
             addReferenceToTarget(key, selectedReferences[key][i], null, target, generator);
         }
     }
@@ -160,7 +160,7 @@ function setList(key, list, target, generator) {
         return;
     }
 
-    for (var i = 0; i < otherObjectLists[key].length; i++) {
+    for (let i = 0; i < otherObjectLists[key].length; i++) {
             addReferenceToTarget(key, otherObjectLists[key][i], null, target, generator);
     }
 }
@@ -194,9 +194,18 @@ function getCurrentModalTitle() {
  *   passed as extra to make this possible.
  */
 function renderReferencesModal(resetTabs, extra) {
-    var addedParam = (extra === undefined || extra === '') ? '/noextra' : ('/' + extra);
 
-    $.ajax({url: '/referables/' + currentOptions['klass'] + addedParam});
+    if (typeof extra === 'string') {
+        let addedParam = (extra === undefined || extra === '') ? '/noextra' : ('/' + extra);
+        $.ajax({url: '/referables/' + currentOptions['klass'] + addedParam});
+    } else if (extra !== null && typeof extra === 'object') {
+        $.ajax(
+            {
+                url: '/referables/' + currentOptions['klass'] + '/noextra',
+                data:  {jsonExtra: extra}
+            }
+        );
+    }
 
     if (getModalId(currentOptions['klass']) === '#table-modal' && resetTabs) {
         $('#references-tabs').find('a[data-target="#table"]').tab('show');
@@ -208,7 +217,7 @@ function renderReferencesModal(resetTabs, extra) {
  * to the user.
  */
 function showReferencesModal() {
-    var htmlId = getModalId(currentOptions['klass']);
+    let htmlId = getModalId(currentOptions['klass']);
 
     $(htmlId + '-title').html('Seleccionar ' + currentOptions['modalTitle']);
     $(htmlId).modal();
@@ -245,10 +254,10 @@ function processReferenceRowClick(selector, objectId, name) {
         return true;
     }
 
-    var isReference = currentOptions['listKey'] === false;
-    var key = isReference ? currentOptions['klass'] : currentOptions['listKey'];
+    let isReference = currentOptions['listKey'] === false;
+    let key = isReference ? currentOptions['klass'] : currentOptions['listKey'];
 
-    var selected = isSelected(isReference, key, objectId);
+    let selected = isSelected(isReference, key, objectId);
 
     if (selected) {
         removeReference(isReference, key, objectId);
@@ -274,10 +283,10 @@ function processNewReferenceCreated(formResponse, extra) {
         return
     }
 
-    var isReference = currentOptions['listKey'] === false;
-    var key = isReference ? currentOptions['klass'] : currentOptions['listKey'];
-    var objectId = formResponse['object_id'];
-    var objectName = formResponse['object_name'];
+    let isReference = currentOptions['listKey'] === false;
+    let key = isReference ? currentOptions['klass'] : currentOptions['listKey'];
+    let objectId = formResponse['object_id'];
+    let objectName = formResponse['object_name'];
 
     if (currentOptions['multiple']) {
         addReference(isReference, key, objectId);
@@ -383,11 +392,11 @@ function styleSelectedRows(rows) {
         return;
     }
 
-    var isReference = currentOptions['listKey'] === false;
-    var key = isReference ? currentOptions['klass'] : currentOptions['listKey'];
+    let isReference = currentOptions['listKey'] === false;
+    let key = isReference ? currentOptions['klass'] : currentOptions['listKey'];
 
     rows.each(function () {
-        var row = $(this);
+        let row = $(this);
         styleSelection(
             row,
             isSelected(

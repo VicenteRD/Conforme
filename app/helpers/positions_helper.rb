@@ -4,7 +4,7 @@ module PositionsHelper
     return if parent_id == exception
 
     if parent_id.nil?
-      parent = Position.or({:parent_id => nil}, {:parent_id.exists => false}).first
+      parent = Position.or({:parent_id => nil}, {:parent_id.exists => false}).where(:name.ne => 'Auditor').first
     else
       parent = Position.find(parent_id)
     end
@@ -25,7 +25,6 @@ module PositionsHelper
     branches_text = ''
 
     branches_ids.each do |branch_id|
-      puts branch_id.class, exception.class
       next if branch_id.to_s == exception
 
       child = Position.find(branch_id)

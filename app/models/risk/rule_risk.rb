@@ -7,7 +7,7 @@ class Risk::RuleRisk < Risk
 
   field :rule_type, type: Integer
 
-  index({rule_type: 1}, {name: 'type_index'})
+  index({ rule_type: 1 }, name: 'type_index')
 
   scope :law,      -> { where(rule_type: 1) }
   scope :standard, -> { where(rule_type: 2) }

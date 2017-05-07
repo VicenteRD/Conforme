@@ -1,5 +1,10 @@
 <% extra ||= 'noextra' %>
-<% employees = extra == 'noextra' ? Person::User.all : Person::User.where(position_ids: extra) %>
+
+<% employees = if extra.class == String
+      extra == 'noextra' ? Person::User.all : Person::User.where(position_ids: extra)
+   else
+     extra[:belongsTo] ? Person::User.where(position_ids: extra[:belongsTo]) : Person::User.all
+   end %>
 
 <%= content_for :references_table_content do %>
     <thead>
@@ -26,10 +31,6 @@
 
 <%= content_for :references_scripts do %>
     <script>
-        $(function () {
-            $('#new-tab').hide()
-        });
-
         var rowSelector = $('.user-row');
 
         rowSelector.click(function () {
@@ -47,5 +48,6 @@
 
         styleSelectedRows(rowSelector);
         $('.filterable').filterable();
+        $('#new-tab').hide()
     </script>
 <% end %>

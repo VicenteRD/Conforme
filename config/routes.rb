@@ -394,6 +394,7 @@ Rails.application.routes.draw do
   # -------- Other
 
   get '/referables/:class_name/:extra' => 'referables#render_list'
+  post '/referables/:class_name/:extra' => 'referables#render_list_post'
 
   get '/providers/evaluations/:person_id/:group_id/:qualification_type' =>
           'provider_evaluations#load_qualifications'

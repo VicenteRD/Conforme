@@ -68,9 +68,38 @@
           </div>
         </div>
 
-        <div class="panel" style="width: 100%">
-          <div id="audit-rows"></div>
-          <a href="javascript:void(0)" id="add-audit-row">+ Agregar</a>
+        <div class="panel" style="width: 100%; padding: 20px 15px">
+          <table width="100%">
+            <thead>
+            <tr>
+              <th>Área</th>
+              <th>Auditor</th>
+              <th>Localidad</th>
+              <th>Auditado</th>
+              <th>Hora</th>
+              <th>Tipo Elemento</th>
+              <th>Elemento</th>
+              <th>Requisito</th>
+            </tr>
+            </thead>
+            <tbody id="audit-table">
+            <tr>
+              <td>
+                <div id="rows-area-in">
+                  <%= text_field :extra, :area_name, class: 'form-control', readonly: true %>
+                </div>
+              </td>
+              <td>
+                <div id="rows-auditor-in">
+                  <%= text_field :extra, :auditor_name, class: 'form-control', readonly: true %>
+                </div>
+              </td>
+
+            </tr>
+
+            </tbody>
+          </table>
+          <!--<a href="javascript:void(0)" id="add-audit-row">+ Agregar</a>-->
         </div>
 
       </div>
@@ -106,9 +135,45 @@
 
 <%= content_for :scripts do %>
     <script>
-      $('#add-audit-row').click(function() {
-          $('#audit-rows').append('<%= render partial: 'audits/row', locals: {program: @program} %>');
-      });
+        var areaId= '';
+        var auditorId;
+        var location;
+        var audited;
+        var hour;
+        var klass;
+
+        function areaElementGenerator(target, klass, id, name) {
+            target.find('.form-control').val(name);
+
+            areaId = id;
+        }
+
+        function auditorElementGenerator(target, klass, id, name) {
+            target.find('form-control').val(name);
+            auditorId = id;
+        }
+
+        $('#rows-area-in').click(function () {
+            setOptions('Position', 'Área', false, 'rows_area', $(this));
+            setElementGenerator(areaElementGenerator);
+
+            renderAndShowReferencesModal('area');
+        });
+
+        $('#rows-auditor-in').click(function () {
+            if (areaId === '') {
+                return;
+            }
+            setOptions('Person::User', 'Auditor', false, 'rows_auditor', $(this));
+            setElementGenerator(auditorElementGenerator);
+
+            renderAndShowReferencesModal(
+                {
+                    belongsTo: '<%= Settings::PeopleSetting.first.audit_position_id %>',
+                    notFromArea: areaId
+                }
+            );
+        });
     </script>
 <% end %>
 
