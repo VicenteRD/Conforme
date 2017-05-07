@@ -1,9 +1,27 @@
 <% extra ||= 'noextra' %>
 
-<% employees = if extra.class == String
-      extra == 'noextra' ? Person::User.all : Person::User.where(position_ids: extra)
+<% if extra.class == String
+     employees = extra == 'noextra' ? Person::User.all : Person::User.where(position_ids: extra)
    else
-     extra[:belongsTo] ? Person::User.where(position_ids: extra[:belongsTo]) : Person::User.all
+     wl_pos = []
+     bl_pos = []
+
+     wl_pos += [extra[:belongsTo]] if extra[:belongsTo]
+
+     wl_area = Position.find(extra[:belongsToArea]) if extra[:belongsToArea]
+     bl_area = Position.find(extra[:notFromArea]) if extra[:notFromArea]
+
+     bl_pos += bl_area.all_children_ids if bl_area
+     wl_pos += wl_area.all_children_ids if wl_area
+
+     puts 'whitelisted positions: ' + wl_pos.to_s
+     puts 'blacklisted positions: ' + bl_pos.to_s
+
+     employees = Person::User.all
+     employees = employees.where(:position_ids.in => wl_pos) unless wl_pos.empty?
+     employees = employees.where(:position_ids.nin => bl_pos) unless bl_pos.empty?
+     employees = employees.where(:_id.ne => extra[:isNot]) if extra[:isNot]
+
    end %>
 
 <%= content_for :references_table_content do %>

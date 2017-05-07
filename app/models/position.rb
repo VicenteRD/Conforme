@@ -35,6 +35,18 @@ class Position
     p_position
   end
 
+  def all_children_ids
+    return_ids = [id.to_s]
+
+    children_ids.each do |child_id|
+      child = Position.find(child_id)
+
+      return_ids += child.all_children_ids if child
+    end
+
+    return_ids
+  end
+
   def add_child(id)
     children_ids << id if id
     save!
