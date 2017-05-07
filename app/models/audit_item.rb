@@ -13,4 +13,8 @@ class AuditItem
   field :location, type: String
   field :requirement, type: String
   field :hour, type: Integer
+
+  def element
+    klass.constantize.find(element_id)
+  end
 end

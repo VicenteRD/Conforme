@@ -1,0 +1,160 @@
+<%= content_for :heading_main do %>
+<% end %>
+
+<%# Populate all 3 columns of the view with keys & their values %>
+
+<%= content_for :main_col_1 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Nombre:</div>
+      <div class="col-lg-8">
+        <%= @audit.name %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_2 do %>
+    <div class="row">
+      <div class="col-lg-4 show-label">Localidad:</div>
+      <div class="col-lg-8">
+        <%= show_formatted_datetime(@audit.audited_at) %>
+      </div>
+    </div>
+<% end %>
+
+<%= content_for :main_col_3 do %>
+<% end %>
+
+<%= content_for :extra do %>
+    <% if @audit.comments? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Descripción</h5>
+          </div>
+          <div class="margin-left-30 margin-bottom-30">
+            <%= raw @audit.comments %>
+          </div>
+        </div>
+    <% end %>
+
+    <div class="row is-flex">
+      <div class="col-lg-5">
+        <% unless @audit.attachment_ids.empty? %>
+            <div class="panel padding-bottom-25">
+              <%= render partial: 'uploaded_files/show_attachments',
+                         locals: {element: @audit} %>
+            </div>
+        <% end %>
+      </div>
+      <div class="col-lg-1"></div>
+      <div class="col-lg-6">
+        <% if @audit.references? %>
+            <div class="panel padding-bottom-25" style="height: 100%">
+              <%= render partial: 'referables/show_all_for',
+                         locals: {element: @audit} %>
+            </div>
+        <% end %>
+      </div>
+    </div>
+
+    <% if @audit.items? %>
+        <div class="panel">
+          <div class="panel-heading">
+            <h5>Ítems</h5>
+          </div>
+          <div class="panel-body">
+            <div class="row margin-left-20 margin-right-20">
+              <div class="table-responsive margin-bottom-10">
+                <table class="table">
+                  <thead>
+                  <tr>
+                    <th>Área</th>
+                    <th>Auditor</th>
+                    <th>Localidad</th>
+                    <th>Auditado</th>
+                    <th>Hora</th>
+                    <th>Tipo Elemento</th>
+                    <th>Elemento</th>
+                    <th>Requisito</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @audit.items.each do |item| %>
+                      <% element = item.element %>
+                      <tr class="item-row" data-id="<%= item.id %>" style="cursor: pointer">
+                        <td>
+                          <%= Position.find(item.area_id).name %>
+                        </td>
+                        <td>
+                          <%= print_responsible(item.auditor_id) %>
+                        </td>
+                        <td>
+                          <%= item.location %>
+                        </td>
+                        <td>
+                          <%= print_responsible(item.audited_id) %>
+                        </td>
+                        <td>
+                          <%= item.hour %>
+                        </td>
+                        <td>
+                          <%= element.class.display_name %>
+                        </td>
+                        <td>
+                          <%= element.display_name %>
+                        </td>
+                        <td>
+                          <%= item.requirement %>
+                        </td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    <% end %>
+<% end %>
+
+<%= content_for :menu do %>
+    <div class="dropdown">
+      <% history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @audit.log_book})}" %>
+      <a href="javascript:void(0)" class="dropdown-inline-button" onclick="showHistory('<%= history_content %>')">
+        <i class="dropdown-inline-button-icon icmn-history"></i>
+        Bitácora
+      </a>
+    </div>
+
+    <!--<div class="dropdown">
+      <%# link_to new_minute_path(@audit), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-file-plus"></i>
+          Nueva Acta
+      <%# end %>
+    </div>-->
+
+
+    <div class="dropdown">
+      <%= link_to edit_audit_path(@program, @audit), method: 'get', class: 'dropdown-inline-button' do %>
+          <i class="dropdown-inline-button-icon icmn-pencil"></i>
+          Editar
+      <% end %>
+    </div>
+<% end %>
+
+<% content_for :breadcrumbs do %>
+    <div class="left">
+      <ul class="list-unstyled breadcrumb breadcrumb-custom">
+        <li>
+          <%= link_to 'Documentos: Actas', minutes_folders_path %>
+        </li>
+        <li>
+          <span>
+            <%= @audit.number %>
+          </span>
+        </li>
+      </ul>
+    </div>
+<% end %>
+
+<% content_for :scripts do %>
+<% end %>

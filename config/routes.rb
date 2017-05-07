@@ -29,15 +29,17 @@ Rails.application.routes.draw do
   get '/mejora/auditoria/:id'        => 'audit_programs#show',  as: :audit_program
   get '/mejora/auditoria/:id/editar' => 'audit_programs#edit',  as: :edit_audit_program
 
-  post  '/mejora/auditoria/nuevo'            => 'audit_programs#create'
+  post '/mejora/auditoria/nuevo' => 'audit_programs#create'
 
   # --- Audits
 
-  get '/mejoras/auditoria/:program_id' => 'audits#index', as: :audits
-  get '/mejora/auditoria/:program_id/nuevo'      => 'audits#new', as: :new_audit
-  get '/mejoras/auditoria/:program_id/:id' => 'audits#show', as: :audit
+  get '/mejoras/auditoria/:program_id'            => 'audits#index', as: :audits
+  get '/mejora/auditoria/:program_id/nuevo'       => 'audits#new',   as: :new_audit
+  get '/mejoras/auditoria/:program_id/:id'        => 'audits#show',  as: :audit
+  get '/mejoras/auditoria/:program_id/:id/editar' => 'audits#show',  as: :edit_audit
 
-  post  '/mejora/auditoria/:program_id/nuevo'            => 'audits#create'
+  post  '/mejora/auditoria/:program_id/nuevo'      => 'audits#create'
+  patch '/mejora/auditoria/:program_id/:id/editar' => 'audits#create'
 
 
   #get '/analisis/indicadores/:indicator_id/nueva'      => 'indicator_measurements#new' ,
