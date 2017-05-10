@@ -14,9 +14,6 @@
      bl_pos += bl_area.all_children_ids if bl_area
      wl_pos += wl_area.all_children_ids if wl_area
 
-     puts 'whitelisted positions: ' + wl_pos.to_s
-     puts 'blacklisted positions: ' + bl_pos.to_s
-
      employees = Person::User.all
      employees = employees.where(:position_ids.in => wl_pos) unless wl_pos.empty?
      employees = employees.where(:position_ids.nin => bl_pos) unless bl_pos.empty?
