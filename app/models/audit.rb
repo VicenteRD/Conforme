@@ -15,6 +15,9 @@ class Audit
   end
 
   field :name, type: String
+
+  field :a_id, as: :master_auditor_id, type: BSON::ObjectId
+
   field :audited_at, type: DateTime
 
   def create_item(fields)

@@ -45,7 +45,7 @@ class AuditsController < ApplicationController
 
     fields[:audited_at] = parse_date(params.dig(:raw, :audited_at))
 
-    fields.permit(:name, :audited_at)
+    fields.permit(:name, :audited_at, :master_auditor_id)
   end
 
   def process_attachments(audit)

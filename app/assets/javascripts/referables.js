@@ -194,6 +194,9 @@ function getCurrentModalTitle() {
  *   passed as extra to make this possible.
  */
 function renderReferencesModal(resetTabs, extra) {
+    if (extra == undefined) {
+        extra = 'noextra';
+    }
 
     if (typeof extra === 'string') {
         let addedParam = (extra === undefined || extra === '') ? '/noextra' : ('/' + extra);

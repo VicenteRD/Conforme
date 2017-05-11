@@ -30,6 +30,18 @@
                 </span>
               </div>
             </div>
+            <div class="col-lg-1">
+              <label class="form-control-label">
+                Auditor Lider
+              </label>
+            </div>
+            <div class="col-lg-3 input-group" id="master-auditor-in">
+              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true %>
+              <span class="input-group-addon" style="cursor: pointer">
+                <i class="icmn-pencil5"></i>
+              </span>
+              <%= f.hidden_field :master_auditor_id, class: 'form-control-hidden' %>
+            </div>
           </div>
 
         </div>
@@ -125,7 +137,6 @@
                 </div>
               </td>
             </tr>
-
             </tbody>
           </table>
         </div>
@@ -231,6 +242,11 @@
             );
             rowsIdx++;
         }
+
+        $('#master-auditor-in').click(function () {
+            setOptions('Person::User', 'Auditor Lider', false, 'audit_master_auditor', $(this));
+            renderAndShowReferencesModal();
+        });
 
         $('#rows-area-in').click(function () {
             setOptions('Position', 'Área', false, 'rows_area', $(this));

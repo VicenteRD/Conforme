@@ -3,6 +3,8 @@ class AuditItem
 
   embedded_in :audit
 
+  field :f_id, as: :finding_id, type: BSON::ObjectId
+
   field :klass, type: String
   field :element_id, type: BSON::ObjectId
 
@@ -16,5 +18,15 @@ class AuditItem
 
   def element
     klass.constantize.find(element_id)
+  end
+
+  def finding_resolved?
+    return unless finding_id?
+
+    finding = Finding.find(finding_id)
+
+    return unless finding
+
+    finding.step_status
   end
 end

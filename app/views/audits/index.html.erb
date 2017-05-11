@@ -1,4 +1,24 @@
 <% content_for :before_table do %>
+    <div class="row">
+      <div class="col-lg-1">
+        <strong>Nombre:</strong>
+      </div>
+      <div class="col-lg-3">
+        <%= @program.name %>
+      </div>
+      <div class="col-lg-1">
+        <strong>Desde:</strong>
+      </div>
+      <div class="col-lg-3">
+        <%= show_formatted_datetime(@program.from) %>
+      </div>
+      <div class="col-lg-1">
+        <strong>Hasta:</strong>
+      </div>
+      <div class="col-lg-3">
+        <%= show_formatted_datetime(@program.to) %>
+      </div>
+    </div>
 <% end %>
 
 <% content_for :table_name_active do %>
