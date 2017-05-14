@@ -23,4 +23,11 @@ class Audit
   def create_item(fields)
     items.create!(fields)
   end
+
+  def update_item(id, fields)
+    item = items.find(id)
+    return unless item
+
+    item.update!(fields)
+  end
 end

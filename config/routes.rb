@@ -34,12 +34,12 @@ Rails.application.routes.draw do
   # --- Audits
 
   get '/mejoras/auditoria/:program_id'            => 'audits#index', as: :audits
-  get '/mejora/auditoria/:program_id/nuevo'       => 'audits#new',   as: :new_audit
+  get '/mejoras/auditoria/:program_id/nuevo'      => 'audits#new',   as: :new_audit
   get '/mejoras/auditoria/:program_id/:id'        => 'audits#show',  as: :audit
-  get '/mejoras/auditoria/:program_id/:id/editar' => 'audits#show',  as: :edit_audit
+  get '/mejoras/auditoria/:program_id/:id/editar' => 'audits#edit',  as: :edit_audit
 
-  post  '/mejora/auditoria/:program_id/nuevo'      => 'audits#create'
-  patch '/mejora/auditoria/:program_id/:id/editar' => 'audits#create'
+  post  '/mejoras/auditoria/:program_id/nuevo'      => 'audits#create'
+  patch '/mejoras/auditoria/:program_id/:id/editar' => 'audits#update'
 
 
   #get '/analisis/indicadores/:indicator_id/nueva'      => 'indicator_measurements#new' ,

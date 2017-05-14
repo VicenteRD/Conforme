@@ -1,4 +1,5 @@
-<%= form_for(:audit, url: new_audit_path(@program)) do |f| %>
+<%= form_for(@audit, as: :audit,
+             url: edit_audit_path(@program, @audit), method: :patch) do |f| %>
 
     <section class="page-content">
       <div class="page-content-inner">
@@ -24,7 +25,7 @@
               <div class='input-group date date-picker' id='date-picker'>
                 <%= text_field :raw, :audited_at, class: 'form-control',
                                data: {format: dt_form_format(true), max: 0},
-                               value: DateTime.now.to_i %>
+                               value: @audit.audited_at.to_i %>
                 <span class="input-group-addon">
                   <i class="icmn-calendar"></i>
                 </span>
@@ -36,11 +37,13 @@
               </label>
             </div>
             <div class="col-lg-3 input-group" id="master-auditor-in">
-              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true %>
+              <%= text_field :extra, :responsible_name, class: 'form-control', readonly: true,
+                             value: print_responsible(@audit.master_auditor_id) %>
               <span class="input-group-addon" style="cursor: pointer">
                 <i class="icmn-pencil5"></i>
               </span>
-              <%= f.hidden_field :master_auditor_id, class: 'form-control-hidden' %>
+              <%= f.hidden_field :master_auditor_id, class: 'form-control-hidden',
+                                 value: @audit.master_auditor_id %>
             </div>
           </div>
 
@@ -69,32 +72,6 @@
           </div>
 
           <div id="audited-tables"></div>
-
-          <!--
-
-            <div class="col-lg-3">Hora</div>
-            <div class="col-lg-3">Tipo Elemento</div>
-            <div class="col-lg-3">Elemento</div>
-            <div class="col-lg-3">Requisito</div>
-            <td>
-                <div id="rows-hour-in">
-                </div>
-              </td>
-              <td>
-                <div id="rows-element-type-in">
-                </div>
-              </td>
-              <td>
-                <div id="rows-element-in">
-                  <%= text_field :extra, :element_name, class: 'form-control', readonly: true %>
-                </div>
-              </td>
-              <td>
-                <div id="rows-hour-in">
-                  <%= text_field :extra, :requirement, class: 'form-control' %>
-                </div>
-              </td>-->
-
         </div>
 
         <div class="row is-flex">
@@ -188,107 +165,14 @@
         function auditedElementGenerator(target, klass, id, name) {
             target.find('.form-control').val(name);
 
-            peopleIdx[id] = Object.keys(peopleIdx).length;
-
-            let tables = $('#audited-tables');
-
-            if (tables.find(`#personItemsArea_${id}`).length !== 0) {
-                return;
-            }
-
-            tables.append(
-                `<div style="padding: 15px 50px; margin: 20px 0; width: 100%; border: 1px solid #aaaaaa"
-                      id="personItemsArea_${id}">
-  <input type="hidden"
-         name="person_${peopleIdx[id]}[area_id]" id="person_${peopleIdx[id]}_area_id"
-         value="${area['id']}">
-  <input type="hidden"
-         name="person_${peopleIdx[id]}[location]" id="person_${peopleIdx[id]}_location"
-         value="${localidad}">
-  <input type="hidden"
-         name="person_${peopleIdx[id]}[auditor_id]" id="person_${peopleIdx[id]}_auditor_id"
-         value="${auditor['id']}">
-  <input type="hidden"
-         name="person_${peopleIdx[id]}[audited_id]" id="person_${peopleIdx[id]}_audited_id"
-         value="${id}">
-  <h6 style="display: inline; padding-right: 50px">${name}</h6>
-  Hora:
-  <input min="0" max="23" class="form-control inline" type="number"
-         name="person_${peopleIdx[id]}[hour]" id="person_${peopleIdx[id]}_hour"
-         style="width: 75px; display: inline; margin-left: 10px">
-  <table id="${id}_table" width="100%">
-    <thead>
-      <tr>
-        <th>Tipo Elemento</th>
-        <th>Elemento</th>
-        <th>Requisito</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td width="33%">
-          ${generateSelect(id)}
-        </td>
-        <td width="33%">
-          <div id="person_${peopleIdx[id]}_element_in">
-            <input class="form-control" readonly="readonly" type="text"
-                   name="extra[${peopleIdx[id]}][element_input]"
-                   id="extra_person_${peopleIdx[id]}_element_input">
-          </div>
-        </td>
-        <td>
-        </td>
-    </tr>
-  </tbody>
-</table>
-</div>`);
-            rowsIdx[id] = 0;
-
-            $(`#person_${peopleIdx[id]}_element_in`).click(function () {
-                if (Object.keys(area).length === 0 ||
-                    Object.keys(auditor).length === 0) {
-                    return;
-                }
-
-                let classOptions = $(`#extra_${id}_klass`);
-
-                let classType = classOptions.val().split('#');
-                let className = classOptions.find('option:selected').text();
-
-                setOptions(classType[0], className, true, `${id}#${classType[0]}`, $(`#${id}_table`));
-                setElementGenerator(elementElementGenerator);
-
-                renderAndShowReferencesModal(classType.length === 2 ? classType[1] : '');
-            });
+            initializePersonItemsArea(id, name);
         }
 
         function elementElementGenerator(target, klass, id, name) {
             let classInfo = klass.split('#');
             let auditedId = classInfo[0];
 
-            target.append(
-                `<tr>
-  <td>
-    ${currentOptions['modalTitle']}
-    <input name="person_${peopleIdx[auditedId]}[item_${rowsIdx[auditedId]}][klass]"
-           id="person_${peopleIdx[auditedId]}_item_${rowsIdx[auditedId]}_klass"
-           type="hidden" value="${currentOptions['klass']}">
-  </td>
-  <td>
-    ${name}
-    <input name="person_${peopleIdx[auditedId]}[item_${rowsIdx[auditedId]}][element_id]"
-           id="person_${peopleIdx[auditedId]}_item_${rowsIdx[auditedId]}_element_id"
-           type="hidden" value="${id}">
-  </td>
-  <td>
-    <input name="person_${peopleIdx[auditedId]}[item_${rowsIdx[auditedId]}][requirement]"
-           id="person_${peopleIdx[auditedId]}_item_${rowsIdx[auditedId]}_requirement"
-           type="text" class="form-control">
-  </td>
-</tr>`
-            );
-
-            rowsIdx[auditedId]++;
+            addItem(target, auditedId, currentOptions['klass'], currentOptions['modalTitle'], id, name);
         }
 
         $('#master-auditor-in').click(function () {
@@ -332,16 +216,157 @@
             renderAndShowReferencesModal({belongsToArea: area['id'], isNot: auditor['id']});
         });
 
-        // TODO - add hours to all audited
-        $('#rows-hour-in').find('.form-control').change(function () {
-            hour = $(this).val();
+        $(document).ready(function() {
+            let personItemsArea = '';
+
+            <% items = @user.id == @audit.master_auditor_id ? @audit.items : @audit.items.where(auditor_id: @user.id) %>
+            <% items.each do |item| %>
+                <% audited_id = item.audited_id %>
+                <% klass = item.klass %>
+
+                personItemsArea = $('#personItemsArea_<%= audited_id %>');
+                if (personItemsArea.length === 0) {
+                    initializePersonItemsArea(
+                        '<%= audited_id %>',
+                        '<%= print_responsible(audited_id) %>',
+                        {
+                            area_id: '<%= item.area_id %>',
+                            location: '<%= item.location %>',
+                            auditor_id: '<%= item.auditor_id %>',
+                            hour: parseInt('<%= item.hour %>')
+                        }
+                    );
+                }
+
+                addItem(
+                    $('#<%= audited_id %>_table'),
+                    '<%= audited_id %>',
+                    '<%= klass %>',
+                    '<%= klass.constantize.display_name %>',
+                    '<%= item.element_id %>',
+                    '<%= klass.constantize.find(item.element_id).display_name %>',
+                    '<%= item.requirement %>',
+                    '<%= item.id %>'
+                );
+
+            <% end %>
         });
 
-        // TODO - reimplement
-        $('#rows-requirement-in').find('.form-control').change(function () {
-            requirement = $(this).val();
-        });
+        function initializePersonItemsArea(id, name, presetValues) {
+            peopleIdx[id] = Object.keys(peopleIdx).length;
 
+            let values = {};
+            if (presetValues === undefined) {
+                values['area_id'] = area['id'];
+                values['location'] = localidad;
+                values['auditor_id'] = auditor['id'];
+                values['hour'] = '';
+            } else {
+                values = presetValues;
+            }
+
+            let tables = $('#audited-tables');
+
+            if (tables.find(`#personItemsArea_${id}`).length !== 0) {
+                return;
+            }
+
+            tables.append(
+                `<div style="padding: 15px 50px; margin: 20px 0; width: 100%; border: 1px solid #aaaaaa"
+                      id="personItemsArea_${id}">
+  <input type="hidden"
+         name="person_${peopleIdx[id]}[area_id]" id="person_${peopleIdx[id]}_area_id"
+         value="${values['area_id']}">
+  <input type="hidden"
+         name="person_${peopleIdx[id]}[location]" id="person_${peopleIdx[id]}_location"
+         value="${values['location']}">
+  <input type="hidden"
+         name="person_${peopleIdx[id]}[auditor_id]" id="person_${peopleIdx[id]}_auditor_id"
+         value="${values['auditor_id']}">
+  <input type="hidden"
+         name="person_${peopleIdx[id]}[audited_id]" id="person_${peopleIdx[id]}_audited_id"
+         value="${id}">
+  <h6 style="display: inline; padding-right: 50px">${name}</h6>
+  Hora:
+  <input min="0" max="23" class="form-control inline" type="number"
+         name="person_${peopleIdx[id]}[hour]" id="person_${peopleIdx[id]}_hour"
+         style="width: 75px; display: inline; margin-left: 10px" value="${values['hour']}">
+  <table id="${id}_table" width="100%">
+    <thead>
+      <tr>
+        <th>Tipo Elemento</th>
+        <th>Elemento</th>
+        <th>Requisito</th>
+        <th width="1%"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td width="33%">
+          ${generateSelect(id)}
+        </td>
+        <td width="33%">
+          <div id="person_${peopleIdx[id]}_element_in">
+            <input class="form-control" readonly="readonly" type="text"
+                   name="extra[${peopleIdx[id]}][element_input]"
+                   id="extra_person_${peopleIdx[id]}_element_input">
+          </div>
+        </td>
+        <td>
+        </td>
+    </tr>
+  </tbody>
+</table>
+</div>`);
+            rowsIdx[id] = 0;
+
+            $(`#person_${peopleIdx[id]}_element_in`).click(function () {
+
+                let classOptions = $(`#extra_${id}_klass`);
+
+                let classType = classOptions.val().split('#');
+                let className = classOptions.find('option:selected').text();
+
+                setOptions(classType[0], className, true, `${id}#${classType[0]}`, $(`#${id}_table`));
+                setElementGenerator(elementElementGenerator);
+
+                renderAndShowReferencesModal(classType.length === 2 ? classType[1] : '');
+            });
+        }
+
+        function addItem(table, auditedId, classType, className, elementId, elementName, requirement, itemId) {
+            table.append(
+                `<tr>
+  <td>
+    ${className}
+    <input name="person_${peopleIdx[auditedId]}[item_${rowsIdx[auditedId]}][klass]"
+           id="person_${peopleIdx[auditedId]}_item_${rowsIdx[auditedId]}_klass"
+           type="hidden" value="${classType}">
+  </td>
+  <td>
+    ${elementName}
+    <input name="person_${peopleIdx[auditedId]}[item_${rowsIdx[auditedId]}][element_id]"
+           id="person_${peopleIdx[auditedId]}_item_${rowsIdx[auditedId]}_element_id"
+           type="hidden" value="${elementId}">
+  </td>
+  <td>
+    <input name="person_${peopleIdx[auditedId]}[item_${rowsIdx[auditedId]}][requirement]"
+           id="person_${peopleIdx[auditedId]}_item_${rowsIdx[auditedId]}_requirement"
+           type="text" class="form-control"
+           value="${requirement === undefined ? '' : requirement}">
+  </td>
+  <td>
+  ${itemId === undefined ? '' : `
+    <input name="person_${peopleIdx[auditedId]}[item_${rowsIdx[auditedId]}][id]"
+           id="person_${peopleIdx[auditedId]}_item_${rowsIdx[auditedId]}_id"
+           type="hidden"
+           value="${itemId}">`}
+  </td>
+</tr>`
+            );
+
+            rowsIdx[auditedId]++;
+        }
 
         function generateSelect(id) {
             return `<select class="form-control" name="extra[${id}][klass]" id="extra_${id}_klass">
@@ -372,18 +397,21 @@
     </script>
 <% end %>
 
-<%= content_for :breadcrumbs do %>
+<% content_for :breadcrumbs do %>
     <div class="left">
       <ul class="list-unstyled breadcrumb breadcrumb-custom">
         <li>
-          <%= link_to 'Mejora: Auditoría', audit_programs_path %>
+          <%= link_to 'Mejora: Auditorías', audit_programs_path %>
         </li>
         <li>
-          <%= link_to @program.number, audits_path(@program) %>
+          <%= link_to "Programa: #{@program.number}" , @program %>
+        </li>
+        <li>
+          <%= link_to @audit.number , audit_path(@program, @audit)%>
         </li>
         <li>
           <span>
-            Nuevo
+            Editar
           </span>
         </li>
       </ul>

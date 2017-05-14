@@ -23,6 +23,15 @@ class AuditProgram
     audits.create!(fields)
   end
 
+  def update_audit(id, fields)
+    audit = audits.find(id)
+    return nil unless audit
+
+    audit.update!(fields)
+
+    audit
+  end
+
   def completion_percentage
     '0.0'
   end
