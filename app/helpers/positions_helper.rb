@@ -4,7 +4,7 @@ module PositionsHelper
     return if parent_id == exception
 
     if parent_id.nil?
-      parent = Position.or({:parent_id => nil}, {:parent_id.exists => false}).where(:name.ne => 'Auditor').first
+      parent = Position.or({:parent_id => nil}, {:parent_id.exists => false}).where(:_id.ne => Settings::PeopleSetting.first.staff_position_id).first
     else
       parent = Position.find(parent_id)
     end

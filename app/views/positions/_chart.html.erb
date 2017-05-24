@@ -1,17 +1,27 @@
 <link rel="stylesheet" href="/assets/organization/jquery.orgchart.css"/>
 
-
-<div id='org-chart-container'></div>
+<div class="row" style="overflow: auto">
+  <div class="col-lg-11" id="org-chart-container"></div>
+  <div class="col-lg-1" id="auditor-chart-container"></div>
+</div>
 
 <ul id="org-chart-data" style="display:none">
   <% parent_id = (defined?(parent) && parent != nil && parent != '') ? parent : nil %>
-  <% exception = (defined?(exclude) && exclude != nil) ? exclude : ''%>
+  <% exception = (defined?(exclude) && exclude != nil) ? exclude : '' %>
   <%= generate_organization_chart(parent_id, exception).html_safe %>
+</ul>
+
+<ul id="auditor-chart-data" style="display: none">
+  <%= generate_organization_chart(Settings::PeopleSetting.first.staff_position_id, '').html_safe %>
 </ul>
 
 <script>
     $('#org-chart-data').orgChart({
         container: $('#org-chart-container'),
+        copyClasses: true, copyStyles: true
+    });
+    $('#auditor-chart-data').orgChart({
+        container: $('#auditor-chart-container'),
         copyClasses: true, copyStyles: true
     });
 </script>

@@ -81,6 +81,11 @@ cmp1 = Qualification.create!(phrase: 'Test competency 2', qualification_type: 1)
 cmp2 = Qualification.create!(phrase: 'Test competency 3', qualification_type: 1)
 perf = Qualification.create!(phrase: 'Test performance', qualification_type: 2)
 
+pos_staff = Position.new(
+    name: 'Staff',
+    area: true
+)
+
 pos_audit = Position.new(
     name: 'Auditor',
     area: false
@@ -113,7 +118,11 @@ pos_dv = Position.new(
     area: true
 )
 
+pos_audit.parent_id = pos_staff.id
 pos_audit.save!
+
+pos_staff.add_to_set(children_ids: pos_audit.id)
+pos_staff.save!
 
 pos_go.parent_id = pos_dp.id
 pos_go.save!
@@ -134,7 +143,7 @@ vr.save!
 cv.add_to_set(positions: [pos_gg, pos_audit])
 cv.save!
 
-Settings::PeopleSetting.create!(audit_position_id: pos_audit.id)
+Settings::PeopleSetting.create!(staff_position_id: pos_staff.id, audit_position_id: pos_audit.id)
 
 Task::DocumentTask.create(executor_id: vr.id, petitioner_id: cv.id, status: 'En curso', extract: 'Hacer pag web', rejected: false,
                           p_at: Time.now, r_at: Time.now)

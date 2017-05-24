@@ -9,7 +9,7 @@
     <%= render 'layouts/nav' %>
 <% end %>
 
-<nav class="top-menu" ng-class="{'hidden-top-menu': hideTopMenu}" style="height:128px">
+<nav class="top-menu" ng-class="{'hidden-top-menu': hideTopMenu}">
   <div class="menu-icon-container hidden-md-up">
     <div class="animate-menu-button left-menu-toggle">
       <div><!-- --></div>
@@ -48,19 +48,19 @@
     </div>
   </div>
 
-  <div class="menu" style="border-top: solid 1px #dfe4ed">
-    <div class="menu-info-block">
-      <div class="left">
-        <div class="header-buttons">
-          <%= yield :menu %>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </nav>
 
+<footer>
+  <div id="footer-extra">
+    <%= yield :footer %>
+  </div>
+  <div class="menu">
+    <%= yield :menu %>
+  </div>
+</footer>
+
 <%= yield %>
+
 
 <!-- Start Page Scripts -->
 
@@ -71,11 +71,55 @@
 <!-- Start Page Styles -->
 
 <%= yield :styles %>
+<style>
+  footer {
+    position: fixed;
+    bottom: 0;
+    border-top: solid 1px #dfe4ed;
+    min-height: 7%;
+    width: 100%;
+    background-color: #ffffff;
+    z-index: 100;
+  }
+
+  footer > #footer-extra {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  footer div.menu {
+    align-items: stretch;
+    bottom: 0;
+    display: flex;
+    padding: 15px;
+  }
+
+  footer div.menu > div.dropdown {
+    align-items: stretch;
+    display: flex;
+  }
+
+  footer div.menu > div.dropdown > a:before {
+    content:'';
+    height:100%;
+    display:inline-block;
+    vertical-align: middle;
+  }
+
+  footer div.menu > div.dropdown > a:before {
+    padding: 0 15px;
+  }
+
+  #filler {
+    height: 69px;
+  }
+</style>
 
 <!-- End Page Styles-->
 
 <div class="main-backdrop"><!-- --></div>
 
+<div id="filler"></div>
 
 </body>
 

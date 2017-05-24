@@ -1,14 +1,10 @@
 <section class="page-content">
   <div class="page-content-inner">
-    <div class="panel" id="overscroll-panel">
+    <div class="panel" style="padding: 0px 15px">
       <%= render partial: 'chart' %>
     </div>
   </div>
 </section>
-
-<% content_for :script_tags do %>
-    <%= javascript_include_tag '/assets/vendors/overscroll/dist/jquery.overscroll.min.js' %>
-<% end %>
 
 <% content_for :scripts do %>
     <script>
@@ -17,8 +13,6 @@
 
             window.open('/personas/organigrama/' + positionId, '_self')
         });
-
-        $('#overscroll-panel').overscroll({persistThumbs: true});
     </script>
 <% end %>
 
