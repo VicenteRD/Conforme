@@ -31,6 +31,17 @@
             </span>
           </div>
 
+          <% if @loader.qualification_type == 1 %>
+              <div class="input-group date date-picker padding-bottom-10" style="width: 25%">
+                <%= text_field :raw, :evaluated_at_end, class: 'form-control',
+                               data: {format: dt_form_format(true)},
+                               value: DateTime.now.to_i %>
+                <span class="input-group-addon">
+                  <i class="icmn-calendar"></i>
+                </span>
+              </div>
+          <% end %>
+
           <table style="width: 100%">
             <thead>
             <tr>

@@ -7,10 +7,12 @@
 
 <% content_for :table_headers do %>
     <tr>
+      <th>N&deg;</th>
       <th>Posición</th>
       <th>Persona</th>
       <th>Evaluador</th>
       <th>Fecha</th>
+      <th>Promedio</th>
     </tr>
 <% end %>
 
@@ -23,6 +25,9 @@
         <% employee_evaluations.each do |evaluation| %>
             <tr data-href="<%= employee_evaluation_path(type_name, evaluation) %>">
               <td>
+                <%= evaluation.number%>
+              </td>
+              <td>
                 <%= evaluation.evaluated_position.name %>
               </td>
               <td>
@@ -33,6 +38,9 @@
               </td>
               <td>
                 <%= show_formatted_datetime(evaluation.evaluated_at) %>
+              </td>
+              <td>
+                <%= evaluation.average_grade.to_i %>%
               </td>
             </tr>
         <% end %>

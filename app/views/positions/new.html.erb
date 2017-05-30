@@ -3,7 +3,7 @@
     <section class="page-content">
       <div class="page-content-inner">
 
-        <div class="panel">
+        <div class="panel padding-top-15">
           <%= render partial: 'referables/references_nav' %>
 
           <div class="row form-group margin-left-30 margin-right-20">
@@ -32,20 +32,20 @@
                 Área
               </label>
             </div>
-            <div class="col-lg-1">
+            <div class="col-lg-1 padding-top-10">
               <%= f.check_box :area, class: 'form-control' %>
             </div>
           </div>
 
-          <div class="row margin-30">
+          <div class="row is-flex margin-30" style="height:50px">
             <div class="col-lg-2" style="text-align: center; vertical-align: middle">
-              <h5 class="margin-0">
-                <a href="javascript:openEmployeesModal()">
-                  Personas:
+              <h5 class="margin-0" style="height: 100%">
+                <a class="category-trigger" href="javascript:openEmployeesModal()">
+                  Personas
                 </a>
               </h5>
             </div>
-            <div class="col-lg-6" id="employees-in"></div>
+            <div class="col-lg-10" id="employees-in"></div>
           </div>
 
           <div class="row margin-left-30 margin-right-30">
@@ -181,6 +181,33 @@
             renderAndShowReferencesModal();
         });
     </script>
+<% end %>
+
+<%= content_for :styles do %>
+    <style>
+      .category-trigger {
+        border-radius: 7px 0 0 7px;
+        display: block;
+        background-color: #01a8fb;
+        height:100%;
+        padding: 15px;
+        color: #ffffff;
+      }
+
+      .category-trigger:hover, .category-trigger:focus {
+        background-color: #1fb2fe;
+        color: #ffffff;
+      }
+
+      #employees-in {
+        background-color: #b0b0b0;
+        color: #ffffff;
+        border-radius: 0 7px 7px 0;
+        height: 100%;
+        display: inline;
+        padding: 15px 0 0 10px;
+      }
+    </style>
 <% end %>
 
 <%= content_for :breadcrumbs do %>

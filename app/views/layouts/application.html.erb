@@ -51,11 +51,21 @@
 </nav>
 
 <footer>
-  <div id="footer-extra">
-    <%= yield :footer %>
-  </div>
-  <div class="menu">
+  <%= yield :footer %>
+  <div id="menu">
     <%= yield :menu %>
+    <div class="dropdown">
+      <a href="javascript:void(0)" class="dropdown-inline-button">
+        <i class="dropdown-inline-button-icon icmn-envelop2"></i>
+        Enviar
+      </a>
+    </div>
+    <div class="dropdown">
+      <a href="javascript:void(0)" class="dropdown-inline-button">
+        <i class="dropdown-inline-button-icon icmn-folder-download3"></i>
+        Descargar
+      </a>
+    </div>
   </div>
 </footer>
 
@@ -75,43 +85,49 @@
   footer {
     position: fixed;
     bottom: 0;
-    border-top: solid 1px #dfe4ed;
-    min-height: 7%;
-    width: 100%;
-    background-color: #ffffff;
     z-index: 100;
-  }
-
-  footer > #footer-extra {
     width: 100%;
-    align-items: stretch;
+    border-top: solid 1px #d58250;
+    background-color: #ff9352;
+    height:51px;
+    display: flex;
   }
 
-  footer div.menu {
+  footer > #menu {
     align-items: stretch;
-    bottom: 0;
     display: flex;
     padding: 15px;
+    height: 50px;
+    bottom: 0;
+    position: absolute;
   }
 
-  footer div.menu > div.dropdown {
+  footer > #menu > .dropdown {
     align-items: stretch;
     display: flex;
+    position: relative;
   }
 
-  footer div.menu > div.dropdown > a:before {
-    content:'';
-    height:100%;
-    display:inline-block;
-    vertical-align: middle;
-  }
-
-  footer div.menu > div.dropdown > a:before {
+  footer > #menu > .dropdown > a {
     padding: 0 15px;
+    color: #e1e1e1;
+
+  }
+  footer > #menu > .dropdown > a > i {
+    color: #e1e1e1;
+  }
+
+  footer > #menu > .dropdown:hover > a {
+    padding: 0 15px;
+    color: #bebebe;
+
+  }
+  footer > #menu > .dropdown:hover > a > i {
+    color: #bebebe;
   }
 
   #filler {
-    height: 69px;
+    height: 50px;
   }
 </style>
 

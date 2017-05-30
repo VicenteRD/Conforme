@@ -22,14 +22,7 @@ class EmployeeEvaluation
   scope :performance, -> { where(qualification_type: 1) }
 
   field :eval_at, as: :evaluated_at, type: DateTime
-
-  def self.person_types
-    { 0 => 'employee', 1 => 'provider' }
-  end
-
-  def self.qualifications_types
-    Qualification.all_types
-  end
+  field :eval_end, as: :evaluated_at_end, type: DateTime
 
   def presentable_qualification_type(lang = :en)
     type_name = Qualification.all_types[qualification_type]
@@ -39,11 +32,25 @@ class EmployeeEvaluation
     type_name
   end
 
-  def self.display_name
-    'Evaluaciones Personas'
+  def average_grade
+    qualification_evaluations.avg(:grade)
+  end
+
+  def self.person_types
+    { 0 => 'employee', 1 => 'provider' }
+  end
+
+  def self.qualifications_types
+    Qualification.all_types
   end
 
   def display_name
     "#{evaluated_position.name} -> #{evaluated_employee.first_last_name} (#{presentable_qualification_type(:es).capitalize})"
   end
+
+  def self.display_name
+    'Evaluaciones Personas'
+  end
+
+
 end

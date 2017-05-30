@@ -3,7 +3,7 @@
     <section class="page-content">
       <div class="page-content-inner">
 
-        <div class="panel">
+        <div class="panel padding-top-15">
           <%= render partial: 'referables/references_nav' %>
 
           <div class="row form-group margin-left-30 margin-right-20">
@@ -116,15 +116,15 @@
             </div>
           </div>
 
-          <div class="row margin-30">
+          <div class="row is-flex margin-30" style="height:50px">
             <div class="col-lg-2" style="text-align: center; vertical-align: middle">
-              <h5 class="margin-0">
-                <a href="javascript:openPositionsModal()">
-                  Posiciones:
+              <h5 class="margin-0" style="height: 100%">
+                <a class="positions-trigger" href="javascript:openPositionsModal()">
+                  Posiciones
                 </a>
               </h5>
             </div>
-            <div class="col-lg-6" id="positions-in"></div>
+            <div class="col-lg-10" id="positions-in"></div>
           </div>
 
           <div style="margin:50px 50px 0 50px">
@@ -193,6 +193,33 @@
             renderAndShowReferencesModal();
         }
     </script>
+<% end %>
+
+<%= content_for :styles do %>
+    <style>
+        .positions-trigger {
+          border-radius: 7px 0 0 7px;
+          display: block;
+          background-color: #01a8fb;
+          height:100%;
+          padding: 15px;
+          color: #ffffff;
+        }
+
+        .positions-trigger:hover, .positions-trigger:focus {
+          background-color: #1fb2fe;
+          color: #ffffff;
+        }
+
+        #positions-in {
+          background-color: #b0b0b0;
+          color: #ffffff;
+          border-radius: 0 7px 7px 0;
+          height: 100%;
+          display: inline-block;
+          padding: 15px 0 0 10px;
+        }
+    </style>
 <% end %>
 
 <%= content_for :breadcrumbs do %>

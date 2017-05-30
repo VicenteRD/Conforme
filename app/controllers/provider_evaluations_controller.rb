@@ -45,9 +45,11 @@ class ProviderEvaluationsController < ApplicationController
 
     fields[:qualification_type] = type
     fields[:evaluated_at] = parse_date(params.dig(:raw, :evaluated_at))
+    fields[:evaluated_at_end] = parse_date(params.dig(:raw, :evaluated_at_end))
 
     fields.permit(:qualification_type,
-                  :evaluated_at, :eval_person_id, :evaluator_id, :eval_group_id)
+                  :evaluated_at, :evaluated_at_end,
+                  :eval_person_id, :evaluator_id, :eval_group_id)
   end
 
   def load_evaluated_qualifications(evaluation)
