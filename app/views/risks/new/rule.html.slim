@@ -1,0 +1,29 @@
+= render partial: 'risks/new/rule_form',
+         locals: {type_label: @rule.get_rule_type_name[:es].capitalize}
+
+= content_for :scripts do
+  javascript:
+      #{}
+      $(document).ready(function() {
+          let ruleArea = $('#rule-in');
+
+          ruleArea.find('.form-control').val('#{@rule.full_name}');
+          ruleArea.find('.form-control-hidden').val('#{@rule.id}');
+      });
+
+      $('#responsible-in').click(function () {
+          setOptions('Person::User', 'Responsable', false, 'risk_responsible', $(this));
+          renderAndShowReferencesModal();
+      });
+      #{}
+
+
+= content_for :breadcrumbs do
+  .left
+    ul.list-unstyled.breadcrumb.breadcrumb-custom
+      li
+        = rule_type_breadcrumb(@rule.rule_type)
+      li
+        = link_to @rule.full_name, risks_path(@rule.id)
+      li
+        span Nuevo

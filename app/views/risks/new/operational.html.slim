@@ -1,0 +1,94 @@
+= render partial: 'referables/references_nav'
+
+= form_for(:risk, url: new_risk_path('operacional')) do |f|
+  section.page-content
+    .page-content-inner
+      .panel style=('padding: 15px 25px')
+
+        .row.form-group
+          .col-lg-1.text-right
+            = label :extra, :area_name, 'Área', class: 'form-control-label'
+          #area-in.col-lg-3.input-group
+            = text_field :extra, :area_name, class: 'form-control', readonly: true
+            = f.hidden_field :area_id, class: 'form-control-hidden'
+            span.input-group-addon style=('cursor: pointer')
+              i.icmn-pencil5
+
+          .col-lg-1.text-right
+            = label :extra, :process_name, 'Proceso', class: 'form-control-label'
+          #process-in.col-lg-3.input-group
+            = text_field :extra, :process_name, class: 'form-control', readonly: true
+            = f.hidden_field :process_id, class: 'form-control-hidden'
+            span.input-group-addon style=('cursor: pointer')
+              i.icmn-pencil5
+
+          .col-lg-1.text-right
+            = label :extra, :responsible_name, 'Responsable', class: 'form-control-label'
+          #responsible-in.col-lg-3.input-group
+            = text_field :extra, :responsible_name, class: 'form-control', readonly: true
+            = f.hidden_field :responsible_id, class: 'form-control-hidden'
+            span.input-group-addon style=('cursor: pointer')
+              i.icmn-pencil5
+
+        .row.form-group
+          .col-lg-1.text-right
+            = f.label :activity, 'Actividad', class: 'form-control-label'
+          .col-lg-3
+            = f.text_field :activity, class: 'form-control'
+
+          .col-lg-1.text-right
+            = f.label :name, 'Riesgo', class: 'form-control-label'
+          .col-lg-3
+            = f.text_field :name, class: 'form-control'
+
+          .col-lg-1.text-right
+            = f.label :measurement_frequency, 'Frecuencia', class: 'form-control-label'
+          .col-lg-3
+            = f.collection_select :measurement_frequency,
+                    frequency_hash,
+                    :first, :last, {}, {class: 'form-control', style: 'width:100%'}
+      / .panel
+
+      .row.is-flex
+        .col-lg-5
+          .panel style=('height: 100%')
+            = render partial: 'uploaded_files/edit_attachments', locals: {element: nil, form: f}
+
+        .col-lg-6.col-lg-offset-1
+          .panel style=('height: 100%')
+            = render partial: 'referables/show_all_for', locals: {element: nil}
+
+      = render partial: 'shared/form/comments_area', locals: {form: f}
+  / section
+
+  /! Confirmation modal
+  = render partial: 'shared/form/confirmation_modal', locals: {form: f}
+
+
+= content_for :scripts do
+  javascript:
+      #{}
+      $('#process-in').click(function () {
+          setOptions('BusinessProcess', 'Proceso', false, 'risk_process', $(this));
+          renderAndShowReferencesModal();
+      });
+
+      $('#responsible-in').click(function () {
+          setOptions('Person::User', 'Responsable', false, 'risk_responsible', $(this));
+          renderAndShowReferencesModal();
+      });
+
+      $('#area-in').click(function () {
+          setOptions('Position', 'Área', false, 'risk_area', $(this));
+          renderAndShowReferencesModal('area');
+      });
+      #{}
+
+
+= content_for :breadcrumbs do
+  .left
+    ul.list-unstyled.breadcrumb.breadcrumb-custom
+      li
+        = link_to 'Riesgos Operacionales', risks_path('operacional')
+      li
+        span Nuevo

@@ -1,0 +1,24 @@
+= render partial: 'risks/new/rule_form', locals: {type_label: 'Norma'}
+
+= content_for :scripts do
+  javascript:
+      #{}
+      $('#rule-in').click(function () {
+          setOptions('Rule', 'Norma', false, 'risk_standard', $(this));
+          renderAndShowReferencesModal('standard');
+      });
+
+      $('#responsible-in').click(function () {
+          setOptions('Person::User', 'Responsable', false, 'risk_responsible', $(this));
+          renderAndShowReferencesModal();
+      });
+      #{}
+
+
+= content_for :breadcrumbs do
+  .left
+    ul.list-unstyled.breadcrumb.breadcrumb-custom
+      li
+        = link_to 'Riesgos Normativos', risks_path('norma')
+      li
+        span Nuevo

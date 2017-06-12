@@ -1,0 +1,57 @@
+= render partial: 'referables/references_nav'
+
+= form_for(:risk, url: new_risk_path) do |f|
+  section.page-content
+    .page-content-inner
+      .panel style=('padding: 15px 25px')
+
+        .row.form-group
+          .col-lg-1.text-right
+            = label :extra, :rule_name, type_label, class: 'form-control-label'
+          #rule-in.col-lg-3.input-group
+            = text_field :extra, :rule_name, class: 'form-control', readonly: true
+            = f.hidden_field :rule_id, class: 'form-control-hidden standard-input'
+            span.input-group-addon style=('cursor: pointer')
+              i.icmn-pencil5
+
+          .col-lg-1.text-right
+            = f.label :numeral, 'Numeral', class: 'form-control-label'
+          .col-lg-3
+            = f.text_field :numeral, class: 'form-control'
+
+          .col-lg-1.text-right
+            = f.label :title, 'Título', class: 'form-control-label'
+          .col-lg-3
+            = f.text_field :title, class: 'form-control'
+
+        .row.form-group
+          .col-lg-1.text-right
+            = label :extra, :responsible_name, 'Responsable', class: 'form-control-label'
+          #responsible-in.col-lg-3.input-group
+            = text_field :extra, :responsible_name, class: 'form-control', readonly: true
+            = f.hidden_field :responsible_id, class: 'form-control-hidden'
+            span.input-group-addon style=('cursor: pointer')
+              i.icmn-pencil5
+
+          .col-lg-1.text-right
+            = f.label :measurement_frequency, 'Frecuencia', class: 'form-control-label'
+          .col-lg-3
+            = f.collection_select :measurement_frequency, frequency_hash,
+                    :first, :last, {}, {class: 'form-control', style: 'width:100%'}
+      / .panel
+
+      .row.is-flex
+        .col-lg-5
+          .panel style=('height: 100%')
+            = render partial: 'uploaded_files/edit_attachments',
+                     locals: {element: nil, form: f}
+
+        .col-lg-6.col-lg-offset-1
+          .panel style=('height: 100%')
+            = render partial: 'referables/show_all_for', locals: {element: nil}
+
+      = render partial: 'shared/form/comments_area', locals: {form: f, key: :requirement}
+  / section
+
+  /! Confirmation modal
+  = render partial: 'shared/form/confirmation_modal', locals: {form: f}

@@ -1,0 +1,82 @@
+= render partial: 'referables/references_nav'
+
+= form_for @measurement, as: :measurement,
+        url: edit_risk_measurement_path('seguridad', @risk.id, @measurement.id),
+        method: :patch do |f|
+  = hidden_field :raw, :type, value: 'ambiente'
+
+  section.page-content
+    .page-content-inner
+      .panel style=('padding: 15px 25px')
+
+        .row.form-group.margin-left-50
+          .col-lg-1.text-right
+            = label :raw, :measured_at, 'Fecha de medición', class: 'form-control-label'
+          #date-picker.col-lg-3.input-group.date.date-picker
+            = text_field :raw, :measured_at, class: 'form-control',
+                    data: {format: dt_form_format(true)},
+                    value: @measurement.measured_at.to_i
+            span.input-group-addon
+              i.icmn-calendar
+
+          .col-lg-1.text-right
+            = f.label :impact, 'Impacto', class: 'form-control-label'
+          .col-lg-3
+            = f.collection_select :impact,
+                    Settings::RiskSettings.first.safety_options[:impact],
+                    :first, :last, {}, {class: 'form-control'}
+
+          .col-lg-1.text-right
+            = label :raw, :probability, 'Probabilidad', class: 'form-control-label'
+          .col-lg-3.form-inline
+            = number_field :raw, :probability,
+                    value: (@measurement.probability * 100).to_i, within: 0..100,
+                    class: 'form-control', style: 'width:75px'
+            |  %
+      / .panel
+
+      .row.is-flex
+        .col-lg-5
+          .panel style=('height: 100%')
+            = render partial: 'uploaded_files/edit_attachments',
+                     locals: {element: @measurement, form: f}
+        .col-lg-6.col-lg-offset-1
+          .panel style=('height: 100%')
+            = render partial: 'referables/show_all_for',
+                     locals: {element: @measurement}
+
+      = render partial: 'shared/form/comments_area', locals: {form: f}
+  / section
+
+  /! Confirmation modal
+  = render partial: 'shared/form/confirmation_modal', locals: {form: f}
+
+
+= content_for :scripts do
+  javascript:
+      #{}
+      function showHistory(bodyContent) {
+        $("#history-modal-body").html(bodyContent);
+        $("#history-modal").modal();
+      }
+      #{}
+
+
+= content_for :menu do
+  .dropdown
+    - history_content = "#{escape_javascript(render partial: 'log/modal', locals: {book: @measurement.log_book})}"
+
+    a.dropdown-inline-button href="javascript:void(0)" onclick="showHistory('#{history_content}')"
+      i.dropdown-inline-button-icon.icmn-history
+      | Bitácora
+
+
+= content_for :breadcrumbs do
+  .left
+    ul.list-unstyled.breadcrumb.breadcrumb-custom
+      li
+        = link_to 'Riesgos de Seguridad', risks_path('seguridad')
+      li
+        = link_to @risk.number, risk_path('seguridad', @risk.id)
+      li
+        span Nueva Medición

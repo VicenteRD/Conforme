@@ -1,0 +1,106 @@
+= render partial: 'referables/references_nav'
+
+= form_for(:measurement, url: new_risk_measurement_path('ambiente', @risk)) do |f|
+  = hidden_field :raw, :type, value: 'ambiente'
+
+  section.page-content
+    .page-content-inner
+      .panel style=('padding: 15px 25px')
+
+        .row.form-group
+          .col-lg-1.text-right
+            = label :raw, :measured_at, 'Fecha de Medición', class: 'form-control-label'
+          #date-picker.col-lg-3.input-group.date.date-picker
+            = text_field :raw, :measured_at, class: 'form-control',
+                    data: {format: dt_form_format(true)},
+                    value: DateTime.now.to_i
+            span.input-group-addon
+              i.icmn-calendar
+
+          .col-lg-1.text-right
+            = label :extra, :regulation_name,
+                    raw('M. Regulatorio (<a id="regulation-clear" href="javascript:void(0);">×</a>)'),
+                    class: 'form-control-label'
+          #regulation-in.col-lg-3.input-group
+            = text_field :extra, :regulation_name, class: 'form-control', readonly: true
+            = f.hidden_field :regulation_id, class: 'form-control-hidden'
+            span.input-group-addon style=('cursor: pointer')
+              i.icmn-pencil5
+
+          .col-lg-1.text-right
+            = label :raw, :probability, 'Probabilidad', class: 'form-control-label'
+          .col-lg-3.form-inline
+            = number_field :raw, :probability, value: 0, within: 0..100,
+                    class: 'form-control', style: 'width:75px'
+            |  %
+
+        .row.form-group
+          .col-lg-1.text-right
+            = f.label :geographical_amplitude, 'Amp. Geográfica', class: 'form-control-label'
+          .col-lg-3
+            = f.collection_select :geographical_amplitude,
+                    @settings.environmental_options[:geo_amplitude],
+                    :first, :last, {}, {class: 'form-control', style: 'width:100%'}
+          .col-lg-1.text-right
+            = f.label :public_perception, 'Percepción Pública', class: 'form-control-label'
+          .col-lg-3
+            = f.collection_select :public_perception,
+                    @settings.environmental_options[:pub_perception],
+                    :first, :last, {}, {class: 'form-control', style: 'width:100%'}
+
+        .row.form-group
+          .col-lg-1.text-right
+            = f.label :criticity, 'Criticidad', class: 'form-control-label'
+          .col-lg-3
+            = f.collection_select :criticity, @settings.environmental_options[:criticity],
+                    :first, :last, {}, {class: 'form-control', style: 'width:100%'}
+
+          .col-lg-1.text-right
+            = f.label :reversibility, 'Reversibilidad', class: 'form-control-label'
+          .col-lg-3
+            = f.collection_select :reversibility,
+                    @settings.environmental_options[:reversibility],
+                    :first, :last, {}, {class: 'form-control', style: 'width:100%'}
+      / .panel
+
+      .row.is-flex
+        .col-lg-5
+          .panel style=('height: 100%')
+            = render partial: 'uploaded_files/edit_attachments', locals: {element: nil, form: f}
+
+        .col-lg-6.col-lg-offset-1
+          .panel style=('height: 100%')
+            = render partial: 'referables/show_all_for', locals: {element: nil}
+
+      = render partial: 'shared/form/comments_area', locals: {form: f}
+  / section
+
+  /! Confirmation modal
+  = render partial: 'shared/form/confirmation_modal', locals: {form: f}
+
+
+= content_for :scripts do
+  javascript:
+      #{}
+      $('#regulation-in').click(function () {
+          setOptions('Risk::RuleRisk', 'Marco Regulatorio', false, 'measurement_law', $(this));
+          renderAndShowReferencesModal('law');
+      });
+
+      $('#regulation-clear').click(function () {
+          let regulationArea = $('#regulation-in');
+          regulationArea.find('.form-control').val('');
+          regulationArea.find('.form-control-hidden').val('');
+      });
+      #{}
+
+
+= content_for :breadcrumbs do
+  .left
+    ul.list-unstyled.breadcrumb.breadcrumb-custom
+      li
+        = link_to 'Riesgos Ambientales', risks_path('ambiente')
+      li
+        = link_to @risk.number, risk_path('ambiente', @risk.id)
+      li
+        span Medir
