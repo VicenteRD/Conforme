@@ -213,6 +213,18 @@ op_risk = Risk::OperationalRisk.new(
 op_risk.save!
 op_risk.log_creation(nil, body = 'Created by system')
 
+op_risk = Risk::OperationalRisk.new(
+    measurement_frequency: 1,
+    responsible_id: vr.id,
+    area_id: pos_gg.id,
+    process_id: proc1.id,
+    activity: 'Activity2',
+    name: 'OpRisk2'
+)
+op_risk.save!
+op_risk.log_creation(nil, body = 'Created by system')
+
+
 st_risk = Risk::RuleRisk.new(
     measurement_frequency: 30,
     responsible_id: cv.id,

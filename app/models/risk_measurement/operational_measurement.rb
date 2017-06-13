@@ -9,6 +9,9 @@ class RiskMeasurement::OperationalMeasurement < RiskMeasurement
 
   field :imp, as: :impact, type: Integer
 
+  field :i_pbb, as: :initial_probability, type: Float
+  field :i_imp, as: :initial_impact, type: Integer
+
   def self.permitted_fields
     super + [:probability, :impact]
   end

@@ -1,0 +1,17 @@
+- if defined? form && form
+    #confirmation-modal.modal.fade.modal-size-large role='dialog'
+      .modal-dialog
+        #confirmation-modal-content.modal-content
+          .modal-header
+            button type='button' class='close' data-dismiss='modal' &times;
+            h4#confirmation-modal-title.modal-title Está Seguro?
+
+          #confirmation-modal-body.modal-body
+            = text_area :log, :body, class: 'form-control height-150'
+
+          .modal-footer
+            .row
+              .col-md-6.text-left
+                button.btn.btn-danger.width-150.height-50 data-dismiss='modal' Cancelar
+              .text-right.col-md-6
+                = form.submit 'Ingresar', class: 'btn btn-primary width-150 height-50'

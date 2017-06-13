@@ -22,15 +22,22 @@
           .col-lg-3
             = f.collection_select :impact,
                     Settings::RiskSettings.first.operational_options[:impact],
-                    :first, :last, {}, {class: 'form-control'}
+                    :first, :last, {}, {class: 'form-control multiplier'}
 
           .col-lg-1.text-right
             = label :raw, :probability, 'Probabilidad', class: 'form-control-label'
-          .col-lg-3.form-inline
+          .col-lg-1.form-inline
             = number_field :raw, :probability, value: 0, within: 0..100,
-                    class: 'form-control', style: 'width:75px'
+                    class: 'form-control multiplier-percent', style: 'width:75px'
             |  %
+
+          .col-lg-1.text-right
+            = label :extra, :result, 'Resultado', class: 'form-control-label'
+          #result.col-lg-1
+            = text_field :extra, :result, readonly: true, class: 'form-control'
       / .panel
+
+      = render partial: 'shared/form/comments_area', locals: {form: f, title: 'Control/Mitigación/Acción Correctiva'}
 
       .row.is-flex
         .col-lg-5
@@ -40,12 +47,30 @@
         .col-lg-6.col-lg-offset-1
           .panel style=('height: 100%')
             = render partial: 'referables/show_all_for', locals: {element: nil}
-
-      = render partial: 'shared/form/comments_area', locals: {form: f}
   / section
 
   /! Confirmation modal
   = render partial: 'shared/form/confirmation_modal', locals: {form: f}
+
+
+= content_for :scripts do
+  javascript:
+      #{}
+      function updateResult() {
+          let result = 1;
+          $('.multiplier').each(function () {
+              result *= $(this).val();
+          });
+          $('.multiplier-percent').each(function () {
+              result *= $(this).val() / 100;
+          });
+
+          $('#result').find('.form-control').val(result);
+      }
+
+      $('.multiplier').change(updateResult);
+      $('.multiplier-percent').change(updateResult);
+      #{}
 
 
 = content_for :breadcrumbs do

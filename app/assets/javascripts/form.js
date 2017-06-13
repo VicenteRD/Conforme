@@ -28,8 +28,7 @@ function sendFile(file, toSummernote) {
 
 function newSummernote(field) {
     field.summernote({
-        height: 300,
-        maxHeight: 350,
+        height: 100,
         lang: 'es-ES'//,
         //callbacks: {
         //    onImageUpload: function(files) {

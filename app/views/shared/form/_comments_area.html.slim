@@ -1,0 +1,11 @@
+- key ||= :comments
+
+- if defined? form && form
+    .panel style=('width: 100%; overflow: visible')
+      - if defined? title
+        .panel-heading
+          h5
+            = title
+      .panel-body
+        .row.form-group style=('margin: 0 10px 30px 10px;height:120px;z-index:100')
+          = form.text_area key, class: 'form-control', data: {provider: 'summernote'}

@@ -6,34 +6,80 @@
   = hidden_field :raw, :type, value: 'operacional'
   section.page-content
     .page-content-inner
-      .panel style=('padding: 15px 25px')
+      .row.is-flex
+        .col-lg-2
+          .panel style=('padding: 0 10px; height: 100%')
+            .panel-heading
+              h5 Fecha
+            .panel-body
+              #date-picker.input-group.date.date-picker
+                = text_field :raw, :measured_at, class: 'form-control',
+                        data: {format: dt_form_format(true)},
+                        value: @measurement.measured_at.to_i
+                span.input-group-addon
+                  i.icmn-calendar
 
-        .row.form-group.margin-left-50
-          .col-lg-1.text-right
-            = label :raw, :measured_at, 'Fecha de Medición', class: 'form-control-label'
-          #date-picker.col-lg-3.input-group.date.date-picker
-            = text_field :raw, :measured_at, class: 'form-control',
-                    data: {format: dt_form_format(true)},
-                    value: @measurement.measured_at.to_i
-            span.input-group-addon
-              i.icmn-calendar
+        .col-lg-10
+          .panel style=('padding: 0 25px; height: 100%')
+            .panel-heading
+              h5 Riesgo Inicial
+            .panel-body
 
-          .col-lg-1.text-right
-            = f.label :impact, 'Impacto', class: 'form-control-label'
-          .col-lg-3
-            = f.collection_select :impact,
-                    Settings::RiskSettings.first.operational_options[:impact],
-                    :first, :last, {}, {class: 'form-control'}
+              .row.form-group
+                .col-lg-1.text-right
+                  = f.label :initial_impact, 'Impacto', class: 'form-control-label'
+                .col-lg-3
+                  = f.collection_select :initial_impact,
+                          Settings::RiskSettings.first.operational_options[:impact],
+                          :first, :last, {}, {class: 'form-control multiplier'}
 
-          .col-lg-1.text-right
-            label.form-control-label
-              = label :raw, :probability, 'Probabilidad', class: 'form-control-label'
-          .col-lg-3.form-inline
-            = number_field :raw, :probability,
-                    value: (@measurement.probability * 100).to_i, within: 0..100,
-                    class: 'form-control', style: 'width:75px'
-            |  %
+                .col-lg-1.text-right
+                  label.form-control-label
+                    = label :raw, :initial_probability, 'Probabilidad', class: 'form-control-label'
+                .col-lg-1.form-inline
+                  = number_field :raw, :initial_probability,
+                          value: (@measurement.probability * 100).to_i, within: 0..100,
+                          class: 'form-control multiplier-percent', style: 'width:75px'
+                  |  %
+
+                .col-lg-1.text-right
+                  = label :extra, :result, 'Resultado', class: 'form-control-label'
+                #result.col-lg-1
+                  = text_field :extra, :result, readonly: true, class: 'form-control'
       / .panel
+
+      = render partial: 'shared/form/comments_area', locals: {form: f}
+
+      .row
+        .col-lg-10.col-lg-offset-2
+          .panel style=('padding: 0 25px')
+            .panel-heading style=('align: center')
+              h5 Riesgo Residual
+
+            .panel-body
+
+              .row.form-group
+                .col-lg-1.text-right
+                  = f.label :impact, 'Impacto', class: 'form-control-label'
+                .col-lg-3
+                  = f.collection_select :impact,
+                          Settings::RiskSettings.first.operational_options[:impact],
+                          :first, :last, {}, {class: 'form-control multiplier2'}
+
+                .col-lg-1.text-right
+                  label.form-control-label
+                    = label :raw, :probability, 'Probabilidad', class: 'form-control-label'
+                .col-lg-1.form-inline
+                  = number_field :raw, :probability,
+                          value: (@measurement.probability * 100).to_i, within: 0..100,
+                          class: 'form-control multiplier-percent2', style: 'width:75px'
+                  |  %
+
+                .col-lg-1.text-right
+                  = label :extra, :result, 'Resultado', class: 'form-control-label'
+                #result2.col-lg-1
+                  = text_field :extra, :result, readonly: true, class: 'form-control'
+
       .row.is-flex
         .col-lg-5
           .panel style=('height: 100%')
@@ -44,8 +90,6 @@
           .panel style=('height: 100%')
             = render partial: 'referables/show_all_for',
                      locals: {element: @measurement}
-
-      = render partial: 'shared/form/comments_area', locals: {form: f}
   / section
 
   /! Confirmation modal
@@ -55,6 +99,40 @@
 = content_for :scripts do
   javascript:
       #{}
+      $(function () {
+         let residual = #{raw @measurement.residual.to_json };
+      })
+
+      function updateResult() {
+          let result = 1;
+          $('.multiplier').each(function () {
+              result *= $(this).val();
+          });
+          $('.multiplier-percent').each(function () {
+              result *= $(this).val() / 100;
+          });
+
+          $('#result').find('.form-control').val(result);
+      }
+
+      function updateResult2() {
+          let result = 1;
+          $('.multiplier2').each(function () {
+              result *= $(this).val();
+          });
+          $('.multiplier-percent2').each(function () {
+              result *= $(this).val() / 100;
+          });
+
+          $('#result2').find('.form-control').val(result);
+      }
+
+      $('.multiplier').change(updateResult);
+      $('.multiplier-percent').change(updateResult);
+
+      $('.multiplier2').change(updateResult2);
+      $('.multiplier-percent2').change(updateResult2);
+
       function showHistory(bodyContent) {
           $("#history-modal-body").html(bodyContent);
           $("#history-modal").modal();

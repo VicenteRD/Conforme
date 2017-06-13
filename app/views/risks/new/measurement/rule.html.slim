@@ -25,6 +25,8 @@
             |  %
       / .panel
 
+      = render partial: 'shared/form/comments_area', locals: {form: f}
+
       .row.is-flex
         .col-lg-5
           .panel style=('height: 100%')
@@ -33,8 +35,6 @@
         .col-lg-6.col-lg-offset-1
           .panel style=('height: 100%')
             = render partial: 'referables/show_all_for', locals: {element: nil}
-
-      = render partial: 'shared/form/comments_area', locals: {form: f}
   / section
 
   /! Confirmation modal

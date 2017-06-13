@@ -83,6 +83,8 @@ class RiskMeasurementsController < ApplicationController
   end
 
   def update_measurement(measurement, risk, klass)
+    measurement.push(residual: {imp: measurement.impact, pbb: measurement.probability})
+
     measurement.update!(measurement_fields(klass))
     log_edited(measurement)
 

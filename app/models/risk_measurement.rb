@@ -23,6 +23,8 @@ class RiskMeasurement
 
   field :mag, as: :magnitude, type: Float
 
+  field :res, as: :residual, type: Array, default: []
+
   def self.permitted_fields
     [:measured_at, :comments]
   end
