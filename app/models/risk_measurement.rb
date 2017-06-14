@@ -23,7 +23,7 @@ class RiskMeasurement
 
   field :mag, as: :magnitude, type: Float
 
-  field :res, as: :residual, type: Array, default: []
+  field :i_mag, as: :initial_magnitude, type: Float
 
   def self.permitted_fields
     [:measured_at, :comments]
@@ -38,6 +38,10 @@ class RiskMeasurement
   def calculate_magnitude
     if !(defined?(self.magnitude)) || self.magnitude.nil?
       self.magnitude = 0
+    end
+
+    if !(defined?(self.initial_magnitude)) || self.initial_magnitude.nil?
+      self.initial_magnitude = 0
     end
 
     settings = Settings::RiskSettings.first

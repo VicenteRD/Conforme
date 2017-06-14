@@ -7,6 +7,7 @@
   section.page-content
     .page-content-inner
       .row.is-flex
+
         .col-lg-2
           .panel style=('padding: 0 10px; height: 100%')
             .panel-heading
@@ -23,32 +24,35 @@
           .panel style=('padding: 0 25px; height: 100%')
             .panel-heading
               h5 Riesgo Inicial
-            .panel-body
 
+            .panel-body
               .row.form-group
                 .col-lg-1.text-right
                   = f.label :initial_impact, 'Impacto', class: 'form-control-label'
                 .col-lg-3
                   = f.collection_select :initial_impact,
                           Settings::RiskSettings.first.operational_options[:impact],
-                          :first, :last, {}, {class: 'form-control multiplier'}
+                          :first, :last, {}, {class: 'form-control initial-multiplier'}
 
                 .col-lg-1.text-right
                   label.form-control-label
                     = label :raw, :initial_probability, 'Probabilidad', class: 'form-control-label'
                 .col-lg-1.form-inline
                   = number_field :raw, :initial_probability,
-                          value: (@measurement.probability * 100).to_i, within: 0..100,
-                          class: 'form-control multiplier-percent', style: 'width:75px'
+                          value: (@measurement.initial_probability * 100).to_i, within: 0..100,
+                          class: 'form-control initial-percent-multiplier', style: 'width:75px'
                   |  %
 
                 .col-lg-1.text-right
-                  = label :extra, :result, 'Resultado', class: 'form-control-label'
-                #result.col-lg-1
-                  = text_field :extra, :result, readonly: true, class: 'form-control'
-      / .panel
+                  = label :extra, :initial_result, 'Resultado', class: 'form-control-label'
+                #initial-result.col-lg-1
+                  = text_field :extra, :initial_result, readonly: true,
+                          value: @measurement.initial_magnitude,
+                          class: 'form-control'
+      / .row
 
-      = render partial: 'shared/form/comments_area', locals: {form: f}
+      = render partial: 'shared/form/comments_area',
+               locals: {form: f, title: 'Control/Mitigación/Acción Correctiva'}
 
       .row
         .col-lg-10.col-lg-offset-2
@@ -64,7 +68,7 @@
                 .col-lg-3
                   = f.collection_select :impact,
                           Settings::RiskSettings.first.operational_options[:impact],
-                          :first, :last, {}, {class: 'form-control multiplier2'}
+                          :first, :last, {}, {class: 'form-control multiplier'}
 
                 .col-lg-1.text-right
                   label.form-control-label
@@ -72,13 +76,15 @@
                 .col-lg-1.form-inline
                   = number_field :raw, :probability,
                           value: (@measurement.probability * 100).to_i, within: 0..100,
-                          class: 'form-control multiplier-percent2', style: 'width:75px'
+                          class: 'form-control percent-multiplier', style: 'width:75px'
                   |  %
 
                 .col-lg-1.text-right
                   = label :extra, :result, 'Resultado', class: 'form-control-label'
-                #result2.col-lg-1
-                  = text_field :extra, :result, readonly: true, class: 'form-control'
+                #result.col-lg-1
+                  = text_field :extra, :result, readonly: true,
+                          value: @measurement.magnitude,
+                          class: 'form-control'
 
       .row.is-flex
         .col-lg-5
@@ -99,39 +105,39 @@
 = content_for :scripts do
   javascript:
       #{}
-      $(function () {
-         let residual = #{raw @measurement.residual.to_json };
-      })
+      function updateInitialResult() {
+          updateResult(
+              $('.initial-multiplier'),
+              $('.initial-percent-multiplier'),
+              $('#initial-result').find('.form-control')
+          )
+      }
 
-      function updateResult() {
+      function updateResidualResult() {
+          updateResult(
+              $('.multiplier'),
+              $('.percent-multiplier'),
+              $('#result').find('.form-control')
+          )
+      }
+
+      function updateResult(multipliers, percentMultipliers, resultField) {
           let result = 1;
-          $('.multiplier').each(function () {
+
+          multipliers.each(function () {
               result *= $(this).val();
           });
-          $('.multiplier-percent').each(function () {
+          percentMultipliers.each(function () {
               result *= $(this).val() / 100;
           });
 
-          $('#result').find('.form-control').val(result);
+          resultField.val(result);
       }
 
-      function updateResult2() {
-          let result = 1;
-          $('.multiplier2').each(function () {
-              result *= $(this).val();
-          });
-          $('.multiplier-percent2').each(function () {
-              result *= $(this).val() / 100;
-          });
-
-          $('#result2').find('.form-control').val(result);
-      }
-
-      $('.multiplier').change(updateResult);
-      $('.multiplier-percent').change(updateResult);
-
-      $('.multiplier2').change(updateResult2);
-      $('.multiplier-percent2').change(updateResult2);
+      $('.initial-multiplier').change(updateInitialResult);
+      $('.initial-percent-multiplier').change(updateInitialResult);
+      $('.multiplier').change(updateResidualResult);
+      $('.percent-multiplier').change(updateResidualResult);
 
       function showHistory(bodyContent) {
           $("#history-modal-body").html(bodyContent);

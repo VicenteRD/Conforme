@@ -13,11 +13,12 @@ class RiskMeasurement::OperationalMeasurement < RiskMeasurement
   field :i_imp, as: :initial_impact, type: Integer
 
   def self.permitted_fields
-    super + [:probability, :impact]
+    super + [:probability, :impact, :initial_probability, :initial_impact]
   end
 
   def calculate_magnitude
-    self.magnitude = self.probability * self.impact
+    self.initial_magnitude = initial_probability * initial_impact
+    self.magnitude = probability * impact
 
     super
   end

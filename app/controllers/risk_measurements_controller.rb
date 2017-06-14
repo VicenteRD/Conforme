@@ -83,8 +83,6 @@ class RiskMeasurementsController < ApplicationController
   end
 
   def update_measurement(measurement, risk, klass)
-    measurement.push(residual: {imp: measurement.impact, pbb: measurement.probability})
-
     measurement.update!(measurement_fields(klass))
     log_edited(measurement)
 
@@ -93,16 +91,23 @@ class RiskMeasurementsController < ApplicationController
 
   def measurement_fields(klass)
     fields = params.require(:measurement)
+    parse_raw_parameters(fields)
 
+    fields.permit(klass.permitted_fields)
+  end
+
+  def parse_raw_parameters(fields)
     fields[:measured_at] = parse_date(params.dig(:raw, :measured_at))
     fields[:probability] = parse_percentage(
       fields, :probability, params.dig(:raw, :probability)
     )
+    fields[:initial_probability] = parse_percentage(
+      fields, :initial_probability, params.dig(:raw, :initial_probability)
+    )
+
     fields[:compliance] = parse_percentage(
       fields, :compliance, params.dig(:raw, :compliance)
     )
-
-    fields.permit(klass.permitted_fields)
   end
 
   def measurement_class(type)
